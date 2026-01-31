@@ -1,6 +1,6 @@
 # 34_TeamLogistics
-Domain : Logistics and Delivery Operations.
-Problem Statement : Fleet and Driver Operations Management System.
+# Domain : Logistics and Delivery Operations.
+# Problem Statement : Fleet and Driver Operations Management System.
 
 ## Identified Actors
 The system involves the following actors:
