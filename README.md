@@ -2,11 +2,13 @@
 # Domain : Logistics and Delivery Operations.
 # Problem Statement : Fleet and Driver Operations Management System.
 
-## Problem Statement Explanation
+## Problem Statement Overview
 
-The Fleet and Driver Operations Management System is built to improve how logistics and delivery operations are handled. It helps manage vehicles, drivers, shipments, and delivery processes in one centralized system.
+The Fleet and Driver Operations Management System is designed to improve and automate logistics and delivery operations by managing vehicles, drivers, shipments, and delivery processes through a single centralized platform.
 
-In many logistics companies, tasks like assigning drivers, tracking vehicles, preparing shipments, checking compliance, and confirming deliveries are often done manually or using different systems. This usually causes delays, mistakes, poor tracking visibility, and compliance issues.
+In many logistics environments, activities such as driver assignment, vehicle tracking, shipment preparation, compliance monitoring, and delivery confirmation are often handled manually or across multiple disconnected systems. This leads to delays, lack of real‑time visibility, coordination issues between teams, and higher chances of operational errors.
+
+## Proposed Solution
 
 This system helps solve these problems by providing:
 
@@ -24,14 +26,17 @@ The main goal is to create a smooth end-to-end logistics workflow from order dis
 
 
 ## Identified Actors
-The system involves the following actors:
 
-1. Admin  
-2. Fleet Manager  
-3. Warehouse Operator  
-4. Dispatcher  
-5. Driver  
-6. Customer
+The system involves the following Actors and their roles/responsibility :
+
+| Actor | Responsibility |
+|---|---|
+| Admin | Ensures the system runs smoothly by managing user access, system settings, and core data used across operations |
+| Fleet Manager | Keeps vehicles operational and compliant by monitoring maintenance schedules, vehicle health, and driver eligibility |
+| Dispatcher | Coordinates daily delivery operations by allocating orders to drivers, planning routes, and resolving delivery disruptions |
+| Warehouse Operator | Ensures shipments are correctly prepared, packed, verified, and handed over for delivery without errors |
+| Driver | Transports shipments safely to customers, follows assigned routes and schedules, and confirms successful delivery completion |
+| Customer | Receives deliveries, monitors delivery progress, confirms receipt, and provides service feedback when required |
 
 ## Planned Features for Each Actor :-
 
