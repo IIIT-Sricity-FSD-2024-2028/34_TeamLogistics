@@ -1,4 +1,3 @@
-
 # Domain: Fleet & Driver Operations Management
 # Problem Statement: Fleet and Driver Operation Management System
 # Last Updated: 2026-02-01
@@ -13,7 +12,9 @@ aliases:
 
 DomainTerm2: Shipment
 definition:
-  A physical package containing one or more items that is prepared, packed, and handed over for delivery.
+  A physical package containing one or more items that is prepared, packed, and handed over for delivery to the customer.
+examples:
+  - Packed box containing mobile phones ready for dispatch
 aliases:
   - Parcel
 
@@ -21,50 +22,64 @@ DomainTerm3: Dispatch
 definition:
   The operational process of assigning prepared shipments to drivers and vehicles and starting the delivery journey.
 examples:
-  - Dispatcher assigns packages to Driver Arun with delivery van KA01AB1234
+  - Dispatcher assigns 10 packages to Driver Arun with delivery van KA01AB1234
 aliases:
   - Outbound Dispatch
 
 DomainTerm4: Fleet
 definition:
-  A group of vehicles owned or managed by the organization used for delivery operations.
+  A group of vehicles owned or managed by the organization that are used for delivery and transportation operations.
+examples:
+  - Company delivery fleet includes 40 bikes and 15 vans
 aliases:
   - Vehicle Fleet
 
 DomainTerm5: Vehicle
 definition:
-  A transport unit such as a bike, van, or truck used to carry shipments.
+  A transport unit such as a bike, van, or truck used to carry shipments from warehouse to customer location.
+examples:
+  - Delivery van used for bulk shipment delivery
 aliases:
   - Delivery Vehicle
 
 DomainTerm6: Driver
 definition:
   A person responsible for transporting shipments from warehouse to customer and completing delivery tasks.
+examples:
+  - Driver Ravi delivers packages to customers in Zone A
 aliases:
   - Delivery Partner
 
 DomainTerm7: Driver Compliance
 definition:
-  The condition where a driver meets all legal and operational requirements such as valid license and documents.
+  The condition where a driver meets all required legal and operational requirements such as valid license, working hour limits, and documents.
+examples:
+  - Driver allowed for delivery after license and documents verification
 aliases:
   - Driver Eligibility
 
 DomainTerm8: Fleet Manager
 definition:
   A role responsible for managing vehicles, scheduling maintenance, and ensuring driver compliance.
+examples:
+  - Fleet manager schedules maintenance for delivery trucks
 aliases:
   - Fleet Administrator
 
 DomainTerm9: Dispatcher
 definition:
-  A role responsible for planning deliveries, assigning orders, and monitoring route execution.
+  A role responsible for planning deliveries, assigning orders, and monitoring delivery route execution.
+examples:
+  - Dispatcher assigns delivery orders and generates route plan for driver
 aliases:
   - Delivery Planner
   - Traffic Controller
 
 DomainTerm10: Warehouse Operator
 definition:
-  A role responsible for preparing shipments through picking, labeling, verification, and packing.
+  A role responsible for preparing shipments through picking, labeling, verification, and packing before dispatch.
+examples:
+  - Warehouse staff packs and labels shipment before handover
 aliases:
   - Warehouse Staff
   - Stock Controller
@@ -72,6 +87,8 @@ aliases:
 DomainTerm11: Route Plan
 definition:
   A planned delivery path followed by driver to complete multiple deliveries efficiently.
+examples:
+  - Warehouse → Area A → Area B → Area C → Return warehouse
 aliases:
   - Delivery Route
   - Delivery Directions
@@ -79,6 +96,8 @@ aliases:
 DomainTerm12: Delivery Status
 definition:
   The current progress stage of a delivery order during the delivery lifecycle.
+examples:
+  - Order status shows Out for Delivery
 aliases:
   - Order Status
 
@@ -102,18 +121,24 @@ aliases:
 DomainTerm15: Exception Handling
 definition:
   The process of managing delivery incidents using reassignment, escalation, or corrective actions.
+examples:
+  - Dispatcher reassigns delivery after driver vehicle breakdown
 aliases:
   - Delivery Exception Management
 
 DomainTerm16: Customer
 definition:
   The shipment recipient who can track delivery, confirm delivery, and provide feedback.
+examples:
+  - Customer tracks order using tracking link
 aliases:
   - Recipient
 
 DomainTerm17: Service Level Agreement
 definition:
   The committed delivery time or service quality standard defined by the organization.
+examples:
+  - Order must be delivered within 24 hours
 aliases:
   - SLA
 
@@ -128,5 +153,7 @@ aliases:
 DomainTerm19: Master Data
 definition:
   Reference data such as vehicle types, service zones, and package categories used across the system.
+examples:
+  - System stores vehicle types like Bike, Van, Truck
 aliases:
   - Reference Data
