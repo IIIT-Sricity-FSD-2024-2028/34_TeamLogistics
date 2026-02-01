@@ -2,7 +2,7 @@
 # Problem Statement: Fleet and Driver Operation Management System
 # Last Updated: 2026-02-01
 
-DomainTerm1: Delivery Order
+Name : Delivery Order
 definition:
   A request created in the system to transport a shipment from a source location to a customer within a defined delivery time window.
 examples:
@@ -10,7 +10,7 @@ examples:
 aliases:
   - Shipment Order
 
-DomainTerm2: Shipment
+Name: Shipment
 definition:
   A physical package containing one or more items that is prepared, packed, and handed over for delivery to the customer.
 examples:
@@ -18,7 +18,7 @@ examples:
 aliases:
   - Parcel
 
-DomainTerm3: Dispatch
+Name : Dispatch
 definition:
   The operational process of assigning prepared shipments to drivers and vehicles and starting the delivery journey.
 examples:
@@ -26,7 +26,7 @@ examples:
 aliases:
   - Outbound Dispatch
 
-DomainTerm4: Fleet
+Name : Fleet
 definition:
   A group of vehicles owned or managed by the organization that are used for delivery and transportation operations.
 examples:
@@ -34,7 +34,7 @@ examples:
 aliases:
   - Vehicle Fleet
 
-DomainTerm5: Vehicle
+Name : Vehicle
 definition:
   A transport unit such as a bike, van, or truck used to carry shipments from warehouse to customer location.
 examples:
@@ -42,7 +42,7 @@ examples:
 aliases:
   - Delivery Vehicle
 
-DomainTerm6: Driver
+Name: Driver
 definition:
   A person responsible for transporting shipments from warehouse to customer and completing delivery tasks.
 examples:
@@ -50,7 +50,7 @@ examples:
 aliases:
   - Delivery Partner
 
-DomainTerm7: Driver Compliance
+Name : Driver Compliance
 definition:
   The condition where a driver meets all required legal and operational requirements such as valid license, working hour limits, and documents.
 examples:
@@ -58,7 +58,7 @@ examples:
 aliases:
   - Driver Eligibility
 
-DomainTerm8: Fleet Manager
+Name : Fleet Manager
 definition:
   A role responsible for managing vehicles, scheduling maintenance, and ensuring driver compliance.
 examples:
@@ -66,7 +66,7 @@ examples:
 aliases:
   - Fleet Administrator
 
-DomainTerm9: Dispatcher
+Name : Dispatcher
 definition:
   A role responsible for planning deliveries, assigning orders, and monitoring delivery route execution.
 examples:
@@ -75,7 +75,7 @@ aliases:
   - Delivery Planner
   - Traffic Controller
 
-DomainTerm10: Warehouse Operator
+Name : Warehouse Operator
 definition:
   A role responsible for preparing shipments through picking, labeling, verification, and packing before dispatch.
 examples:
@@ -84,7 +84,7 @@ aliases:
   - Warehouse Staff
   - Stock Controller
 
-DomainTerm11: Route Plan
+Name : Route Plan
 definition:
   A planned delivery path followed by driver to complete multiple deliveries efficiently.
 examples:
@@ -93,7 +93,7 @@ aliases:
   - Delivery Route
   - Delivery Directions
 
-DomainTerm12: Delivery Status
+Name : Delivery Status
 definition:
   The current progress stage of a delivery order during the delivery lifecycle.
 examples:
@@ -101,7 +101,7 @@ examples:
 aliases:
   - Order Status
 
-DomainTerm13: Proof Of Delivery
+Name : Proof Of Delivery
 definition:
   Confirmation that shipment has been successfully delivered to the customer.
 examples:
@@ -110,7 +110,7 @@ aliases:
   - POD
   - Delivery Confirmation
 
-DomainTerm14: Incident
+Name : Incident
 definition:
   An unexpected event that delays or prevents successful delivery such as vehicle breakdown or wrong address.
 examples:
@@ -118,7 +118,7 @@ examples:
 aliases:
   - Delivery Issue
 
-DomainTerm15: Exception Handling
+Name : Exception Handling
 definition:
   The process of managing delivery incidents using reassignment, escalation, or corrective actions.
 examples:
@@ -126,7 +126,7 @@ examples:
 aliases:
   - Delivery Exception Management
 
-DomainTerm16: Customer
+Name : Customer
 definition:
   The shipment recipient who can track delivery, confirm delivery, and provide feedback.
 examples:
@@ -134,7 +134,7 @@ examples:
 aliases:
   - Recipient
 
-DomainTerm17: Service Level Agreement
+Name : Service Level Agreement
 definition:
   The committed delivery time or service quality standard defined by the organization.
 examples:
@@ -142,7 +142,7 @@ examples:
 aliases:
   - SLA
 
-DomainTerm18: Estimated Time Of Arrival
+Name : Estimated Time Of Arrival
 definition:
   The predicted time when shipment is expected to reach the customer location.
 examples:
@@ -150,7 +150,7 @@ examples:
 aliases:
   - ETA
 
-DomainTerm19: Master Data
+Name : Master Data
 definition:
   Reference data such as vehicle types, service zones, and package categories used across the system.
 examples:
