@@ -2,6 +2,27 @@
 # Domain : Logistics and Delivery Operations.
 # Problem Statement : Fleet and Driver Operations Management System.
 
+## Problem Statement Explanation
+
+The Fleet and Driver Operations Management System is built to improve how logistics and delivery operations are handled. It helps manage vehicles, drivers, shipments, and delivery processes in one centralized system.
+
+In many logistics companies, tasks like assigning drivers, tracking vehicles, preparing shipments, checking compliance, and confirming deliveries are often done manually or using different systems. This usually causes delays, mistakes, poor tracking visibility, and compliance issues.
+
+This system helps solve these problems by providing:
+
+- Centralized management of fleet vehicles and drivers  
+- Automated delivery planning and dispatch process  
+- Real-time delivery tracking and monitoring  
+- Driver and vehicle compliance validation  
+- Better coordination between warehouse and dispatch teams  
+- Customer delivery tracking and confirmation  
+- Support for handling delivery delays, incidents, and reassignment  
+
+### Primary Goal
+
+The main goal is to create a smooth end-to-end logistics workflow from order dispatch to final delivery confirmation while improving efficiency and reducing manual work.
+
+
 ## Identified Actors
 The system involves the following actors:
 
