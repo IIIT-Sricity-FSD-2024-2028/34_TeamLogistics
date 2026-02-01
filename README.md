@@ -4,12 +4,13 @@
 
 ## Identified Actors
 The system involves the following actors:
-1.Admin
-2.Fleet Manager
-3.Warehouse Operator
-4.Dispatcher
-5.Driver
-6.Customer
+
+1. Admin  
+2. Fleet Manager  
+3. Warehouse Operator  
+4. Dispatcher  
+5. Driver  
+6. Customer
 
 ## Planned Features for Each Actor :-
 
