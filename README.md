@@ -31,57 +31,48 @@ The system involves the following Actors and their roles/responsibility :
 
 | Actor | Responsibility |
 |---|---|
-| Admin | Ensures the system runs smoothly by managing user access, system settings, and core data used across operations |
-| Fleet Manager | Keeps vehicles operational and compliant by monitoring maintenance schedules, vehicle health, and driver eligibility |
-| Dispatcher | Coordinates daily delivery operations by allocating orders to drivers, planning routes, and resolving delivery disruptions |
-| Warehouse Operator | Ensures shipments are correctly prepared, packed, verified, and handed over for delivery without errors |
-| Driver | Transports shipments safely to customers, follows assigned routes and schedules, and confirms successful delivery completion |
-| Customer | Receives deliveries, monitors delivery progress, confirms receipt, and provides service feedback when required |
+| Admin | Manages system users, roles, permissions, system settings, and ensures overall system operation and data integrity |
+| Business Client | Creates and manages delivery requests, tracks shipment progress, monitors service performance, and reviews delivery reports |
+| Fleet Manager | Manages vehicles and drivers, assigns deliveries, monitors fleet availability, tracks trip progress, and ensures compliance and maintenance readiness |
+| Driver | Executes deliveries, follows assigned routes and schedules, updates trip status, shares live location, and confirms delivery through proof of delivery |
+
+
 
 ## Planned Features for Each Actor :-
 
-1.Admin : 
-Responsible for system setup and overall configuration.
-- Manage users (create, update, deactivate accounts)
-- Assign roles and permissions
-- Manage master data (vehicle types, zones, package types)
-- Configure system rules (driver working hours, SLA limits)
-- Monitor system access and security.
-  
-2.Fleet Manager :
-Responsible for managing vehicles and driver compliance.
-- Manage fleet vehicles (add, update, allocate, block vehicles)
-- Schedule and track vehicle maintenance
-- Monitor driver compliance (license validity, working hours, documents)
-- Track fuel usage and vehicle mileage
-- View fleet performance analytics
+### Admin
+- User account creation, update, and deactivation  
+- Role and permission management  
+- System configuration management  
+- Audit logs and activity monitoring  
+- Master data management (vehicles, drivers, compliance templates)  
+- Security and access control management  
 
-3.Dispatcher :
-Responsible for planning and controlling delivery operations.
-- Create delivery orders (single and bulk upload)
-- Assign deliveries to drivers and vehicles
-- Plan optimal delivery routes
-- Reassign deliveries when exceptions occur
-- Handle delivery exceptions and escalations
+### Business Client
+- Create single and bulk delivery requests  
+- Select delivery type and priority  
+- Track delivery status and live ETA  
+- View delivery history and reports  
+- Receive delivery notifications and alerts  
+- Manage organizational delivery preferences  
 
-4. Warehouse Operator :
-Responsible for preparing shipments for delivery.
-- Prepare shipment (picking, labeling, verification, packing)
-- Update shipment status as ready for dispatch
-- Handover packages to drivers
-- Report shipment issues or mismatches
+### Fleet Manager
+- View incoming delivery requests  
+- Assign drivers and vehicles  
+- Monitor fleet availability and utilization  
+- Manage vehicle lifecycle (add, update, deactivate)  
+- Monitor active trips and delivery performance  
+- View compliance and maintenance status  
+- Handle reassignment and exception cases  
+- View SLA risk alerts and delay notifications  
 
-5.Driver :
-Responsible for executing deliveries.
-- Manage work shift (check‑in and check‑out)
-- Accept or reject assigned delivery tasks
-- Execute delivery and update delivery status
-- Submit proof of delivery (OTP, signature, photo)
-- Report incidents or delivery issues
+### Driver
+- View assigned deliveries  
+- Accept / start / complete trips  
+- Update trip status in real time  
+- Share live location tracking  
+- Upload Proof of Delivery (POD)  
+- Receive assignment and alert notifications  
+- Report trip issues or delays  
 
-6.Customer :
-Responsible for tracking and confirming deliveries.
-- Track delivery status and location
-- Confirm delivery using OTP or confirmation
-- Provide feedback.
 
