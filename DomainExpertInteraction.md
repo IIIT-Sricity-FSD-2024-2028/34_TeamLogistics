@@ -41,37 +41,40 @@ The main goals of this problem statement are to:
 
 **Answer:**
 | Term | Meaning as explained by the expert |
-|------|----------------------------------|
-| Delivery Order | A request to transport a shipment from a source location to a customer within a defined time frame. |
-| Shipment | A physical package containing one or more items that is prepared, packed, and handed over for delivery. |
-| Dispatch | The process of assigning prepared shipments to drivers and vehicles and initiating the delivery journey. |
-| Fleet | A collection of vehicles owned or managed by the organization for delivery and transportation purposes. |
-| Vehicle | A transport unit such as a bike, van, or truck used to carry shipments. |
-| Driver | A person responsible for transporting shipments from the warehouse to the customer and completing deliveries. |
-| Driver Compliance | The state in which a driver satisfies all required conditions such as valid license, working hour limits, and mandatory documents. |
-| Fleet Manager | A role responsible for managing vehicles, scheduling maintenance, and monitoring driver compliance. |
-| Dispatcher | A role responsible for planning deliveries, assigning orders, and managing route execution. |
-| Warehouse Operator | A role responsible for preparing shipments through picking, labeling, verification, and packing. |
-| Route Plan | A planned path that a driver follows to complete one or more deliveries efficiently. |
-| Delivery Status | The current state of a delivery order indicating its progress in the delivery lifecycle. |
-| Proof of Delivery | Confirmation that a shipment has been successfully delivered to the customer. |
-| Incident | An unexpected event that prevents or delays successful delivery, such as vehicle breakdown or customer unavailability. |
-| Exception Handling | The process of managing delivery incidents through reassignment, escalation, or corrective actions. |
-| Customer | The recipient of a shipment who can track, confirm, or provide feedback on a delivery. |
-| Service Level Agreement (SLA) | A committed time or quality standard within which a delivery is expected to be completed. |
-| Estimated Time of Arrival (ETA) | The predicted time at which a shipment is expected to reach the customer. |
-| Master Data | Reference information such as vehicle types, service zones, and package categories used across the system. |
+## Q3. Key Domain Terms and Meanings
+
+| Term | Meaning as explained by the domain expert |
+|------|-------------------------------------------|
+| Delivery Order | A request created in the system to transport a shipment from a source location to a customer within a defined delivery time window |
+| Bulk Order | A single request containing multiple delivery orders that need to be planned and executed together |
+| Shipment | A physical package or set of items prepared for delivery |
+| Dispatch | The process of assigning delivery orders to drivers and vehicles and initiating delivery |
+| Fleet | A group of vehicles managed by the organization for transportation and delivery |
+| Vehicle | A transport unit such as a bike, van, or truck used to carry shipments |
+| Driver | A person responsible for transporting shipments and completing deliveries |
+| Driver Compliance | Verification that a driver meets all regulatory and company requirements such as license validity and working hours |
+| Fleet Manager | A role responsible for managing vehicles and drivers, assigning deliveries, and monitoring operations |
+| Admin | A role responsible for managing users, system configuration, and overall platform control |
+| Route Plan | A planned path followed by a driver to complete deliveries efficiently |
+| Delivery Status | The current stage of a delivery order in its lifecycle |
+| Proof of Delivery (POD) | Evidence confirming successful delivery, such as signature or photo |
+| Incident | An unexpected event that delays or prevents delivery |
+| Exception Handling | The process of resolving delivery issues through reassignment or escalation |
+| SLA (Service Level Agreement) | A defined delivery time or quality commitment agreed with the client |
+| ETA (Estimated Time of Arrival) | The predicted time when the delivery will reach the customer |
+| Automation Engine | A system component that automatically monitors, assigns, and optimizes deliveries based on rules |
+| Compliance Monitoring | Continuous tracking of driver and vehicle compliance status |
+| Live Tracking | Real‑time location sharing of drivers during delivery execution |
+
 
 ## Actors and Responsibilities
 
 | Actor / Role | Responsibilities |
 |--------------|------------------|
-| Admin | Manages system users, assigns roles and permissions, configures system rules, and maintains master data. |
-| Fleet Manager | Manages fleet vehicles, schedules vehicle maintenance, monitors driver compliance, and ensures vehicle availability. |
-| Dispatcher | Creates delivery orders, assigns deliveries to drivers and vehicles, plans routes, and handles delivery exceptions. |
-| Warehouse Operator | Prepares shipments by picking, labeling, verifying, and packing orders, and marks shipments ready for dispatch. |
-| Driver | Executes assigned deliveries, updates delivery status, submits proof of delivery, and reports incidents during delivery. |
-| Customer | Tracks delivery status, confirms delivery, and provides feedback or raises delivery-related issues. |
+| Admin | Manages system users, roles, permissions, system settings, and ensures overall system operation and data integrity |
+| Business Client | Creates and manages delivery requests, tracks shipment progress, monitors service performance, and reviews delivery reports |
+| Fleet Manager | Manages vehicles and drivers, assigns deliveries, monitors fleet availability, tracks trip progress, and ensures compliance and maintenance readiness |
+| Driver | Executes deliveries, follows assigned routes and schedules, updates trip status, shares live location, and confirms delivery through proof of delivery |
 
 ## Core workflows
 
