@@ -2,158 +2,155 @@
 # Problem Statement: Fleet and Driver Operation Management System
 # Last Updated: 2026-02-01
 
-Name : Delivery Order
+Name: Delivery Order
 definition:
-  A request created in the system to transport a shipment from a source location to a customer within a defined delivery time window.
+  A request created in the system to transport a shipment from a source location to a destination within a specified time window.
 examples:
   - Customer orders electronics delivery from Hyderabad warehouse to Bangalore address
 aliases:
   - Shipment Order
+  - Delivery Request
 
-Name: Shipment
+Name: Business Client
 definition:
-  A physical package containing one or more items that is prepared, packed, and handed over for delivery to the customer.
+  An organization or customer that creates delivery orders and tracks shipment progress through the system.
 examples:
-  - Packed box containing mobile phones ready for dispatch
+  - An e-commerce company submitting daily delivery requests
 aliases:
-  - Parcel
+  - Customer
+  - Client
 
-Name : Dispatch
+Name: Fleet Manager
 definition:
-  The operational process of assigning prepared shipments to drivers and vehicles and starting the delivery journey.
+  A system user responsible for managing vehicles, assigning drivers, monitoring trips, and ensuring smooth delivery operations.
 examples:
-  - Dispatcher assigns 10 packages to Driver Arun with delivery van KA01AB1234
+  - Fleet manager assigning drivers to delivery orders based on availability
 aliases:
-  - Outbound Dispatch
-
-Name : Fleet
-definition:
-  A group of vehicles owned or managed by the organization that are used for delivery and transportation operations.
-examples:
-  - Company delivery fleet includes 40 bikes and 15 vans
-aliases:
-  - Vehicle Fleet
-
-Name : Vehicle
-definition:
-  A transport unit such as a bike, van, or truck used to carry shipments from warehouse to customer location.
-examples:
-  - Delivery van used for bulk shipment delivery
-aliases:
-  - Delivery Vehicle
+  - Operations Manager
+  - Transport Manager
 
 Name: Driver
 definition:
-  A person responsible for transporting shipments from warehouse to customer and completing delivery tasks.
+  A person responsible for executing assigned deliveries and updating delivery status during the trip.
 examples:
-  - Driver Ravi delivers packages to customers in Zone A
+  - Driver transporting goods and uploading proof of delivery
 aliases:
-  - Delivery Partner
+  - Delivery Agent
+  - Courier
 
-Name : Driver Compliance
+Name: Vehicle
 definition:
-  The condition where a driver meets all required legal and operational requirements such as valid license, working hour limits, and documents.
+  A transport asset used to carry shipments from source to destination.
 examples:
-  - Driver allowed for delivery after license and documents verification
+  - Delivery van used for city logistics
+aliases:
+  - Truck
+  - Transport Unit
+
+Name: Driver Compliance
+definition:
+  The process of ensuring drivers meet all legal, safety, and organizational requirements before and during operations.
+examples:
+  - Checking driving license validity before assigning deliveries
 aliases:
   - Driver Eligibility
+  - Compliance Status
 
-Name : Fleet Manager
+Name: Proof of Delivery
 definition:
-  A role responsible for managing vehicles, scheduling maintenance, and ensuring driver compliance.
+  Evidence submitted by a driver to confirm successful delivery of a shipment.
 examples:
-  - Fleet manager schedules maintenance for delivery trucks
-aliases:
-  - Fleet Administrator
-
-Name : Dispatcher
-definition:
-  A role responsible for planning deliveries, assigning orders, and monitoring delivery route execution.
-examples:
-  - Dispatcher assigns delivery orders and generates route plan for driver
-aliases:
-  - Delivery Planner
-  - Traffic Controller
-
-Name : Warehouse Operator
-definition:
-  A role responsible for preparing shipments through picking, labeling, verification, and packing before dispatch.
-examples:
-  - Warehouse staff packs and labels shipment before handover
-aliases:
-  - Warehouse Staff
-  - Stock Controller
-
-Name : Route Plan
-definition:
-  A planned delivery path followed by driver to complete multiple deliveries efficiently.
-examples:
-  - Warehouse → Area A → Area B → Area C → Return warehouse
-aliases:
-  - Delivery Route
-  - Delivery Directions
-
-Name : Delivery Status
-definition:
-  The current progress stage of a delivery order during the delivery lifecycle.
-examples:
-  - Order status shows Out for Delivery
-aliases:
-  - Order Status
-
-Name : Proof Of Delivery
-definition:
-  Confirmation that shipment has been successfully delivered to the customer.
-examples:
-  - Customer provides OTP and driver uploads delivery photo
+  - Customer signature or delivery photo uploaded by driver
 aliases:
   - POD
   - Delivery Confirmation
 
-Name : Incident
+Name: SLA
 definition:
-  An unexpected event that delays or prevents successful delivery such as vehicle breakdown or wrong address.
+  A Service Level Agreement defining expected delivery timelines and service standards.
 examples:
-  - Delivery delayed due to vehicle puncture
+  - Delivery must be completed within 24 hours
 aliases:
-  - Delivery Issue
+  - Service Agreement
+  - Delivery SLA
 
-Name : Exception Handling
+Name: Automation Engine
 definition:
-  The process of managing delivery incidents using reassignment, escalation, or corrective actions.
+  An internal system component that automatically monitors compliance, SLA deadlines, and triggers alerts.
 examples:
-  - Dispatcher reassigns delivery after driver vehicle breakdown
+  - System generates alert when driver license expires
 aliases:
-  - Delivery Exception Management
+  - Background Processor
+  - System Automation
 
-Name : Customer
+Name: Delivery Assignment
 definition:
-  The shipment recipient who can track delivery, confirm delivery, and provide feedback.
+  The process of allocating a delivery order to a specific driver and vehicle for execution.
 examples:
-  - Customer tracks order using tracking link
+  - Fleet manager assigns Order
 aliases:
-  - Recipient
+  - Order Allocation
+  - Delivery Allocation
 
-Name : Service Level Agreement
+Name: Trip
 definition:
-  The committed delivery time or service quality standard defined by the organization.
+  A delivery journey performed by a driver from pickup to drop-off location for one or more delivery orders.
 examples:
-  - Order must be delivered within 24 hours
+  - Driver starts a trip covering 5 delivery orders in Bangalore
 aliases:
-  - SLA
+  - Delivery Trip
+  - Route Trip
 
-Name : Estimated Time Of Arrival
+Name: Vehicle Maintenance
 definition:
-  The predicted time when shipment is expected to reach the customer location.
+  Activities performed to ensure vehicles are safe, operational, and compliant with regulations.
 examples:
-  - Delivery ETA shown as 6:30 PM in tracking app
+  - Scheduled servicing of delivery van every 10,000 km
 aliases:
-  - ETA
+  - Fleet Maintenance
+  - Vehicle Servicing
 
-Name : Master Data
+Name: Delivery Status
 definition:
-  Reference data such as vehicle types, service zones, and package categories used across the system.
+  The current state of a delivery order throughout its lifecycle.
 examples:
-  - System stores vehicle types like Bike, Van, Truck
+  - Order marked as In-Transit or Delivered
 aliases:
-  - Reference Data
+  - Order Status
+  - Shipment Status
+
+Name: Compliance Alert
+definition:
+  A system-generated notification triggered when a compliance rule or SLA condition is violated.
+examples:
+  - Alert sent when driver license expires
+aliases:
+  - Violation Alert
+  - System Alert
+
+Name: Proof of Compliance
+definition:
+  Documents or records used to verify that drivers and vehicles meet regulatory requirements.
+examples:
+  - Uploaded insurance certificate for vehicle
+aliases:
+  - Compliance Document
+  - Verification Record
+
+Name: Performance Report
+definition:
+  A generated summary showing operational metrics such as delivery success rate, delays, and utilization.
+examples:
+  - Monthly delivery performance report for fleet manager
+aliases:
+  - Analytics Report
+  - Operations Report
+
+Name: Reassignment
+definition:
+  The process of changing the assigned driver or vehicle for an ongoing or upcoming delivery.
+examples:
+  - Delivery reassigned due to vehicle breakdown
+aliases:
+  - Delivery Reallocation
+  - Task Reassignment
