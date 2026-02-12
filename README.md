@@ -45,7 +45,7 @@ The system involves the following Actors and their roles/responsibility :
 - Role and permission management  
 - System configuration management  
 - Audit logs and activity monitoring  
-- Master data management (vehicles, drivers, compliance templates)  
+- Master data management (vehicles, drivers, compliance  )  
 - Security and access control management  
 
 ### Business Client
