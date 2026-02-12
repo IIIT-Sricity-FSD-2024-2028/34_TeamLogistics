@@ -39,10 +39,7 @@ The main goals of this problem statement are to:
 
 ### Q3. List key terms used by the domain expert and their meanings.
 
-**Answer:**
-| Term | Meaning as explained by the expert |
-## Q3. Key Domain Terms and Meanings
-
+**Answer:**  
 | Term | Meaning as explained by the domain expert |
 |------|-------------------------------------------|
 | Delivery Order | A request created in the system to transport a shipment from a source location to a customer within a defined delivery time window |
