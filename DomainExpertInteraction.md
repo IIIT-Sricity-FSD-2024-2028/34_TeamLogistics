@@ -95,20 +95,20 @@ The vehicle is restored to service or remains unavailable until issues are resol
 
 ---
 
-### Workflow 2: Delivery Order Creation & Dispatch Planning
+### Workflow 2: Delivery Order Creation & Dispatch
 
 **Trigger / Start Condition:**  
-A shipment is ready to be delivered from the warehouse.
+A business client creates a new delivery request.
 
 **Steps Involved :**
-1. Dispatcher creates a delivery order (single or bulk).
-2. System validates the order details.
-3. Warehouse Operator prepares the shipment.
-4. Dispatcher assigns the delivery to a driver and vehicle.
-5. A route plan is generated for delivery execution.
+- Business Client submits delivery order details  
+- System validates order information and SLA  
+- Delivery order is added to the pending queue  
+- Fleet Manager reviews incoming delivery requests  
+- Order is approved and moved to dispatch planning  
 
 **Outcome / End Condition:**  
-The delivery order is assigned and marked ready for execution.
+The delivery order is ready for assignment to a driver and vehicle.
 
 ---
 
@@ -163,7 +163,7 @@ The delivery is successfully completed and confirmed by the customer.
 ## Current Challenges and Pain Points
 
 ### Most Difficult or Inefficient Parts
-- Coordinating activities between warehouse, dispatcher, fleet manager, and drivers.
+- Coordinating activities between fleet manager and drivers.
 - Managing delivery assignments when drivers or vehicles become unavailable suddenly.
 - Handling delivery exceptions in real time without manual follow‑ups.
 
