@@ -2,14 +2,13 @@
 # Problem Statement: Fleet and Driver Operation Management System
 # Last Updated: 2026-02-01
 
-Name: Delivery Order
+Name: Delivery Request
 definition:
-  A request created in the system to transport a shipment from a source location to a destination within a specified time window.
+  A request created by Business Client in the system to transport a shipment from a source location to a destination within a specified time window.
 examples:
   - Customer orders electronics delivery from Hyderabad warehouse to Bangalore address
 aliases:
   - Shipment Order
-  - Delivery Request
 
 Name: Business Client
 definition:
