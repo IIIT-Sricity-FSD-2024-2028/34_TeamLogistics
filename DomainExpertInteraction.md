@@ -102,7 +102,7 @@ A business client creates a new delivery request.
 - System validates order information and SLA  
 - Delivery order is added to the pending queue  
 - Fleet Manager reviews incoming delivery requests  
-- Order is approved and moved to dispatch planning  
+- Order is automatically approved and moved to dispatch planning  
 
 **Outcome / End Condition:**  
 The delivery order is ready for assignment to a driver and vehicle.
@@ -116,9 +116,9 @@ A driver is assigned a delivery order.
 
 **Steps Involved :**
 1. Driver accepts the assigned delivery.
-2. Driver picks up the shipment from the warehouse.
+2. Driver picks up the shipment from the pickup location.
 3. Driver follows the planned route to the customer.
-4. Driver delivers the shipment.
+4. Driver delivers the package.
 5. Driver submits proof of delivery (OTP, signature, or photo).
 
 **Outcome / End Condition:**  
@@ -128,7 +128,6 @@ The delivery is successfully completed and confirmed by the customer.
 
 ### Mandatory Rules or Policies
 - Drivers must have valid licenses and mandatory documents before assignment.
-- Drivers must follow defined working hour limits.
 - Vehicles must be operational and approved before being assigned.
 - Deliveries must comply with agreed Service Level Agreements (SLAs).
 - Proof of Delivery must be recorded for completed deliveries.
