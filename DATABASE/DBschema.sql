@@ -8,10 +8,10 @@ CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    phone VARCHAR(15),
-    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    password VARCHAR(255) NOT NULL, 
     role_id INT NOT NULL,
-    FOREIGN KEY (role_id) REFERENCES Role(role_id) ON DELETE CASCADE
+    FOREIGN KEY (role_id) REFERENCES Role(role_id)
 );
 CREATE TABLE Vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,8 +34,8 @@ CREATE TABLE Business_Client (
     client_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     company_name VARCHAR(120) NOT NULL,
-    company_address TEXT,
-    company_contact_num VARCHAR(15),
+    company_address TEXT NOT NULL,
+    company_contact_num VARCHAR(15) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 CREATE TABLE Delivery_Request (
@@ -60,7 +60,7 @@ CREATE TABLE Assignment (
 );
 CREATE TABLE Trip (
     trip_id INT AUTO_INCREMENT PRIMARY KEY,
-    assignment_id INT NOT NULL,
+    assignment_id INT NOT NULL, 
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     distance DECIMAL(10,2) CHECK (distance >= 0),
@@ -117,3 +117,4 @@ CREATE TABLE Notification (
     status ENUM('Unread','Read') DEFAULT 'Unread',
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
+
