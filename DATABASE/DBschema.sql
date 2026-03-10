@@ -24,11 +24,11 @@ CREATE TABLE Fleet_Manager (
     user_id INT NOT NULL,
     company_name VARCHAR(120) NOT NULL,
     company_address TEXT,
-    number_of_vehicles INT CHECK (number_of_vehicles >= 0),
+    no_of_vehicles INT CHECK (no_of_vehicles >= 0),
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 -- create the Vehicle table
-CREATE TABLE Vehicle (
+CREATE TABLE Vehicle (  
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
     fleet_manager_id INT,
     vehicle_number VARCHAR(30) UNIQUE NOT NULL,
@@ -44,9 +44,20 @@ CREATE TABLE Driver (
     driver_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     license_number VARCHAR(50) UNIQUE NOT NULL,
+    license_document TEXT,
     rating DECIMAL(2,1) CHECK (rating >= 0 AND rating <= 5),
     status ENUM('Active','Inactive','Suspended') DEFAULT 'Active',
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+-- create the bank details
+CREATE TABLE Bank(
+    driver_id INT NOT NULL,
+    account_holder_name VARCHAR(100) NOT NULL,
+    account_number VARCHAR(30) NOT NULL,
+    ifsc_code VARCHAR(20) NOT NULL,
+    bank_name VARCHAR(100) NOT NULL,
+    bank_book_image TEXT,
+    FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE
 );
 -- create the Business_client table
 CREATE TABLE Business_Client (
@@ -88,7 +99,7 @@ CREATE TABLE Trip (
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     distance DECIMAL(10,2) CHECK (distance >= 0),
-    trip_status ENUM('Started','In_Transit','Delivered','Cancelled') DEFAULT 'Started',
+    trip_status ENUM('Picked Up','In_Transit','Delivered','Cancelled') DEFAULT 'Started',
     FOREIGN KEY (assignment_id) REFERENCES Assignment(assignment_id) ON DELETE CASCADE
 );
 -- create the proof_of_Delivery table
