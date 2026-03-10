@@ -34,7 +34,7 @@ CREATE TABLE Vehicle (
     vehicle_number VARCHAR(30) UNIQUE NOT NULL,
     vehicle_company VARCHAR(100),
     model VARCHAR(100),
-    year INT CHECK (year >= 2000),
+    year YEAR CHECK (year >= 2000),
     color VARCHAR(50),
     type VARCHAR(50),
     FOREIGN KEY (fleet_manager_id) REFERENCES Fleet_Manager(fleet_manager_id) ON DELETE CASCADE
@@ -51,7 +51,7 @@ CREATE TABLE Driver (
 );
 -- create the bank details
 CREATE TABLE Bank(
-    driver_id INT NOT NULL,
+    driver_id  INT NOT NULL UNIQUE,
     account_holder_name VARCHAR(100) NOT NULL,
     account_number VARCHAR(30) NOT NULL,
     ifsc_code VARCHAR(20) NOT NULL,
@@ -99,12 +99,12 @@ CREATE TABLE Trip (
     start_time TIMESTAMP,
     end_time TIMESTAMP,
     distance DECIMAL(10,2) CHECK (distance >= 0),
-    trip_status ENUM('Picked Up','In_Transit','Delivered','Cancelled') DEFAULT 'Started',
+    trip_status ENUM('Picked Up','In_Transit','Delivered','Cancelled') DEFAULT 'Picked Up',
     FOREIGN KEY (assignment_id) REFERENCES Assignment(assignment_id) ON DELETE CASCADE
 );
 -- create the proof_of_Delivery table
 CREATE TABLE Proof_of_Delivery (
-    trip_id INT PRIMARY KEY,
+    trip_id INT NOT NULL UNIQUE,
     delivery_image TEXT,
     customer_signature TEXT,
     delivered_time TIMESTAMP,
