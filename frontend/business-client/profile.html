@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Profile Settings | DeliverSync</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/css/business-client.css"><script src="../assets/js/data.js"></script><script src="../assets/js/business-client.js" defer></script><script src="../assets/js/workflow-demo.js" defer></script></head><body class="bc-body" data-page="profile"><div class="bc-layout"><aside class="bc-sidebar"><div class="bc-brand"><div class="logo-box"><img src="../assets/fleet-logo-icon.png" alt=""></div><div><div class="title">Deliver<span>Sync</span></div></div></div><nav class="bc-nav"><a href="dashboard.html" data-nav="dashboard" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Dashboard</span></a><a href="create-delivery.html" data-nav="create-delivery" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path></svg></span><span>Create Delivery</span></a><a href="active-deliveries.html" data-nav="active-deliveries" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Active Deliveries</span></a><a href="completed-deliveries.html" data-nav="completed-deliveries" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Completed Deliveries</span></a><a href="invoices.html" data-nav="invoices" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Invoices</span></a><a href="submit-transaction.html" data-nav="submit-transaction" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Submit Transaction</span></a><a href="profile.html" data-nav="profile" class="active"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Profile</span></a></nav><div class="spacer"></div><a class="bc-logout" href="../login.html"><span class="ico"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside><main class="bc-main"><header class="bc-topbar"><div><div class="company">Acme Logistics Inc.</div><div class="subtitle">Business Client Dashboard</div></div><a class="bc-bell" href="notifications.html" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span class="badge">3</span></a></header><section class="bc-content">
+<div class="top-actions"><div><h1 class="page-title small">Profile Settings</h1><p class="page-subtitle">Manage your company information</p></div><button class="btn yellow" id="profile-edit-btn"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg> Edit</button></div>
+<div class="card profile-card"><div class="profile-head"><div class="avatar-square">AL</div><div><div style="font-size:28px;font-weight:800" data-bc-company>Acme Logistics Inc.</div><div style="margin-top:6px;color:#9d9d9d;font-size:18px">Business Account</div></div></div>
+<div class="info-field"><label>Company Name</label><div class="value-box" data-field="company-name"><svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 10h.01"></path><path d="M9 14h.01"></path><path d="M9 18h.01"></path><path d="M15 10h.01"></path><path d="M15 14h.01"></path><path d="M15 18h.01"></path></svg><span class="profile-value-text">Acme Logistics Inc.</span></div><input class="input profile-edit-input" id="profile-company-name" value="Acme Logistics Inc." hidden></div>
+<div class="info-field"><label>Full Name</label><div class="value-box" data-field="full-name"><svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg> <span class="profile-value-text">Rajesh</span></div><input class="input profile-edit-input" id="profile-full-name" value="Rajesh" hidden></div>
+<div class="info-field"><label>Email Address</label><div class="value-box" data-field="email"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg><span class="profile-value-text">rajesh@gmail.com</span></div><input class="input profile-edit-input" id="profile-email" value="rajesh@gmail.com" hidden></div>
+<div class="info-field"><label>Phone Number</label><div class="value-box" data-field="phone"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.5 6.5l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z"></path></svg><span class="profile-value-text">+91 89304 57809</span></div><input class="input profile-edit-input" id="profile-phone" value="+91 89304 57809" hidden></div>
+<div class="info-field"><label>Address</label><div class="value-box" data-field="address"><svg viewBox="0 0 24 24"><path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"></path><circle cx="12" cy="10" r="2"></circle></svg> <span class="profile-value-text">123,Tada</span></div><input class="input profile-edit-input" id="profile-address" value="123,Tada" hidden></div>
+</div>
+</section></main></div><script>
+document.addEventListener('DOMContentLoaded', function(){
+  const originalBtn = document.getElementById('profile-edit-btn');
+  if(!originalBtn) return;
+  const btn = originalBtn.cloneNode(true);
+  originalBtn.parentNode.replaceChild(btn, originalBtn);
+
+  const fields = [
+    ['company-name','profile-company-name'],
+    ['full-name','profile-full-name'],
+    ['email','profile-email'],
+    ['phone','profile-phone'],
+    ['address','profile-address']
+  ];
+
+  const COMPANY_RE = /^[A-Za-z0-9 ]+$/;
+  const NAME_RE = /^[A-Za-z ]+$/;
+  const PHONE_RE = /^[6-9][0-9]{9}$/;
+  const EMAIL_RE = /^(?=.{1,64}@)(?=.{6,320}$)(?!\.)(?!.*\.\.)([A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+(?:\.[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]+)*)@([A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+)$/;
+
+  function ensureErr(input){
+    let err = input.parentElement.querySelector('.field-error');
+    if(!err){
+      err = document.createElement('div');
+      err.className = 'field-error';
+      err.style.color = '#ef4444';
+      err.style.fontSize = '14px';
+      err.style.marginTop = '8px';
+      input.insertAdjacentElement('afterend', err);
+    }
+    return err;
+  }
+  function setErr(input, msg){ ensureErr(input).textContent = msg || ''; }
+  function clearErr(input){ const err = input && input.parentElement.querySelector('.field-error'); if(err) err.textContent = ''; }
+  function normalizePhone(v){ const d = String(v||'').replace(/\D/g,''); return d.length===12 && d.startsWith('91') ? d.slice(2) : d; }
+
+  let editing = false;
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const companyInput = document.getElementById('profile-company-name');
+    const fullNameInput = document.getElementById('profile-full-name');
+    const emailInput = document.getElementById('profile-email');
+    const phoneInput = document.getElementById('profile-phone');
+    const addressInput = document.getElementById('profile-address');
+
+    if(!editing){
+      editing = true;
+      fields.forEach(([key,id])=>{
+        const box = document.querySelector(`.value-box[data-field="${key}"]`);
+        const inp = document.getElementById(id);
+        if(box) box.style.display = 'none';
+        if(inp) inp.hidden = false;
+      });
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg> Save';
+      return;
+    }
+
+    [companyInput, fullNameInput, emailInput, phoneInput, addressInput].forEach(clearErr);
+    const companyValue = (companyInput?.value || '').trim();
+    const fullNameValue = (fullNameInput?.value || '').trim();
+    const emailValue = (emailInput?.value || '').trim();
+    const phoneValue = normalizePhone(phoneInput?.value || '');
+    const addressValue = (addressInput?.value || '').trim();
+    let bad = false;
+
+    if(companyValue && !COMPANY_RE.test(companyValue)){ setErr(companyInput,'Company name should contain only letters, numbers, and spaces.'); bad = true; }
+    if(!NAME_RE.test(fullNameValue)){ setErr(fullNameInput,'Full name should contain only letters and spaces.'); bad = true; }
+    if(!EMAIL_RE.test(emailValue)){ setErr(emailInput,'Enter a valid email address in personal_info@domain format.'); bad = true; }
+    if(!PHONE_RE.test(phoneValue)){ setErr(phoneInput,'Phone number should start with 9, 8, 7, or 6 and contain exactly 10 digits.'); bad = true; }
+    if(bad) return;
+
+    const payload = {companyName: companyValue, fullName: fullNameValue, email: emailValue, phone: phoneValue, address: addressValue};
+    localStorage.setItem('bcProfileData', JSON.stringify(payload));
+
+    if(window.DeliverySyncData && DeliverySyncData.readState && DeliverySyncData.saveState && DeliverySyncData.getSession){
+      const st = DeliverySyncData.readState();
+      const session = DeliverySyncData.getSession();
+      const user = (st.users||[]).find(u => (u.email||'').toLowerCase() === ((session&&session.email)||'').toLowerCase());
+      if(user){
+        user.name = payload.fullName;
+        user.fullName = payload.fullName;
+        user.email = payload.email;
+        user.phone = payload.phone;
+        user.companyName = payload.companyName;
+        user.address = payload.address;
+        user.profileDetails = user.profileDetails || {};
+        user.profileDetails.companyName = payload.companyName;
+        user.profileDetails.fullName = payload.fullName;
+        user.profileDetails.businessAddress = payload.address;
+        user.profileDetails.address = payload.address;
+      }
+      DeliverySyncData.saveState(st);
+    }
+
+    fields.forEach(([key,id])=>{
+      const box = document.querySelector(`.value-box[data-field="${key}"]`);
+      const inp = document.getElementById(id);
+      if(box) box.style.display = 'flex';
+      if(inp) inp.hidden = true;
+      const span = box ? box.querySelector('.profile-value-text') : null;
+      const value = key==='company-name' ? payload.companyName : key==='full-name' ? payload.fullName : key==='email' ? payload.email : key==='phone' ? payload.phone : payload.address;
+      if(span) span.textContent = value || '';
+    });
+
+    const top = document.querySelector('.bc-topbar .company');
+    if(top) top.textContent = payload.companyName || '';
+    const head = document.querySelector('[data-bc-company]');
+    if(head) head.textContent = payload.companyName || '';
+    const avatar = document.querySelector('.avatar-square');
+    if(avatar){
+      const initials = (payload.companyName || '').trim().split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+      avatar.textContent = initials || avatar.textContent;
+    }
+    if(phoneInput) phoneInput.value = phoneValue;
+
+    editing = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg> Edit';
+  }, true);
+});
+</script></body></html>

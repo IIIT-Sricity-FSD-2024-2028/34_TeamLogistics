@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Fleet Manager | DeliverSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script src="assets/js/data.js"></script><script src="assets/js/utils.js"></script><script src="assets/js/forms.js" defer></script>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-panel-wrap" style="grid-column:1 / -1;">
+      <div class="auth-panel dark" style="width:min(760px,100%);">
+        <a class="back-link" href="roles.html">← Back</a>
+        <div class="page-header-logo"><a class="brand brand-image" href="index.html"><img src="assets/logo.png" alt="DeliverSync Logo"></a></div>
+        <div class="auth-card-head"><div class="icon-box" style="margin:0;">▤</div><div><h3>Create Fleet Manager Account</h3><p>Manage your fleet operations</p></div></div>
+        <form id="fleet-form" novalidate>
+          <div class="form-grid">
+            <div class="form-control"><label for="companyName">Company Name</label><input id="companyName" name="companyName" type="text" placeholder="Enter company name"><div class="error-message"></div></div>
+            <div class="form-control"><label for="managerName">Fleet Manager Name</label><input id="managerName" name="managerName" type="text" placeholder="Enter your full name"><div class="error-message"></div></div>
+            <div class="form-control"><label for="companyAddress">Company Address</label><input id="companyAddress" name="companyAddress" type="text" placeholder="Enter company address"><div class="error-message"></div></div>
+            <div class="form-control"><label for="vehicleCount">Number of Vehicles</label><input id="vehicleCount" name="vehicleCount" type="number" placeholder="Enter number of vehicles"><div class="error-message"></div></div>
+            <div class="form-control"><label for="phone">Phone Number</label><input id="phone" name="phone" type="text" placeholder="Enter phone"><div class="error-message"></div></div>
+            <div class="form-control"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="Enter email"><div class="error-message"></div></div>
+            <div class="form-row">
+              <div class="form-control"><label for="password">Password</label><div class="input-wrap"><input id="password" name="password" type="password" placeholder="Enter password"><button type="button" class="toggle-visibility">👁</button></div><div class="error-message"></div></div>
+              <div class="form-control"><label for="confirmPassword">Confirm Password</label><div class="input-wrap"><input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password"><button type="button" class="toggle-visibility">👁</button></div><div class="error-message"></div></div>
+            </div>
+          </div>
+          <div class="form-actions" style="justify-content:stretch;"><button class="btn btn-primary" style="width:100%;" type="submit">Create Fleet Manager Account</button></div>
+          <div class="form-footer">Already have an account? <a href="login.html">Sign in</a></div>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

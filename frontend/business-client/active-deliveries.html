@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Active Deliveries | DeliverSync</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/css/business-client.css"><script src="../assets/js/data.js"></script><script src="../assets/js/business-client.js" defer></script><script src="../assets/js/workflow-demo.js" defer></script><style>
+.bc-active-search{display:flex;justify-content:flex-end;margin:10px 0 18px}
+.bc-active-search .bc-search-dark{display:flex;align-items:center;gap:12px;background:#11141c;border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:0 18px;height:52px;min-width:310px;max-width:310px;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02)}
+.bc-active-search .bc-search-dark svg{width:18px;height:18px;stroke:#9ca3af;fill:none;stroke-width:2}
+.bc-active-search .bc-search-dark input{border:none;outline:none;background:transparent;width:100%;color:#d1d5db;font-weight:500;font-size:16px}
+.bc-active-search .bc-search-dark input::placeholder{color:#8b93a7;opacity:1}
+</style></head><body class="bc-body" data-page="active-deliveries"><div class="bc-layout"><aside class="bc-sidebar"><div class="bc-brand"><div class="logo-box"><img src="../assets/fleet-logo-icon.png" alt=""></div><div><div class="title">Deliver<span>Sync</span></div></div></div><nav class="bc-nav"><a href="dashboard.html" data-nav="dashboard" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Dashboard</span></a><a href="create-delivery.html" data-nav="create-delivery" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path></svg></span><span>Create Delivery</span></a><a href="active-deliveries.html" data-nav="active-deliveries" class="active"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Active Deliveries</span></a><a href="completed-deliveries.html" data-nav="completed-deliveries" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Completed Deliveries</span></a><a href="invoices.html" data-nav="invoices" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Invoices</span></a><a href="submit-transaction.html" data-nav="submit-transaction" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Submit Transaction</span></a><a href="profile.html" data-nav="profile" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Profile</span></a></nav><div class="spacer"></div><a class="bc-logout" href="../login.html"><span class="ico"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside><main class="bc-main"><header class="bc-topbar"><div><div class="company">Acme Logistics Inc.</div><div class="subtitle">Business Client Dashboard</div></div><a class="bc-bell" href="notifications.html" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span class="badge">3</span></a></header><section class="bc-content">
+<h1 class="page-title bc-active-title">Active Deliveries</h1><p class="page-subtitle">5 deliveries in progress</p>
+<div class="bc-active-search"><label class="bc-search-dark"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input id="bc-active-delivery-search" placeholder="Search Delivery ID"></label></div>
+<div class="delivery-list">
+<div class="delivery-item" data-order-id="DS-2045"><div><div class="delivery-id">#DS-2045</div><span class="pill bright">IN TRANSIT</span></div><div><div class="delivery-meta-label">From</div><div class="delivery-meta-value">BH-1, IIIT SRICITY</div></div><div><div class="delivery-meta-label">To</div><div class="delivery-meta-value">49-27 sullurpeta</div></div><div><div class="delivery-meta-label">Driver</div><div class="delivery-meta-value">Srujan</div><div class="delivery-meta-sub">3.2 km away</div></div><div><div class="delivery-meta-label">ETA</div><div class="eta-big">12</div><div class="eta-unit">mins</div></div><a class="btn yellow" href="live-tracking.html"><svg viewBox="0 0 24 24"><path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"></path><circle cx="12" cy="10" r="2"></circle></svg> Track Live</a><a class="btn outline-red" href="cancel-order.html?order=DS-2045" data-cancel-order="DS-2045">× Cancel Order</a></div>
+<div class="delivery-item" data-order-id="DS-2044"><div><div class="delivery-id">#DS-2044</div><span class="pill bright">PICKED UP</span></div><div><div class="delivery-meta-label">From</div><div class="delivery-meta-value">789 Airport Terminal</div></div><div><div class="delivery-meta-label">To</div><div class="delivery-meta-value">321 Central Plaza</div></div><div><div class="delivery-meta-label">Driver</div><div class="delivery-meta-value">Sarath</div><div class="delivery-meta-sub">12.8 km away</div></div><div><div class="delivery-meta-label">ETA</div><div class="eta-big">28</div><div class="eta-unit">mins</div></div><a class="btn yellow" href="live-tracking.html"><svg viewBox="0 0 24 24"><path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"></path><circle cx="12" cy="10" r="2"></circle></svg> Track Live</a><a class="btn outline-red" href="cancel-order.html?order=DS-2044" data-cancel-order="DS-2044">× Cancel Order</a></div>
+<div class="delivery-item" data-order-id="DS-2041"><div><div class="delivery-id">#DS-2041</div><span class="pill bright">IN TRANSIT</span></div><div><div class="delivery-meta-label">From</div><div class="delivery-meta-value">67-IIIT SRICITY</div></div><div><div class="delivery-meta-label">To</div><div class="delivery-meta-value">69-Om Street, Tada</div></div><div><div class="delivery-meta-label">Driver</div><div class="delivery-meta-value">David</div><div class="delivery-meta-sub">8.5 km away</div></div><div><div class="delivery-meta-label">ETA</div><div class="eta-big">45</div><div class="eta-unit">mins</div></div><a class="btn yellow" href="live-tracking.html"><svg viewBox="0 0 24 24"><path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"></path><circle cx="12" cy="10" r="2"></circle></svg> Track Live</a><a class="btn outline-red" href="cancel-order.html?order=DS-2041" data-cancel-order="DS-2041">× Cancel Order</a></div>
+</div>
+</section></main></div><script>
+(function(){
+  function read(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); } catch(e){ return fallback; }
+  }
+  function save(key, value){
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+  function buildCard(item){
+    return `<div class="delivery-item" data-order-id="${item.id}" data-created-delivery="1"><div><div class="delivery-id">#${item.id}</div><span class="pill bright">${item.status}</span></div><div><div class="delivery-meta-label">From</div><div class="delivery-meta-value">${item.pickup}</div></div><div><div class="delivery-meta-label">To</div><div class="delivery-meta-value">${item.drop}</div></div><div><div class="delivery-meta-label">Driver</div><div class="delivery-meta-value">${item.driver || 'Assigning'}</div><div class="delivery-meta-sub">${item.deliveryType || 'Standard'}</div></div><div><div class="delivery-meta-label">ETA</div><div class="eta-big">${item.eta || '35'}</div><div class="eta-unit">mins</div></div><a class="btn yellow" href="live-tracking.html"><svg viewBox="0 0 24 24"><path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"></path><circle cx="12" cy="10" r="2"></circle></svg> Track Live</a><a class="btn outline-red" href="cancel-order.html?order=${item.id}" data-cancel-order="${item.id}">× Cancel Order</a></div>`;
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    const container = document.querySelector('.delivery-list');
+    if(!container) return;
+    const params = new URLSearchParams(location.search);
+    const cancelled = read('bcCancelledOrders', []);
+    let items = read('bcCreatedDeliveries', []);
+    if(params.get('created') === '1'){
+      const item = {
+        id: params.get('id') || ('DS-' + Date.now()),
+        pickup: params.get('pickup') || 'Pickup',
+        drop: params.get('drop') || 'Drop',
+        driver: params.get('driver') || 'Assigning',
+        eta: params.get('eta') || '35',
+        status: params.get('status') || 'IN TRANSIT',
+        deliveryType: params.get('deliveryType') || 'Standard'
+      };
+      if(!items.some(x => x.id === item.id)){
+        items.unshift(item);
+        save('bcCreatedDeliveries', items);
+      }
+    }
+    container.querySelectorAll('[data-created-delivery="1"]').forEach(node => node.remove());
+    items.filter(item => !cancelled.includes(item.id)).slice().reverse().forEach(item => {
+      container.insertAdjacentHTML('afterbegin', buildCard(item));
+    });
+    const count = container.querySelectorAll('.delivery-item[data-order-id]').length;
+    const subtitle = document.querySelector('.bc-active-title + .page-subtitle');
+    if(subtitle) subtitle.textContent = `${count} deliveries in progress`;
+
+    const searchInput = document.getElementById('bc-active-delivery-search');
+    const applyPrefixSearch = function(){
+      const q = (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+      container.querySelectorAll('.delivery-item[data-order-id]').forEach(function(card){
+        const id = String(card.getAttribute('data-order-id') || '').toLowerCase();
+        card.style.display = !q || id.startsWith(q) ? '' : 'none';
+      });
+    };
+    if(searchInput){
+      searchInput.addEventListener('input', applyPrefixSearch);
+      applyPrefixSearch();
+    }
+  });
+})();
+</script></body></html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Earnings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css">
+<script src="../assets/js/workflow-demo.js" defer></script></head>
+<body class="driver-desktop-page" data-page="earnings">
+  <div class="driver-shell">
+    <aside class="driver-sidebar">
+      <a class="brand" href="dashboard.html"><div class="brand-badge">🚚</div><div class="brand-text">Deliver<span>Sync</span></div></a>
+      <nav class="sidebar-nav">
+        <a class="nav-link" data-nav="dashboard" href="dashboard.html"><span class="nav-icon icon-dashboard"></span><span>Dashboard</span></a>
+        <a class="nav-link" data-nav="map" href="map.html"><span class="nav-icon icon-map"></span><span>Map</span></a>
+        <a class="nav-link" data-nav="history" href="history.html"><span class="nav-icon icon-history"></span><span>History</span></a>
+        <a class="nav-link" data-nav="notifications" href="notifications.html"><span class="nav-icon icon-notifications"></span><span>Notifications</span></a>
+        <a class="nav-link" data-nav="earnings" href="earnings.html"><span class="nav-icon icon-earnings"></span><span>Earnings</span></a>
+        <a class="nav-link" data-nav="profile" href="profile.html"><span class="nav-icon icon-profile"></span><span>Profile</span></a>
+      </nav>
+      <div class="sidebar-footer">
+<button class="logout-btn" id="driverLogout" type="button" style="margin-top:10px"><span>Logout</span></button>
+      </div>
+    </aside>
+    <main class="driver-main">
+      <header class="topbar">
+        <div class="topbar-left"><h1 id="page-title">Driver Portal</h1><p id="page-subtitle">Desktop view</p></div>
+        <div class="topbar-right">
+          <div id="notifWrap" style="position:relative"><button class="icon-circle" id="notifBtn" type="button">🔔<span class="icon-badge"></span></button><div class="dropdown" id="notifMenu"></div></div>
+          <div id="profileWrap" class="profile-menu" style="position:relative"><button class="profile-chip" id="profileBtn" type="button"><div class="profile-avatar" id="profileInitial">R</div><div><div id="quickProfileName" style="font-weight:800">Driver</div><div id="quickProfileEmail" style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div></div></button><div class="dropdown" id="profileMenu"><div class="dropdown-item"><strong>Driver Quick Actions</strong><small><a href="profile.html">Edit profile</a></small><small><a href="dashboard.html">View dashboard</a></small></div></div></div>
+        </div>
+      </header>
+      <section class="content" id="driver-content"></section>
+    </main>
+  </div>
+  <script src="../assets/js/driver-desktop.js"></script>
+</body>
+</html>

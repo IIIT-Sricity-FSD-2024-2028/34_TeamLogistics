@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Driver | DeliverSync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script src="assets/js/data.js"></script><script src="assets/js/utils.js"></script><script src="assets/js/forms.js" defer></script>
+
+  <style>
+    .file-upload-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+    .file-upload-input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+    .file-upload-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.28);background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));color:#fff;font-weight:700;cursor:pointer;min-height:46px;box-shadow:0 0 0 1px rgba(255,255,255,0.06) inset, 0 10px 24px rgba(0,0,0,0.22)}
+    .file-upload-name{color:#d8dfeb;font-size:14px;word-break:break-word}
+  </style>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-panel-wrap" style="grid-column:1 / -1;">
+      <div class="auth-panel dark" style="width:min(760px,100%);">
+        <a class="back-link" href="roles.html">← Back</a>
+        <div class="page-header-logo"><a class="brand brand-image" href="index.html"><img src="assets/logo.png" alt="DeliverSync Logo"></a></div>
+        <div class="auth-card-head"><div class="icon-box" style="margin:0;">◉</div><div><h3>Register as Driver</h3><p>Join our delivery network</p></div></div>
+        <form id="driver-form" novalidate>
+          <div class="form-grid">
+            <div class="form-control"><label for="name">Full Name</label><input id="name" name="name" type="text" placeholder="Enter your full name"><div class="error-message"></div></div>
+            <div class="form-control"><label for="phone">Phone Number</label><input id="phone" name="phone" type="text" placeholder="Enter phone"><div class="error-message"></div></div>
+            <div class="form-control"><label for="license">Driver License Number</label><input id="license" name="license" type="text" placeholder="Enter license no."><div class="error-message"></div></div>
+            <div class="form-control"><label for="licenseDoc">Upload License</label><div class="file-upload-wrap"><label class="file-upload-btn" for="licenseDoc">Choose File</label><input class="file-upload-input" id="licenseDoc" name="licenseDoc" type="file" accept=".png,image/png"><span class="file-upload-name" id="licenseDocName">No file chosen</span></div><div class="error-message"></div></div>
+            <div class="panel" style="padding:20px;">
+              <h3 style="margin-top:0;">Bank Details</h3>
+              <div class="form-grid">
+                <div class="form-control"><label for="accountHolder">Account Holder Name</label><input id="accountHolder" name="accountHolder" type="text" placeholder="Enter account holder name" pattern="[A-Za-z ]+" title="Letters and spaces only"><div class="error-message"></div></div>
+                <div class="form-row"><div class="form-control"><label for="accountNumber">Account Number</label><input id="accountNumber" name="accountNumber" type="text" placeholder="Enter account no." pattern="\d{12}" maxlength="12" inputmode="numeric" title="12 digit account number"><div class="error-message"></div></div><div class="form-control"><label for="ifsc">IFSC Code</label><input id="ifsc" name="ifsc" type="text" placeholder="Enter IFSC" pattern="[A-Za-z]{4}0[A-Za-z0-9]{6}" maxlength="11" title="4 letters, 0, then 6 letters or numbers"><div class="error-message"></div></div></div>
+                <div class="form-control"><label for="bankName">Bank Name</label><input id="bankName" name="bankName" type="text" placeholder="Enter bank name" pattern="[A-Za-z .&-]+" title="Letters, spaces, dots, ampersand and hyphen only"><div class="error-message"></div></div>
+                <div class="form-control"><label for="bankBook">Upload Bank Book</label><div class="file-upload-wrap"><label class="file-upload-btn" for="bankBook">Choose File</label><input class="file-upload-input" id="bankBook" name="bankBook" type="file" accept=".png,image/png"><span class="file-upload-name" id="bankBookName">No file chosen</span></div><div class="error-message"></div></div>
+              </div>
+            </div>
+            <div class="form-control"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="Enter email address"><div class="error-message"></div></div>
+            <div class="form-row"><div class="form-control"><label for="password">Password</label><div class="input-wrap"><input id="password" name="password" type="password" placeholder="Enter password"><button type="button" class="toggle-visibility">👁</button></div><div class="error-message"></div></div><div class="form-control"><label for="confirmPassword">Confirm Password</label><div class="input-wrap"><input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password"><button type="button" class="toggle-visibility">👁</button></div><div class="error-message"></div></div></div>
+          </div>
+          <div class="form-actions" style="justify-content:stretch;"><button class="btn btn-primary" style="width:100%;" type="submit">Register as Driver</button></div>
+          <div class="form-footer">Already have an account? <a href="login.html">Sign in</a></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  [['licenseDoc','licenseDocName'],['bankBook','bankBookName']].forEach(function(pair){
+    var input=document.getElementById(pair[0]);
+    var text=document.getElementById(pair[1]);
+    if(!input || !text) return;
+    input.addEventListener('change', function(){
+      var file=input.files && input.files[0];
+      text.textContent = file ? file.name : 'No file chosen';
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>Upload Document | DeliverSync</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/><link href="../assets/css/fleet-manager.css" rel="stylesheet"/><script src="../assets/js/fleet-manager.js"></script><script src="../assets/js/workflow-demo.js" defer></script><style>
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.category-card{cursor:pointer}.hidden{display:none}.field select,.field input[type=date],.field .file-shell{width:100%;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:18px;color:#fff;padding:14px 16px;font:inherit;box-sizing:border-box}.file-shell{display:flex;align-items:center;gap:12px;min-height:56px}.file-shell input[type=file]{position:absolute;opacity:0;width:.1px;height:.1px;pointer-events:none}.file-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:12px;border:1px solid #3a3a3a;background:#111;color:#fff;font-weight:600;cursor:pointer}.file-name{font-size:13px;color:#a7a7a7;line-height:1.2}.upload-actions{display:flex;gap:12px;margin-top:16px}.file-note{font-size:13px;color:#8f8f8f;margin-top:8px}
+@media(max-width:900px){.upload-grid,.form-grid{grid-template-columns:1fr}}
+</style></head><body><div class="fleet-layout"><aside class="sidebar"><div class="brand"><img alt="DeliverSync logo" src="../assets/fleet-logo-icon.png"/><div><div class="brand-name">Deliver<span>Sync</span></div><div class="brand-sub">Fleet Manager Portal</div></div></div><nav class="nav"><a class="" href="dashboard.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="6" rx="1" width="6" x="4" y="4"></rect><rect height="6" rx="1" width="6" x="14" y="4"></rect><rect height="6" rx="1" width="6" x="4" y="14"></rect><rect height="6" rx="1" width="6" x="14" y="14"></rect></svg></span><span>Dashboard</span></a><a class="" href="vehicles.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 14V9a2 2 0 0 1 2-2h8l3 3h3a2 2 0 0 1 2 2v2"></path><circle cx="7" cy="16.5" r="2"></circle><circle cx="17" cy="16.5" r="2"></circle></svg></span><span>Vehicles</span></a><a class="" href="drivers.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M4 19a5 5 0 0 1 10 0"></path><circle cx="17" cy="9" r="2"></circle><path d="M15 19a4 4 0 0 1 5-3.8"></path></svg></span><span>Drivers</span></a><a class="" href="compliance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path></svg></span><span>Compliance</span></a><a class="" href="trips.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12"></path><path d="M13 6l6 6-6 6"></path></svg></span><span>Trips</span></a><a class="" href="maintenance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 0-5.7-3"></path></svg></span><span>Maintenance</span></a><a class="active" href="documents.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 3v5h5"></path></svg></span><span>Documents</span></a><a class="" href="analytics.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V9"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20V12"></path></svg></span><span>Analytics</span></a><a class="" href="notifications.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg></span><span>Notifications</span></a><a class="" href="profile.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20a8 8 0 0 1 16 0"></path></svg></span><span>Profile</span></a><a class="" href="settings.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></span><span>Settings</span></a></nav><a class="logout" href="../login.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside><main class="main"><div class="topbar"><div class="pagehead"><h1>Upload Document</h1><p>Add new document to fleet management system</p></div><div class="toptools"><label class="search"><span>⌕</span><input placeholder="Search..."/></label><a aria-label="Notifications" class="iconbox iconlink notif-link" href="notifications.html"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span class="dot">3</span></a><div class="avatar">FM</div><div class="usertext"><strong>Fleet Manager</strong><span>Administrator</span></div><div class="caret">⌄</div></div></div><div class="content">
+<div class="info-card">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px"><a class="btn btn-square btn-ghost" href="documents.html">←</a><div><div class="section-title">Upload Document</div><div class="muted">Add new document to fleet management system</div></div></div>
+  <div class="upload-grid" style="margin-bottom:24px">
+    <div class="category-card active" data-kind="vehicle"><div style="font-size:48px;margin-bottom:10px">▤</div><div style="font-size:18px;font-weight:700">Vehicle Documents</div><div class="muted">Insurance, Pollution Certificate</div></div>
+    <div class="category-card" data-kind="driver"><div style="font-size:48px;margin-bottom:10px">◌</div><div style="font-size:18px;font-weight:700">Driver Documents</div><div class="muted">Driver License</div></div>
+  </div>
+  <div class="form-grid">
+    <div class="field"><label>Document Type *</label><select id="docType"></select></div>
+    <div class="field vehicle-only"><label>Select Vehicle *</label><select id="selectVehicle"></select></div>
+    <div class="field driver-only hidden"><label>Select Driver *</label><select id="selectDriver"></select></div>
+    <div class="field"><label>Upload File *</label><div class="file-shell"><label class="file-btn" for="docFile">Choose File</label><input id="docFile" type="file" accept=".pdf,.png,.jpg,.jpeg"/><span class="file-name" id="fileName">No file chosen</span></div></div><div class="field"><label>Expiry Date *</label><input id="expiryDate" type="date"/></div><div class="file-note">Accepted: PDF, PNG, JPG</div></div>
+  </div>
+  <div class="upload-actions"><button class="btn btn-ghost" type="button" onclick="window.location.href='documents.html'">Cancel</button><button class="btn btn-yellow" id="uploadBtn" type="button">Upload Document</button></div>
+</div>
+</div></main></div>
+<script>
+(function(){
+  const vehicleTypes=['Pollution Certificate','Insurance'];
+  const driverTypes=['Driver License'];
+  const vehicleSelect=document.getElementById('selectVehicle');
+  const driverSelect=document.getElementById('selectDriver');
+  const docType=document.getElementById('docType');
+  const cards=document.querySelectorAll('.category-card');
+  const fileInput=document.getElementById('docFile');
+  const fileName=document.getElementById('fileName');
+  let kind='vehicle';
+
+  function fillOptions(select, items, label){
+    select.innerHTML = `<option value="">Select ${label}</option>` + items.map(x=>`<option value="${x}">${x}</option>`).join('');
+  }
+  function setKind(next){
+    kind=next;
+    cards.forEach(c=>c.classList.toggle('active', c.dataset.kind===next));
+    document.querySelectorAll('.vehicle-only').forEach(el=>el.classList.toggle('hidden', next!=='vehicle'));
+    document.querySelectorAll('.driver-only').forEach(el=>el.classList.toggle('hidden', next!=='driver'));
+    fillOptions(docType, next==='vehicle'?vehicleTypes:driverTypes, 'document type');
+  }
+
+  fillOptions(vehicleSelect, (window.FleetManagerData?.vehicles||[]).map(v=>v.plate), 'vehicle');
+  fillOptions(driverSelect, (window.FleetManagerData?.drivers||[]).map(d=>d.name), 'driver');
+  setKind('vehicle');
+  cards.forEach(c=>c.addEventListener('click', ()=>setKind(c.dataset.kind)));
+
+  fileInput.addEventListener('change', ()=>{
+    fileName.textContent = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
+  });
+
+  document.getElementById('uploadBtn').addEventListener('click', ()=>{
+    const type=docType.value;
+    const entity = kind==='vehicle' ? vehicleSelect.value : driverSelect.value;
+    const file=fileInput.files[0];
+    const expiry=document.getElementById('expiryDate').value;
+    if(!type || !entity || !file || !expiry){ alert('Please complete all required fields.'); return; }
+    const key='deliverysync-fm-uploaded-docs';
+    let docs=[];
+    try{ docs=JSON.parse(localStorage.getItem(key)||'[]'); if(!Array.isArray(docs)) docs=[]; }catch(e){ docs=[]; }
+    const today=new Date();
+    const issueDate=today.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).replace(',', ',');
+    const expDate=new Date(expiry+'T00:00:00');
+    const expiryDate=expDate.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'}).replace(',', ',');
+    docs.unshift({id:Date.now(),kind,entity,type,fileName:file.name,issueDate,expiryDate,status:'Valid'});
+    localStorage.setItem(key, JSON.stringify(docs));
+    window.location.href='documents.html';
+  });
+})();
+</script>
+</body></html>
