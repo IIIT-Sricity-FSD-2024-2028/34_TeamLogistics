@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Completed Deliveries | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/business-client.js" defer></script>
+  <script src="../assets/js/workflow-demo.js" defer></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body" data-page="completed-deliveries">
+  <div class="bc-layout">
+    <aside class="bc-sidebar">
+      <div class="bc-brand">
+        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div>
+      </div>
+
+      <nav class="bc-nav">
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path></svg>
+          </span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html" data-nav="active-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg>
+          </span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" data-nav="completed-deliveries" class="active">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg>
+          </span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg>
+          </span>
+          <span>Invoices</span>
+        </a>
+
+        <a href="submit-transaction.html" data-nav="submit-transaction">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg>
+          </span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html" data-nav="notifications">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg>
+          </span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+        </span>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <main class="bc-main">
+      <header class="bc-topbar">
+        <div>
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
+
+        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
+          <svg viewBox="0 0 24 24"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>
+          <span class="badge">3</span>
+        </a>
+      </header>
+
+      <section class="bc-content">
+        <h1 class="page-title small">Completed Deliveries</h1>
+        <p class="page-subtitle" id="completedSubtitle">Loading completed deliveries...</p>
+
+        <div
+          id="backendVerification"
+          style="
+            margin-top: 16px;
+            margin-bottom: 24px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            color: #d1d5db;
+            font-size: 14px;
+          "
+        >
+          Verifying backend data...
+        </div>
+
+        <div class="stats-row">
+          <div class="card" style="padding:24px">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l2.5 2.5L16 9"></path></svg>
+            </div>
+            <div class="stat-label">This Week</div>
+            <div class="stat-value" id="completedWeekCount" style="font-size:42px">0</div>
+          </div>
+
+          <div class="card" style="padding:24px">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg>
+            </div>
+            <div class="stat-label">This Month</div>
+            <div class="stat-value" id="completedMonthCount" style="font-size:42px">0</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">Recent Completions</div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Delivery ID</th>
+                <th>Date</th>
+                <th>Driver</th>
+                <th>Route</th>
+                <th>Status</th>
+                <th>Invoice</th>
+                <th>Feedback</th>
+              </tr>
+            </thead>
+
+            <tbody id="completedDeliveriesBody">
+              <tr>
+                <td colspan="7" style="text-align:center;color:#8f8f8f;padding:24px">
+                  Loading completed deliveries from backend...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const CLIENT_NAME = "Acme Logistics Inc.";
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.invoices)) return result.invoices;
+        return [];
+      };
+
+      const esc = (value) => {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const isCompleted = (item) => {
+        const status = normalize(item.status);
+        return status === "delivered" || status === "completed" || status.includes("delivered") || status.includes("completed");
+      };
+
+      const belongsToClient = (delivery) => {
+        const customer = normalize(delivery.customer || delivery.client || delivery.company);
+        const contact = normalize(delivery.contact);
+        const target = normalize(CLIENT_NAME);
+
+        return (
+          customer === target ||
+          contact === target ||
+          customer.includes("acme") ||
+          contact.includes("acme")
+        );
+      };
+
+      const formatDate = (value) => {
+        if (!value) return "--";
+
+        const date = new Date(value);
+        if (!Number.isNaN(date.getTime())) {
+          return date.toLocaleDateString("en-IN", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        return value;
+      };
+
+      const getLinkedTrip = (delivery, trips) => {
+        return (
+          trips.find((t) => String(t.request) === String(delivery.id)) ||
+          trips.find((t) => String(t.deliveryId) === String(delivery.id)) ||
+          trips.find((t) => String(t.delivery_id) === String(delivery.id)) ||
+          trips.find((t) => String(t.requestId) === String(delivery.id)) ||
+          trips.find((t) => String(t.deliveryRequestId) === String(delivery.id)) ||
+          null
+        );
+      };
+
+    const getLinkedInvoice = (delivery, invoices) => {
+  return (
+    invoices.find((inv) => String(inv.deliveryId) === String(delivery.id)) ||
+    invoices.find((inv) => String(inv.request) === String(delivery.id)) ||
+    invoices.find((inv) => String(inv.deliveryRequestId) === String(delivery.id)) ||
+    null
+  );
+};
+
+      try {
+        if (!window.DeliverySyncAPI) {
+          throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+        }
+
+        const deliveriesResult = await DeliverySyncAPI.Deliveries.getAll();
+        const tripsResult = await DeliverySyncAPI.Trips.getAll();
+
+        let invoicesResult = [];
+        let invoicesLoaded = false;
+
+        try {
+          if (DeliverySyncAPI.Transactions && DeliverySyncAPI.Transactions.getInvoices) {
+            invoicesResult = await DeliverySyncAPI.Transactions.getInvoices();
+            invoicesLoaded = true;
+          }
+        } catch (invoiceError) {
+          console.warn("Invoices could not be loaded:", invoiceError);
+        }
+
+        const deliveries = getArray(deliveriesResult);
+        const trips = getArray(tripsResult);
+        const invoices = getArray(invoicesResult);
+
+        const completedDeliveries = deliveries
+          .filter((d) => belongsToClient(d))
+          .filter((d) => isCompleted(d))
+          .sort((a, b) => {
+            const da = new Date(a.requestTime || a.createdAt || 0).getTime();
+            const db = new Date(b.requestTime || b.createdAt || 0).getTime();
+            return db - da;
+          });
+
+        const tbody = document.getElementById("completedDeliveriesBody");
+
+        setText("completedSubtitle", `${completedDeliveries.length} most recent deliveries`);
+        setText("completedWeekCount", completedDeliveries.length);
+        setText("completedMonthCount", completedDeliveries.length);
+
+        if (!tbody) return;
+
+        if (completedDeliveries.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align:center;color:#8f8f8f;padding:24px">
+                No completed deliveries found from backend.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = completedDeliveries
+            .map((delivery) => {
+              const trip = getLinkedTrip(delivery, trips);
+              const invoice = getLinkedInvoice(delivery, invoices);
+
+              const id = delivery.id || "--";
+              const date = formatDate(delivery.requestTime || delivery.createdAt);
+              const driver = trip?.driver || delivery.driver || "--";
+              const pickup = delivery.pickup || trip?.pickup || "--";
+              const dropoff = delivery.dropoff || delivery.destination || trip?.destination || "--";
+              const status = delivery.status || trip?.status || "Delivered";
+
+              const invoiceLink = invoice
+  ? `invoice-view.html?deliveryId=${encodeURIComponent(id)}&id=${encodeURIComponent(invoice.id)}&from=completed`
+  : `invoice-view.html?deliveryId=${encodeURIComponent(id)}&from=completed`;
+
+              return `
+                <tr>
+                  <td>#${esc(id)}</td>
+                  <td>${esc(date)}</td>
+                  <td>${esc(driver)}</td>
+                  <td>${esc(pickup)} → ${esc(dropoff)}</td>
+                  <td><span class="pill yellow">${esc(status)}</span></td>
+                  <td>
+                    <a class="btn sm outline-yellow" href="${esc(invoiceLink)}">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+                        <path d="M9 8h6"></path>
+                        <path d="M9 12h6"></path>
+                      </svg>
+                      View
+                    </a>
+                  </td>
+                  <td>
+                    <a class="btn sm yellow" href="feedback.html?id=${encodeURIComponent(id)}">
+                      Provide Feedback
+                    </a>
+                  </td>
+                </tr>
+              `;
+            })
+            .join("");
+        }
+
+        const tripMatches = completedDeliveries.filter((d) => getLinkedTrip(d, trips)).length;
+        const invoiceMatches = completedDeliveries.filter((d) => getLinkedInvoice(d, invoices)).length;
+
+        console.table({
+          deliveriesLoaded: deliveries.length,
+          completedForClient: completedDeliveries.length,
+          tripsLoaded: trips.length,
+          tripMatches,
+          invoicesLoaded,
+          invoicesCount: invoices.length,
+          invoiceMatches,
+        });
+
+        setVerification(
+          `Backend verified: Deliveries ✓ | Completed ${completedDeliveries.length} | Trips ${tripMatches}/${completedDeliveries.length} | Invoices ${
+            invoicesLoaded ? "✓" : "✗"
+          }`
+        );
+      } catch (error) {
+        console.error("Completed deliveries backend sync failed:", error);
+
+        setVerification(`Backend sync failed: ${error.message}`, true);
+
+        const tbody = document.getElementById("completedDeliveriesBody");
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align:center;color:#ff8d8d;padding:24px">
+                Could not load completed deliveries from backend.
+              </td>
+            </tr>
+          `;
+        }
+
+        setText("completedSubtitle", "0 most recent deliveries");
+        setText("completedWeekCount", "0");
+        setText("completedMonthCount", "0");
+      }
+    });
+  </script>
+</body>
+</html>

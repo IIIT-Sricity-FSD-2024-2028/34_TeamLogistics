@@ -1,0 +1,87 @@
+[
+  {
+    "id": "VH-1007",
+    "plate": "TS-09-QA-2345",
+    "type": "Mini Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "location": "Hyderabad",
+    "availability": "Available"
+  },
+  {
+    "id": "VH-1008",
+    "plate": "KA-09-LM-4567",
+    "type": "Tempo",
+    "capacity": "4 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "location": "Chennai",
+    "availability": "Available"
+  },
+  {
+    "id": "VH-1009",
+    "plate": "MH-12-EF-4321",
+    "type": "Truck",
+    "capacity": "8 Tons",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "location": "Mumbai",
+    "availability": "Unavailable"
+  },
+  {
+    "id": "VH-1010",
+    "plate": "AP-07-RS-6543",
+    "type": "Van",
+    "capacity": "1 Ton",
+    "assignedDriver": "--",
+    "status": "Active",
+    "location": "Vijayawada",
+    "availability": "Available"
+  },
+  {
+    "id": "VH-1008",
+    "plate": "TS08XY1256",
+    "type": "Mini Truck",
+    "capacity": "20 kg",
+    "assignedDriver": "1121212121",
+    "status": "Active",
+    "maintenance": ""
+  },
+  {
+    "id": "VH-1008",
+    "plate": "TN09AB1000",
+    "type": "Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-05-01"
+  },
+  {
+    "id": "VH-1008",
+    "plate": "TN09AB1056",
+    "type": "Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-05-04"
+  },
+  {
+    "id": "VH-1009",
+    "plate": "TN09AB9654",
+    "type": "Van",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-05-01"
+  },
+  {
+    "id": "VH-1009",
+    "plate": "TN09AB0000",
+    "type": "SUV",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-05-02"
+  }
+]

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeliverSync | Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/brand-logo.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/api-client.js"></script>
+  <script src="assets/js/utils.js"></script>
+  <style>
+    .form-control .error-message {
+      color: #ff5b5b;
+      font-size: 0.82rem;
+      margin-top: 4px;
+      min-height: 1.1em;
+      display: block;
+    }
+    .login-global-error {
+      background: rgba(255,91,91,0.12);
+      color: #ff5b5b;
+      border: 1px solid rgba(255,91,91,0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      display: none;
+      text-align: center;
+    }
+    .login-global-error.show {
+      display: block;
+    }
+    .login-success {
+      background: rgba(46,204,113,0.12);
+      color: #2ecc71;
+      border: 1px solid rgba(46,204,113,0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      display: none;
+      text-align: center;
+    }
+    .login-success.show {
+      display: block;
+    }
+  </style>
+  <script src="assets/js/brand-logo.js"></script>
+</head>
+
+<body>
+  <main class="login-shell">
+
+    <!-- LEFT SIDE -->
+    <section class="showcase">
+      <a class="back-link login-back-link" href="index.html">← Back</a>
+      <div class="ds-brand-logo" data-href="index.html" data-size="lg"></div>
+
+      <h1>Access<br>Your<br>Operations</h1>
+      <p>Log in to manage fleets, track deliveries, and monitor performance in real time.</p>
+    </section>
+
+    <!-- RIGHT SIDE -->
+    <section class="auth-panel-wrap">
+      <div class="auth-panel">
+
+        <h2>Welcome Back!!</h2>
+
+        <div id="login-global-error" class="login-global-error"></div>
+        <div id="login-success" class="login-success"></div>
+
+        <form id="login-form" novalidate>
+
+          <!-- EMAIL LOGIN -->
+          <div class="form-grid">
+
+            <div class="form-control">
+              <label for="email">Email</label>
+              <div class="input-wrap">
+                <input id="email" name="email" type="email" placeholder="abc@gmail.com">
+              </div>
+              <span class="error-message"></span>
+            </div>
+
+            <div class="form-control">
+              <label for="password">Password</label>
+              <div class="input-wrap">
+                <input id="password" name="password" type="password" placeholder="••••••••">
+                <button type="button" id="togglePassword" class="toggle-visibility">👁</button>
+              </div>
+              <span class="error-message"></span>
+            </div>
+
+          </div>
+
+          <div class="form-meta">
+            <label class="checkbox-line">
+              <input id="rememberMe" type="checkbox" checked> Remember Me
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-secondary" type="submit" id="loginBtn" style="min-width:160px;background:#efefef;color:#222;">
+              Login
+            </button>
+          </div>
+
+          <!-- 🔽 GOOGLE MOVED TO BOTTOM -->
+          <div style="text-align:center;margin:20px 0;opacity:0.7;">
+            ───────── OR ─────────
+          </div>
+
+          <button type="button" id="googleLogin" class="google-btn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+            Continue with Google
+          </button>
+
+          <div class="form-footer">
+            Don't have an account? <a href="roles.html">Get started</a>
+          </div>
+
+          <div id="demo-credentials" style="margin-top:14px;padding:12px;background:rgba(255,255,255,0.06);border-radius:8px;font-size:0.82rem;line-height:1.7;color:#aaa;"></div>
+
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    (function () {
+      const { readState, initialState, setSession, roleRoutes, seed } = window.DeliverySyncData;
+
+      const $ = (sel) => document.querySelector(sel);
+      const API_BASE = 'http://localhost:3000/api';
+
+      function setFieldError(input, message) {
+        const field = input.closest('.form-control');
+        if (!field) return;
+        const err = field.querySelector('.error-message');
+        if (err) err.textContent = message || '';
+        input.style.borderColor = message ? '#ff5b5b' : '';
+      }
+
+      function clearAllErrors() {
+        document.querySelectorAll('.error-message').forEach(e => e.textContent = '');
+        document.querySelectorAll('input').forEach(e => e.style.borderColor = '');
+        const ge = $('#login-global-error');
+        if (ge) { ge.textContent = ''; ge.classList.remove('show'); }
+      }
+
+      function showGlobalError(msg) {
+        const ge = $('#login-global-error');
+        if (ge) { ge.textContent = msg; ge.classList.add('show'); }
+      }
+
+      function showSuccess(msg) {
+        const s = $('#login-success');
+        if (s) { s.textContent = msg; s.classList.add('show'); }
+      }
+
+      // Setup password toggle
+      const toggleBtn = $('#togglePassword');
+      const passInput = $('#password');
+      if (toggleBtn && passInput) {
+        toggleBtn.addEventListener('click', () => {
+          passInput.type = passInput.type === 'password' ? 'text' : 'password';
+          toggleBtn.textContent = passInput.type === 'password' ? '👁' : '🙈';
+        });
+      }
+
+      // Strip spaces from password
+      if (passInput) {
+        passInput.addEventListener('input', () => {
+          passInput.value = passInput.value.replace(/\s/g, '');
+        });
+      }
+
+      // Seed local data
+      seed();
+
+      // Show demo credentials
+      const demo = $('#demo-credentials');
+      if (demo) {
+        demo.innerHTML = `
+          <strong>Demo credentials</strong><br>
+          Super User: superuser@deliverysync.com / Super@123<br>
+          Fleet Manager: fleet@deliverysync.com / Fleet@123<br>
+          Business Client: client@deliverysync.com / Client@123<br>
+          Driver: driver@deliverysync.com / Driver@123
+        `;
+      }
+
+      // Try backend login first, then fall back to local data
+      async function tryBackendLogin(email, password) {
+        try {
+          const response = await fetch(`${API_BASE}/users?search=${encodeURIComponent(email)}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-user-role': 'superuser',
+              'x-user-id': ''
+            }
+          });
+          if (!response.ok) return null;
+          const users = await response.json();
+          const normalizedEmail = email.toLowerCase();
+          const user = users.find(u => (u.email || '').toLowerCase() === normalizedEmail);
+          if (!user) return null;
+          return user;
+        } catch (e) {
+          // Backend not available — return null to fall back to local
+          console.log('Backend not available, using local data for login');
+          return null;
+        }
+      }
+
+      function findLocalUser(email) {
+        const state = readState();
+        const normalizedEmail = email.toLowerCase();
+        const findUser = (list) => (list || []).find(item => {
+          return (item.email || '').toLowerCase() === normalizedEmail;
+        });
+        return findUser(state.users) || findUser(initialState.users);
+      }
+
+      // Login form handler
+      const form = $('#login-form');
+      if (form) {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          clearAllErrors();
+
+          const emailInput = $('#email');
+          const passwordInput = $('#password');
+          const rememberMe = $('#rememberMe');
+          const loginBtn = $('#loginBtn');
+
+          const identifier = emailInput.value.trim();
+          const password = passwordInput.value;
+          let valid = true;
+
+          if (!identifier) {
+            setFieldError(emailInput, 'Email is required');
+            valid = false;
+          } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(identifier)) {
+            setFieldError(emailInput, 'Please enter a valid email address');
+            valid = false;
+          }
+          if (!password) {
+            setFieldError(passwordInput, 'Password is required');
+            valid = false;
+          }
+          if (!valid) return;
+
+          // Disable button while processing
+          if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
+          }
+
+          try {
+            // Try backend first
+            let user = await tryBackendLogin(identifier, password);
+
+            // Fall back to local data if backend unavailable
+            if (!user) {
+              user = findLocalUser(identifier);
+            }
+
+            if (!user) {
+              setFieldError(emailInput, 'No account found for this email');
+              return;
+            }
+
+            const status = (user.status || '').toLowerCase();
+            if (status === 'pending approval') {
+              setFieldError(emailInput, 'Your account is awaiting super user approval');
+              return;
+            }
+            if (status === 'rejected' || status === 'suspended') {
+              setFieldError(emailInput, 'Your account is not allowed to sign in');
+              return;
+            }
+            if (user.password !== password) {
+              setFieldError(passwordInput, 'Incorrect password');
+              return;
+            }
+
+            // Success — set session and redirect
+            const session = {
+              userId: user.id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
+              remembered: rememberMe ? rememberMe.checked : true,
+              loggedInAt: new Date().toISOString()
+            };
+            localStorage.setItem('deliverysync-session-v1', JSON.stringify(session));
+
+            showSuccess(`${user.name} signed in successfully! Redirecting...`);
+
+            setTimeout(() => {
+              window.location.href = roleRoutes[user.role] || 'index.html';
+            }, 400);
+
+          } catch (err) {
+            showGlobalError('Login failed. Please try again.');
+            console.error('Login error:', err);
+          } finally {
+            if (loginBtn) {
+              loginBtn.disabled = false;
+              loginBtn.textContent = 'Login';
+            }
+          }
+        });
+      }
+    })();
+  </script>
+
+  <!-- 🔥 FIREBASE GOOGLE AUTH -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup }
+      from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCaOYnj0WTxYdQj0qWkqt3t0TT8VGdameU",
+      authDomain: "ffsd-d89c2.firebaseapp.com",
+      projectId: "ffsd-d89c2",
+      storageBucket: "ffsd-d89c2.firebasestorage.app",
+      messagingSenderId: "523513923224",
+      appId: "1:523513923224:web:041d38baabeaa8afd2b2ed",
+      measurementId: "G-X4S8SNTT9H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    const btn = document.getElementById("googleLogin");
+
+    btn.addEventListener("click", async () => {
+      try {
+        btn.innerText = "Signing in...";
+        btn.disabled = true;
+
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        localStorage.setItem("user", JSON.stringify(user));
+
+        window.location.href = "index.html";
+
+      } catch (error) {
+        console.error(error.code);
+        console.error(error.message);
+        alert(error.message);
+      } finally {
+        btn.innerText = "Continue with Google";
+        btn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+
+</html>

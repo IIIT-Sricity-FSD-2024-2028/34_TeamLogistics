@@ -1,0 +1,754 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice View | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body">
+  <div class="invoice-wrap">
+    <a href="invoices.html" class="back-btn" id="backButton">← Back to Invoices</a>
+
+    <div
+      id="backendVerification"
+      style="
+        margin: 16px 0;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #111827;
+        border: 1px solid #1f2937;
+        color: #d1d5db;
+        font-size: 14px;
+      "
+    >
+      Verifying backend data...
+    </div>
+
+    <div class="invoice-shell">
+      <div class="invoice-top">
+        <div>
+          <div class="invoice-logo">DeliverSync</div>
+          <div class="invoice-sub">Logistics Technology Platform</div>
+
+          <div style="height:36px"></div>
+
+          <div style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">
+            Billed To
+          </div>
+
+          <div class="invoice-mini">
+            <div class="value" id="billedToName" style="font-size:28px">Loading...</div>
+            <div id="billedToAddress" style="margin-top:12px;font-size:18px">Loading...</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div></div>
+            <div>
+              <div class="invoice-chip">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+                  <path d="M9 8h6"></path>
+                  <path d="M9 12h6"></path>
+                </svg>
+                INVOICE
+              </div>
+              <div class="invoice-number" id="invoiceNumber">Loading...</div>
+            </div>
+          </div>
+
+          <div class="invoice-grid-top">
+            <div class="invoice-mini">
+              <div class="label">Invoice Date</div>
+              <div class="value" id="invoiceDate">Loading...</div>
+            </div>
+
+            <div class="invoice-mini">
+              <div class="label">Due Date</div>
+              <div class="value" id="dueDate">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-section">
+        <h2>Delivery Details</h2>
+
+        <div class="detail-card">
+          <div class="detail-row">
+            <div class="left">Delivery ID</div>
+            <div class="right yellow" id="deliveryId">Loading...</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Driver</div>
+            <div class="right" id="driverName">Loading...</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Pickup Location</div>
+            <div class="right" id="pickupLocation">Loading...</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Drop Location</div>
+            <div class="right" id="dropLocation">Loading...</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Distance Traveled</div>
+            <div class="right yellow" id="distanceTravelled">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-section">
+        <h2>Cost Breakdown</h2>
+
+        <div class="detail-card">
+          <div class="detail-row">
+            <div class="left">Base Cost</div>
+            <div class="right" id="baseCost">Loading...</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Tax (10%)</div>
+            <div class="right" id="taxAmount">Loading...</div>
+          </div>
+
+          <div class="total-row">
+            <span>Total Amount</span>
+            <span id="totalAmount">Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-section">
+        <h2>Payment Status</h2>
+
+        <div class="status-card">
+          <div class="status-ico" id="statusIcon">✓</div>
+          <div>
+            <div id="paymentStatus" style="font-size:18px;font-weight:800;color:#69e38f">Loading...</div>
+            <div id="paymentInfo" style="margin-top:8px;color:#d4f5db">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-section">
+        <h2>Payment Instructions</h2>
+
+        <div class="detail-card">
+          <div style="padding:18px 0;color:#a8a8a8">
+            For future payments, please make transfers to the following account:
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Bank Name</div>
+            <div class="right">First National Bank</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Account Name</div>
+            <div class="right">DeliverSync Inc.</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Account Number</div>
+            <div class="right">1234567890</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="left">Reference</div>
+            <div class="right yellow" id="paymentReference">Loading...</div>
+          </div>
+        </div>
+
+        <div class="invoice-actions">
+          <a href="#" class="btn yellow" data-download>
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3v12"></path>
+              <path d="M7 10l5 5 5-5"></path>
+              <path d="M5 21h14"></path>
+            </svg>
+            Download PDF
+          </a>
+
+          <a href="#" class="btn outline-yellow" data-print>
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+            Print Invoice
+          </a>
+        </div>
+
+        <div class="footer-note">
+          For questions about this invoice, please contact
+          <a href="#">billing@deliverysync.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const params = new URLSearchParams(window.location.search);
+
+      const invoiceIdFromUrl = params.get("id");
+      const deliveryIdFromUrl = params.get("deliveryId");
+      const fromPage = params.get("from");
+
+      const backButton = document.getElementById("backButton");
+
+      if (backButton) {
+        if (fromPage === "completed" || deliveryIdFromUrl) {
+          backButton.href = "completed-deliveries.html";
+          backButton.textContent = "← Back to Completed Deliveries";
+        } else {
+          backButton.href = "invoices.html";
+          backButton.textContent = "← Back to Invoices";
+        }
+      }
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        if (value === 0) {
+          el.textContent = "0";
+          return;
+        }
+
+        el.textContent = value || "Not available";
+      };
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.invoices)) return result.invoices;
+        if (Array.isArray(result?.deliveries)) return result.deliveries;
+        if (Array.isArray(result?.trips)) return result.trips;
+        return [];
+      };
+
+      const normalize = (value) => {
+        return String(value || "").trim().toLowerCase();
+      };
+
+      const same = (a, b) => {
+        return String(a || "").trim() === String(b || "").trim();
+      };
+
+      const cleanId = (value) => {
+        return String(value || "").replace(/^#/, "").trim();
+      };
+
+      const money = (value) => {
+        if (typeof value === "string" && value.includes("₹")) {
+          return value;
+        }
+
+        const num = Number(value || 0);
+
+        if (Number.isNaN(num)) {
+          return value || "₹0.00";
+        }
+
+        return `₹${num.toFixed(2)}`;
+      };
+
+      const formatDate = (value) => {
+        if (!value) return "Not available";
+
+        const date = new Date(value);
+
+        if (!Number.isNaN(date.getTime())) {
+          return date.toLocaleDateString("en-IN", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        return value;
+      };
+
+      const getInvoiceDeliveryId = (invoice) => {
+        if (!invoice) return null;
+
+        return (
+          invoice.deliveryId ||
+          invoice.request ||
+          invoice.deliveryRequestId ||
+          invoice.delivery ||
+          invoice.delivery_id ||
+          invoice.requestId ||
+          null
+        );
+      };
+
+      const findInvoiceById = (invoices, invoiceId) => {
+        if (!invoiceId) return null;
+
+        return (
+          invoices.find((inv) => same(inv.id, invoiceId)) ||
+          invoices.find((inv) => same(inv.invoiceId, invoiceId)) ||
+          invoices.find((inv) => same(inv.invoiceNo, invoiceId)) ||
+          invoices.find((inv) => same(inv.invoiceNumber, invoiceId)) ||
+          null
+        );
+      };
+
+      const findInvoiceByDeliveryId = (invoices, deliveryId) => {
+        if (!deliveryId) return null;
+
+        const target = cleanId(deliveryId);
+
+        return (
+          invoices.find((inv) => same(cleanId(inv.deliveryId), target)) ||
+          invoices.find((inv) => same(cleanId(inv.request), target)) ||
+          invoices.find((inv) => same(cleanId(inv.deliveryRequestId), target)) ||
+          invoices.find((inv) => same(cleanId(inv.delivery), target)) ||
+          invoices.find((inv) => same(cleanId(inv.delivery_id), target)) ||
+          invoices.find((inv) => same(cleanId(inv.requestId), target)) ||
+          null
+        );
+      };
+
+      const findDeliveryById = (deliveries, deliveryId) => {
+        if (!deliveryId) return null;
+
+        const target = cleanId(deliveryId);
+
+        return (
+          deliveries.find((d) => same(cleanId(d.id), target)) ||
+          deliveries.find((d) => same(cleanId(d.deliveryId), target)) ||
+          deliveries.find((d) => same(cleanId(d.request), target)) ||
+          deliveries.find((d) => same(cleanId(d.requestId), target)) ||
+          deliveries.find((d) => same(cleanId(d.deliveryRequestId), target)) ||
+          null
+        );
+      };
+
+      const findTripForDelivery = (delivery, trips, deliveryIdFromInvoiceOrUrl) => {
+        const targetDeliveryId =
+          cleanId(delivery?.id) ||
+          cleanId(delivery?.deliveryId) ||
+          cleanId(deliveryIdFromInvoiceOrUrl);
+
+        if (!targetDeliveryId) return null;
+
+        return (
+          trips.find((t) => same(cleanId(t.request), targetDeliveryId)) ||
+          trips.find((t) => same(cleanId(t.deliveryId), targetDeliveryId)) ||
+          trips.find((t) => same(cleanId(t.delivery_id), targetDeliveryId)) ||
+          trips.find((t) => same(cleanId(t.requestId), targetDeliveryId)) ||
+          trips.find((t) => same(cleanId(t.deliveryRequestId), targetDeliveryId)) ||
+          trips.find((t) => same(cleanId(t.delivery), targetDeliveryId)) ||
+          null
+        );
+      };
+
+      const safeNumber = (value, fallback = 0) => {
+        const num = Number(value);
+        return Number.isNaN(num) ? fallback : num;
+      };
+
+      const calculateBaseCostFromDelivery = (delivery, trip) => {
+        const distanceRaw =
+          trip?.distance ||
+          trip?.distanceKm ||
+          delivery?.distance ||
+          delivery?.distanceKm ||
+          0;
+
+        const distance = parseFloat(String(distanceRaw).replace(/[^\d.]/g, ""));
+
+        if (!Number.isNaN(distance) && distance > 0) {
+          return distance * 100;
+        }
+
+        return 0;
+      };
+
+      const setStatusStyle = (status) => {
+        const statusEl = document.getElementById("paymentStatus");
+        const iconEl = document.getElementById("statusIcon");
+
+        const normalized = normalize(status);
+
+        if (!statusEl || !iconEl) return;
+
+        if (
+          normalized.includes("paid") ||
+          normalized.includes("received") ||
+          normalized.includes("completed")
+        ) {
+          statusEl.style.color = "#69e38f";
+          iconEl.textContent = "✓";
+          return;
+        }
+
+        if (
+          normalized.includes("pending") ||
+          normalized.includes("unpaid") ||
+          normalized.includes("due")
+        ) {
+          statusEl.style.color = "#ffd400";
+          iconEl.textContent = "!";
+          return;
+        }
+
+        statusEl.style.color = "#69e38f";
+        iconEl.textContent = "✓";
+      };
+
+      const renderInvoice = ({ invoice, delivery, trip, invoices, deliveries, trips }) => {
+        const invoiceExists = Boolean(invoice);
+        const deliveryExists = Boolean(delivery);
+        const tripExists = Boolean(trip);
+
+        const linkedDeliveryId =
+          delivery?.id ||
+          delivery?.deliveryId ||
+          getInvoiceDeliveryId(invoice) ||
+          deliveryIdFromUrl ||
+          null;
+
+        const invoiceNumber =
+          invoice?.id ||
+          invoice?.invoiceId ||
+          invoice?.invoiceNo ||
+          invoice?.invoiceNumber ||
+          (linkedDeliveryId ? `INV-${linkedDeliveryId}` : "Invoice not generated");
+
+        const clientName =
+          invoice?.client ||
+          invoice?.billedTo ||
+          invoice?.customer ||
+          delivery?.customer ||
+          delivery?.client ||
+          "Not available";
+
+        const clientAddress =
+          invoice?.address ||
+          invoice?.clientAddress ||
+          invoice?.billingAddress ||
+          delivery?.address ||
+          delivery?.clientAddress ||
+          "123 Business Avenue";
+
+        const invoiceDate =
+          invoice?.date ||
+          invoice?.invoiceDate ||
+          invoice?.createdAt ||
+          delivery?.completedAt ||
+          delivery?.deliveryDate ||
+          delivery?.requestTime ||
+          "Not available";
+
+        const dueDate =
+          invoice?.dueDate ||
+          invoice?.paymentDueDate ||
+          invoice?.paymentDue ||
+          "Not available";
+
+        const finalDriver =
+          trip?.driver ||
+          trip?.driverName ||
+          invoice?.driver ||
+          invoice?.driverName ||
+          delivery?.driver ||
+          delivery?.driverName ||
+          "Not assigned";
+
+        const finalPickup =
+          trip?.pickup ||
+          trip?.pickupLocation ||
+          delivery?.pickup ||
+          delivery?.pickupAddress ||
+          delivery?.source ||
+          invoice?.pickup ||
+          invoice?.pickupLocation ||
+          "--";
+
+        const finalDrop =
+          trip?.destination ||
+          trip?.dropoff ||
+          trip?.dropLocation ||
+          delivery?.dropoff ||
+          delivery?.destination ||
+          delivery?.drop ||
+          delivery?.dropAddress ||
+          invoice?.dropoff ||
+          invoice?.dropLocation ||
+          invoice?.destination ||
+          "--";
+
+        const finalDistance =
+          trip?.distance ||
+          trip?.distanceKm ||
+          invoice?.distance ||
+          invoice?.distanceTravelled ||
+          invoice?.distanceTraveled ||
+          delivery?.distance ||
+          delivery?.distanceKm ||
+          "Distance not available";
+
+        const calculatedBase = calculateBaseCostFromDelivery(delivery, trip);
+
+        const baseCost =
+          invoice?.baseCost ||
+          invoice?.subtotal ||
+          invoice?.amount ||
+          invoice?.baseAmount ||
+          calculatedBase ||
+          0;
+
+        const tax =
+          invoice?.tax ||
+          invoice?.taxAmount ||
+          safeNumber(baseCost) * 0.1;
+
+        const total =
+          invoice?.total ||
+          invoice?.totalAmount ||
+          invoice?.grandTotal ||
+          safeNumber(baseCost) + safeNumber(tax);
+
+        const paymentStatus =
+          invoice?.status ||
+          invoice?.paymentStatus ||
+          (invoiceExists ? "Payment Received" : "Invoice Not Generated");
+
+        setText("invoiceNumber", invoiceNumber);
+        setText("billedToName", clientName);
+        setText("billedToAddress", clientAddress);
+
+        setText("invoiceDate", formatDate(invoiceDate));
+        setText("dueDate", formatDate(dueDate));
+
+        setText("deliveryId", linkedDeliveryId ? `#${cleanId(linkedDeliveryId)}` : "Not available");
+        setText("driverName", finalDriver);
+        setText("pickupLocation", finalPickup);
+        setText("dropLocation", finalDrop);
+        setText("distanceTravelled", finalDistance);
+
+        setText("baseCost", money(baseCost));
+        setText("taxAmount", money(tax));
+        setText("totalAmount", money(total));
+
+        setText("paymentStatus", paymentStatus);
+
+        if (invoiceExists) {
+          setText("paymentInfo", `Invoice status loaded from backend for ${invoiceNumber}`);
+          setText("paymentReference", invoiceNumber);
+        } else {
+          setText(
+            "paymentInfo",
+            "Delivery exists in backend, but invoice record is not generated yet."
+          );
+          setText("paymentReference", linkedDeliveryId || "Not available");
+        }
+
+        setStatusStyle(paymentStatus);
+
+        const verificationMessage =
+          `Backend verified: Invoice ${invoiceExists ? "✓" : "✗"} | ` +
+          `Delivery ${deliveryExists ? "✓" : "✗"} | ` +
+          `Trip ${tripExists ? "✓" : "✗"}`;
+
+        setVerification(verificationMessage, !deliveryExists);
+
+        console.table({
+          invoiceVerified: invoiceExists,
+          invoiceId: invoice?.id || invoiceNumber || "Not linked",
+          deliveryVerified: deliveryExists,
+          deliveryId: linkedDeliveryId || "Not linked",
+          tripVerified: tripExists,
+          tripId: trip?.id || "Not linked",
+          invoicesLoaded: invoices.length,
+          deliveriesLoaded: deliveries.length,
+          tripsLoaded: trips.length,
+          urlInvoiceId: invoiceIdFromUrl || "Not provided",
+          urlDeliveryId: deliveryIdFromUrl || "Not provided"
+        });
+      };
+
+      try {
+        if (!window.DeliverySyncAPI) {
+          throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+        }
+
+        let invoicesResult = await DeliverySyncAPI.Transactions.getInvoices();
+        const deliveriesResult = await DeliverySyncAPI.Deliveries.getAll();
+        const tripsResult = await DeliverySyncAPI.Trips.getAll();
+
+        let invoices = getArray(invoicesResult);
+        const deliveries = getArray(deliveriesResult);
+        const trips = getArray(tripsResult);
+
+        let invoice = null;
+        let delivery = null;
+        let trip = null;
+
+        /*
+          IMPORTANT:
+          deliveryId is checked first because completed-deliveries.html opens invoice view
+          from a specific delivery row.
+
+          If invoice does not exist, this page will ask backend to auto-generate it.
+        */
+        if (deliveryIdFromUrl) {
+          delivery = findDeliveryById(deliveries, deliveryIdFromUrl);
+          invoice = findInvoiceByDeliveryId(invoices, deliveryIdFromUrl);
+
+          if (!invoice && delivery) {
+            const canGenerate =
+              window.DeliverySyncAPI &&
+              DeliverySyncAPI.Transactions &&
+              typeof DeliverySyncAPI.Transactions.generateInvoiceForDelivery === "function";
+
+            if (canGenerate) {
+              try {
+                setVerification("Invoice not found. Generating invoice from backend...");
+
+                invoice = await DeliverySyncAPI.Transactions.generateInvoiceForDelivery(
+                  cleanId(deliveryIdFromUrl)
+                );
+
+                invoicesResult = await DeliverySyncAPI.Transactions.getInvoices();
+                invoices = getArray(invoicesResult);
+
+                invoice =
+                  findInvoiceByDeliveryId(invoices, deliveryIdFromUrl) ||
+                  invoice;
+
+              } catch (generateError) {
+                console.warn("Invoice auto-generation failed:", generateError);
+                setVerification(
+                  `Invoice generation skipped: ${generateError.message || "Backend rejected request"}`,
+                  false
+                );
+              }
+            } else {
+              console.warn(
+                "DeliverySyncAPI.Transactions.generateInvoiceForDelivery is missing in api-client.js"
+              );
+            }
+          }
+        }
+
+        /*
+          If deliveryId was not provided, then use invoice id.
+          This keeps normal invoices.html → invoice-view.html?id=INV-001 working.
+        */
+        if (!invoice && invoiceIdFromUrl) {
+          invoice = findInvoiceById(invoices, invoiceIdFromUrl);
+        }
+
+        /*
+          If invoice exists but delivery was not already found,
+          find delivery using invoice's linked delivery id.
+        */
+        if (!delivery && invoice) {
+          const linkedDeliveryId = getInvoiceDeliveryId(invoice);
+          delivery = findDeliveryById(deliveries, linkedDeliveryId);
+        }
+
+        /*
+          Trip is linked using delivery id.
+        */
+        const finalLinkedDeliveryId =
+          delivery?.id ||
+          delivery?.deliveryId ||
+          getInvoiceDeliveryId(invoice) ||
+          deliveryIdFromUrl ||
+          null;
+
+        trip = findTripForDelivery(delivery, trips, finalLinkedDeliveryId);
+
+        /*
+          Do not fallback to invoices[0].
+          That was the reason wrong invoice like INV-001 appeared.
+        */
+        if (!invoice && !delivery) {
+          throw new Error("No matching invoice or delivery found from backend.");
+        }
+
+        renderInvoice({
+          invoice,
+          delivery,
+          trip,
+          invoices,
+          deliveries,
+          trips
+        });
+
+      } catch (error) {
+        console.error("Invoice view backend sync failed:", error);
+
+        setVerification(`Backend sync failed: ${error.message}`, true);
+
+        setText("invoiceNumber", "Unavailable");
+        setText("billedToName", "Not available");
+        setText("billedToAddress", "Not available");
+        setText("invoiceDate", "Not available");
+        setText("dueDate", "Not available");
+        setText("deliveryId", "Not available");
+        setText("driverName", "Not available");
+        setText("pickupLocation", "Not available");
+        setText("dropLocation", "Not available");
+        setText("distanceTravelled", "Not available");
+        setText("baseCost", "Not available");
+        setText("taxAmount", "Not available");
+        setText("totalAmount", "Not available");
+        setText("paymentStatus", "Not available");
+        setText("paymentInfo", "Could not load backend data");
+        setText("paymentReference", "Not available");
+      }
+
+      const printButton = document.querySelector("[data-print]");
+      if (printButton) {
+        printButton.addEventListener("click", (event) => {
+          event.preventDefault();
+          window.print();
+        });
+      }
+
+      const downloadButton = document.querySelector("[data-download]");
+      if (downloadButton) {
+        downloadButton.addEventListener("click", (event) => {
+          event.preventDefault();
+          window.print();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

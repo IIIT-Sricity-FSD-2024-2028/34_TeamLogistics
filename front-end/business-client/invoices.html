@@ -1,0 +1,783 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoices | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body" data-page="invoices">
+  <div class="bc-layout">
+    <aside class="bc-sidebar">
+      <div class="bc-brand">
+        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div>
+      </div>
+
+      <nav class="bc-nav">
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">▧</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">↯</span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html" data-nav="active-deliveries">
+          <span class="ico">◇</span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" data-nav="completed-deliveries">
+          <span class="ico">▤</span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices" class="active">
+          <span class="ico">▥</span>
+          <span>Invoices</span>
+        </a>
+
+        <a href="submit-transaction.html" data-nav="submit-transaction">
+          <span class="ico">▥</span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html" data-nav="notifications">
+          <span class="ico">♧</span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile">
+          <span class="ico">◇</span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">↢</span>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <main class="bc-main">
+      <header class="bc-topbar">
+        <div>
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
+
+        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
+          🔔
+          <span class="badge">3</span>
+        </a>
+      </header>
+
+      <section class="bc-content">
+        <h1 class="page-title">Invoices</h1>
+        <p class="page-subtitle">Manage and track your delivery invoices</p>
+
+        <div id="backendVerification" class="verify-box">
+          Verifying invoices from backend...
+        </div>
+
+        <div class="invoice-stats">
+          <div class="invoice-stat yellow">
+            <span>Total Invoices</span>
+            <strong id="totalInvoices">0</strong>
+            <p id="totalInvoicesSub">0 Invoices</p>
+          </div>
+
+          <div class="invoice-stat">
+            <span>Total Paid</span>
+            <strong id="totalPaid">₹0</strong>
+            <p id="paidInvoicesSub">0 Paid Invoices</p>
+          </div>
+
+          <div class="invoice-stat">
+            <span>Total Unpaid</span>
+            <strong id="totalUnpaid">₹0</strong>
+            <p id="pendingInvoicesSub">0 Pending Invoices</p>
+          </div>
+        </div>
+
+        <div class="invoice-panel">
+          <div class="invoice-panel-head">
+            <h2>All Invoices</h2>
+
+            <label class="invoice-search">
+              <span>🔍</span>
+              <input id="invoiceSearch" type="text" placeholder="Search invoice ID, status, amount..." />
+            </label>
+          </div>
+
+          <div class="invoice-table-wrap">
+            <table class="invoice-table">
+              <thead>
+                <tr>
+                  <th>Invoice ID</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th>Delivery</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="invoiceTableBody">
+                <tr>
+                  <td colspan="7" class="empty-row">Loading invoices from backend...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .verify-box {
+      margin: 18px 0 26px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .invoice-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+
+    .invoice-stat {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 22px;
+      padding: 28px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+      min-height: 140px;
+    }
+
+    .invoice-stat.yellow {
+      background: #ffd400;
+      color: #000;
+      border-color: #ffd400;
+    }
+
+    .invoice-stat span {
+      display: block;
+      color: #9ca3af;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .invoice-stat.yellow span {
+      color: #2b2b2b;
+    }
+
+    .invoice-stat strong {
+      display: block;
+      font-size: 54px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .invoice-stat p {
+      margin: 12px 0 0;
+      color: #9ca3af;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .invoice-stat.yellow p {
+      color: #2b2b2b;
+    }
+
+    .invoice-panel {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 22px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+      overflow: hidden;
+    }
+
+    .invoice-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 24px 28px;
+      border-bottom: 1px solid #262626;
+    }
+
+    .invoice-panel-head h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .invoice-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #050505;
+      border: 1px solid #262626;
+      border-radius: 14px;
+      padding: 10px 14px;
+      min-width: 320px;
+    }
+
+    .invoice-search input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+    }
+
+    .invoice-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+
+    .invoice-table th {
+      text-align: left;
+      padding: 18px 28px;
+      color: #d1d5db;
+      font-size: 14px;
+      font-weight: 800;
+      border-bottom: 1px solid #262626;
+    }
+
+    .invoice-table td {
+      padding: 22px 28px;
+      border-bottom: 1px solid #222;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+
+    .invoice-table tbody tr:hover {
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .invoice-id {
+      font-weight: 900;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status-paid {
+      background: rgba(16, 185, 129, .16);
+      color: #86efac;
+      border: 1px solid rgba(16, 185, 129, .4);
+    }
+
+    .status-pending,
+    .status-under-review {
+      background: rgba(255, 212, 0, .14);
+      color: #ffd400;
+      border: 1px solid rgba(255, 212, 0, .35);
+    }
+
+    .status-rejected,
+    .status-unpaid {
+      background: rgba(239, 68, 68, .14);
+      color: #fecaca;
+      border: 1px solid rgba(239, 68, 68, .45);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-yellow,
+    .btn-outline {
+      border-radius: 14px;
+      padding: 11px 20px;
+      font-family: Inter, sans-serif;
+      font-weight: 900;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-yellow {
+      background: #ffd400;
+      color: #000;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #ffd400;
+      border: 1px solid #ffd400;
+    }
+
+    .empty-row {
+      text-align: center;
+      color: #9ca3af !important;
+      padding: 30px !important;
+    }
+
+    @media (max-width: 900px) {
+      .invoice-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .invoice-panel-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .invoice-search {
+        min-width: unset;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const CLIENT_NAME = "Acme Logistics Inc.";
+
+      let allInvoices = [];
+      let clientInvoices = [];
+      let filteredInvoices = [];
+
+      const tableBody = document.getElementById("invoiceTableBody");
+      const searchInput = document.getElementById("invoiceSearch");
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const esc = (value) => {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const cleanId = (value) => {
+        return String(value || "").replace(/^#/, "").trim();
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.invoices)) return result.invoices;
+        return [];
+      };
+
+      const formatMoney = (amount) => {
+        const value = Number(amount || 0);
+
+        if (Number.isNaN(value)) {
+          return "₹0";
+        }
+
+        return `₹${value.toLocaleString("en-IN", {
+          maximumFractionDigits: 0,
+        })}`;
+      };
+
+      const formatDate = (value) => {
+        if (!value) return "--";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+          return String(value);
+        }
+
+        return date.toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+      };
+
+      const getInvoiceId = (invoice) => {
+        return (
+          invoice.id ||
+          invoice.invoiceId ||
+          invoice.invoiceNo ||
+          invoice.invoiceNumber ||
+          invoice.number ||
+          "--"
+        );
+      };
+
+      const getClient = (invoice) => {
+        return (
+          invoice.client ||
+          invoice.customer ||
+          invoice.company ||
+          invoice.billedTo ||
+          ""
+        );
+      };
+
+      const getStatus = (invoice) => {
+        return invoice.status || invoice.paymentStatus || "Pending";
+      };
+
+      const getDeliveryId = (invoice) => {
+        return (
+          invoice.deliveryId ||
+          invoice.delivery ||
+          invoice.request ||
+          invoice.deliveryRequestId ||
+          invoice.deliveryRequest ||
+          invoice.requestId ||
+          "--"
+        );
+      };
+
+      const getDueDate = (invoice) => {
+        return (
+          invoice.dueDate ||
+          invoice.due ||
+          invoice.paymentDue ||
+          invoice.paymentDueDate ||
+          "--"
+        );
+      };
+
+      const getInvoiceDate = (invoice) => {
+        return (
+          invoice.date ||
+          invoice.invoiceDate ||
+          invoice.createdAt ||
+          "--"
+        );
+      };
+
+      const getAmount = (invoice) => {
+        return (
+          invoice.totalAmount ||
+          invoice.total ||
+          invoice.amount ||
+          invoice.baseCost ||
+          0
+        );
+      };
+
+      const statusClass = (status) => {
+        const s = normalize(status);
+
+        if (
+          s === "paid" ||
+          s === "completed" ||
+          s === "payment received" ||
+          s === "received"
+        ) {
+          return "status-paid";
+        }
+
+        if (
+          s === "under review" ||
+          s === "review" ||
+          s === "pending"
+        ) {
+          return "status-under-review";
+        }
+
+        if (
+          s === "rejected" ||
+          s === "unpaid" ||
+          s === "failed"
+        ) {
+          return "status-rejected";
+        }
+
+        return "status-pending";
+      };
+
+      const isPaidInvoice = (invoice) => {
+        const status = normalize(getStatus(invoice));
+
+        return (
+          status === "paid" ||
+          status === "completed" ||
+          status === "payment received" ||
+          status === "received"
+        );
+      };
+
+      const fetchInvoices = async () => {
+        if (!window.DeliverySyncAPI) {
+          throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+        }
+
+        if (!DeliverySyncAPI.Transactions || !DeliverySyncAPI.Transactions.getInvoices) {
+          throw new Error("DeliverySyncAPI.Transactions.getInvoices is missing in api-client.js.");
+        }
+
+        const result = await DeliverySyncAPI.Transactions.getInvoices();
+
+        return getArray(result);
+      };
+
+      const renderStats = () => {
+        const paidInvoices = clientInvoices.filter(isPaidInvoice);
+        const unpaidInvoices = clientInvoices.filter((invoice) => !isPaidInvoice(invoice));
+
+        const paidAmount = paidInvoices.reduce((sum, invoice) => {
+          return sum + Number(getAmount(invoice) || 0);
+        }, 0);
+
+        const unpaidAmount = unpaidInvoices.reduce((sum, invoice) => {
+          return sum + Number(getAmount(invoice) || 0);
+        }, 0);
+
+        document.getElementById("totalInvoices").textContent = clientInvoices.length;
+        document.getElementById("totalInvoicesSub").textContent =
+          `${clientInvoices.length} ${clientInvoices.length === 1 ? "Invoice" : "Invoices"}`;
+
+        document.getElementById("totalPaid").textContent = formatMoney(paidAmount);
+        document.getElementById("paidInvoicesSub").textContent =
+          `${paidInvoices.length} Paid ${paidInvoices.length === 1 ? "Invoice" : "Invoices"}`;
+
+        document.getElementById("totalUnpaid").textContent = formatMoney(unpaidAmount);
+        document.getElementById("pendingInvoicesSub").textContent =
+          `${unpaidInvoices.length} Pending ${unpaidInvoices.length === 1 ? "Invoice" : "Invoices"}`;
+      };
+
+      const renderTable = () => {
+        if (!filteredInvoices.length) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="7" class="empty-row">No invoices found from backend.</td>
+            </tr>
+          `;
+          return;
+        }
+
+        tableBody.innerHTML = filteredInvoices.map((invoice) => {
+          const id = getInvoiceId(invoice);
+          const date = formatDate(getInvoiceDate(invoice));
+          const amount = formatMoney(getAmount(invoice));
+          const dueDate = formatDate(getDueDate(invoice));
+          const status = getStatus(invoice);
+          const deliveryId = getDeliveryId(invoice);
+
+          const viewUrl =
+            `invoice-view.html?id=${encodeURIComponent(cleanId(id))}` +
+            `&deliveryId=${encodeURIComponent(cleanId(deliveryId))}` +
+            `&from=invoices`;
+
+          return `
+            <tr>
+              <td class="invoice-id">#${esc(cleanId(id))}</td>
+              <td>${esc(date)}</td>
+              <td>${esc(amount)}</td>
+              <td>${esc(dueDate)}</td>
+              <td>
+                <span class="status-pill ${statusClass(status)}">
+                  ${esc(status)}
+                </span>
+              </td>
+              <td>${esc(cleanId(deliveryId))}</td>
+              <td>
+                <div class="actions">
+                  <a class="btn-yellow" href="${viewUrl}">
+                    👁 View
+                  </a>
+
+                  <button class="btn-outline" type="button" data-download="${esc(cleanId(id))}">
+                    ⬇ Download
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("");
+
+        document.querySelectorAll("[data-download]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-download");
+
+            const invoice = clientInvoices.find((item) => {
+              return cleanId(getInvoiceId(item)) === cleanId(id);
+            });
+
+            if (!invoice) return;
+
+            const text = [
+              "DeliverSync Invoice",
+              "-------------------",
+              `Invoice ID: ${getInvoiceId(invoice)}`,
+              `Client: ${getClient(invoice) || CLIENT_NAME}`,
+              `Delivery: ${getDeliveryId(invoice)}`,
+              `Date: ${formatDate(getInvoiceDate(invoice))}`,
+              `Due Date: ${formatDate(getDueDate(invoice))}`,
+              `Amount: ${formatMoney(getAmount(invoice))}`,
+              `Status: ${getStatus(invoice)}`,
+            ].join("\n");
+
+            const blob = new Blob([text], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${cleanId(getInvoiceId(invoice))}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            URL.revokeObjectURL(url);
+          });
+        });
+      };
+
+      const applySearch = () => {
+        const q = normalize(searchInput.value);
+
+        if (!q) {
+          filteredInvoices = [...clientInvoices];
+        } else {
+          filteredInvoices = clientInvoices.filter((invoice) => {
+            return (
+              normalize(getInvoiceId(invoice)).includes(q) ||
+              normalize(getStatus(invoice)).includes(q) ||
+              normalize(getDeliveryId(invoice)).includes(q) ||
+              normalize(getClient(invoice)).includes(q) ||
+              normalize(getAmount(invoice)).includes(q)
+            );
+          });
+        }
+
+        renderTable();
+      };
+
+      const loadInvoices = async () => {
+        try {
+          allInvoices = await fetchInvoices();
+
+          clientInvoices = allInvoices.filter((invoice) => {
+            const client = normalize(getClient(invoice));
+
+            return (
+              client === normalize(CLIENT_NAME) ||
+              client.includes("acme") ||
+              !client
+            );
+          });
+
+          clientInvoices.sort((a, b) => {
+            const aTime = new Date(getInvoiceDate(a)).getTime();
+            const bTime = new Date(getInvoiceDate(b)).getTime();
+
+            return (Number.isNaN(bTime) ? 0 : bTime) - (Number.isNaN(aTime) ? 0 : aTime);
+          });
+
+          filteredInvoices = [...clientInvoices];
+
+          renderStats();
+          renderTable();
+
+          const paid = clientInvoices.filter(isPaidInvoice);
+          const pending = clientInvoices.filter((invoice) => !isPaidInvoice(invoice));
+
+          console.log("BUSINESS CLIENT INVOICES RAW:", allInvoices);
+          console.log("BUSINESS CLIENT INVOICES FILTERED:", clientInvoices);
+
+          console.table({
+            invoicesPageLoaded: true,
+            invoicesLoadedFromBackend: allInvoices.length,
+            clientInvoices: clientInvoices.length,
+            paidInvoices: paid.length,
+            pendingInvoices: pending.length,
+            source: "GET /api/transactions/invoices",
+          });
+
+          setVerification(
+            `Backend verified: Invoices ✓ | Loaded ${allInvoices.length} | Client invoices ${clientInvoices.length} | Paid ${paid.length} | Pending ${pending.length}`
+          );
+        } catch (error) {
+          console.error("Invoices backend sync failed:", error);
+
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="7" class="empty-row">Could not load invoices from backend.</td>
+            </tr>
+          `;
+
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      searchInput.addEventListener("input", applySearch);
+
+      await loadInvoices();
+    });
+  </script>
+</body>
+</html>

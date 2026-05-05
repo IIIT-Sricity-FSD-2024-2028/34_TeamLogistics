@@ -1,0 +1,625 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body" data-page="completed-deliveries">
+  <div class="bc-layout">
+    <aside class="bc-sidebar">
+      <div class="bc-brand">
+        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div>
+      </div>
+
+      <nav class="bc-nav">
+        <a href="dashboard.html">
+          <span class="ico">▧</span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html">
+          <span class="ico">↯</span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html">
+          <span class="ico">◇</span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" class="active">
+          <span class="ico">▤</span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html">
+          <span class="ico">▥</span>
+          <span>Invoices</span>
+        </a>
+
+        <a href="submit-transaction.html">
+          <span class="ico">▥</span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html">
+          <span class="ico">♧</span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html">
+          <span class="ico">◇</span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">↢</span>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <main class="bc-main">
+      <header class="bc-topbar">
+        <div>
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
+
+        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
+          🔔
+          <span class="badge">3</span>
+        </a>
+      </header>
+
+      <section class="bc-content">
+        <a href="completed-deliveries.html" class="back-link">Back</a>
+
+        <h1 class="page-title">Provide Feedback</h1>
+        <p class="page-subtitle">Rate your completed delivery experience</p>
+
+        <div id="backendVerification" class="verify-box">
+          Verifying completed delivery from backend...
+        </div>
+
+        <div class="feedback-card">
+          <form id="feedbackForm">
+            <div class="form-grid">
+              <div>
+                <label>Delivery ID</label>
+                <input id="deliveryIdInput" type="text" readonly />
+              </div>
+
+              <div>
+                <label>Trip ID</label>
+                <input id="tripIdInput" type="text" readonly />
+              </div>
+
+              <div>
+                <label>Driver</label>
+                <input id="driverInput" type="text" readonly />
+              </div>
+
+              <div>
+                <label>Status</label>
+                <input id="statusInput" type="text" readonly />
+              </div>
+            </div>
+
+            <div class="summary-box">
+              <div>
+                <span>From</span>
+                <strong id="pickupText">--</strong>
+              </div>
+
+              <div>
+                <span>To</span>
+                <strong id="dropoffText">--</strong>
+              </div>
+
+              <div>
+                <span>Package</span>
+                <strong id="packageText">--</strong>
+              </div>
+            </div>
+
+            <label>Overall Rating</label>
+            <div class="stars" id="stars">
+              <button type="button" data-rating="1">★</button>
+              <button type="button" data-rating="2">★</button>
+              <button type="button" data-rating="3">★</button>
+              <button type="button" data-rating="4">★</button>
+              <button type="button" data-rating="5">★</button>
+            </div>
+
+            <label>Share Your Experience</label>
+            <textarea
+              id="commentInput"
+              placeholder="Tell us what went well and what can be improved"
+            ></textarea>
+
+            <div class="form-grid">
+              <div>
+                <label>Delivery Quality</label>
+                <select id="deliveryQualityInput">
+                  <option value="">Select quality</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Average">Average</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+
+              <div>
+                <label>Driver Behavior</label>
+                <select id="driverBehaviorInput">
+                  <option value="">Select behavior</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Average">Average</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+            </div>
+
+            <label>Overall Experience</label>
+            <select id="overallExperienceInput">
+              <option value="">Select experience</option>
+              <option value="Very satisfied">Very satisfied</option>
+              <option value="Satisfied">Satisfied</option>
+              <option value="Neutral">Neutral</option>
+              <option value="Unsatisfied">Unsatisfied</option>
+            </select>
+
+            <div id="formMessage"></div>
+
+            <div class="actions">
+              <button id="submitBtn" type="submit" class="yellow-btn">
+                Submit Feedback
+              </button>
+
+              <a href="completed-deliveries.html" class="dark-btn">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    .verify-box {
+      margin: 18px 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .feedback-card {
+      max-width: 980px;
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 22px;
+      padding: 28px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      color: #9fb0c9;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 13px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      background: #050505;
+      border: 1px solid #1f2937;
+      color: #fff;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #ffd400;
+      box-shadow: 0 0 0 3px rgba(255, 212, 0, .15);
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    input[readonly] {
+      opacity: .85;
+      cursor: not-allowed;
+    }
+
+    .summary-box {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .summary-box div {
+      background: #080808;
+      border: 1px solid #262626;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .summary-box span {
+      display: block;
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .summary-box strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .stars button {
+      background: transparent;
+      border: none;
+      font-size: 34px;
+      cursor: pointer;
+      color: #4b5563;
+      transition: transform .15s ease, color .15s ease;
+    }
+
+    .stars button.active {
+      color: #ffd400;
+    }
+
+    .stars button:hover {
+      transform: scale(1.08);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .yellow-btn,
+    .dark-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 20px;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Inter, sans-serif;
+    }
+
+    .yellow-btn {
+      background: #ffd400;
+      color: #000;
+    }
+
+    .yellow-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .dark-btn {
+      background: #0b0b0b;
+      color: #fff;
+      border: 1px solid #262626;
+    }
+
+    #formMessage {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    #formMessage.success {
+      display: block;
+      background: rgba(16, 185, 129, .12);
+      border: 1px solid #10b981;
+      color: #d1fae5;
+    }
+
+    #formMessage.error {
+      display: block;
+      background: rgba(239, 68, 68, .12);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    @media (max-width: 800px) {
+      .form-grid,
+      .summary-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "business-client";
+
+      const params = new URLSearchParams(window.location.search);
+      const deliveryId = params.get("id");
+
+      let delivery = null;
+      let trip = null;
+      let rating = 4;
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const setMessage = (message, type) => {
+        const box = document.getElementById("formMessage");
+        box.textContent = message;
+        box.className = type;
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.trips)) return result.trips;
+        return [];
+      };
+
+      const fetchDelivery = async (id) => {
+        const response = await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(id)}`, {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Delivery fetch failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const fetchTrips = async () => {
+        const response = await fetch("http://localhost:3000/api/trips", {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Trips fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const submitFeedback = async (id, payload) => {
+        const response = await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(id)}/feedback`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body.message || `Feedback submit failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const getPickup = (d) => {
+        return d.pickup || d.from || d.pickupAddress || d.source || "--";
+      };
+
+      const getDropoff = (d) => {
+        return d.dropoff || d.destination || d.to || d.dropAddress || "--";
+      };
+
+      const renderStars = () => {
+        document.querySelectorAll("#stars button").forEach((btn) => {
+          const value = Number(btn.dataset.rating);
+          btn.classList.toggle("active", value <= rating);
+        });
+      };
+
+      const loadPage = async () => {
+        if (!deliveryId) {
+          setVerification("Missing delivery id in URL. Example: feedback.html?id=DR-2026-002", true);
+          return;
+        }
+
+        delivery = await fetchDelivery(deliveryId);
+
+        const trips = await fetchTrips();
+        trip = trips.find((t) => String(t.request) === String(deliveryId)) || null;
+
+        document.getElementById("deliveryIdInput").value = delivery.id || deliveryId;
+        document.getElementById("tripIdInput").value = trip?.id || "--";
+        document.getElementById("driverInput").value =
+          trip?.driver ||
+          delivery.driver ||
+          delivery.assignedDriver ||
+          "Not assigned";
+        document.getElementById("statusInput").value =
+          delivery.status ||
+          trip?.status ||
+          "--";
+
+        document.getElementById("pickupText").textContent = getPickup(delivery);
+        document.getElementById("dropoffText").textContent = getDropoff(delivery);
+        document.getElementById("packageText").textContent =
+          delivery.package ||
+          delivery.packageType ||
+          delivery.item ||
+          "--";
+
+        if (delivery.feedback) {
+          rating = Number(delivery.feedback.rating || 4);
+          document.getElementById("commentInput").value = delivery.feedback.comment || "";
+          document.getElementById("deliveryQualityInput").value = delivery.feedback.deliveryQuality || "";
+          document.getElementById("driverBehaviorInput").value = delivery.feedback.driverBehavior || "";
+          document.getElementById("overallExperienceInput").value = delivery.feedback.overallExperience || "";
+        }
+
+        renderStars();
+
+        console.log("FEEDBACK DELIVERY:", delivery);
+        console.log("FEEDBACK TRIP:", trip);
+
+        console.table({
+          feedbackPageLoaded: true,
+          deliveryId: delivery.id,
+          tripId: trip?.id || "No linked trip",
+          driver: trip?.driver || delivery.driver || "Not assigned",
+          status: delivery.status,
+          source: "GET /api/deliveries/:id + GET /api/trips",
+        });
+
+        setVerification(
+          `Backend verified: Feedback ✓ | Delivery ${delivery.id} | Trip ${trip?.id || "--"}`
+        );
+      };
+
+      document.querySelectorAll("#stars button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          rating = Number(btn.dataset.rating);
+          renderStars();
+        });
+      });
+
+      document.getElementById("feedbackForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!delivery) {
+          setMessage("Delivery is not loaded yet.", "error");
+          return;
+        }
+
+        const payload = {
+          rating,
+          comment: document.getElementById("commentInput").value.trim(),
+          deliveryQuality: document.getElementById("deliveryQualityInput").value,
+          driverBehavior: document.getElementById("driverBehaviorInput").value,
+          overallExperience: document.getElementById("overallExperienceInput").value,
+        };
+
+        const submitBtn = document.getElementById("submitBtn");
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting...";
+
+          const updatedDelivery = await submitFeedback(delivery.id, payload);
+
+          console.log("FEEDBACK SUBMIT RESPONSE:", updatedDelivery);
+
+          console.table({
+            feedbackSubmittedInBackend: true,
+            deliveryId: updatedDelivery.id || delivery.id,
+            rating: payload.rating,
+            source: "PATCH /api/deliveries/:id/feedback",
+          });
+
+          setMessage("Feedback submitted successfully. Backend synced.", "success");
+          setVerification(`Backend verified: Feedback submitted ✓ | ${delivery.id}`);
+
+          setTimeout(() => {
+            window.location.href = "completed-deliveries.html";
+          }, 900);
+        } catch (error) {
+          console.error("Feedback submit failed:", error);
+          setMessage(`Feedback submit failed: ${error.message}`, "error");
+          setVerification(`Feedback submit failed: ${error.message}`, true);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Feedback";
+        }
+      });
+
+      try {
+        await loadPage();
+      } catch (error) {
+        console.error("Feedback page load failed:", error);
+        setVerification(`Backend sync failed: ${error.message}`, true);
+      }
+    });
+  </script>
+</body>
+</html>

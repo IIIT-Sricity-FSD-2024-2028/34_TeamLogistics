@@ -1,0 +1,585 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Transaction | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body" data-page="submit-transaction">
+  <div class="bc-layout">
+    <aside class="bc-sidebar">
+      <div class="bc-brand">
+        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div>
+      </div>
+
+      <nav class="bc-nav">
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+            </svg>
+          </span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html" data-nav="active-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" data-nav="completed-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Invoices</span>
+        </a>
+
+        <a href="submit-transaction.html" data-nav="submit-transaction" class="active">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html" data-nav="notifications">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
+              <path d="M10 20a2 2 0 0 0 4 0"></path>
+            </svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <path d="M16 17l5-5-5-5"></path>
+            <path d="M21 12H9"></path>
+          </svg>
+        </span>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <main class="bc-main">
+      <header class="bc-topbar">
+        <div>
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
+
+        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
+          <svg viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+            <path d="M10 20a2 2 0 0 0 4 0"></path>
+          </svg>
+          <span class="badge">3</span>
+        </a>
+      </header>
+
+      <section class="bc-content">
+        <h1 class="page-title small">Submit Transaction</h1>
+        <p class="page-subtitle">Upload payment proof for pending invoices</p>
+
+        <div
+          id="backendVerification"
+          style="
+            margin-top: 16px;
+            margin-bottom: 24px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            color: #d1d5db;
+            font-size: 14px;
+          "
+        >
+          Verifying unpaid invoices from backend...
+        </div>
+
+        <div class="form-grid">
+          <div class="card form-card">
+            <form id="transactionForm">
+              <div style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a8b3c7;margin-bottom:16px">
+                Transaction Details
+              </div>
+
+              <div class="two-col">
+                <div class="field">
+                  <label>Invoice ID</label>
+                  <select id="invoiceId" required>
+                    <option value="">Loading unpaid invoices...</option>
+                  </select>
+                  <div id="invoiceError" style="color:#ff8d8d;font-size:13px;margin-top:8px;display:none"></div>
+                </div>
+
+                <div class="field">
+                  <label>Transaction Date</label>
+                  <input type="date" id="transactionDate" required />
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Payment Mode</label>
+                <select id="paymentMode" required>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                  <option value="UPI">UPI</option>
+                  <option value="Credit Card">Credit Card</option>
+                  <option value="Debit Card">Debit Card</option>
+                  <option value="Cheque">Cheque</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>Transaction ID</label>
+                <input id="transactionReference" type="text" placeholder="Enter payment reference" required />
+                <div id="referenceError" style="color:#ff8d8d;font-size:13px;margin-top:8px;display:none"></div>
+              </div>
+
+              <div class="field">
+                <label>Amount</label>
+                <input id="amount" type="number" min="1" placeholder="Amount" required />
+                <div id="amountError" style="color:#ff8d8d;font-size:13px;margin-top:8px;display:none"></div>
+              </div>
+
+              <div class="field">
+                <label>Upload Receipt</label>
+
+                <label
+                  for="receipt"
+                  style="
+                    display:flex;
+                    min-height:120px;
+                    border:1px solid #374151;
+                    border-radius:12px;
+                    align-items:center;
+                    justify-content:center;
+                    text-align:center;
+                    background:#050505;
+                    cursor:pointer;
+                  "
+                >
+                  <div>
+                    <div style="font-size:22px">↥</div>
+                    <div style="font-weight:700;margin-top:8px">Upload receipt</div>
+                    <div id="receiptFileName" style="font-size:13px;color:#9ca3af;margin-top:8px">No file selected</div>
+                  </div>
+                </label>
+
+                <input id="receipt" type="file" accept=".jpg,.jpeg,.png,.pdf" style="display:none" />
+              </div>
+
+              <div id="formStatus" style="display:none;margin-bottom:14px;padding:12px;border-radius:10px;font-size:14px"></div>
+
+              <button type="submit" class="btn yellow" style="width:100%;justify-content:center">
+                Submit Transaction
+              </button>
+            </form>
+          </div>
+
+          <div class="card" style="padding:24px">
+            <h2 style="margin-top:0">Unpaid Invoices</h2>
+
+            <div id="unpaidInvoicesBox">
+              <div style="background:#050505;border-radius:12px;padding:16px;color:#cbd5e1">
+                Loading unpaid invoices from backend...
+              </div>
+            </div>
+
+            <div style="margin-top:20px">
+              <strong>Important</strong>
+              <ul style="color:#d1d5db;line-height:1.6">
+                <li>Attach a clear screenshot or receipt.</li>
+                <li>Reference number must match the payment transaction.</li>
+                <li>Verification status will update after review.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const CLIENT_NAME = "Acme Logistics Inc.";
+      let unpaidInvoices = [];
+
+      const form = document.getElementById("transactionForm");
+      const invoiceSelect = document.getElementById("invoiceId");
+      const amountInput = document.getElementById("amount");
+      const transactionDate = document.getElementById("transactionDate");
+      const receiptInput = document.getElementById("receipt");
+      const receiptFileName = document.getElementById("receiptFileName");
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const showStatus = (message, type = "success") => {
+        const el = document.getElementById("formStatus");
+        if (!el) return;
+
+        el.style.display = "block";
+        el.textContent = message;
+        el.style.background = type === "error" ? "#331717" : "#0f2e1a";
+        el.style.border = type === "error" ? "1px solid #ef4444" : "1px solid #10b981";
+        el.style.color = type === "error" ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.invoices)) return result.invoices;
+        return [];
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const belongsToClient = (invoice) => {
+        const client = normalize(invoice.client || invoice.customer || invoice.billedTo);
+
+        return (
+          client === normalize(CLIENT_NAME) ||
+          client.includes("acme")
+        );
+      };
+
+     const isUnpaid = (invoice) => {
+  const status = normalize(invoice.status);
+  return status.includes("unpaid") || status.includes("overdue");
+};
+
+      const money = (value) => {
+        const num = Number(value || 0);
+        if (Number.isNaN(num)) return "₹0";
+        return `₹${num.toLocaleString("en-IN")}`;
+      };
+
+      const formatDate = (value) => {
+        if (!value) return "--";
+
+        const date = new Date(value);
+
+        if (!Number.isNaN(date.getTime())) {
+          return date.toLocaleDateString("en-IN", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        return value;
+      };
+
+      const renderUnpaidInvoices = () => {
+        const box = document.getElementById("unpaidInvoicesBox");
+
+        if (!box || !invoiceSelect) return;
+
+        if (unpaidInvoices.length === 0) {
+          box.innerHTML = `
+            <div style="background:#050505;border-radius:12px;padding:16px;color:#cbd5e1">
+              No unpaid invoices available.
+            </div>
+          `;
+
+          invoiceSelect.innerHTML = `<option value="">No unpaid invoices available</option>`;
+          amountInput.value = "";
+          return;
+        }
+
+        invoiceSelect.innerHTML = `
+          <option value="">Select unpaid invoice</option>
+          ${unpaidInvoices
+            .map((invoice) => {
+              const amount = invoice.total || invoice.amount || 0;
+              return `<option value="${invoice.id}" data-amount="${amount}">${invoice.id} - ${money(amount)}</option>`;
+            })
+            .join("")}
+        `;
+
+        box.innerHTML = unpaidInvoices
+          .map((invoice) => {
+            const amount = invoice.total || invoice.amount || 0;
+
+            return `
+              <button
+                type="button"
+                class="unpaid-invoice-btn"
+                data-id="${invoice.id}"
+                style="
+                  width:100%;
+                  text-align:left;
+                  border:1px solid #1f2937;
+                  background:#050505;
+                  color:#e5e7eb;
+                  border-radius:12px;
+                  padding:14px 16px;
+                  margin-bottom:12px;
+                  cursor:pointer;
+                "
+              >
+                <div style="display:flex;justify-content:space-between;gap:12px">
+                  <strong>${invoice.id}</strong>
+                  <strong style="color:var(--yellow)">${money(amount)}</strong>
+                </div>
+                <div style="margin-top:8px;color:#9ca3af;font-size:13px">
+                  Due: ${formatDate(invoice.dueDate)} • Status: ${invoice.status}
+                </div>
+              </button>
+            `;
+          })
+          .join("");
+
+        document.querySelectorAll(".unpaid-invoice-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            const selected = unpaidInvoices.find((inv) => inv.id === id);
+
+            if (!selected) return;
+
+            invoiceSelect.value = selected.id;
+            amountInput.value = selected.total || selected.amount || "";
+          });
+        });
+      };
+
+      const loadUnpaidInvoices = async () => {
+        try {
+          if (!window.DeliverySyncAPI) {
+            throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+          }
+
+          const invoicesResult = await DeliverySyncAPI.Transactions.getInvoices();
+          const invoices = getArray(invoicesResult);
+
+          unpaidInvoices = invoices.filter(belongsToClient).filter(isUnpaid);
+
+          console.log("RAW INVOICES API RESULT:", invoicesResult);
+          console.log("UNPAID INVOICES FOR CLIENT:", unpaidInvoices);
+
+          console.table({
+            invoicesLoadedFromBackend: invoices.length,
+            unpaidForClient: unpaidInvoices.length,
+            source: "back-end/data/invoices.json through GET /api/transactions/invoices",
+          });
+
+          renderUnpaidInvoices();
+
+          setVerification(
+            `Backend verified: Invoices ✓ | Loaded ${invoices.length} | Unpaid for client ${unpaidInvoices.length}`
+          );
+        } catch (error) {
+          console.error("Submit transaction backend sync failed:", error);
+
+          setVerification(`Backend sync failed: ${error.message}`, true);
+
+          const box = document.getElementById("unpaidInvoicesBox");
+          if (box) {
+            box.innerHTML = `
+              <div style="background:#331717;border:1px solid #ef4444;border-radius:12px;padding:16px;color:#fecaca">
+                Could not load unpaid invoices from backend.
+              </div>
+            `;
+          }
+        }
+      };
+
+      if (transactionDate) {
+        transactionDate.value = new Date().toISOString().split("T")[0];
+      }
+
+      if (invoiceSelect) {
+        invoiceSelect.addEventListener("change", () => {
+          const selected = unpaidInvoices.find((inv) => inv.id === invoiceSelect.value);
+          amountInput.value = selected ? selected.total || selected.amount || "" : "";
+        });
+      }
+
+      if (receiptInput) {
+        receiptInput.addEventListener("change", () => {
+          const file = receiptInput.files?.[0];
+          receiptFileName.textContent = file ? file.name : "No file selected";
+        });
+      }
+
+      if (form) {
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const invoiceId = invoiceSelect.value;
+          const selectedInvoice = unpaidInvoices.find((inv) => inv.id === invoiceId);
+          const amount = Number(amountInput.value || 0);
+          const reference = document.getElementById("transactionReference").value.trim();
+          const paymentMode = document.getElementById("paymentMode").value;
+          const date = transactionDate.value;
+          const receiptFile = receiptInput.files?.[0];
+
+          document.getElementById("invoiceError").style.display = "none";
+          document.getElementById("amountError").style.display = "none";
+          document.getElementById("referenceError").style.display = "none";
+
+          if (!selectedInvoice) {
+            const el = document.getElementById("invoiceError");
+            el.textContent = "Please select a valid unpaid invoice.";
+            el.style.display = "block";
+            return;
+          }
+
+          if (!reference) {
+            const el = document.getElementById("referenceError");
+            el.textContent = "Transaction ID/reference is required.";
+            el.style.display = "block";
+            return;
+          }
+
+          if (!amount || amount <= 0) {
+            const el = document.getElementById("amountError");
+            el.textContent = "Please enter a valid amount.";
+            el.style.display = "block";
+            return;
+          }
+
+          const payload = {
+            type: "Payment",
+            client: selectedInvoice.client || CLIENT_NAME,
+            invoiceId,
+            deliveryId: selectedInvoice.deliveryId || null,
+            amount,
+            status: "Pending",
+            date,
+            paymentMode,
+            reference,
+            receiptName: receiptFile ? receiptFile.name : "No receipt uploaded",
+            createdAt: new Date().toISOString(),
+          };
+
+          try {
+            console.log("SUBMITTING TRANSACTION PAYLOAD:", payload);
+
+            let createdTransaction = null;
+
+            if (DeliverySyncAPI.Transactions.create) {
+              createdTransaction = await DeliverySyncAPI.Transactions.create(payload);
+            } else {
+              createdTransaction = await fetch("http://localhost:3000/api/transactions", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-user-role": "business-client",
+                },
+                body: JSON.stringify(payload),
+              }).then((res) => {
+                if (!res.ok) {
+                  throw new Error(`Transaction submit failed with status ${res.status}`);
+                }
+                return res.json();
+              });
+            }
+
+            console.log("CREATED TRANSACTION RESPONSE:", createdTransaction);
+
+            console.table({
+              transactionSubmitted: true,
+              invoiceId,
+              amount,
+              paymentMode,
+              reference,
+              receiptName: receiptFile ? receiptFile.name : "No receipt uploaded",
+            });
+
+            setVerification(
+              `Backend verified: Transaction submitted ✓ | Invoice ${invoiceId} | Amount ${money(amount)}`
+            );
+
+            showStatus("Transaction submitted successfully. Verification status will update after review.", "success");
+
+            form.reset();
+            transactionDate.value = new Date().toISOString().split("T")[0];
+            receiptFileName.textContent = "No file selected";
+
+            await loadUnpaidInvoices();
+          } catch (error) {
+            console.error("Transaction submission failed:", error);
+            showStatus(`Transaction submission failed: ${error.message}`, "error");
+            setVerification(`Submit failed: ${error.message}`, true);
+          }
+        });
+      }
+
+      await loadUnpaidInvoices();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,983 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Task Details | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="driver-desktop-page" data-page="task-details">
+  <div class="driver-shell">
+    <aside class="driver-sidebar">
+      <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Driver Portal"></div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard.html"><span class="nav-icon icon-dashboard"></span><span>Dashboard</span></a>
+        <a class="nav-link" href="map.html"><span class="nav-icon icon-map"></span><span>Map</span></a>
+        <a class="nav-link active" href="history.html"><span class="nav-icon icon-history"></span><span>History</span></a>
+        <a class="nav-link" href="notifications.html"><span class="nav-icon icon-notifications"></span><span>Notifications</span></a>
+        <a class="nav-link" href="earnings.html"><span class="nav-icon icon-earnings"></span><span>Earnings</span></a>
+        <a class="nav-link" href="profile.html"><span class="nav-icon icon-profile"></span><span>Profile</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="driverLogout" type="button" style="margin-top:10px">
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="driver-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="pageTitle">Task Details</h1>
+          <p id="pageSubtitle">Loading backend task details...</p>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-circle" type="button">🔔<span class="icon-badge"></span></button>
+
+          <div class="profile-menu" style="position:relative">
+            <button class="profile-chip" type="button">
+              <div class="profile-avatar">R</div>
+              <div>
+                <div style="font-weight:800">Raghav Reddy</div>
+                <div style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="backendVerification" class="verify-box">
+          Verifying task details from backend...
+        </div>
+
+        <div class="details-grid">
+          <div class="details-card">
+            <div class="title-row">
+              <div>
+                <h2 id="deliveryTitle">Delivery Details</h2>
+                <p id="deliveryRoute">Loading route...</p>
+              </div>
+              <span id="statusPill" class="status-pill">Loading</span>
+            </div>
+
+            <div class="route-block">
+              <div class="route-point">
+                <div class="dot"></div>
+                <div>
+                  <span>Pickup</span>
+                  <strong id="pickupText">Loading...</strong>
+                </div>
+              </div>
+
+              <div class="route-point">
+                <div class="dot"></div>
+                <div>
+                  <span>Drop-off</span>
+                  <strong id="dropText">Loading...</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <div>
+                <span>Trip ID</span>
+                <strong id="tripIdText">Loading...</strong>
+              </div>
+
+              <div>
+                <span>Delivery Request</span>
+                <strong id="requestIdText">Loading...</strong>
+              </div>
+
+              <div>
+                <span>Customer</span>
+                <strong id="customerText">Loading...</strong>
+              </div>
+
+              <div>
+                <span>Contact</span>
+                <strong id="contactText">Loading...</strong>
+              </div>
+
+              <div>
+                <span>ETA</span>
+                <strong id="etaText">35 mins</strong>
+              </div>
+
+              <div>
+                <span>Distance</span>
+                <strong id="distanceText">Loading...</strong>
+              </div>
+            </div>
+
+            <div class="package-box">
+              <div>
+                <span>Package</span>
+                <strong id="packageText">Loading...</strong>
+              </div>
+
+              <div>
+                <span>Weight</span>
+                <strong id="weightText">Loading...</strong>
+              </div>
+
+              <div>
+                <span>Instructions</span>
+                <strong id="instructionsText">Loading...</strong>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="acceptBtn" class="btn btn-yellow" type="button">Accept Order</button>
+              <button id="rejectBtn" class="btn btn-red" type="button">Reject</button>
+              <a id="reportBtn" class="btn btn-dark" href="#">Report Issue</a>
+              <a id="backBtn" class="btn btn-dark" href="history.html">Back</a>
+            </div>
+          </div>
+
+          <div class="map-card">
+            <div class="map-badge" id="mapBadge">Loading...</div>
+
+            <div class="fake-map">
+              <div class="road road-one"></div>
+              <div class="road road-two"></div>
+              <div class="road road-three"></div>
+              <div class="green area-one"></div>
+              <div class="green area-two"></div>
+              <div class="blue area-three"></div>
+              <div class="route-curve"></div>
+              <div class="pin pin-one"></div>
+              <div class="pin pin-two"></div>
+              <div class="map-place place-one">Pickup</div>
+              <div class="map-place place-two">Drop</div>
+            </div>
+
+            <div class="map-bottom">
+              <div>
+                <span>Current Speed</span>
+                <strong>45 km/h</strong>
+              </div>
+
+              <div>
+                <span>Status</span>
+                <strong id="mapStatusText">Loading...</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="notes-section">
+          <h2>Delivery Notes</h2>
+          <p>Local notes for this order. These notes remain on this page.</p>
+
+          <div class="notes-grid">
+            <div class="note-card">
+              <label>Note</label>
+              <textarea id="noteInput" placeholder="Add a delivery note for this order"></textarea>
+
+              <div class="note-actions">
+                <button id="saveNoteBtn" class="btn btn-yellow" type="button">Save Note</button>
+                <button id="clearNoteBtn" class="btn btn-dark" type="button">Clear</button>
+              </div>
+            </div>
+
+            <div id="notesList" class="notes-list">
+              <div class="empty-state">No notes added yet.</div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .verify-box {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 24px;
+    }
+
+    .details-card,
+    .map-card,
+    .note-card,
+    .notes-list {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 22px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .title-row h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .title-row p {
+      margin: 8px 0 0;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      width: fit-content;
+      background: rgba(255, 212, 0, .15);
+      color: #ffd400;
+      border: 1px solid rgba(255, 212, 0, .35);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .route-block {
+      display: grid;
+      gap: 18px;
+      margin-bottom: 22px;
+      background: #0b0b0b;
+      border: 1px solid #262626;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .route-point {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: #ffd400;
+      box-shadow: 0 0 0 5px rgba(255, 212, 0, .15);
+      margin-top: 4px;
+      flex: 0 0 auto;
+    }
+
+    .route-point span,
+    .info-grid span,
+    .package-box span,
+    .map-bottom span,
+    .note-card label {
+      display: block;
+      color: #9ca3af;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .route-point strong,
+    .info-grid strong,
+    .package-box strong {
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .info-grid > div,
+    .package-box > div {
+      background: #0b0b0b;
+      border: 1px solid #262626;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .package-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .package-box > div:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: Inter, sans-serif;
+    }
+
+    .btn-yellow {
+      background: #ffd400;
+      color: #000;
+    }
+
+    .btn-red {
+      background: rgba(239, 68, 68, .14);
+      color: #fecaca;
+      border: 1px solid #ef4444;
+    }
+
+    .btn-dark {
+      background: #0b0b0b;
+      color: #fff;
+      border: 1px solid #262626;
+    }
+
+    .btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .map-card {
+      position: relative;
+      min-height: 380px;
+      overflow: hidden;
+    }
+
+    .map-badge {
+      position: absolute;
+      top: 22px;
+      left: 22px;
+      z-index: 5;
+      background: rgba(0,0,0,.78);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+    }
+
+    .fake-map {
+      position: absolute;
+      inset: 18px;
+      border-radius: 18px;
+      background: #d8d4ca;
+      overflow: hidden;
+    }
+
+    .road {
+      position: absolute;
+      background: rgba(255,255,255,.85);
+      height: 18px;
+      width: 120%;
+      transform-origin: center;
+    }
+
+    .road-one {
+      top: 70px;
+      left: -80px;
+      transform: rotate(-8deg);
+    }
+
+    .road-two {
+      top: 160px;
+      left: 70px;
+      transform: rotate(-4deg);
+    }
+
+    .road-three {
+      width: 20px;
+      height: 120%;
+      top: -40px;
+      left: 48%;
+      transform: rotate(5deg);
+    }
+
+    .green {
+      position: absolute;
+      background: #b9d896;
+      border-radius: 12px;
+    }
+
+    .area-one {
+      width: 260px;
+      height: 70px;
+      top: 65px;
+      left: 150px;
+    }
+
+    .area-two {
+      width: 260px;
+      height: 80px;
+      bottom: 70px;
+      left: 70px;
+    }
+
+    .blue {
+      position: absolute;
+      width: 130px;
+      height: 70px;
+      right: 90px;
+      top: 130px;
+      background: #a6cbe7;
+      border-radius: 12px;
+    }
+
+    .route-curve {
+      position: absolute;
+      width: 310px;
+      height: 280px;
+      left: 270px;
+      top: 90px;
+      border-top: 34px solid #ffd400;
+      border-right: 34px solid #f59e0b;
+      border-radius: 60% 80% 0 0;
+      transform: rotate(18deg);
+    }
+
+    .pin {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #ffd400;
+      border: 4px solid #fff;
+      z-index: 4;
+    }
+
+    .pin-one {
+      top: 70px;
+      left: 225px;
+    }
+
+    .pin-two {
+      top: 86px;
+      left: 305px;
+    }
+
+    .map-place {
+      position: absolute;
+      background: #fff;
+      color: #111;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 14px;
+      border-radius: 999px;
+      z-index: 4;
+    }
+
+    .place-one {
+      top: 120px;
+      left: 130px;
+    }
+
+    .place-two {
+      top: 115px;
+      right: 235px;
+    }
+
+    .map-bottom {
+      position: absolute;
+      left: 36px;
+      right: 36px;
+      bottom: 36px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      z-index: 5;
+    }
+
+    .map-bottom > div {
+      background: rgba(0,0,0,.78);
+      border-radius: 16px;
+      padding: 14px 18px;
+    }
+
+    .map-bottom strong {
+      display: block;
+      font-size: 28px;
+      margin-top: 4px;
+    }
+
+    .notes-section {
+      margin-top: 30px;
+    }
+
+    .notes-section h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .notes-section p {
+      color: #9ca3af;
+      margin: 8px 0 18px;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .note-card textarea {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 130px;
+      background: #070707;
+      color: #fff;
+      border: 1px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 14px;
+      outline: none;
+      resize: vertical;
+      font-family: Inter, sans-serif;
+      font-weight: 600;
+    }
+
+    .note-card textarea:focus {
+      border-color: #ffd400;
+      box-shadow: 0 0 0 3px rgba(255, 212, 0, .15);
+    }
+
+    .note-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .saved-note {
+      background: #0b0b0b;
+      border: 1px solid #262626;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .saved-note strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .saved-note p {
+      margin: 0;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .empty-state {
+      background: #0b0b0b;
+      border: 1px dashed #333;
+      border-radius: 16px;
+      padding: 22px;
+      color: #9ca3af;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .details-grid,
+      .notes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions,
+      .info-grid,
+      .package-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "driver";
+
+      const params = new URLSearchParams(window.location.search);
+      const tripId = params.get("id");
+
+      let currentTrip = null;
+      let currentDelivery = null;
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value || "Not available";
+      };
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.trips)) return result.trips;
+        if (Array.isArray(result?.deliveries)) return result.deliveries;
+        return [];
+      };
+
+      const fetchTrip = async () => {
+        if (!tripId) {
+          throw new Error("Trip ID missing in URL.");
+        }
+
+        if (window.DeliverySyncAPI?.Trips?.getOne) {
+          try {
+            return await DeliverySyncAPI.Trips.getOne(tripId);
+          } catch (error) {
+            console.warn("Trips.getOne failed, falling back to getAll:", error);
+          }
+        }
+
+        const result = window.DeliverySyncAPI?.Trips?.getAll
+          ? await DeliverySyncAPI.Trips.getAll()
+          : await fetch("http://localhost:3000/api/trips", {
+              headers: { "x-user-role": ROLE },
+            }).then((res) => {
+              if (!res.ok) throw new Error(`Trips fetch failed with status ${res.status}`);
+              return res.json();
+            });
+
+        const trips = getArray(result);
+
+        const trip =
+          trips.find((t) => String(t.id) === String(tripId)) ||
+          trips.find((t) => String(t.tripId) === String(tripId)) ||
+          null;
+
+        if (!trip) {
+          throw new Error(`Trip "${tripId}" not found from backend.`);
+        }
+
+        return trip;
+      };
+
+      const fetchLinkedDelivery = async (requestId) => {
+        if (!requestId) return null;
+
+        try {
+          if (window.DeliverySyncAPI?.Deliveries?.getOne) {
+            return await DeliverySyncAPI.Deliveries.getOne(requestId);
+          }
+
+          return await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(requestId)}`, {
+            headers: { "x-user-role": ROLE },
+          }).then((res) => {
+            if (!res.ok) throw new Error(`Delivery fetch failed with status ${res.status}`);
+            return res.json();
+          });
+        } catch (error) {
+          console.warn("Linked delivery fetch failed:", error);
+          return null;
+        }
+      };
+
+      const updateTripStatus = async (status) => {
+        const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(tripId)}/status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+          body: JSON.stringify({ status }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Trip status update failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const renderPage = () => {
+        const requestId =
+          currentTrip.request ||
+          currentTrip.deliveryId ||
+          currentTrip.deliveryRequestId ||
+          currentTrip.id;
+
+        const customer =
+          currentTrip.customer ||
+          currentTrip.client ||
+          currentDelivery?.customer ||
+          currentDelivery?.client ||
+          currentDelivery?.company ||
+          "Customer not available";
+
+        const contact =
+          currentDelivery?.contact ||
+          currentTrip.contact ||
+          "Contact not available";
+
+        const pickup =
+          currentTrip.pickup ||
+          currentTrip.pickupLocation ||
+          currentDelivery?.pickup ||
+          "Pickup not available";
+
+        const drop =
+          currentTrip.destination ||
+          currentTrip.dropoff ||
+          currentDelivery?.dropoff ||
+          currentDelivery?.destination ||
+          "Drop not available";
+
+        const packageInfo =
+          currentDelivery?.package ||
+          currentTrip.package ||
+          currentTrip.packageType ||
+          "Package not available";
+
+        const weight =
+          currentDelivery?.weight ||
+          currentTrip.weight ||
+          "Weight not available";
+
+        const instructions =
+          currentDelivery?.instructions ||
+          currentTrip.instructions ||
+          "Handle package carefully.";
+
+        const distance =
+          currentTrip.distance ||
+          currentDelivery?.distance ||
+          "Distance not available";
+
+        const eta =
+          currentTrip.eta ||
+          currentTrip.estimatedTime ||
+          "35 mins";
+
+        const status =
+          currentTrip.status ||
+          currentDelivery?.status ||
+          "Not available";
+
+        setText("pageTitle", `Delivery #${requestId}`);
+        setText("pageSubtitle", `Backend task details for ${currentTrip.id}`);
+
+        setText("deliveryTitle", `Delivery #${requestId}`);
+        setText("deliveryRoute", `${pickup} → ${drop}`);
+        setText("statusPill", status);
+
+        setText("pickupText", pickup);
+        setText("dropText", drop);
+
+        setText("tripIdText", currentTrip.id);
+        setText("requestIdText", requestId);
+        setText("customerText", customer);
+        setText("contactText", contact);
+        setText("etaText", eta);
+        setText("distanceText", distance);
+
+        setText("packageText", packageInfo);
+        setText("weightText", weight);
+        setText("instructionsText", instructions);
+
+        setText("mapBadge", `${distance} • ${eta}`);
+        setText("mapStatusText", status);
+
+        const reportBtn = document.getElementById("reportBtn");
+        reportBtn.href = `report-issue.html?id=${encodeURIComponent(currentTrip.id)}`;
+
+        const acceptBtn = document.getElementById("acceptBtn");
+        const rejectBtn = document.getElementById("rejectBtn");
+
+        const normalizedStatus = String(status).toLowerCase();
+
+        if (["accepted", "picked up", "in transit", "delivered", "completed", "issue reported"].includes(normalizedStatus)) {
+          acceptBtn.textContent = "Already Accepted";
+          acceptBtn.disabled = true;
+        }
+
+        if (["rejected", "delivered", "completed"].includes(normalizedStatus)) {
+          rejectBtn.disabled = true;
+        }
+      };
+
+      const renderNotes = () => {
+        const notesList = document.getElementById("notesList");
+        const key = `driver_notes_${tripId}`;
+        const notes = JSON.parse(localStorage.getItem(key) || "[]");
+
+        if (!notes.length) {
+          notesList.innerHTML = `<div class="empty-state">No notes added yet.</div>`;
+          return;
+        }
+
+        notesList.innerHTML = notes.map((note, index) => `
+          <div class="saved-note">
+            <strong>Note ${index + 1}</strong>
+            <p>${note.text}</p>
+            <p style="margin-top:8px;color:#9ca3af;font-size:12px">${note.time}</p>
+          </div>
+        `).join("");
+      };
+
+      const loadPage = async () => {
+        try {
+          currentTrip = await fetchTrip();
+
+          const requestId =
+            currentTrip.request ||
+            currentTrip.deliveryId ||
+            currentTrip.deliveryRequestId;
+
+          currentDelivery = await fetchLinkedDelivery(requestId);
+
+          renderPage();
+          renderNotes();
+
+          console.log("TASK DETAILS TRIP:", currentTrip);
+          console.log("TASK DETAILS DELIVERY:", currentDelivery);
+
+          console.table({
+            taskDetailsLoaded: true,
+            tripId,
+            request: requestId || "No request",
+            status: currentTrip.status || "No status",
+            customer:
+              currentDelivery?.customer ||
+              currentTrip.customer ||
+              "Customer not available",
+            source: "GET /api/trips/:id + GET /api/deliveries/:requestId",
+          });
+
+          setVerification(
+            `Backend verified: Task Details ✓ | Trip ${currentTrip.id} | Delivery ${requestId || "N/A"} ✓`
+          );
+        } catch (error) {
+          console.error("Task details backend sync failed:", error);
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      document.getElementById("acceptBtn").addEventListener("click", async () => {
+        if (!currentTrip) return;
+
+        const btn = document.getElementById("acceptBtn");
+
+        try {
+          btn.disabled = true;
+          btn.textContent = "Updating...";
+
+          await updateTripStatus("Accepted");
+
+          window.location.href = `delivery-accepted.html?id=${encodeURIComponent(tripId)}`;
+        } catch (error) {
+          console.error("Accept failed:", error);
+          btn.disabled = false;
+          btn.textContent = "Accept Order";
+          setVerification(`Accept failed: ${error.message}`, true);
+        }
+      });
+
+      document.getElementById("rejectBtn").addEventListener("click", async () => {
+        if (!currentTrip) return;
+
+        const btn = document.getElementById("rejectBtn");
+
+        try {
+          btn.disabled = true;
+          btn.textContent = "Rejecting...";
+
+          await updateTripStatus("Rejected");
+
+          window.location.href = `report-issue.html?id=${encodeURIComponent(tripId)}&action=reject`;
+        } catch (error) {
+          console.error("Reject failed:", error);
+          btn.disabled = false;
+          btn.textContent = "Reject";
+          setVerification(`Reject failed: ${error.message}`, true);
+        }
+      });
+
+      document.getElementById("saveNoteBtn").addEventListener("click", () => {
+        const input = document.getElementById("noteInput");
+        const value = input.value.trim();
+
+        if (!value) return;
+
+        const key = `driver_notes_${tripId}`;
+        const notes = JSON.parse(localStorage.getItem(key) || "[]");
+
+        notes.unshift({
+          text: value,
+          time: new Date().toLocaleString("en-IN"),
+        });
+
+        localStorage.setItem(key, JSON.stringify(notes));
+        input.value = "";
+        renderNotes();
+      });
+
+      document.getElementById("clearNoteBtn").addEventListener("click", () => {
+        document.getElementById("noteInput").value = "";
+      });
+
+      document.getElementById("driverLogout").addEventListener("click", () => {
+        window.location.href = "../login.html";
+      });
+
+      await loadPage();
+    });
+  </script>
+</body>
+</html>

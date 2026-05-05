@@ -1,0 +1,135 @@
+{
+  "platform": {
+    "name": "DeliverSync",
+    "timezone": "Asia/Kolkata",
+    "language": "English",
+    "logo": ""
+  },
+  "security": {
+    "passwordLength": 8,
+    "failedAttempts": 5,
+    "sessionTimeout": 30,
+    "twoFactor": true
+  },
+  "permissions": {
+    "fleet-manager": [
+      [
+        "Dashboard Access",
+        "View platform overview",
+        true
+      ],
+      [
+        "Fleet Management Access",
+        "Manage assigned fleets",
+        true
+      ],
+      [
+        "User Management Access",
+        "Create and update operational users",
+        true
+      ],
+      [
+        "Reports Access",
+        "Access operational reports",
+        true
+      ],
+      [
+        "System Configuration Access",
+        "View configuration settings",
+        false
+      ],
+      [
+        "Role & Permissions Access",
+        "Edit role policies",
+        false
+      ]
+    ],
+    "business-client": [
+      [
+        "Dashboard Access",
+        "View account overview",
+        true
+      ],
+      [
+        "Track Requests",
+        "Track assigned delivery requests",
+        true
+      ],
+      [
+        "Manage Contacts",
+        "Manage business contacts",
+        true
+      ],
+      [
+        "Reports Access",
+        "Access order reports",
+        true
+      ],
+      [
+        "System Configuration Access",
+        "No configuration access",
+        false
+      ],
+      [
+        "Role & Permissions Access",
+        "No permission control",
+        false
+      ]
+    ],
+    "driver": [
+      [
+        "Dashboard Access",
+        "View trip overview",
+        true
+      ],
+      [
+        "Trip Monitoring",
+        "Access assigned trip details",
+        true
+      ],
+      [
+        "Reports Access",
+        "View trip reports",
+        true
+      ],
+      [
+        "Manage Users",
+        "No user management",
+        false
+      ],
+      [
+        "System Configuration Access",
+        "No configuration access",
+        false
+      ],
+      [
+        "Role & Permissions Access",
+        "No permission control",
+        false
+      ]
+    ]
+  },
+  "configEntries": [
+    {
+      "id": "CFG-01",
+      "key": "Auto Assignment",
+      "value": "Enabled",
+      "scope": "System",
+      "status": "Active"
+    },
+    {
+      "id": "CFG-02",
+      "key": "SLA Threshold",
+      "value": "30 mins",
+      "scope": "Operations",
+      "status": "Active"
+    },
+    {
+      "id": "CFG-03",
+      "key": "Document Policy",
+      "value": "Mandatory",
+      "scope": "Driver Onboarding",
+      "status": "Active"
+    }
+  ]
+}

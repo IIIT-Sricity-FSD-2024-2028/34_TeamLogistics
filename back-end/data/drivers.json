@@ -1,0 +1,130 @@
+[
+  {
+    "id": "DR-301",
+    "name": "Raghav Reddy",
+    "phone": "9440011229",
+    "zone": "Chennai North",
+    "vehicle": "TN09AB1234",
+    "status": "Available",
+    "license": "TN03201800034521",
+    "rating": "4.7",
+    "trip": "Mar 05, 2026",
+    "email": "driver@deliverysync.com",
+    "licenseNumber": "TN03201800034521",
+    "vehicleType": ""
+  },
+  {
+    "id": "DR-302",
+    "name": "Kiran Teja",
+    "phone": "+91 9555500011",
+    "zone": "Bengaluru South",
+    "vehicle": "KA03PQ9876",
+    "status": "Available",
+    "license": "AP07202100012478",
+    "rating": "4.6",
+    "trip": "Mar 07, 2026",
+    "email": "kiran@deliverysync.com"
+  },
+  {
+    "id": "DR-303",
+    "name": "Manoj Kumar",
+    "phone": "+91 9666677788",
+    "zone": "Hyderabad Hub",
+    "vehicle": "TS08XY2045",
+    "status": "Document Review",
+    "license": "TS12202000098765",
+    "rating": "4.4",
+    "trip": "Mar 04, 2026",
+    "email": "manoj@deliverysync.com"
+  },
+  {
+    "id": "DR-304",
+    "name": "Suresh Babu",
+    "phone": "+91 6543210987",
+    "zone": "Delhi",
+    "vehicle": "--",
+    "status": "Suspended",
+    "license": "DL08201900091256",
+    "rating": "3.9",
+    "trip": "Feb 28, 2026",
+    "email": "suresh@deliverysync.com"
+  },
+  {
+    "id": "DR-305",
+    "name": "Rahul Singh",
+    "phone": "+91 9876543210",
+    "zone": "New Delhi",
+    "vehicle": "DL-01-AB-1234",
+    "status": "Available",
+    "license": "DL01202000045678",
+    "rating": "4.8",
+    "trip": "Mar 08, 2026",
+    "email": "rahul@deliverysync.com"
+  },
+  {
+    "id": "DR-306",
+    "name": "Sana Khan",
+    "phone": "+91 9001245210",
+    "zone": "Hyderabad Hub",
+    "vehicle": "TS-09-QA-2345",
+    "status": "On Duty",
+    "license": "TS08202100067890",
+    "rating": "4.5",
+    "trip": "Mar 08, 2026",
+    "email": "sana@deliverysync.com"
+  },
+  {
+    "id": "DR-307",
+    "name": "Pooja Nair",
+    "phone": "+91 9112233445",
+    "zone": "Chennai North",
+    "vehicle": "--",
+    "status": "Available",
+    "license": "TN09202000011234",
+    "rating": "4.3",
+    "trip": "Mar 06, 2026",
+    "email": "pooja@deliverysync.com"
+  },
+  {
+    "id": "DR-308",
+    "name": "Arjun Verma",
+    "phone": "+91 8765432109",
+    "zone": "Bengaluru South",
+    "vehicle": "--",
+    "status": "Active",
+    "license": "KA61201900056712",
+    "rating": "4.4",
+    "trip": "Mar 08, 2026",
+    "email": "arjun@deliverysync.com"
+  },
+  {
+    "id": "DRV-309",
+    "name": "rajesh",
+    "phone": "9876432100",
+    "zone": "Chennai North",
+    "vehicle": "TN09AB1234",
+    "status": "Available",
+    "license": "TN03 2018 0003452",
+    "email": "rajesh@gmail.com"
+  },
+  {
+    "id": "DRV-310",
+    "name": "Rajesh Kumar",
+    "phone": "987643210",
+    "zone": "Chennai North",
+    "vehicle": "TN0B1234",
+    "status": "Available",
+    "license": "TN03201800034521",
+    "email": "rajesh@gmail.com"
+  },
+  {
+    "id": "DRV-311",
+    "name": "Rajesh Kumar",
+    "phone": "987643210",
+    "zone": "Chennai North",
+    "vehicle": "TN0B1234",
+    "status": "Available",
+    "license": "TN03201800034521",
+    "email": "rajesh@gmail.com"
+  }
+]

@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body" data-page="profile">
+  <div class="bc-layout">
+    <aside class="bc-sidebar">
+      <div class="bc-brand">
+        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div>
+      </div>
+
+      <nav class="bc-nav">
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+            </svg>
+          </span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html" data-nav="active-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" data-nav="completed-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Invoices</span>
+        </a>
+
+        <a href="submit-transaction.html" data-nav="submit-transaction">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html" data-nav="notifications">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
+              <path d="M10 20a2 2 0 0 0 4 0"></path>
+            </svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile" class="active">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <path d="M16 17l5-5-5-5"></path>
+            <path d="M21 12H9"></path>
+          </svg>
+        </span>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <main class="bc-main">
+      <header class="bc-topbar">
+        <div>
+          <div class="company" id="topCompanyName">Loading...</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
+
+        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
+          <svg viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+            <path d="M10 20a2 2 0 0 0 4 0"></path>
+          </svg>
+          <span class="badge">3</span>
+        </a>
+      </header>
+
+      <section class="bc-content">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:20px">
+          <div>
+            <h1 class="page-title small">Profile Settings</h1>
+            <p class="page-subtitle">Manage your company information</p>
+          </div>
+
+          <button id="editBtn" class="btn yellow" style="padding:12px 24px">
+            ✎ Edit
+          </button>
+        </div>
+
+        <div
+          id="backendVerification"
+          style="
+            margin-top: 16px;
+            margin-bottom: 24px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            color: #d1d5db;
+            font-size: 14px;
+          "
+        >
+          Verifying backend profile data...
+        </div>
+
+        <div class="card" style="max-width:900px;padding:32px">
+          <div style="display:flex;align-items:center;gap:22px;margin-bottom:26px">
+            <div
+              id="profileAvatar"
+              style="
+                width:78px;
+                height:78px;
+                border-radius:18px;
+                background:var(--yellow);
+                color:#000;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:34px;
+                font-weight:900;
+              "
+            >
+              AI
+            </div>
+
+            <div>
+              <div id="profileTitle" style="font-size:20px;font-weight:800">Business Account</div>
+              <div id="profileSub" style="color:#9ca3af;margin-top:6px">Loaded from backend</div>
+            </div>
+          </div>
+
+          <div style="height:1px;background:#262626;margin-bottom:24px"></div>
+
+          <form id="profileForm">
+            <div class="profile-field">
+              <label>Company Name</label>
+              <input id="companyName" type="text" disabled />
+            </div>
+
+            <div class="profile-field">
+              <label>Full Name</label>
+              <input id="fullName" type="text" disabled />
+            </div>
+
+            <div class="profile-field">
+              <label>Email Address</label>
+              <input id="emailAddress" type="email" disabled />
+            </div>
+
+            <div class="profile-field">
+              <label>Phone Number</label>
+              <input id="phoneNumber" type="text" disabled />
+            </div>
+
+            <div class="profile-field">
+              <label>Address</label>
+              <input id="address" type="text" disabled />
+            </div>
+
+            <div id="formStatus" style="display:none;margin-top:16px;padding:12px;border-radius:10px;font-size:14px"></div>
+
+            <button id="saveBtn" type="submit" class="btn yellow" style="display:none;margin-top:20px;padding:12px 24px">
+              Save Changes
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    .profile-field {
+      margin-bottom: 18px;
+    }
+
+    .profile-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #a8b3c7;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .profile-field input {
+      width: 100%;
+      height: 54px;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      background: #050505;
+      color: #ffffff;
+      padding: 0 16px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .profile-field input:disabled {
+      color: #d1d5db;
+      opacity: 0.9;
+    }
+
+    .profile-field input:not(:disabled) {
+      border-color: var(--yellow);
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "business-client";
+      const DEFAULT_EMAIL = "client@deliverysync.com";
+
+      let currentUser = null;
+      let isEditing = false;
+
+      const form = document.getElementById("profileForm");
+      const editBtn = document.getElementById("editBtn");
+      const saveBtn = document.getElementById("saveBtn");
+
+      const fields = {
+        companyName: document.getElementById("companyName"),
+        fullName: document.getElementById("fullName"),
+        emailAddress: document.getElementById("emailAddress"),
+        phoneNumber: document.getElementById("phoneNumber"),
+        address: document.getElementById("address"),
+      };
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const showStatus = (message, type = "success") => {
+        const el = document.getElementById("formStatus");
+        if (!el) return;
+
+        el.style.display = "block";
+        el.textContent = message;
+        el.style.background = type === "error" ? "#331717" : "#0f2e1a";
+        el.style.border = type === "error" ? "1px solid #ef4444" : "1px solid #10b981";
+        el.style.color = type === "error" ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.users)) return result.users;
+        return [];
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const getUserDisplay = (user) => {
+        const first = user.firstName || "";
+        const last = user.lastName || "";
+        const full = user.fullName || user.name || `${first} ${last}`.trim();
+
+        return {
+          companyName: user.company || user.companyName || user.organization || "Acme Logistics Inc.",
+          fullName: full || user.customer || "Acme Logistics",
+          email: user.email || DEFAULT_EMAIL,
+          phone: user.phone || user.contact || "--",
+          address: user.address || user.location || "123 Business Avenue",
+        };
+      };
+
+      const fillForm = (user) => {
+        const d = getUserDisplay(user);
+
+        fields.companyName.value = d.companyName;
+        fields.fullName.value = d.fullName;
+        fields.emailAddress.value = d.email;
+        fields.phoneNumber.value = d.phone;
+        fields.address.value = d.address;
+
+        document.getElementById("topCompanyName").textContent = d.companyName;
+        document.getElementById("profileTitle").textContent = d.companyName;
+        document.getElementById("profileSub").textContent = d.email;
+
+        const initials = d.companyName
+          .split(" ")
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((word) => word[0])
+          .join("")
+          .toUpperCase();
+
+        document.getElementById("profileAvatar").textContent = initials || "AI";
+      };
+
+      const setEditMode = (enabled) => {
+        isEditing = enabled;
+
+        Object.values(fields).forEach((input) => {
+          input.disabled = !enabled;
+        });
+
+        saveBtn.style.display = enabled ? "inline-flex" : "none";
+        editBtn.textContent = enabled ? "Cancel" : "✎ Edit";
+      };
+
+      const loadProfile = async () => {
+        try {
+          if (!window.DeliverySyncAPI) {
+            throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+          }
+
+          let result;
+
+          if (DeliverySyncAPI.Users && DeliverySyncAPI.Users.getAll) {
+            result = await DeliverySyncAPI.Users.getAll();
+          } else {
+            result = await fetch("http://localhost:3000/api/users", {
+              headers: {
+                "x-user-role": ROLE,
+              },
+            }).then((res) => {
+              if (!res.ok) throw new Error(`Users fetch failed with status ${res.status}`);
+              return res.json();
+            });
+          }
+
+          const users = getArray(result);
+
+          currentUser =
+            users.find((u) => normalize(u.role) === ROLE) ||
+            users.find((u) => normalize(u.email) === DEFAULT_EMAIL) ||
+            users.find((u) => normalize(u.role).includes("client")) ||
+            users[0];
+
+          if (!currentUser) {
+            throw new Error("Business client profile not found in backend users.json.");
+          }
+
+          fillForm(currentUser);
+
+          console.log("RAW USERS API RESULT:", result);
+          console.log("BUSINESS CLIENT PROFILE:", currentUser);
+
+          console.table({
+            usersLoadedFromBackend: users.length,
+            profileMatched: Boolean(currentUser),
+            profileId: currentUser.id || "No ID",
+            role: currentUser.role || "No role",
+            email: currentUser.email || "No email",
+            source: "back-end/data/users.json through GET /api/users",
+          });
+
+          setVerification(
+            `Backend verified: Profile ✓ | Users loaded ${users.length} | Profile ${currentUser.id || currentUser.email || "matched"}`
+          );
+        } catch (error) {
+          console.error("Profile backend sync failed:", error);
+
+          currentUser = {
+            id: "local-business-client",
+            companyName: "Acme Logistics Inc.",
+            name: "Acme Logistics",
+            email: "client@deliverysync.com",
+            phone: "--",
+            address: "123 Business Avenue",
+            role: "business-client",
+          };
+
+          fillForm(currentUser);
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      editBtn.addEventListener("click", () => {
+        setEditMode(!isEditing);
+        document.getElementById("formStatus").style.display = "none";
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!currentUser) return;
+const payload = {
+  name: fields.fullName.value.trim(),
+  email: fields.emailAddress.value.trim(),
+  phone: fields.phoneNumber.value.trim(),
+  companyName: fields.companyName.value.trim(),
+  company: fields.companyName.value.trim(),
+  address: fields.address.value.trim(),
+  role: currentUser.role || ROLE,
+  status: currentUser.status || "Active",
+};
+
+        try {
+          console.log("SUBMITTING PROFILE UPDATE:", payload);
+
+          let response = null;
+
+          if (currentUser.id && DeliverySyncAPI.Users && DeliverySyncAPI.Users.update) {
+            response = await DeliverySyncAPI.Users.update(currentUser.id, payload);
+          } else if (currentUser.id) {
+            response = await fetch(`http://localhost:3000/api/users/${currentUser.id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "x-user-role": ROLE,
+              },
+              body: JSON.stringify(payload),
+            }).then((res) => {
+              if (!res.ok) throw new Error(`Profile update failed with status ${res.status}`);
+              return res.json();
+            });
+          } else {
+            throw new Error("User ID missing. Cannot update backend profile.");
+          }
+
+          currentUser = response || payload;
+          fillForm(currentUser);
+          setEditMode(false);
+
+          console.log("PROFILE UPDATE RESPONSE:", response);
+
+          console.table({
+            profileUpdated: true,
+            profileId: currentUser.id,
+            companyName: fields.companyName.value,
+            email: fields.emailAddress.value,
+          });
+
+          showStatus("Profile updated successfully in backend.", "success");
+
+          setVerification(
+            `Backend verified: Profile update ✓ | ${currentUser.id || currentUser.email}`
+          );
+        } catch (error) {
+          console.error("Profile update failed:", error);
+          showStatus(`Profile update failed: ${error.message}`, "error");
+          setVerification(`Profile update failed: ${error.message}`, true);
+        }
+      });
+
+      await loadProfile();
+    });
+  </script>
+</body>
+</html>

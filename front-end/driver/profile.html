@@ -1,0 +1,748 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Driver Profile | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="driver-desktop-page" data-page="profile">
+  <div class="driver-shell">
+    <aside class="driver-sidebar">
+      <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Driver Portal"></div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard.html">
+          <span class="nav-icon icon-dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link" href="map.html">
+          <span class="nav-icon icon-map"></span>
+          <span>Map</span>
+        </a>
+
+        <a class="nav-link" href="history.html">
+          <span class="nav-icon icon-history"></span>
+          <span>History</span>
+        </a>
+
+        <a class="nav-link" href="notifications.html">
+          <span class="nav-icon icon-notifications"></span>
+          <span>Notifications</span>
+        </a>
+
+        <a class="nav-link" href="earnings.html">
+          <span class="nav-icon icon-earnings"></span>
+          <span>Earnings</span>
+        </a>
+
+        <a class="nav-link active" href="profile.html">
+          <span class="nav-icon icon-profile"></span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="driverLogout" type="button" style="margin-top:10px">
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="driver-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Profile</h1>
+          <p>Backend synced driver information and account settings</p>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-circle" type="button">
+            🔔
+            <span class="icon-badge"></span>
+          </button>
+
+          <div class="profile-menu" style="position:relative">
+            <button class="profile-chip" type="button">
+              <div class="profile-avatar" id="topAvatar">R</div>
+              <div>
+                <div id="topDriverName" style="font-weight:800">Loading...</div>
+                <div id="topDriverEmail" style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="backendVerification" class="verify-box">
+          Verifying driver profile from backend...
+        </div>
+
+        <div class="profile-layout">
+          <div class="profile-card profile-left">
+            <div class="big-avatar" id="bigAvatar">R</div>
+            <h2 id="profileName">Loading...</h2>
+            <p id="profileEmail">driver@deliverysync.com</p>
+            <p id="profilePhone">Phone not available</p>
+            <span id="profileStatus" class="status-pill">Loading</span>
+          </div>
+
+          <div class="profile-main">
+            <div class="profile-stats">
+              <div class="stat-card">
+                <strong id="completedDeliveries">0</strong>
+                <span>Completed Deliveries</span>
+              </div>
+
+              <div class="stat-card">
+                <strong id="todayEarnings">₹0.00</strong>
+                <span>Today's Earnings</span>
+              </div>
+
+              <div class="stat-card">
+                <strong id="licenseTop">Not available</strong>
+                <span>License Number</span>
+              </div>
+            </div>
+
+            <div class="details-card">
+              <div class="card-head">
+                <h2>Profile Details</h2>
+                <button id="editBtn" class="yellow-btn" type="button">Edit</button>
+              </div>
+
+              <form id="profileForm">
+                <div class="form-grid">
+                  <div>
+                    <label>Full Name</label>
+                    <input id="nameInput" type="text" readonly />
+                  </div>
+
+                  <div>
+                    <label>Email</label>
+                    <input id="emailInput" type="email" readonly />
+                  </div>
+
+                  <div>
+                    <label>Phone</label>
+                    <input id="phoneInput" type="text" readonly />
+                  </div>
+
+                  <div>
+                    <label>License Number</label>
+                    <input id="licenseInput" type="text" readonly />
+                  </div>
+
+                  <div>
+                    <label>Status</label>
+                    <select id="statusInput" disabled>
+                      <option value="Available">Available</option>
+                      <option value="Active">Active</option>
+                      <option value="Busy">Busy</option>
+                      <option value="Offline">Offline</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label>Vehicle</label>
+                    <input id="vehicleInput" type="text" readonly />
+                  </div>
+                </div>
+
+                <div id="formMessage"></div>
+
+                <button id="saveBtn" class="yellow-btn" type="submit" disabled>
+                  Save Changes
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .verify-box {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 22px;
+    }
+
+    .profile-card,
+    .details-card,
+    .stat-card {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .profile-left {
+      padding: 28px;
+      text-align: center;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .big-avatar {
+      width: 86px;
+      height: 86px;
+      border-radius: 999px;
+      background: #ffd400;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .profile-left h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .profile-left p {
+      margin: 0;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .status-pill {
+      margin-top: 12px;
+      display: inline-flex;
+      width: fit-content;
+      background: rgba(255, 212, 0, .15);
+      color: #ffd400;
+      border: 1px solid rgba(255, 212, 0, .35);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .profile-main {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 20px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .stat-card span {
+      color: #d1d5db;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .details-card {
+      padding: 22px;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .card-head h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e5e7eb;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    input,
+    select {
+      width: 100%;
+      box-sizing: border-box;
+      background: #070707;
+      color: #fff;
+      border: 1px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 13px 14px;
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #ffd400;
+      box-shadow: 0 0 0 3px rgba(255, 212, 0, .15);
+    }
+
+    input[readonly],
+    select:disabled {
+      opacity: .8;
+      cursor: not-allowed;
+    }
+
+    .yellow-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ffd400;
+      color: #000;
+      font-weight: 900;
+      padding: 11px 18px;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+    }
+
+    .yellow-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    #saveBtn {
+      margin-top: 18px;
+      border-radius: 14px;
+    }
+
+    #formMessage {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #formMessage.success {
+      display: block;
+      background: rgba(16, 185, 129, .12);
+      border: 1px solid #10b981;
+      color: #d1fae5;
+    }
+
+    #formMessage.error {
+      display: block;
+      background: rgba(239, 68, 68, .12);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    @media (max-width: 1000px) {
+      .profile-layout,
+      .profile-stats,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "driver";
+      const DRIVER_NAME = "Raghav Reddy";
+      const DRIVER_EMAIL = "driver@deliverysync.com";
+
+      let currentDriver = null;
+      let trips = [];
+      let deliveries = [];
+      let isEditing = false;
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const setMessage = (message, type) => {
+        const box = document.getElementById("formMessage");
+        box.textContent = message;
+        box.className = type;
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.drivers)) return result.drivers;
+        if (Array.isArray(result?.trips)) return result.trips;
+        if (Array.isArray(result?.deliveries)) return result.deliveries;
+        return [];
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const formatMoney = (amount) => {
+        const value = Number(amount || 0);
+        return `₹${value.toLocaleString("en-IN", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`;
+      };
+
+      const fetchDrivers = async () => {
+        if (window.DeliverySyncAPI?.Drivers?.getAll) {
+          return getArray(await DeliverySyncAPI.Drivers.getAll());
+        }
+
+        const response = await fetch("http://localhost:3000/api/drivers", {
+          headers: { "x-user-role": ROLE },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Drivers fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const fetchTrips = async () => {
+        if (window.DeliverySyncAPI?.Trips?.getAll) {
+          return getArray(await DeliverySyncAPI.Trips.getAll());
+        }
+
+        const response = await fetch("http://localhost:3000/api/trips", {
+          headers: { "x-user-role": ROLE },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Trips fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const fetchDeliveries = async () => {
+        if (window.DeliverySyncAPI?.Deliveries?.getAll) {
+          return getArray(await DeliverySyncAPI.Deliveries.getAll());
+        }
+
+        const response = await fetch("http://localhost:3000/api/deliveries", {
+          headers: { "x-user-role": ROLE },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Deliveries fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const getDeliveryForTrip = (trip) => {
+        const requestId = trip.request || trip.deliveryId || trip.deliveryRequestId;
+
+        return (
+          deliveries.find((d) => String(d.id) === String(requestId)) ||
+          deliveries.find((d) => String(d.deliveryId) === String(requestId)) ||
+          null
+        );
+      };
+
+      const calculateAmount = (trip, delivery) => {
+        if (trip.amount) return Number(trip.amount);
+        if (delivery?.amount) return Number(delivery.amount);
+        if (delivery?.price) return Number(delivery.price);
+        if (delivery?.fare) return Number(delivery.fare);
+        if (delivery?.revenue) return Number(delivery.revenue);
+
+        const distanceText = String(trip.distance || delivery?.distance || "0");
+        const distance = Number(distanceText.replace(/[^\d.]/g, "")) || 0;
+
+        if (distance > 0) {
+          return Math.round(250 + distance * 18);
+        }
+
+        return 0;
+      };
+
+      const findCurrentDriver = (drivers) => {
+        return (
+          drivers.find((d) => normalize(d.name) === normalize(DRIVER_NAME)) ||
+          drivers.find((d) => normalize(d.email) === normalize(DRIVER_EMAIL)) ||
+          drivers.find((d) => normalize(d.fullName) === normalize(DRIVER_NAME)) ||
+          drivers[0] ||
+          {
+            id: "DRV-LOCAL",
+            name: DRIVER_NAME,
+            email: DRIVER_EMAIL,
+            phone: "+91 9440011223",
+            licenseNumber: "TN03201800034521",
+            status: "Available",
+            vehicle: "KA-09-LM-4567",
+          }
+        );
+      };
+
+      const getDriverValue = (driver, keys, fallback = "Not available") => {
+        for (const key of keys) {
+          if (driver?.[key]) return driver[key];
+        }
+
+        return fallback;
+      };
+
+      const renderProfile = () => {
+        const name = getDriverValue(currentDriver, ["name", "fullName", "driverName"], DRIVER_NAME);
+        const email = getDriverValue(currentDriver, ["email"], DRIVER_EMAIL);
+        const phone = getDriverValue(currentDriver, ["phone", "contact", "mobile"], "+91 9440011223");
+        const license = getDriverValue(
+          currentDriver,
+          ["licenseNumber", "license", "licenceNumber", "driverLicense"],
+          "TN03201800034521"
+        );
+        const status = getDriverValue(currentDriver, ["status", "availability"], "Available");
+        const vehicle = getDriverValue(currentDriver, ["vehicle", "vehicleNumber", "assignedVehicle"], "KA-09-LM-4567");
+
+        const initial = String(name || "R").charAt(0).toUpperCase();
+
+        document.getElementById("topAvatar").textContent = initial;
+        document.getElementById("topDriverName").textContent = name;
+        document.getElementById("topDriverEmail").textContent = email;
+
+        document.getElementById("bigAvatar").textContent = initial;
+        document.getElementById("profileName").textContent = name;
+        document.getElementById("profileEmail").textContent = email;
+        document.getElementById("profilePhone").textContent = phone;
+        document.getElementById("profileStatus").textContent = status;
+
+        document.getElementById("nameInput").value = name;
+        document.getElementById("emailInput").value = email;
+        document.getElementById("phoneInput").value = phone;
+        document.getElementById("licenseInput").value = license;
+        document.getElementById("statusInput").value = status;
+        document.getElementById("vehicleInput").value = vehicle;
+
+        document.getElementById("licenseTop").textContent = license;
+
+        const completedTrips = trips.filter((trip) => {
+          const driver = normalize(trip.driver || trip.assignedDriver || trip.driverName);
+          const tripStatus = normalize(trip.status);
+
+          return (
+            driver === normalize(name) &&
+            ["completed", "delivered"].includes(tripStatus)
+          );
+        });
+
+        const totalToday = completedTrips.reduce((sum, trip) => {
+          const delivery = getDeliveryForTrip(trip);
+          return sum + calculateAmount(trip, delivery);
+        }, 0);
+
+        document.getElementById("completedDeliveries").textContent = completedTrips.length;
+        document.getElementById("todayEarnings").textContent = formatMoney(totalToday);
+      };
+
+      const setEditing = (enabled) => {
+        isEditing = enabled;
+
+        ["nameInput", "emailInput", "phoneInput", "licenseInput", "vehicleInput"].forEach((id) => {
+          document.getElementById(id).readOnly = !enabled;
+        });
+
+        document.getElementById("statusInput").disabled = !enabled;
+        document.getElementById("saveBtn").disabled = !enabled;
+        document.getElementById("editBtn").textContent = enabled ? "Cancel" : "Edit";
+      };
+
+      const updateDriverProfile = async (payload) => {
+        const driverId = currentDriver?.id || currentDriver?.driverId;
+
+        if (!driverId) {
+          throw new Error("Driver ID missing. Cannot update backend.");
+        }
+
+        const url = `http://localhost:3000/api/drivers/${encodeURIComponent(driverId)}`;
+
+        let response = await fetch(url, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.status === 404 || response.status === 405) {
+          response = await fetch(url, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "x-user-role": ROLE,
+            },
+            body: JSON.stringify(payload),
+          });
+        }
+
+        if (!response.ok) {
+          throw new Error(`Driver update failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const loadProfile = async () => {
+        try {
+          const drivers = await fetchDrivers();
+          trips = await fetchTrips();
+          deliveries = await fetchDeliveries();
+
+          currentDriver = findCurrentDriver(drivers);
+
+          renderProfile();
+
+          console.log("PROFILE DRIVER:", currentDriver);
+          console.log("PROFILE TRIPS:", trips);
+          console.log("PROFILE DELIVERIES:", deliveries);
+
+          console.table({
+            profilePageLoaded: true,
+            driversLoadedFromBackend: drivers.length,
+            tripsLoadedFromBackend: trips.length,
+            deliveriesLoadedFromBackend: deliveries.length,
+            driverName: currentDriver.name || currentDriver.fullName || DRIVER_NAME,
+            source: "GET /api/drivers + GET /api/trips + GET /api/deliveries",
+          });
+
+          setVerification(
+            `Backend verified: Profile ✓ | Drivers ${drivers.length} | Trips ${trips.length} | Deliveries ${deliveries.length}`
+          );
+        } catch (error) {
+          console.error("Profile backend sync failed:", error);
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      document.getElementById("editBtn").addEventListener("click", () => {
+        setMessage("", "");
+        setEditing(!isEditing);
+        renderProfile();
+      });
+
+      document.getElementById("profileForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!isEditing) return;
+
+        const payload = {
+          name: document.getElementById("nameInput").value.trim(),
+          email: document.getElementById("emailInput").value.trim(),
+          phone: document.getElementById("phoneInput").value.trim(),
+          licenseNumber: document.getElementById("licenseInput").value.trim(),
+          status: document.getElementById("statusInput").value,
+          vehicle: document.getElementById("vehicleInput").value.trim(),
+        };
+
+        if (!payload.name || !payload.email || !payload.phone) {
+          setMessage("Name, email, and phone are required.", "error");
+          return;
+        }
+
+        const saveBtn = document.getElementById("saveBtn");
+
+        try {
+          saveBtn.disabled = true;
+          saveBtn.textContent = "Saving...";
+
+          const updated = await updateDriverProfile(payload);
+
+          currentDriver = {
+            ...currentDriver,
+            ...updated,
+            ...payload,
+          };
+
+          renderProfile();
+          setEditing(false);
+
+          console.log("DRIVER PROFILE UPDATE RESPONSE:", updated);
+
+          console.table({
+            profileUpdatedInBackend: true,
+            driverId: currentDriver.id || currentDriver.driverId,
+            name: payload.name,
+            email: payload.email,
+            status: payload.status,
+            source: "PATCH/PUT /api/drivers/:id",
+          });
+
+          setMessage("Profile updated successfully.", "success");
+          setVerification(`Backend verified: Driver profile updated ✓ | ${payload.name}`);
+        } catch (error) {
+          console.error("Profile update failed:", error);
+          setMessage(`Profile update failed: ${error.message}`, "error");
+          saveBtn.disabled = false;
+        } finally {
+          saveBtn.textContent = "Save Changes";
+        }
+      });
+
+      document.getElementById("driverLogout").addEventListener("click", () => {
+        window.location.href = "../login.html";
+      });
+
+      await loadProfile();
+    });
+  </script>
+</body>
+</html>

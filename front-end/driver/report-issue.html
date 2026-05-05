@@ -1,0 +1,623 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Report Issue | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="driver-desktop-page" data-page="report-issue">
+  <div class="driver-shell">
+    <aside class="driver-sidebar">
+      <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Driver Portal"></div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard.html">
+          <span class="nav-icon icon-dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link active" href="map.html">
+          <span class="nav-icon icon-map"></span>
+          <span>Map</span>
+        </a>
+
+        <a class="nav-link" href="history.html">
+          <span class="nav-icon icon-history"></span>
+          <span>History</span>
+        </a>
+
+        <a class="nav-link" href="notifications.html">
+          <span class="nav-icon icon-notifications"></span>
+          <span>Notifications</span>
+        </a>
+
+        <a class="nav-link" href="earnings.html">
+          <span class="nav-icon icon-earnings"></span>
+          <span>Earnings</span>
+        </a>
+
+        <a class="nav-link" href="profile.html">
+          <span class="nav-icon icon-profile"></span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="driverLogout" type="button" style="margin-top:10px">
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="driver-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Report Issue</h1>
+          <p id="pageSubtitle">Submit an incident for this delivery</p>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-circle" type="button">🔔</button>
+
+          <div class="profile-menu" style="position:relative">
+            <button class="profile-chip" type="button">
+              <div class="profile-avatar">R</div>
+              <div>
+                <div style="font-weight:800">Raghav Reddy</div>
+                <div style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="backendVerification" class="verify-box">
+          Verifying trip and delivery from backend...
+        </div>
+
+        <div class="issue-layout">
+          <div class="issue-card">
+            <h2>Report an Issue</h2>
+            <p class="muted">
+              Please provide details about the issue you are experiencing with this delivery.
+            </p>
+
+            <form id="issueForm">
+              <div class="form-row">
+                <div>
+                  <label>Trip ID</label>
+                  <input id="tripIdInput" type="text" readonly />
+                </div>
+
+                <div>
+                  <label>Delivery ID</label>
+                  <input id="deliveryIdInput" type="text" readonly />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div>
+                  <label>Issue Type *</label>
+                  <select id="issueTypeInput" required>
+                    <option value="">Select issue type</option>
+                    <option value="Vehicle problem">Vehicle problem</option>
+                    <option value="Traffic delay">Traffic delay</option>
+                    <option value="Customer unavailable">Customer unavailable</option>
+                    <option value="Package damaged">Package damaged</option>
+                    <option value="Address issue">Address issue</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label>Current Status</label>
+                  <input id="statusInput" type="text" readonly />
+                </div>
+              </div>
+
+              <label>Issue Description *</label>
+              <textarea id="descriptionInput" required placeholder="Describe the issue in detail..."></textarea>
+
+              <label>Upload Photo Evidence (Optional)</label>
+              <div class="upload-box">
+                <input id="photoInput" type="file" accept="image/png,image/jpeg,image/jpg" />
+                <p>Click to upload photo</p>
+                <span>PNG, JPG up to 10MB</span>
+              </div>
+
+              <div id="formMessage"></div>
+
+              <div class="actions">
+                <button class="yellow-btn" type="submit" id="submitBtn">Submit Report</button>
+                <a class="dark-btn" id="cancelBtn" href="dashboard.html">Cancel</a>
+              </div>
+            </form>
+          </div>
+
+          <div class="issue-card">
+            <h2>Open Reports</h2>
+            <div id="reportsList">
+              <div class="empty-state">Loading reports from backend...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .verify-box {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .issue-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .issue-card {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 24px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .issue-card h2 {
+      margin: 0 0 18px;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .muted {
+      color: #9ca3af;
+      margin: 0 0 18px;
+      line-height: 1.5;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 8px;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: #0b0b0b;
+      border: 1px solid #2a2a2a;
+      color: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #ffd400;
+      box-shadow: 0 0 0 3px rgba(255, 212, 0, .15);
+    }
+
+    input[readonly] {
+      opacity: .8;
+      cursor: not-allowed;
+    }
+
+    .upload-box {
+      border: 1px dashed #3a3a3a;
+      border-radius: 18px;
+      padding: 30px;
+      text-align: center;
+      background: #0b0b0b;
+      color: #9ca3af;
+    }
+
+    .upload-box input {
+      border: none;
+      background: transparent;
+      padding: 0;
+      margin-bottom: 10px;
+    }
+
+    .upload-box p {
+      margin: 8px 0 4px;
+      font-weight: 800;
+      color: #d1d5db;
+    }
+
+    .upload-box span {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .yellow-btn,
+    .dark-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Inter, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .yellow-btn {
+      background: #ffd400;
+      color: #000;
+    }
+
+    .dark-btn {
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+    }
+
+    .yellow-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .report-item {
+      border: 1px solid #262626;
+      background: #0b0b0b;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .report-item h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .report-item p {
+      margin: 6px 0;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .report-meta {
+      margin-top: 8px;
+      color: #9ca3af;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      background: #0b0b0b;
+      border: 1px dashed #333;
+      border-radius: 16px;
+      padding: 24px;
+      color: #9ca3af;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    #formMessage {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    #formMessage.success {
+      display: block;
+      background: rgba(16, 185, 129, .12);
+      border: 1px solid #10b981;
+      color: #d1fae5;
+    }
+
+    #formMessage.error {
+      display: block;
+      background: rgba(239, 68, 68, .12);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    @media (max-width: 1000px) {
+      .issue-layout,
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "driver";
+
+      const params = new URLSearchParams(window.location.search);
+      const tripId = params.get("id");
+
+      let trip = null;
+      let delivery = null;
+      let allTrips = [];
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const setMessage = (message, type) => {
+        const box = document.getElementById("formMessage");
+        box.textContent = message;
+        box.className = type;
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.trips)) return result.trips;
+        return [];
+      };
+
+      const esc = (value) => {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      };
+
+      const fetchTrip = async (id) => {
+        const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(id)}`, {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Trip fetch failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const fetchDelivery = async (id) => {
+        const response = await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(id)}`, {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Delivery fetch failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const fetchTrips = async () => {
+        const response = await fetch("http://localhost:3000/api/trips", {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Trips fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const reportIssue = async (id, payload) => {
+        const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(id)}/report-issue`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorBody = await response.json().catch(() => ({}));
+          throw new Error(errorBody.message || `Report issue failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const renderOpenReports = () => {
+        const reportsList = document.getElementById("reportsList");
+
+        const reports = allTrips.filter((t) => {
+          return t.issueType || t.issueDescription || String(t.status || "").toLowerCase() === "issue reported";
+        });
+
+        if (!reports.length) {
+          reportsList.innerHTML = `<div class="empty-state">No issue reports found from backend.</div>`;
+          return;
+        }
+
+        reportsList.innerHTML = reports.map((t) => {
+          return `
+            <div class="report-item">
+              <h3>${esc(t.issueType || "Issue Reported")}</h3>
+              <p>${esc(t.issueDescription || "No description available.")}</p>
+              <div class="report-meta">
+                Trip ${esc(t.id)} • Delivery ${esc(t.request || "--")} • ${esc(t.status || "--")}
+              </div>
+            </div>
+          `;
+        }).join("");
+      };
+
+      const loadPage = async () => {
+        if (!tripId) {
+          setVerification("Missing trip id in URL. Example: report-issue.html?id=TRP-2026-003", true);
+          return;
+        }
+
+        trip = await fetchTrip(tripId);
+
+        const deliveryId = trip.request || trip.deliveryId || trip.deliveryRequestId;
+
+        if (deliveryId) {
+          delivery = await fetchDelivery(deliveryId);
+        }
+
+        allTrips = await fetchTrips();
+
+        document.getElementById("tripIdInput").value = trip.id || tripId;
+        document.getElementById("deliveryIdInput").value = deliveryId || "--";
+        document.getElementById("statusInput").value = trip.status || delivery?.status || "--";
+
+        document.getElementById("pageSubtitle").textContent =
+          `Submit an incident for ${deliveryId || trip.id}`;
+
+        document.getElementById("cancelBtn").href =
+          `task-details.html?id=${encodeURIComponent(trip.id || tripId)}`;
+
+        renderOpenReports();
+
+        console.log("REPORT ISSUE TRIP:", trip);
+        console.log("REPORT ISSUE DELIVERY:", delivery);
+        console.log("REPORT ISSUE ALL TRIPS:", allTrips);
+
+        console.table({
+          reportIssuePageLoaded: true,
+          tripId: trip.id,
+          deliveryRequest: deliveryId || "No linked delivery",
+          tripStatus: trip.status,
+          source: "GET /api/trips/:id + GET /api/deliveries/:requestId",
+        });
+
+        setVerification(
+          `Backend verified: Report Issue ✓ | Trip ${trip.id} | Delivery ${deliveryId || "--"}`
+        );
+      };
+
+      document.getElementById("issueForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!trip) {
+          setMessage("Trip is not loaded yet.", "error");
+          return;
+        }
+
+        const issueType = document.getElementById("issueTypeInput").value;
+        const description = document.getElementById("descriptionInput").value.trim();
+
+        if (!issueType || !description) {
+          setMessage("Issue type and description are required.", "error");
+          return;
+        }
+
+        const submitBtn = document.getElementById("submitBtn");
+
+        const payload = {
+          issueType,
+          description,
+          issueDescription: description,
+          status: "Issue Reported",
+        };
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting...";
+
+          const updatedTrip = await reportIssue(trip.id, payload);
+
+          console.log("REPORT ISSUE RESPONSE:", updatedTrip);
+
+          console.table({
+            issueReportedInBackend: true,
+            tripId: updatedTrip.id || trip.id,
+            deliveryRequest: updatedTrip.request || trip.request,
+            status: updatedTrip.status,
+            issueType,
+            source: "PATCH /api/trips/:id/report-issue",
+          });
+
+          setMessage("Issue reported successfully. Backend synced.", "success");
+          setVerification(
+            `Backend verified: Issue reported ✓ | ${trip.id} → Issue Reported`
+          );
+
+          setTimeout(() => {
+            window.location.href = `history.html`;
+          }, 900);
+        } catch (error) {
+          console.error("Issue report failed:", error);
+          setMessage(`Issue report failed: ${error.message}`, "error");
+          setVerification(`Issue report failed: ${error.message}`, true);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Report";
+        }
+      });
+
+      document.getElementById("driverLogout").addEventListener("click", () => {
+        window.location.href = "../login.html";
+      });
+
+      try {
+        await loadPage();
+      } catch (error) {
+        console.error("Report issue page load failed:", error);
+        setVerification(`Backend sync failed: ${error.message}`, true);
+      }
+    });
+  </script>
+</body>
+</html>

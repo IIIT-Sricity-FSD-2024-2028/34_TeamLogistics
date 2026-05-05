@@ -1,0 +1,3671 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/users": {
+      "get": {
+        "description": "Returns users. Superuser/fleet manager can view all. Other roles use this for profile loading in frontend.",
+        "operationId": "UsersController_findAll",
+        "parameters": [
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "description": "Filter by role",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by name, email, or role",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users returned successfully"
+          }
+        },
+        "summary": "List users",
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "description": "Only superuser can create users.",
+        "operationId": "UsersController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "Email already exists"
+          }
+        },
+        "summary": "Create a new user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID (e.g. SU-001)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Get user by ID",
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "description": "Superuser/fleet manager can update users. Other roles can update their own profile.",
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Update a user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Delete a user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/status": {
+      "patch": {
+        "description": "Approve, reject, or suspend a user.",
+        "operationId": "UsersController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated"
+          }
+        },
+        "summary": "Update user status",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/vehicles": {
+      "get": {
+        "operationId": "VehiclesController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by status (active, maintenance, blocked, on trip)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of vehicles"
+          }
+        },
+        "summary": "List all vehicles",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "post": {
+        "operationId": "VehiclesController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Vehicle created"
+          }
+        },
+        "summary": "Add a new vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/vehicles/{id}": {
+      "get": {
+        "operationId": "VehiclesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Vehicle ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get vehicle by ID",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "put": {
+        "operationId": "VehiclesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Vehicle ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVehicleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "delete": {
+        "operationId": "VehiclesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Vehicle ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/drivers": {
+      "get": {
+        "description": "Returns drivers list. Driver role is allowed so driver portal profile page can load its own driver data.",
+        "operationId": "DriversController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search driver by name, email, phone, vehicle, or license number",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all drivers",
+        "tags": [
+          "Drivers"
+        ]
+      },
+      "post": {
+        "description": "Only superuser and fleet manager can create drivers.",
+        "operationId": "DriversController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDriverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Add a new driver",
+        "tags": [
+          "Drivers"
+        ]
+      }
+    },
+    "/api/drivers/{id}": {
+      "get": {
+        "description": "Returns one driver profile. Driver role is allowed for driver portal profile view.",
+        "operationId": "DriversController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get driver by ID",
+        "tags": [
+          "Drivers"
+        ]
+      },
+      "put": {
+        "description": "Superuser and fleet manager can update driver data. Driver role is allowed so driver portal profile page can save its own profile.",
+        "operationId": "DriversController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDriverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update driver info",
+        "tags": [
+          "Drivers"
+        ]
+      },
+      "delete": {
+        "description": "Only superuser and fleet manager can delete drivers.",
+        "operationId": "DriversController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a driver",
+        "tags": [
+          "Drivers"
+        ]
+      }
+    },
+    "/api/deliveries": {
+      "get": {
+        "description": "Returns delivery requests. Used by business client, driver, fleet manager, and superuser portals.",
+        "operationId": "DeliveriesController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all delivery requests",
+        "tags": [
+          "Deliveries"
+        ]
+      },
+      "post": {
+        "description": "Business client creates a delivery request. New flow: backend automatically creates a linked trip and directly assigns it to the default driver.",
+        "operationId": "DeliveriesController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a new delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}": {
+      "get": {
+        "description": "Returns one delivery request by ID. Used for live tracking, feedback, driver details, and completed delivery pages.",
+        "operationId": "DeliveriesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID, e.g. DR-2026-001",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get delivery request by ID",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/block": {
+      "patch": {
+        "description": "Superuser blocks a delivery request and syncs the linked trip status.",
+        "operationId": "DeliveriesController_block",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Block a delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/unblock": {
+      "patch": {
+        "description": "Superuser unblocks a delivery request and makes the linked trip visible again in the driver portal.",
+        "operationId": "DeliveriesController_unblock",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnblockDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Unblock a delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/cancel": {
+      "patch": {
+        "description": "Business client or superuser cancels a delivery request and syncs the linked trip.",
+        "operationId": "DeliveriesController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Cancel a delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/feedback": {
+      "patch": {
+        "description": "Stores feedback in deliveries.json, syncs feedback into the linked trip in trips.json, and creates a notification.",
+        "operationId": "DeliveriesController_submitFeedback",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID, e.g. DR-2026-001",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "example": 4
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "Delivery was smooth and driver was polite."
+                  },
+                  "deliveryQuality": {
+                    "type": "string",
+                    "example": "Excellent"
+                  },
+                  "driverBehavior": {
+                    "type": "string",
+                    "example": "Good"
+                  },
+                  "overallExperience": {
+                    "type": "string",
+                    "example": "Very satisfied"
+                  }
+                },
+                "required": [
+                  "rating"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Submit feedback for completed delivery",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/documents": {
+      "get": {
+        "operationId": "DocumentsController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all documents",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "post": {
+        "operationId": "DocumentsController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDocumentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/documents/{id}": {
+      "get": {
+        "operationId": "DocumentsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get document by ID",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "put": {
+        "operationId": "DocumentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a document",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "delete": {
+        "operationId": "DocumentsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/trips": {
+      "get": {
+        "operationId": "TripsController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all trips",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}": {
+      "get": {
+        "operationId": "TripsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get trip by ID",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/reassign": {
+      "patch": {
+        "operationId": "TripsController_reassign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "driver": {
+                    "type": "string",
+                    "example": "Raghav Reddy"
+                  }
+                },
+                "required": [
+                  "driver"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Reassign driver for a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/status": {
+      "patch": {
+        "description": "Updates trip status and syncs the linked delivery request status so other actor portals show the same state.",
+        "operationId": "TripsController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "example": "Accepted",
+                    "enum": [
+                      "Assigned",
+                      "Accepted",
+                      "Rejected",
+                      "In Transit",
+                      "Picked Up",
+                      "Delivered",
+                      "Completed",
+                      "Delayed",
+                      "Queued",
+                      "Issue Reported"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update trip status",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/report-issue": {
+      "patch": {
+        "description": "Reports an issue for a trip, updates the linked delivery request, and creates notifications for other portals.",
+        "operationId": "TripsController_reportIssue",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "issueType": {
+                    "type": "string",
+                    "example": "Vehicle problem"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Vehicle broke down near pickup location."
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "Issue Reported"
+                  }
+                },
+                "required": [
+                  "issueType",
+                  "description"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Report an issue for a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/maintenance": {
+      "get": {
+        "operationId": "MaintenanceController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all maintenance schedules",
+        "tags": [
+          "Maintenance"
+        ]
+      },
+      "post": {
+        "operationId": "MaintenanceController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMaintenanceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Schedule a maintenance",
+        "tags": [
+          "Maintenance"
+        ]
+      }
+    },
+    "/api/maintenance/{id}": {
+      "get": {
+        "operationId": "MaintenanceController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get maintenance schedule by ID",
+        "tags": [
+          "Maintenance"
+        ]
+      },
+      "put": {
+        "operationId": "MaintenanceController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMaintenanceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a maintenance schedule",
+        "tags": [
+          "Maintenance"
+        ]
+      },
+      "delete": {
+        "operationId": "MaintenanceController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a maintenance schedule",
+        "tags": [
+          "Maintenance"
+        ]
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "description": "Returns notifications filtered by the x-user-role header.",
+        "operationId": "NotificationsController_findAll",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get notifications for current role",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "post": {
+        "operationId": "NotificationsController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a notification",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/mark-read": {
+      "patch": {
+        "operationId": "NotificationsController_markRead",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Mark all notifications as read for current role",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/transactions": {
+      "get": {
+        "operationId": "TransactionsController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all transactions and invoices",
+        "tags": [
+          "Transactions"
+        ]
+      },
+      "post": {
+        "operationId": "TransactionsController_create",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create transaction",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/payments": {
+      "get": {
+        "operationId": "TransactionsController_findTransactions",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List transactions only",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/invoices": {
+      "get": {
+        "operationId": "TransactionsController_findInvoices",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List invoices only",
+        "tags": [
+          "Transactions"
+        ]
+      },
+      "post": {
+        "operationId": "TransactionsController_createInvoice",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create an invoice",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/invoices/generate/{deliveryId}": {
+      "post": {
+        "operationId": "TransactionsController_generateInvoiceForDelivery",
+        "parameters": [
+          {
+            "name": "deliveryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Automatically generate invoice for delivered delivery",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/payments/{transactionId}/status": {
+      "patch": {
+        "operationId": "TransactionsController_updateTransactionStatus",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Approve, reject, or update submitted payment transaction status",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/settings/platform": {
+      "get": {
+        "operationId": "SettingsController_getPlatform",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get platform settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updatePlatform",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlatformSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update platform settings",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/security": {
+      "get": {
+        "operationId": "SettingsController_getSecurity",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get security settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updateSecurity",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSecuritySettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update security settings",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/permissions": {
+      "get": {
+        "operationId": "SettingsController_getAllPermissions",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get all role permissions",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/permissions/{role}": {
+      "get": {
+        "operationId": "SettingsController_getPermissions",
+        "parameters": [
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "description": "Role key (fleet-manager, business-client, driver)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get permissions for a specific role",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updatePermissions",
+        "parameters": [
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePermissionsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update permissions for a specific role",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/dashboard/superuser": {
+      "get": {
+        "operationId": "DashboardController_getSuperuserDashboard",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get superuser dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/business-client": {
+      "get": {
+        "operationId": "DashboardController_getBusinessClientDashboard",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get business client dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/fleet-manager": {
+      "get": {
+        "operationId": "DashboardController_getFleetManagerDashboard",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get fleet manager dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/driver": {
+      "get": {
+        "operationId": "DashboardController_getDriverDashboard",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": true,
+            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "superuser",
+                "fleet-manager",
+                "business-client",
+                "driver"
+              ]
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get driver dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "DeliverSync API",
+    "description": "REST API for the DeliverSync delivery management platform. Role-based access is controlled via the `x-user-role` request header. Supported roles: superuser, fleet-manager, business-client, driver.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe",
+            "description": "Full name of the user"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@deliverysync.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123",
+            "description": "Min 8 chars, 1 uppercase, 1 special char"
+          },
+          "role": {
+            "type": "string",
+            "example": "fleet-manager",
+            "enum": [
+              "fleet-manager",
+              "business-client",
+              "driver",
+              "superuser"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Active",
+              "Pending",
+              "Suspended"
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "companyName": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "company": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Business Avenue"
+          },
+          "profileDetails": {
+            "type": "object",
+            "description": "Role-specific profile details"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@deliverysync.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123"
+          },
+          "role": {
+            "type": "string",
+            "example": "fleet-manager"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active"
+          },
+          "phone": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "companyName": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "company": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Business Avenue"
+          },
+          "profileDetails": {
+            "type": "object"
+          },
+          "notifications": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UpdateStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Active",
+              "Suspended",
+              "Rejected",
+              "Pending Approval"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "CreateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "plate": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "type": {
+            "type": "string",
+            "example": "Mini Truck",
+            "enum": [
+              "Mini Truck",
+              "Van",
+              "Truck",
+              "Bike",
+              "SUV",
+              "Cargo Van"
+            ]
+          },
+          "capacity": {
+            "type": "string",
+            "example": "2 Tons"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Active",
+              "On Trip",
+              "Maintenance",
+              "Blocked"
+            ]
+          },
+          "assignedDriver": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "maintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Last maintenance date in YYYY-MM-DD format"
+          },
+          "lastMaintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Alias for maintenance date"
+          }
+        },
+        "required": [
+          "plate",
+          "type"
+        ]
+      },
+      "UpdateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "plate": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "type": {
+            "type": "string",
+            "example": "Van",
+            "enum": [
+              "Mini Truck",
+              "Van",
+              "Truck",
+              "Bike",
+              "SUV",
+              "Cargo Van"
+            ]
+          },
+          "capacity": {
+            "type": "string",
+            "example": "1 Ton"
+          },
+          "status": {
+            "type": "string",
+            "example": "Maintenance",
+            "enum": [
+              "Active",
+              "On Trip",
+              "Maintenance",
+              "Blocked"
+            ]
+          },
+          "assignedDriver": {
+            "type": "string",
+            "example": "Kiran Teja"
+          },
+          "maintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Last maintenance date in YYYY-MM-DD format"
+          },
+          "lastMaintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Alias for maintenance date"
+          }
+        }
+      },
+      "CreateDriverDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "email": {
+            "type": "string",
+            "example": "driver@deliverysync.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+91 9440011223"
+          },
+          "licenseNumber": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "vehicleType": {
+            "type": "string",
+            "example": "Tempo"
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Active",
+              "Busy",
+              "Offline",
+              "Inactive"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      },
+      "UpdateDriverDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "email": {
+            "type": "string",
+            "example": "driver@deliverysync.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+91 9440011223"
+          },
+          "licenseNumber": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "vehicleType": {
+            "type": "string",
+            "example": "Tempo"
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Active",
+              "Busy",
+              "Offline",
+              "Inactive"
+            ]
+          }
+        }
+      },
+      "CreateDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "customer": {
+            "type": "string",
+            "example": "Acme Logistics"
+          },
+          "contact": {
+            "type": "string",
+            "example": "Sarah Johnson"
+          },
+          "pickup": {
+            "type": "string",
+            "example": "OMR, Chennai"
+          },
+          "dropoff": {
+            "type": "string",
+            "example": "Tambaram, Chennai"
+          },
+          "package": {
+            "type": "string",
+            "example": "Electronics - 2 Laptops, 15kg"
+          },
+          "type": {
+            "type": "string",
+            "example": "Express",
+            "enum": [
+              "Standard",
+              "Express"
+            ]
+          },
+          "priority": {
+            "type": "string",
+            "example": "High",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ]
+          },
+          "items": {
+            "type": "number",
+            "example": 2
+          },
+          "instructions": {
+            "type": "string",
+            "example": "Special handling needed"
+          }
+        },
+        "required": [
+          "customer",
+          "pickup",
+          "dropoff"
+        ]
+      },
+      "BlockDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Suspicious address flagged for review"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "UnblockDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Address verified, approved for delivery"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "CancelDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "No longer needed"
+          }
+        }
+      },
+      "CreateDocumentDto": {
+        "type": "object",
+        "properties": {
+          "ownerType": {
+            "type": "string",
+            "example": "vehicle",
+            "enum": [
+              "vehicle",
+              "driver"
+            ]
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN-09-AB-2345"
+          },
+          "driver": {
+            "type": "string",
+            "example": "Rajesh Kumar"
+          },
+          "documentType": {
+            "type": "string",
+            "example": "Registration"
+          },
+          "issueDate": {
+            "type": "string",
+            "example": "2025-04-01"
+          },
+          "expiryDate": {
+            "type": "string",
+            "example": "2026-03-31"
+          },
+          "status": {
+            "type": "string",
+            "example": "Valid",
+            "enum": [
+              "Valid",
+              "Expiring Soon",
+              "Expired"
+            ]
+          }
+        },
+        "required": [
+          "ownerType",
+          "documentType"
+        ]
+      },
+      "UpdateDocumentDto": {
+        "type": "object",
+        "properties": {
+          "ownerType": {
+            "type": "string",
+            "example": "vehicle",
+            "enum": [
+              "vehicle",
+              "driver"
+            ]
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN-09-AB-2345"
+          },
+          "driver": {
+            "type": "string",
+            "example": "Rajesh Kumar"
+          },
+          "documentType": {
+            "type": "string",
+            "example": "Insurance"
+          },
+          "issueDate": {
+            "type": "string",
+            "example": "2025-04-01"
+          },
+          "expiryDate": {
+            "type": "string",
+            "example": "2026-03-31"
+          },
+          "status": {
+            "type": "string",
+            "example": "Valid",
+            "enum": [
+              "Valid",
+              "Expiring Soon",
+              "Expired"
+            ]
+          }
+        }
+      },
+      "CreateMaintenanceDto": {
+        "type": "object",
+        "properties": {
+          "vehicle": {
+            "type": "string",
+            "example": "TN-09-AB-2345"
+          },
+          "issue": {
+            "type": "string",
+            "example": "Engine Oil Change"
+          },
+          "priority": {
+            "type": "string",
+            "example": "High",
+            "enum": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "example": "2026-03-10"
+          },
+          "mechanic": {
+            "type": "string",
+            "example": "Ravi Auto Service"
+          },
+          "cost": {
+            "type": "string",
+            "example": "₹1200"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Check brake fluid"
+          }
+        },
+        "required": [
+          "vehicle",
+          "issue",
+          "priority",
+          "date",
+          "mechanic"
+        ]
+      },
+      "UpdateMaintenanceDto": {
+        "type": "object",
+        "properties": {
+          "vehicle": {
+            "type": "string"
+          },
+          "issue": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "mechanic": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateNotificationDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "New delivery request"
+          },
+          "message": {
+            "type": "string",
+            "example": "Delivery DR-2024-001 needs review."
+          },
+          "to": {
+            "type": "string",
+            "example": "superuser",
+            "description": "Target role to receive the notification"
+          }
+        },
+        "required": [
+          "title",
+          "message",
+          "to"
+        ]
+      },
+      "CreateTransactionDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateInvoiceDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdatePlatformSettingsDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "DeliverSync"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Kolkata"
+          },
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "logo": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      },
+      "UpdateSecuritySettingsDto": {
+        "type": "object",
+        "properties": {
+          "passwordLength": {
+            "type": "number",
+            "example": 8
+          },
+          "failedAttempts": {
+            "type": "number",
+            "example": 5
+          },
+          "sessionTimeout": {
+            "type": "number",
+            "example": 30
+          },
+          "twoFactor": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "UpdatePermissionsDto": {
+        "type": "object",
+        "properties": {
+          "permissions": {
+            "description": "Array of permission entries: [label, description, enabled]",
+            "example": [
+              [
+                "Dashboard Access",
+                "View platform overview",
+                true
+              ]
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "permissions"
+        ]
+      }
+    }
+  }
+}

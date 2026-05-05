@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body">
+  <div style="max-width: 880px; margin: 0 auto; padding: 32px 20px 60px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <a href="dashboard.html" class="back-btn">← Back</a>
+
+      <a href="../login.html" class="btn outline-yellow" style="padding:10px 18px">
+        Logout
+      </a>
+    </div>
+
+    <div
+      id="backendVerification"
+      style="
+        margin-bottom: 20px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #111827;
+        border: 1px solid #1f2937;
+        color: #d1d5db;
+        font-size: 14px;
+      "
+    >
+      Verifying backend notifications...
+    </div>
+
+    <section
+      style="
+        background: linear-gradient(135deg, #1f1f1f, #171717);
+        border: 1px solid #262626;
+        padding: 24px 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      "
+    >
+      <div>
+        <h1 style="margin:0 0 8px;font-size:24px">Notifications</h1>
+        <p style="margin:0;color:#a8a8a8">Stay updated with your delivery activities</p>
+      </div>
+
+      <div
+        id="newCountBadge"
+        style="
+          background: var(--yellow);
+          color: #000;
+          font-weight: 900;
+          padding: 8px 18px;
+          border-radius: 999px;
+        "
+      >
+        0 New
+      </div>
+    </section>
+
+    <div style="display:flex;gap:24px;border-bottom:1px solid #262626;margin-top:14px">
+      <button
+        id="allTab"
+        type="button"
+        style="
+          background:none;
+          border:none;
+          color:var(--yellow);
+          border-bottom:2px solid var(--yellow);
+          padding:14px 0;
+          font-weight:800;
+          cursor:pointer;
+        "
+      >
+        All Notifications
+      </button>
+
+      <button
+        id="unreadTab"
+        type="button"
+        style="
+          background:none;
+          border:none;
+          color:#d1d5db;
+          padding:14px 0;
+          font-weight:800;
+          cursor:pointer;
+        "
+      >
+        Unread (<span id="unreadTabCount">0</span>)
+      </button>
+    </div>
+
+    <div id="notificationsList" style="margin-top:24px">
+      <div style="padding:24px;background:#171717;border:1px solid #262626;color:#9ca3af;text-align:center">
+        Loading notifications from backend...
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px">
+      <button
+        id="markAllReadBtn"
+        type="button"
+        class="btn yellow"
+        style="padding:12px 24px"
+      >
+        Mark all as read
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "business-client";
+      let allNotifications = [];
+      let currentFilter = "all";
+
+      const list = document.getElementById("notificationsList");
+      const newCountBadge = document.getElementById("newCountBadge");
+      const unreadTabCount = document.getElementById("unreadTabCount");
+      const allTab = document.getElementById("allTab");
+      const unreadTab = document.getElementById("unreadTab");
+      const markAllReadBtn = document.getElementById("markAllReadBtn");
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.notifications)) return result.notifications;
+        return [];
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const belongsToClient = (notification) => {
+        const to = normalize(notification.to || notification.role || notification.target || notification.recipient);
+
+        return (
+          !to ||
+          to === ROLE ||
+          to === "business-client" ||
+          to === "client" ||
+          to === "all" ||
+          to.includes("business")
+        );
+      };
+
+      const escapeHtml = (value) => {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      };
+
+      const getIcon = (notification) => {
+        const text = normalize(`${notification.title} ${notification.message}`);
+
+        if (text.includes("payment") || text.includes("invoice")) return "✓";
+        if (text.includes("delay") || text.includes("overdue")) return "!";
+        if (text.includes("completed") || text.includes("delivered")) return "✓";
+        return "◈";
+      };
+
+      const render = () => {
+        const unreadCount = allNotifications.filter((n) => !n.read).length;
+
+        newCountBadge.textContent = `${unreadCount} New`;
+        unreadTabCount.textContent = unreadCount;
+
+        const items =
+          currentFilter === "unread"
+            ? allNotifications.filter((n) => !n.read)
+            : allNotifications;
+
+        if (!items.length) {
+          list.innerHTML = `
+            <div style="padding:24px;background:#171717;border:1px solid #262626;color:#9ca3af;text-align:center">
+              No ${currentFilter === "unread" ? "unread" : ""} notifications found from backend.
+            </div>
+          `;
+          return;
+        }
+
+        list.innerHTML = items
+          .map((notification) => {
+            const title = notification.title || "Notification";
+            const message = notification.message || notification.description || "--";
+            const time = notification.time || notification.createdAt || "Just now";
+            const isUnread = !notification.read;
+
+            return `
+              <div
+                style="
+                  display:grid;
+                  grid-template-columns:48px 1fr auto;
+                  gap:18px;
+                  align-items:start;
+                  background:linear-gradient(135deg,#1f1f1f,#171717);
+                  border:1px solid #262626;
+                  border-bottom:none;
+                  padding:22px 24px;
+                "
+              >
+                <div
+                  style="
+                    width:46px;
+                    height:46px;
+                    border-radius:12px;
+                    background:#050505;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    color:var(--yellow);
+                    font-weight:900;
+                  "
+                >
+                  ${escapeHtml(getIcon(notification))}
+                </div>
+
+                <div>
+                  <h3 style="margin:0 0 8px;font-size:18px">${escapeHtml(title)}</h3>
+                  <p style="margin:0;color:#cbd5e1;line-height:1.5">${escapeHtml(message)}</p>
+                  <div style="margin-top:12px;color:#9ca3af;font-size:13px">
+                    ◷ ${escapeHtml(time)}
+                  </div>
+                </div>
+
+                <div
+                  title="${isUnread ? "Unread" : "Read"}"
+                  style="
+                    width:8px;
+                    height:8px;
+                    border-radius:999px;
+                    background:${isUnread ? "var(--yellow)" : "#4b5563"};
+                    margin-top:10px;
+                  "
+                ></div>
+              </div>
+            `;
+          })
+          .join("");
+      };
+
+      const setActiveTab = () => {
+        if (currentFilter === "all") {
+          allTab.style.color = "var(--yellow)";
+          allTab.style.borderBottom = "2px solid var(--yellow)";
+          unreadTab.style.color = "#d1d5db";
+          unreadTab.style.borderBottom = "none";
+        } else {
+          unreadTab.style.color = "var(--yellow)";
+          unreadTab.style.borderBottom = "2px solid var(--yellow)";
+          allTab.style.color = "#d1d5db";
+          allTab.style.borderBottom = "none";
+        }
+      };
+
+      const loadNotifications = async () => {
+        try {
+          if (!window.DeliverySyncAPI) {
+            throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+          }
+
+          let result;
+
+          if (DeliverySyncAPI.Notifications && DeliverySyncAPI.Notifications.getAll) {
+            result = await DeliverySyncAPI.Notifications.getAll();
+          } else {
+            result = await fetch("http://localhost:3000/api/notifications", {
+              headers: {
+                "x-user-role": ROLE,
+              },
+            }).then((res) => {
+              if (!res.ok) throw new Error(`Notifications fetch failed with status ${res.status}`);
+              return res.json();
+            });
+          }
+
+          const notifications = getArray(result);
+          allNotifications = notifications.filter(belongsToClient);
+
+          console.log("RAW NOTIFICATIONS API RESULT:", result);
+          console.log("BUSINESS CLIENT NOTIFICATIONS:", allNotifications);
+
+          console.table({
+            notificationsLoadedFromBackend: notifications.length,
+            clientNotifications: allNotifications.length,
+            unreadForClient: allNotifications.filter((n) => !n.read).length,
+            source: "back-end/data/notifications.json through GET /api/notifications",
+          });
+
+          render();
+
+          setVerification(
+            `Backend verified: Notifications ✓ | Loaded ${notifications.length} | Client notifications ${allNotifications.length} | Unread ${allNotifications.filter((n) => !n.read).length}`
+          );
+        } catch (error) {
+          console.error("Notifications backend sync failed:", error);
+
+          setVerification(`Backend sync failed: ${error.message}`, true);
+
+          list.innerHTML = `
+            <div style="padding:24px;background:#331717;border:1px solid #ef4444;color:#fecaca;text-align:center">
+              Could not load notifications from backend.
+            </div>
+          `;
+        }
+      };
+
+      allTab.addEventListener("click", () => {
+        currentFilter = "all";
+        setActiveTab();
+        render();
+      });
+
+      unreadTab.addEventListener("click", () => {
+        currentFilter = "unread";
+        setActiveTab();
+        render();
+      });
+
+      markAllReadBtn.addEventListener("click", async () => {
+        try {
+          console.log("MARK ALL AS READ CLICKED");
+
+          let response = null;
+
+          if (DeliverySyncAPI.Notifications && DeliverySyncAPI.Notifications.markRead) {
+            response = await DeliverySyncAPI.Notifications.markRead();
+          } else {
+            response = await fetch("http://localhost:3000/api/notifications/mark-read", {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                "x-user-role": ROLE,
+              },
+              body: JSON.stringify({ to: ROLE }),
+            }).then((res) => {
+              if (!res.ok) throw new Error(`Mark read failed with status ${res.status}`);
+              return res.json();
+            });
+          }
+
+          console.log("MARK READ RESPONSE:", response);
+
+          allNotifications = allNotifications.map((n) => ({
+            ...n,
+            read: true,
+          }));
+
+          render();
+
+          console.table({
+            markAllReadSubmitted: true,
+            clientNotificationsMarkedRead: allNotifications.length,
+          });
+
+          setVerification(
+            `Backend verified: Mark all read ✓ | Client notifications ${allNotifications.length}`
+          );
+        } catch (error) {
+          console.error("Mark all read failed:", error);
+          setVerification(`Mark read failed: ${error.message}`, true);
+        }
+      });
+
+      await loadNotifications();
+    });
+  </script>
+</body>
+</html>

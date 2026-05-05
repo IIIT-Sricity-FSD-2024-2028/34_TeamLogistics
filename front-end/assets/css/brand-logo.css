@@ -1,0 +1,100 @@
+/* ============================================================
+   DeliverSync Brand Logo — Shared Styles
+   Single source of truth.  Imported by EVERY portal CSS.
+   Brand colours:
+     --brand-white : #FFFFFF   ("Deliver")
+     --brand-yellow: #FFD60A   ("Sync")
+   ============================================================ */
+
+:root {
+  --brand-white: #FFFFFF;
+  --brand-yellow: #FFD60A;
+}
+
+/* ── Link wrapper ── */
+.ds-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity .18s ease;
+}
+.ds-brand-link:hover { opacity: .88; }
+
+/* ── Icon (image) ── */
+.ds-brand-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+}
+.ds-brand-icon img {
+  display: block;
+  object-fit: contain;
+}
+
+/* ── Text block ── */
+.ds-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Word-mark ── */
+.ds-brand-word {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+.ds-deliver {
+  color: var(--brand-white) !important;
+}
+.ds-sync {
+  color: var(--brand-yellow) !important;
+}
+
+/* ── Subtitle ── */
+.ds-brand-sub {
+  font-size: 11px;
+  font-weight: 500;
+  color: #8b8b8b;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   SIZE VARIANTS
+   ============================================================ */
+
+/* sm – compact sidebar / mobile */
+.ds-brand-sm .ds-brand-icon img { width: 28px; height: 28px; border-radius: 10px; }
+.ds-brand-sm .ds-brand-word { font-size: 14px; }
+.ds-brand-sm .ds-brand-sub { font-size: 10px; }
+
+/* md – default sidebar */
+.ds-brand-md .ds-brand-icon img { width: 36px; height: 36px; border-radius: 12px; }
+.ds-brand-md .ds-brand-word { font-size: 17px; }
+
+/* lg – landing page navbar / hero */
+.ds-brand-lg .ds-brand-icon img { width: 42px; height: 42px; border-radius: 14px; }
+.ds-brand-lg .ds-brand-word { font-size: 20px; }
+
+/* ============================================================
+   CONTEXT OVERRIDES  (so it fits each portal's existing layout)
+   ============================================================ */
+
+/* Landing page topbar */
+.topbar .ds-brand-link { gap: 10px; }
+
+/* Footer */
+.footer .ds-brand-link { gap: 10px; }
+.footer .ds-brand-icon img { width: 32px; height: 32px; }
+.footer .ds-brand-word { font-size: 17px; }
+
+/* Sidebar contexts */
+.su-sidebar .ds-brand-link,
+.sidebar .ds-brand-link,
+.driver-sidebar .ds-brand-link,
+.bc-sidebar .ds-brand-link { gap: 12px; }

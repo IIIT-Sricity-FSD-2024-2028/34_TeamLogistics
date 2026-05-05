@@ -1,0 +1,637 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proof of Delivery | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="driver-desktop-page" data-page="proof-of-delivery">
+  <div class="driver-shell">
+    <aside class="driver-sidebar">
+      <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Driver Portal"></div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" data-nav="dashboard" href="dashboard.html">
+          <span class="nav-icon icon-dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link active" data-nav="map" href="map.html">
+          <span class="nav-icon icon-map"></span>
+          <span>Map</span>
+        </a>
+
+        <a class="nav-link" data-nav="history" href="history.html">
+          <span class="nav-icon icon-history"></span>
+          <span>History</span>
+        </a>
+
+        <a class="nav-link" data-nav="notifications" href="notifications.html">
+          <span class="nav-icon icon-notifications"></span>
+          <span>Notifications</span>
+        </a>
+
+        <a class="nav-link" data-nav="earnings" href="earnings.html">
+          <span class="nav-icon icon-earnings"></span>
+          <span>Earnings</span>
+        </a>
+
+        <a class="nav-link" data-nav="profile" href="profile.html">
+          <span class="nav-icon icon-profile"></span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="driverLogout" type="button" style="margin-top:10px">
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="driver-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="page-title">Proof of Delivery</h1>
+          <p id="page-subtitle">Complete delivery using backend data</p>
+        </div>
+
+        <div class="topbar-right">
+          <div id="notifWrap" style="position:relative">
+            <button class="icon-circle" id="notifBtn" type="button">
+              🔔
+              <span class="icon-badge"></span>
+            </button>
+            <div class="dropdown" id="notifMenu"></div>
+          </div>
+
+          <div id="profileWrap" class="profile-menu" style="position:relative">
+            <button class="profile-chip" id="profileBtn" type="button">
+              <div class="profile-avatar" id="profileInitial">R</div>
+              <div>
+                <div id="quickProfileName" style="font-weight:800">Raghav Reddy</div>
+                <div id="quickProfileEmail" style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div>
+              </div>
+            </button>
+
+            <div class="dropdown" id="profileMenu">
+              <div class="dropdown-item">
+                <strong>Driver Quick Actions</strong>
+                <small><a href="profile.html">Edit profile</a></small>
+                <small><a href="dashboard.html">View dashboard</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="backendVerification" class="verify-box">
+          Verifying proof of delivery data from backend...
+        </div>
+
+        <div class="pod-grid">
+          <div class="pod-card">
+            <h2>Delivery Confirmation</h2>
+
+            <form id="proofForm">
+              <label>Delivery ID</label>
+              <input id="deliveryIdInput" type="text" readonly />
+
+              <label>Recipient Name *</label>
+              <input id="recipientNameInput" type="text" placeholder="Enter recipient name" required />
+
+              <label>Delivery Notes</label>
+              <textarea id="notesInput" placeholder="Optional proof notes"></textarea>
+
+              <label>Photo / Signature *</label>
+              <input id="proofFileInput" type="file" accept="image/*,.pdf" required />
+
+              <small id="fileHelp">Only image/PDF files up to 5 MB.</small>
+
+              <div id="formMessage"></div>
+
+              <button id="completeBtn" class="yellow-btn" type="submit">
+                Complete Delivery
+              </button>
+            </form>
+          </div>
+
+          <div class="pod-card">
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+              <span>Trip ID</span>
+              <strong id="tripIdText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Delivery Request</span>
+              <strong id="requestIdText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Customer</span>
+              <strong id="customerText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Contact</span>
+              <strong id="contactText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Pickup</span>
+              <strong id="pickupText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Drop</span>
+              <strong id="dropText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Package</span>
+              <strong id="packageText">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Status</span>
+              <strong id="statusText" class="status-pill">Loading...</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Distance</span>
+              <strong id="distanceText">Loading...</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .verify-box {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .pod-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 1050px;
+    }
+
+    .pod-card {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 22px;
+      color: #fff;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .pod-card h2 {
+      margin: 0 0 22px;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    form label {
+      display: block;
+      margin: 14px 0 8px;
+      color: #e5e7eb;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: #070707;
+      color: #fff;
+      border: 1px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 13px 14px;
+      outline: none;
+      font-family: Inter, sans-serif;
+      font-weight: 600;
+    }
+
+    form input:focus,
+    form textarea:focus {
+      border-color: #ffd400;
+      box-shadow: 0 0 0 3px rgba(255, 212, 0, .15);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    #fileHelp {
+      display: block;
+      margin-top: 8px;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+
+    .yellow-btn {
+      margin-top: 18px;
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      background: #ffd400;
+      color: #000;
+      font-weight: 900;
+      padding: 14px 18px;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+    }
+
+    .yellow-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #262626;
+      align-items: center;
+    }
+
+    .summary-row span {
+      color: #9ca3af;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 900;
+    }
+
+    .summary-row strong {
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      width: fit-content;
+      background: rgba(255, 212, 0, .15);
+      color: #ffd400 !important;
+      border: 1px solid rgba(255, 212, 0, .35);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px !important;
+      font-weight: 900;
+    }
+
+    #formMessage {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #formMessage.success {
+      display: block;
+      background: rgba(16, 185, 129, .12);
+      border: 1px solid #10b981;
+      color: #d1fae5;
+    }
+
+    #formMessage.error {
+      display: block;
+      background: rgba(239, 68, 68, .12);
+      border: 1px solid #ef4444;
+      color: #fecaca;
+    }
+
+    @media (max-width: 900px) {
+      .pod-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "driver";
+
+      const params = new URLSearchParams(window.location.search);
+      const tripId = params.get("id");
+
+      let currentTrip = null;
+      let currentDelivery = null;
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value || "Not available";
+      };
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const setMessage = (message, type) => {
+        const box = document.getElementById("formMessage");
+        box.textContent = message;
+        box.className = type;
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.trips)) return result.trips;
+        if (Array.isArray(result?.deliveries)) return result.deliveries;
+        return [];
+      };
+
+      const fetchTrip = async () => {
+        if (!tripId) {
+          throw new Error("Trip ID missing in URL.");
+        }
+
+        if (window.DeliverySyncAPI?.Trips?.getOne) {
+          try {
+            return await DeliverySyncAPI.Trips.getOne(tripId);
+          } catch (error) {
+            console.warn("Trips.getOne failed, falling back to getAll:", error);
+          }
+        }
+
+        const result = window.DeliverySyncAPI?.Trips?.getAll
+          ? await DeliverySyncAPI.Trips.getAll()
+          : await fetch("http://localhost:3000/api/trips", {
+              headers: { "x-user-role": ROLE },
+            }).then((res) => {
+              if (!res.ok) throw new Error(`Trips fetch failed with status ${res.status}`);
+              return res.json();
+            });
+
+        const trips = getArray(result);
+
+        const trip =
+          trips.find((t) => String(t.id) === String(tripId)) ||
+          trips.find((t) => String(t.tripId) === String(tripId)) ||
+          null;
+
+        if (!trip) {
+          throw new Error(`Trip "${tripId}" not found from backend.`);
+        }
+
+        return trip;
+      };
+
+      const fetchLinkedDelivery = async (requestId) => {
+        if (!requestId) return null;
+
+        try {
+          if (window.DeliverySyncAPI?.Deliveries?.getOne) {
+            return await DeliverySyncAPI.Deliveries.getOne(requestId);
+          }
+
+          return await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(requestId)}`, {
+            headers: { "x-user-role": ROLE },
+          }).then((res) => {
+            if (!res.ok) throw new Error(`Delivery fetch failed with status ${res.status}`);
+            return res.json();
+          });
+        } catch (error) {
+          console.warn("Linked delivery fetch failed:", error);
+          return null;
+        }
+      };
+
+      const updateTripStatus = async (status) => {
+        const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(tripId)}/status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+          body: JSON.stringify({ status }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Trip status update failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const renderPage = () => {
+        const requestId =
+          currentTrip.request ||
+          currentTrip.deliveryId ||
+          currentTrip.deliveryRequestId ||
+          currentTrip.id;
+
+        const customer =
+          currentTrip.customer ||
+          currentTrip.client ||
+          currentTrip.customerName ||
+          currentTrip.clientName ||
+          currentDelivery?.customer ||
+          currentDelivery?.client ||
+          currentDelivery?.customerName ||
+          currentDelivery?.clientName ||
+          currentDelivery?.company ||
+          currentDelivery?.businessName ||
+          currentDelivery?.name ||
+          "Customer not available";
+
+        const contact =
+          currentDelivery?.contact ||
+          currentTrip.contact ||
+          "Contact not available";
+
+        const pickup =
+          currentTrip.pickup ||
+          currentTrip.pickupLocation ||
+          currentDelivery?.pickup ||
+          "Pickup not available";
+
+        const drop =
+          currentTrip.destination ||
+          currentTrip.dropoff ||
+          currentTrip.dropLocation ||
+          currentDelivery?.dropoff ||
+          currentDelivery?.destination ||
+          "Drop not available";
+
+        const packageInfo =
+          currentDelivery?.package ||
+          currentTrip.package ||
+          currentTrip.packageType ||
+          "Package not available";
+
+        const distance =
+          currentTrip.distance ||
+          currentDelivery?.distance ||
+          "Distance not available";
+
+        const status =
+          currentTrip.status ||
+          currentDelivery?.status ||
+          "Delivered";
+
+        document.getElementById("deliveryIdInput").value = requestId;
+        document.getElementById("recipientNameInput").value = contact !== "Contact not available" ? contact : "";
+
+        setText("tripIdText", currentTrip.id);
+        setText("requestIdText", requestId);
+        setText("customerText", customer);
+        setText("contactText", contact);
+        setText("pickupText", pickup);
+        setText("dropText", drop);
+        setText("packageText", packageInfo);
+        setText("statusText", status);
+        setText("distanceText", distance);
+
+        document.getElementById("page-subtitle").textContent = `Complete ${requestId}`;
+      };
+
+      const loadPage = async () => {
+        try {
+          currentTrip = await fetchTrip();
+
+          const requestId =
+            currentTrip.request ||
+            currentTrip.deliveryId ||
+            currentTrip.deliveryRequestId;
+
+          currentDelivery = await fetchLinkedDelivery(requestId);
+
+          renderPage();
+
+          console.log("PROOF TRIP:", currentTrip);
+          console.log("PROOF DELIVERY:", currentDelivery);
+
+          console.table({
+            proofPageLoaded: true,
+            tripId,
+            request: requestId || "No request",
+            tripStatus: currentTrip.status || "No status",
+            deliveryCustomer:
+              currentDelivery?.customer ||
+              currentDelivery?.client ||
+              "Customer not available",
+            source: "GET /api/trips/:id + GET /api/deliveries/:requestId",
+          });
+
+          setVerification(
+            `Backend verified: Proof of Delivery ✓ | Trip ${currentTrip.id} | Delivery ${requestId || "N/A"} ✓`
+          );
+        } catch (error) {
+          console.error("Proof page backend sync failed:", error);
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      document.getElementById("proofForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!currentTrip) {
+          setMessage("Trip data not loaded yet.", "error");
+          return;
+        }
+
+        const recipient = document.getElementById("recipientNameInput").value.trim();
+        const proofFile = document.getElementById("proofFileInput").files[0];
+        const completeBtn = document.getElementById("completeBtn");
+
+        if (!recipient) {
+          setMessage("Recipient name is required.", "error");
+          return;
+        }
+
+        if (!proofFile) {
+          setMessage("Proof photo/signature file is required.", "error");
+          return;
+        }
+
+        if (proofFile.size > 5 * 1024 * 1024) {
+          setMessage("File size must be less than 5 MB.", "error");
+          return;
+        }
+
+        try {
+          completeBtn.disabled = true;
+          completeBtn.textContent = "Completing delivery...";
+
+          const updatedTrip = await updateTripStatus("Completed");
+
+          console.log("COMPLETE DELIVERY RESPONSE:", updatedTrip);
+
+          console.table({
+            deliveryCompletedInBackend: true,
+            tripId,
+            status: "Completed",
+            proofRecipient: recipient,
+            proofFileName: proofFile.name,
+            syncedFiles: "trips.json + deliveries.json + notifications.json",
+            nextPage: "history.html",
+          });
+
+          setMessage("Delivery completed successfully.", "success");
+          setVerification(`Backend verified: Delivery completed ✓ | ${tripId} → Completed`);
+
+         setTimeout(() => {
+  window.location.assign(`dashboard.html`);
+}, 500);
+        } catch (error) {
+          console.error("Complete delivery failed:", error);
+          completeBtn.disabled = false;
+          completeBtn.textContent = "Complete Delivery";
+          setMessage(`Complete delivery failed: ${error.message}`, "error");
+        }
+      });
+
+      document.getElementById("driverLogout").addEventListener("click", () => {
+        window.location.href = "../login.html";
+      });
+
+      await loadPage();
+    });
+  </script>
+</body>
+</html>

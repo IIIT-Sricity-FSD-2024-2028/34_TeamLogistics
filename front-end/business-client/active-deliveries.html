@@ -1,0 +1,509 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Active Deliveries | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/business-client.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="bc-body" data-page="active-deliveries">
+  <div class="bc-layout">
+    <aside class="bc-sidebar">
+      <div class="bc-brand">
+        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div>
+      </div>
+
+      <nav class="bc-nav">
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+            </svg>
+          </span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html" data-nav="active-deliveries" class="active">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" data-nav="completed-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Invoices</span>
+        </a>
+
+        <a href="submit-transaction.html" data-nav="submit-transaction">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html" data-nav="notifications">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+              <path d="M10 20a2 2 0 0 0 4 0"></path>
+            </svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile">
+          <span class="ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <path d="M16 17l5-5-5-5"></path>
+            <path d="M21 12H9"></path>
+          </svg>
+        </span>
+        <span>Logout</span>
+      </a>
+    </aside>
+
+    <main class="bc-main">
+      <header class="bc-topbar">
+        <div>
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
+
+        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
+          <svg viewBox="0 0 24 24">
+            <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+            <path d="M10 20a2 2 0 0 0 4 0"></path>
+          </svg>
+          <span class="badge">3</span>
+        </a>
+      </header>
+
+      <section class="bc-content">
+        <h1 class="page-title bc-active-title">Active Deliveries</h1>
+        <p class="page-subtitle" id="activeSubtitle">Loading active deliveries from backend...</p>
+
+        <div
+          id="backendVerification"
+          style="
+            margin: 18px 0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            color: #d1d5db;
+            font-size: 14px;
+          "
+        >
+          Verifying active deliveries from backend...
+        </div>
+
+        <div class="bc-active-search">
+          <label class="bc-search-dark">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-3.5-3.5"></path>
+            </svg>
+            <input id="bc-active-delivery-search" placeholder="Search Delivery ID" />
+          </label>
+        </div>
+
+        <div class="delivery-list" id="deliveryList">
+          <div style="padding:24px;background:#171717;border:1px solid #262626;border-radius:16px;color:#9ca3af;text-align:center">
+            Loading deliveries...
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "business-client";
+
+      let allDeliveries = [];
+      let activeDeliveries = [];
+      let filteredDeliveries = [];
+
+      const container = document.getElementById("deliveryList");
+      const subtitle = document.getElementById("activeSubtitle");
+      const searchInput = document.getElementById("bc-active-delivery-search");
+
+      const activeStatuses = [
+        "pending",
+        "approved",
+        "queued",
+        "assigned",
+        "accepted",
+        "picked up",
+        "in transit",
+        "issue reported",
+        "blocked"
+      ];
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.deliveries)) return result.deliveries;
+        if (Array.isArray(result?.deliveryRequests)) return result.deliveryRequests;
+        return [];
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const esc = (value) => {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      };
+
+      const getPickup = (delivery) => {
+        return (
+          delivery.pickup ||
+          delivery.from ||
+          delivery.pickupAddress ||
+          delivery.source ||
+          "--"
+        );
+      };
+
+      const getDropoff = (delivery) => {
+        return (
+          delivery.dropoff ||
+          delivery.destination ||
+          delivery.to ||
+          delivery.dropAddress ||
+          delivery.drop ||
+          "--"
+        );
+      };
+
+      const getDriver = (delivery) => {
+        return (
+          delivery.driver ||
+          delivery.assignedDriver ||
+          delivery.driverName ||
+          "Assigning"
+        );
+      };
+
+      const getEtaNumber = (delivery) => {
+        const raw =
+          delivery.eta ||
+          delivery.estimatedTime ||
+          delivery.estimatedArrival ||
+          "--";
+
+        const text = String(raw);
+
+        if (text.toLowerCase().includes("min")) {
+          return text.replace(/mins?|minutes?/gi, "").trim() || "--";
+        }
+
+        return text;
+      };
+
+      const isActiveDelivery = (delivery) => {
+        const status = normalize(delivery.status);
+
+        return activeStatuses.includes(status);
+      };
+
+      const fetchDeliveries = async () => {
+        if (window.DeliverySyncAPI?.Deliveries?.getAll) {
+          return getArray(await DeliverySyncAPI.Deliveries.getAll());
+        }
+
+        const response = await fetch("http://localhost:3000/api/deliveries", {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Deliveries fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const cancelDelivery = async (id) => {
+        const reason = prompt("Enter cancellation reason:", "Cancelled by business client");
+
+        if (reason === null) return;
+
+        const url = `http://localhost:3000/api/deliveries/${encodeURIComponent(id)}/cancel`;
+
+        const response = await fetch(url, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+          body: JSON.stringify({ reason }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Cancel failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const renderDeliveries = () => {
+        if (!filteredDeliveries.length) {
+          container.innerHTML = `
+            <div style="padding:24px;background:#171717;border:1px solid #262626;border-radius:16px;color:#9ca3af;text-align:center">
+              No active deliveries found from backend.
+            </div>
+          `;
+
+          subtitle.textContent = "0 deliveries in progress";
+          return;
+        }
+
+        container.innerHTML = filteredDeliveries.map((delivery) => {
+          const id = delivery.id || delivery.deliveryId || "--";
+          const pickup = getPickup(delivery);
+          const dropoff = getDropoff(delivery);
+          const driver = getDriver(delivery);
+          const eta = getEtaNumber(delivery);
+          const status = delivery.status || "Pending";
+          const driverSub =
+            delivery.driverPhone ||
+            delivery.phone ||
+            delivery.deliveryType ||
+            delivery.type ||
+            "--";
+
+          return `
+            <div class="delivery-item" data-order-id="${esc(id)}">
+              <div>
+                <div class="delivery-id">#${esc(id)}</div>
+                <span class="pill bright">${esc(String(status).toUpperCase())}</span>
+              </div>
+
+              <div>
+                <div class="delivery-meta-label">From</div>
+                <div class="delivery-meta-value">${esc(pickup)}</div>
+              </div>
+
+              <div>
+                <div class="delivery-meta-label">To</div>
+                <div class="delivery-meta-value">${esc(dropoff)}</div>
+              </div>
+
+              <div>
+                <div class="delivery-meta-label">Driver</div>
+                <div class="delivery-meta-value">${esc(driver)}</div>
+                <div class="delivery-meta-sub">${esc(driverSub)}</div>
+              </div>
+
+              <div>
+                <div class="delivery-meta-label">ETA</div>
+                <div class="eta-big">${esc(eta)}</div>
+                <div class="eta-unit">mins</div>
+              </div>
+
+              <a class="btn yellow" href="live-tracking.html?id=${encodeURIComponent(id)}">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"></path>
+                  <circle cx="12" cy="10" r="2"></circle>
+                </svg>
+                Track Live
+              </a>
+
+              <button class="btn outline-red" type="button" data-cancel-order="${esc(id)}">
+                × Cancel Order
+              </button>
+            </div>
+          `;
+        }).join("");
+
+        subtitle.textContent =
+          `${filteredDeliveries.length} ${filteredDeliveries.length === 1 ? "delivery" : "deliveries"} in progress`;
+
+        document.querySelectorAll("[data-cancel-order]").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-cancel-order");
+
+            try {
+              btn.disabled = true;
+              btn.textContent = "Cancelling...";
+
+              await cancelDelivery(id);
+
+              console.table({
+                deliveryCancelled: true,
+                deliveryId: id,
+                source: "PATCH /api/deliveries/:id/cancel",
+              });
+
+              setVerification(`Backend verified: Delivery ${id} cancelled ✓`);
+
+              await loadDeliveries();
+            } catch (error) {
+              console.error("Cancel delivery failed:", error);
+              setVerification(`Cancel failed: ${error.message}`, true);
+
+              btn.disabled = false;
+              btn.textContent = "× Cancel Order";
+            }
+          });
+        });
+      };
+
+      const applySearch = () => {
+        const q = normalize(searchInput.value);
+
+        if (!q) {
+          filteredDeliveries = [...activeDeliveries];
+        } else {
+          filteredDeliveries = activeDeliveries.filter((delivery) => {
+            const id = normalize(delivery.id || delivery.deliveryId);
+            const pickup = normalize(getPickup(delivery));
+            const dropoff = normalize(getDropoff(delivery));
+            const driver = normalize(getDriver(delivery));
+            const customer = normalize(delivery.customer || delivery.client || delivery.company);
+
+            return (
+              id.startsWith(q) ||
+              pickup.includes(q) ||
+              dropoff.includes(q) ||
+              driver.includes(q) ||
+              customer.includes(q)
+            );
+          });
+        }
+
+        renderDeliveries();
+      };
+
+      const loadDeliveries = async () => {
+        try {
+          allDeliveries = await fetchDeliveries();
+
+          activeDeliveries = allDeliveries
+            .filter(isActiveDelivery)
+            .sort((a, b) => {
+              const aTime = new Date(a.createdAt || a.requestTime || 0).getTime();
+              const bTime = new Date(b.createdAt || b.requestTime || 0).getTime();
+              return bTime - aTime;
+            });
+
+          filteredDeliveries = [...activeDeliveries];
+
+          renderDeliveries();
+
+          console.log("BUSINESS ACTIVE RAW DELIVERIES:", allDeliveries);
+          console.log("BUSINESS ACTIVE FILTERED DELIVERIES:", activeDeliveries);
+
+          console.table({
+            activeDeliveriesPageLoaded: true,
+            deliveriesLoadedFromBackend: allDeliveries.length,
+            activeDeliveries: activeDeliveries.length,
+            activeStatuses: activeStatuses.join(", "),
+            source: "GET /api/deliveries",
+          });
+
+          setVerification(
+            `Backend verified: Active Deliveries ✓ | Loaded ${allDeliveries.length} | Active ${activeDeliveries.length}`
+          );
+        } catch (error) {
+          console.error("Active deliveries backend sync failed:", error);
+
+          container.innerHTML = `
+            <div style="padding:24px;background:#331717;border:1px solid #ef4444;border-radius:16px;color:#fecaca;text-align:center">
+              Could not load active deliveries from backend.
+            </div>
+          `;
+
+          subtitle.textContent = "Backend sync failed";
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      searchInput.addEventListener("input", applySearch);
+
+      await loadDeliveries();
+    });
+  </script>
+</body>
+</html>

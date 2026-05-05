@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delivery Details | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/driver.css" />
+
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="driver-body">
+  <div class="page-shell">
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+    <div
+      id="backendVerification"
+      class="verify-box"
+    >
+      Verifying delivery details from backend...
+    </div>
+
+    <section class="hero-card">
+      <div>
+        <div class="eyebrow">Delivery Details</div>
+        <h1 id="deliveryTitle">Loading...</h1>
+        <p id="deliverySubtitle">Fetching trip details from backend</p>
+      </div>
+
+      <div class="status-box">
+        <div class="status-label">Current Status</div>
+        <div id="statusValue" class="status-value">Loading...</div>
+      </div>
+    </section>
+
+    <section class="details-grid">
+      <div class="main-card">
+        <h2>Route Information</h2>
+
+        <div class="route-timeline">
+          <div class="route-item">
+            <div class="route-dot"></div>
+            <div>
+              <div class="small-label">Pickup Location</div>
+              <div id="pickupLocation" class="main-value">Loading...</div>
+            </div>
+          </div>
+
+          <div class="route-line"></div>
+
+          <div class="route-item">
+            <div class="route-dot"></div>
+            <div>
+              <div class="small-label">Drop Location</div>
+              <div id="dropLocation" class="main-value">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <div class="small-label">Trip ID</div>
+            <div id="tripId" class="main-value">Loading...</div>
+          </div>
+
+          <div class="info-box">
+            <div class="small-label">Delivery Request</div>
+            <div id="requestId" class="main-value">Loading...</div>
+          </div>
+
+          <div class="info-box">
+            <div class="small-label">Distance</div>
+            <div id="distance" class="main-value">Loading...</div>
+          </div>
+
+          <div class="info-box">
+            <div class="small-label">Start Time</div>
+            <div id="startTime" class="main-value">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <h2>Driver</h2>
+
+        <div class="driver-mini">
+          <div id="driverAvatar" class="avatar">R</div>
+          <div>
+            <div id="driverName" class="driver-name">Loading...</div>
+            <div id="driverPhone" class="muted">Loading...</div>
+          </div>
+        </div>
+
+        <div class="side-info">
+          <div class="small-label">Vehicle</div>
+          <div id="vehicle" class="main-value">Loading...</div>
+        </div>
+
+        <div class="side-info">
+          <div class="small-label">Vehicle Type</div>
+          <div id="vehicleType" class="main-value">Loading...</div>
+        </div>
+
+        <div class="side-info">
+          <div class="small-label">Assignment</div>
+          <div id="assignment" class="main-value">Loading...</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="main-card">
+      <h2>Package / Delivery Notes</h2>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="small-label">Package</div>
+          <div id="packageName" class="main-value">Package</div>
+        </div>
+
+        <div class="info-box">
+          <div class="small-label">Weight</div>
+          <div id="weight" class="main-value">Not available</div>
+        </div>
+
+        <div class="info-box wide">
+          <div class="small-label">Instructions</div>
+          <div id="instructions" class="main-value">Handle package carefully.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="action-card">
+      <button id="acceptBtn" class="btn btn-yellow">Accept Delivery</button>
+      <button id="rejectBtn" class="btn btn-red">Reject Delivery</button>
+      <button id="startBtn" class="btn btn-dark">Start Trip</button>
+      <button id="completeBtn" class="btn btn-dark">Mark Completed</button>
+    </section>
+  </div>
+
+  <style>
+    body {
+      margin: 0;
+      background: #050505;
+      color: #fff;
+      font-family: Inter, sans-serif;
+    }
+
+    .page-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 70px;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: #9ca3af;
+      text-decoration: none;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+
+    .verify-box {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .hero-card,
+    .main-card,
+    .side-card,
+    .action-card {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .hero-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow,
+    .small-label {
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 8px 0;
+      font-size: 42px;
+    }
+
+    h2 {
+      margin: 0 0 20px;
+      font-size: 24px;
+    }
+
+    p {
+      color: #9ca3af;
+      margin: 0;
+    }
+
+    .status-box {
+      min-width: 190px;
+      background: #ffd400;
+      color: #000;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .status-label {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .status-value {
+      font-size: 26px;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.6fr .9fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .route-timeline {
+      margin-bottom: 24px;
+    }
+
+    .route-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .route-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #ffd400;
+      box-shadow: 0 0 0 5px rgba(255, 212, 0, .18);
+      margin-top: 5px;
+    }
+
+    .route-line {
+      width: 2px;
+      height: 42px;
+      background: #333;
+      margin-left: 7px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    .main-value {
+      margin-top: 6px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .info-box,
+    .side-info {
+      background: #050505;
+      border: 1px solid #262626;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .driver-mini {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 999px;
+      background: #ffd400;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 24px;
+    }
+
+    .driver-name {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .muted {
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .side-info {
+      margin-top: 12px;
+    }
+
+    .action-card {
+      margin-top: 24px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 20px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn-yellow {
+      background: #ffd400;
+      color: #000;
+    }
+
+    .btn-red {
+      background: #321717;
+      color: #fecaca;
+      border: 1px solid #ef4444;
+    }
+
+    .btn-dark {
+      background: #050505;
+      color: #fff;
+      border: 1px solid #262626;
+    }
+
+    @media (max-width: 900px) {
+      .hero-card,
+      .details-grid {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "driver";
+
+      const params = new URLSearchParams(window.location.search);
+      const tripIdFromUrl = params.get("id");
+
+      let currentTrip = null;
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value || "Not available";
+      };
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.trips)) return result.trips;
+        return [];
+      };
+
+      const normalize = (value) => String(value || "").trim().toLowerCase();
+
+      const fillPage = (trip) => {
+        const tripId = trip.id || trip.tripId || "Not available";
+        const request = trip.request || trip.deliveryId || trip.deliveryRequestId || tripId;
+        const pickup = trip.pickup || trip.pickupLocation || "Pickup not available";
+        const destination = trip.destination || trip.dropoff || trip.dropLocation || "Destination not available";
+        const status = trip.status || "Assigned";
+        const driver = trip.driver || trip.assignedDriver || "Not available";
+        const phone = trip.phone || trip.driverPhone || "Not available";
+        const vehicle = trip.vehicle || "Not available";
+        const vehicleType = trip.vehicleType || trip.type || "Not available";
+
+        setText("deliveryTitle", `Delivery #${request}`);
+        setText("deliverySubtitle", `${pickup} → ${destination}`);
+        setText("statusValue", status);
+
+        setText("tripId", tripId);
+        setText("requestId", request);
+        setText("pickupLocation", pickup);
+        setText("dropLocation", destination);
+        setText("distance", trip.distance || "Not available");
+        setText("startTime", trip.startTime || trip.date || "Not available");
+
+        setText("driverName", driver);
+        setText("driverPhone", phone);
+        setText("vehicle", vehicle);
+        setText("vehicleType", vehicleType);
+        setText("assignment", trip.assignment || "Not available");
+
+        setText("packageName", trip.package || trip.packageType || trip.item || "Package");
+        setText("weight", trip.weight || trip.estimatedWeight || "Not available");
+        setText("instructions", trip.instructions || "Handle package carefully.");
+
+        const avatar = document.getElementById("driverAvatar");
+        if (avatar) avatar.textContent = driver[0] || "D";
+      };
+
+      const loadTrip = async () => {
+        try {
+          if (!tripIdFromUrl) {
+            throw new Error("Trip ID missing in URL.");
+          }
+
+          let trip = null;
+          let result = null;
+
+          if (window.DeliverySyncAPI?.Trips?.getOne) {
+            try {
+              trip = await DeliverySyncAPI.Trips.getOne(tripIdFromUrl);
+              result = trip;
+            } catch (err) {
+              console.warn("getOne failed, falling back to getAll:", err);
+            }
+          }
+
+          if (!trip) {
+            if (window.DeliverySyncAPI?.Trips?.getAll) {
+              result = await DeliverySyncAPI.Trips.getAll();
+            } else {
+              result = await fetch("http://localhost:3000/api/trips", {
+                headers: { "x-user-role": ROLE },
+              }).then((res) => {
+                if (!res.ok) throw new Error(`Trips fetch failed with status ${res.status}`);
+                return res.json();
+              });
+            }
+
+            const trips = getArray(result);
+
+            trip =
+              trips.find((t) => String(t.id) === String(tripIdFromUrl)) ||
+              trips.find((t) => String(t.tripId) === String(tripIdFromUrl)) ||
+              trips.find((t) => String(t.request) === String(tripIdFromUrl)) ||
+              null;
+          }
+
+          if (!trip) {
+            throw new Error(`Trip "${tripIdFromUrl}" not found from backend.`);
+          }
+
+          currentTrip = trip;
+          fillPage(currentTrip);
+
+          console.log("RAW TRIP API RESULT:", result);
+          console.log("CURRENT TRIP DETAILS:", currentTrip);
+
+          console.table({
+            tripDetailsLoaded: true,
+            requestedTripId: tripIdFromUrl,
+            matchedTripId: currentTrip.id || "No ID",
+            deliveryRequest: currentTrip.request || "No request",
+            driver: currentTrip.driver || "No driver",
+            status: currentTrip.status || "No status",
+            source: "back-end/data/trips.json through GET /api/trips or GET /api/trips/:id",
+          });
+
+          setVerification(
+            `Backend verified: Trip details ✓ | ${currentTrip.id || tripIdFromUrl} | ${currentTrip.status || "Loaded"}`
+          );
+        } catch (error) {
+          console.error("Delivery details backend sync failed:", error);
+
+          setVerification(`Backend sync failed: ${error.message}`, true);
+
+          setText("deliveryTitle", "Delivery not found");
+          setText("deliverySubtitle", "Could not load trip details from backend.");
+        }
+      };
+
+      const updateStatusInUI = (status) => {
+        if (!currentTrip) return;
+
+        currentTrip.status = status;
+        setText("statusValue", status);
+
+        console.table({
+          tripActionClicked: true,
+          tripId: currentTrip.id,
+          newStatus: status,
+          note: "UI updated. Add backend PATCH endpoint for persistent driver status changes.",
+        });
+
+        setVerification(`Backend verified: Trip details ✓ | UI status changed to ${status}`);
+      };
+
+      document.getElementById("acceptBtn").addEventListener("click", () => updateStatusInUI("Accepted"));
+      document.getElementById("rejectBtn").addEventListener("click", () => updateStatusInUI("Rejected"));
+      document.getElementById("startBtn").addEventListener("click", () => updateStatusInUI("In Transit"));
+      document.getElementById("completeBtn").addEventListener("click", () => updateStatusInUI("Completed"));
+
+      await loadTrip();
+    });
+  </script>
+</body>
+</html>

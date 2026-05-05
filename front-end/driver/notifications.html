@@ -1,0 +1,517 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Notifications | DeliverSync</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/brand-logo.js"></script>
+</head>
+
+<body class="driver-desktop-page" data-page="notifications">
+  <div class="driver-shell">
+    <aside class="driver-sidebar">
+      <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Driver Portal"></div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard.html">
+          <span class="nav-icon icon-dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+
+        <a class="nav-link" href="map.html">
+          <span class="nav-icon icon-map"></span>
+          <span>Map</span>
+        </a>
+
+        <a class="nav-link" href="history.html">
+          <span class="nav-icon icon-history"></span>
+          <span>History</span>
+        </a>
+
+        <a class="nav-link active" href="notifications.html">
+          <span class="nav-icon icon-notifications"></span>
+          <span>Notifications</span>
+        </a>
+
+        <a class="nav-link" href="earnings.html">
+          <span class="nav-icon icon-earnings"></span>
+          <span>Earnings</span>
+        </a>
+
+        <a class="nav-link" href="profile.html">
+          <span class="nav-icon icon-profile"></span>
+          <span>Profile</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="driverLogout" type="button" style="margin-top:10px">
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="driver-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>Notifications</h1>
+          <p>Backend synced driver notifications</p>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-circle" type="button">
+            🔔
+            <span id="topUnreadBadge" class="icon-badge"></span>
+          </button>
+
+          <div class="profile-menu" style="position:relative">
+            <button class="profile-chip" type="button">
+              <div class="profile-avatar">R</div>
+              <div>
+                <div style="font-weight:800">Raghav Reddy</div>
+                <div style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div id="backendVerification" class="verify-box">
+          Verifying notifications from backend...
+        </div>
+
+        <div class="notifications-card">
+          <div class="notif-header">
+            <div>
+              <h2>Notifications</h2>
+              <p>Updates from trips, deliveries, issues, and system actions</p>
+            </div>
+
+            <div class="notif-actions">
+              <span id="unreadCount" class="count-pill">0 New</span>
+              <button id="markReadBtn" class="yellow-btn" type="button">Mark all as read</button>
+            </div>
+          </div>
+
+          <div class="tabs">
+            <button class="tab active" data-filter="all" type="button">All Notifications</button>
+            <button class="tab" data-filter="unread" type="button">Unread</button>
+            <button class="tab" data-filter="read" type="button">Read</button>
+          </div>
+
+          <div id="notificationsList" class="notifications-list">
+            <div class="empty-state">Loading notifications...</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+    }
+
+    .verify-box {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .notifications-card {
+      background: linear-gradient(135deg, #1f1f1f, #111);
+      border: 1px solid #262626;
+      border-radius: 20px;
+      padding: 22px;
+      color: #fff;
+      max-width: 950px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    }
+
+    .notif-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .notif-header h2 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .notif-header p {
+      margin: 6px 0 0;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .notif-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .count-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: #ffd400;
+      color: #000;
+      font-weight: 900;
+      padding: 8px 14px;
+      white-space: nowrap;
+    }
+
+    .yellow-btn {
+      border: none;
+      border-radius: 999px;
+      background: #ffd400;
+      color: #000;
+      font-weight: 900;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+    }
+
+    .yellow-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid #262626;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      padding: 12px 4px;
+      font-weight: 900;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      font-family: Inter, sans-serif;
+    }
+
+    .tab.active {
+      color: #ffd400;
+      border-bottom-color: #ffd400;
+    }
+
+    .notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .notification-item {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 16px;
+      align-items: flex-start;
+      background: #0b0b0b;
+      border: 1px solid #262626;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .notification-item.unread {
+      border-color: rgba(255, 212, 0, .45);
+      background: linear-gradient(135deg, rgba(255, 212, 0, .08), #0b0b0b);
+    }
+
+    .notif-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #050505;
+      border: 1px solid #262626;
+      color: #ffd400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .notif-title {
+      font-weight: 900;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .notif-message {
+      color: #d1d5db;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .notif-meta {
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .unread-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ffd400;
+      margin-top: 8px;
+    }
+
+    .empty-state {
+      background: #0b0b0b;
+      border: 1px dashed #333;
+      border-radius: 16px;
+      padding: 28px;
+      color: #9ca3af;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .notif-header,
+      .notif-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .notification-item {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const ROLE = "driver";
+
+      let notifications = [];
+      let currentFilter = "all";
+
+      const setVerification = (message, isError = false) => {
+        const box = document.getElementById("backendVerification");
+        if (!box) return;
+
+        box.textContent = message;
+        box.style.borderColor = isError ? "#ef4444" : "#10b981";
+        box.style.color = isError ? "#fecaca" : "#d1fae5";
+      };
+
+      const getArray = (result) => {
+        if (Array.isArray(result)) return result;
+        if (Array.isArray(result?.data)) return result.data;
+        if (Array.isArray(result?.items)) return result.items;
+        if (Array.isArray(result?.notifications)) return result.notifications;
+        return [];
+      };
+
+      const formatTime = (value) => {
+        if (!value) return "Just now";
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+
+        return date.toLocaleString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      };
+
+      const fetchNotifications = async () => {
+        const response = await fetch("http://localhost:3000/api/notifications", {
+          headers: {
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Notifications fetch failed with status ${response.status}`);
+        }
+
+        return getArray(await response.json());
+      };
+
+      const markAllRead = async () => {
+        const response = await fetch("http://localhost:3000/api/notifications/mark-read", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": ROLE,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Mark read failed with status ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      const getIcon = (title, message) => {
+        const text = `${title || ""} ${message || ""}`.toLowerCase();
+
+        if (text.includes("issue")) return "!";
+        if (text.includes("completed") || text.includes("delivered")) return "✓";
+        if (text.includes("accepted")) return "✓";
+        if (text.includes("reassigned") || text.includes("assigned")) return "⇄";
+        if (text.includes("payment")) return "₹";
+
+        return "🔔";
+      };
+
+      const updateUnreadCount = () => {
+        const unread = notifications.filter((n) => !n.read).length;
+
+        document.getElementById("unreadCount").textContent = `${unread} New`;
+
+        const topBadge = document.getElementById("topUnreadBadge");
+        if (topBadge) {
+          topBadge.textContent = unread > 0 ? unread : "";
+          topBadge.style.display = unread > 0 ? "inline-flex" : "none";
+        }
+      };
+
+      const renderNotifications = () => {
+        const list = document.getElementById("notificationsList");
+
+        let filtered = [...notifications];
+
+        if (currentFilter === "unread") {
+          filtered = filtered.filter((n) => !n.read);
+        }
+
+        if (currentFilter === "read") {
+          filtered = filtered.filter((n) => n.read);
+        }
+
+        if (!filtered.length) {
+          list.innerHTML = `<div class="empty-state">No ${currentFilter} notifications found from backend.</div>`;
+          updateUnreadCount();
+          return;
+        }
+
+        list.innerHTML = filtered.map((n) => {
+          const title = n.title || "Notification";
+          const message = n.message || "No message available.";
+          const time = n.time || formatTime(n.createdAt);
+          const read = Boolean(n.read);
+
+          return `
+            <div class="notification-item ${read ? "" : "unread"}">
+              <div class="notif-icon">${getIcon(title, message)}</div>
+
+              <div>
+                <div class="notif-title">${title}</div>
+                <div class="notif-message">${message}</div>
+                <div class="notif-meta">${time} • ${read ? "Read" : "Unread"} • To: ${n.to || "driver"}</div>
+              </div>
+
+              ${read ? "" : `<div class="unread-dot"></div>`}
+            </div>
+          `;
+        }).join("");
+
+        updateUnreadCount();
+      };
+
+      const loadNotifications = async () => {
+        try {
+          notifications = await fetchNotifications();
+
+          renderNotifications();
+
+          console.log("DRIVER NOTIFICATIONS:", notifications);
+
+          console.table({
+            notificationsPageLoaded: true,
+            notificationsLoadedFromBackend: notifications.length,
+            unread: notifications.filter((n) => !n.read).length,
+            source: "GET /api/notifications with x-user-role: driver",
+          });
+
+          setVerification(
+            `Backend verified: Notifications ✓ | Loaded ${notifications.length}`
+          );
+        } catch (error) {
+          console.error("Notifications backend sync failed:", error);
+          setVerification(`Backend sync failed: ${error.message}`, true);
+        }
+      };
+
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+
+          tab.classList.add("active");
+          currentFilter = tab.dataset.filter || "all";
+
+          renderNotifications();
+        });
+      });
+
+      document.getElementById("markReadBtn").addEventListener("click", async () => {
+        const btn = document.getElementById("markReadBtn");
+
+        try {
+          btn.disabled = true;
+          btn.textContent = "Updating...";
+
+          await markAllRead();
+          notifications = await fetchNotifications();
+
+          renderNotifications();
+
+          console.table({
+            markAllReadSuccessful: true,
+            unreadAfterUpdate: notifications.filter((n) => !n.read).length,
+            source: "PATCH /api/notifications/mark-read",
+          });
+
+          setVerification("Backend verified: All driver notifications marked as read ✓");
+        } catch (error) {
+          console.error("Mark all read failed:", error);
+          setVerification(`Mark all read failed: ${error.message}`, true);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Mark all as read";
+        }
+      });
+
+      document.getElementById("driverLogout").addEventListener("click", () => {
+        window.location.href = "../login.html";
+      });
+
+      await loadNotifications();
+    });
+  </script>
+</body>
+</html>
