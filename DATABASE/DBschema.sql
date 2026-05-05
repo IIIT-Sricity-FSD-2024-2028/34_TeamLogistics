@@ -47,6 +47,11 @@ CREATE TABLE Driver (
     license_document TEXT,
     rating DECIMAL(2,1) CHECK (rating >= 0 AND rating <= 5),
     status ENUM('Active','Inactive','Suspended') DEFAULT 'Active',
+    account_holder_name VARCHAR(100),
+    account_number VARCHAR(50),
+    ifsc_code VARCHAR(20),
+    bank_name VARCHAR(100),
+    bank_book_image TEXT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 -- create the bank details
@@ -145,7 +150,7 @@ CREATE TABLE Compliance (
     driver_id INT NOT NULL,
     license_status ENUM('Valid','Expired','Suspended') DEFAULT 'Valid',
     expiry_date DATE,
-    violations TEXT,
+    no_of_violations INT DEFAULT 0 CHECK (no_of_violations >= 0),
     compliance_status ENUM('Valid','Invalid') DEFAULT 'Valid',
     FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE
 );
