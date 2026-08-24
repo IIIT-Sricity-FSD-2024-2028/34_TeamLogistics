@@ -31,9 +31,10 @@
     "type": "Payment",
     "client": "Acme Logistics",
     "amount": 9800,
-    "status": "Pending",
+    "status": "Rejected",
     "date": "2026-03-06",
-    "createdAt": "2026-03-06T11:00:00.000Z"
+    "createdAt": "2026-03-06T11:00:00.000Z",
+    "updatedAt": "2026-08-24T17:12:22.757Z"
   },
   {
     "id": "TXN-005",
@@ -58,9 +59,10 @@
     "type": "Payment",
     "client": "UrbanKart Retail",
     "amount": 15600,
-    "status": "Pending",
+    "status": "Rejected",
     "date": "2026-03-08",
-    "createdAt": "2026-03-08T12:00:00.000Z"
+    "createdAt": "2026-03-08T12:00:00.000Z",
+    "updatedAt": "2026-08-24T16:51:08.012Z"
   },
   {
     "id": "TXN-1777987934467",

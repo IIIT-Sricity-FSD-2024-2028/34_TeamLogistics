@@ -1,118 +1,1301 @@
-﻿<!DOCTYPE html>
-<html><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>Notifications | DeliverSync</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/brand-logo.css">
-<link href="../assets/css/fleet-manager.css" rel="stylesheet"/><script src="../assets/js/api-client.js"></script><script src="../assets/js/fleet-manager.js"></script><script src="../assets/js/workflow-demo.js" defer></script><script src="../assets/js/brand-logo.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+  <title>Notifications | DeliverSync</title>
+
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
+  <link href="../assets/css/fleet-manager.css" rel="stylesheet" />
+
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/fleet-manager.js"></script>
+  <script src="../assets/js/workflow-demo.js" defer></script>
+  <script src="../assets/js/brand-logo.js"></script>
 </head>
-<body><div class="fleet-layout"><aside class="sidebar"><div class="brand"><div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Fleet Manager Portal"></div></div><nav class="nav"><a class="" href="dashboard.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="6" rx="1" width="6" x="4" y="4"></rect><rect height="6" rx="1" width="6" x="14" y="4"></rect><rect height="6" rx="1" width="6" x="4" y="14"></rect><rect height="6" rx="1" width="6" x="14" y="14"></rect></svg></span><span>Dashboard</span></a><a class="" href="vehicles.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 14V9a2 2 0 0 1 2-2h8l3 3h3a2 2 0 0 1 2 2v2"></path><circle cx="7" cy="16.5" r="2"></circle><circle cx="17" cy="16.5" r="2"></circle></svg></span><span>Vehicles</span></a><a class="" href="drivers.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M4 19a5 5 0 0 1 10 0"></path><circle cx="17" cy="9" r="2"></circle><path d="M15 19a4 4 0 0 1 5-3.8"></path></svg></span><span>Drivers</span></a><a class="" href="compliance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path></svg></span><span>Compliance</span></a><a class="" href="trips.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12"></path><path d="M13 6l6 6-6 6"></path></svg></span><span>Trips</span></a><a class="" href="maintenance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 0-5.7-3"></path></svg></span><span>Maintenance</span></a><a class="" href="documents.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 3v5h5"></path></svg></span><span>Documents</span></a><a class="" href="analytics.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V9"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20V12"></path></svg></span><span>Analytics</span></a><a class="active" href="notifications.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg></span><span>Notifications</span></a><a class="" href="profile.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20a8 8 0 0 1 16 0"></path></svg></span><span>Profile</span></a><a class="" href="settings.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></span><span>Settings</span></a></nav><a class="logout" href="../login.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside>
-<main class="main"><div class="topbar"><div class="pagehead"><h1>Notifications</h1><p>Fleet alerts and system notifications</p></div><div class="toptools"><label class="search"><span>⌕</span><input placeholder="Search..."/></label><a aria-label="Notifications" class="iconbox iconlink notif-link" href="notifications.html"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span class="dot">3</span></a><div class="avatar">FM</div><div class="usertext"><strong>Fleet Manager</strong><span>Administrator</span></div></div></div><div class="content notifications-view">
-<div class="notif-toolbar">
-<div class="notif-filters">
-<button class="notif-filter active" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span>3 Unread</span></button>
-<button class="notif-filter" type="button"><span class="count">5</span><span>All</span></button>
-<button class="notif-filter" type="button"><span class="count critical">3</span><span>Critical</span></button>
-<button class="notif-filter" type="button"><span class="count high">2</span><span>High</span></button>
-</div>
-<div class="notif-actions">
-<button class="btn btn-ghost btn-small" type="button">Mark All as Read</button>
-<button class="btn btn-ghost btn-small filter-action" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16l-6 7v5l-4 2v-7L4 5z"></path></svg><span>Filter</span></button>
-</div>
-</div>
-<div class="notif-list">
-<article class="notif-card tone-olive">
-<div class="notif-card-icon icon-maintenance"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 0-5.7-3"></path></svg></div>
-<div class="notif-card-main">
-<div class="notif-card-title-row">
-<h3>Scheduled Maintenance Due<span class="title-dot"></span></h3>
-<span class="notif-level high">High</span>
-</div>
-<p>Vehicle TN-09-AB-2345 is due for engine oil change. Last service was 45 days ago.</p>
-<div class="notif-tags">
-<span class="tag orange">Maintenance Due</span>
-<span class="meta-code">TN-09-AB-2345</span>
-</div>
-</div>
-<div class="notif-time">
-<span>2 hours ago</span>
-<span>Mar 06, 2026</span>
-<button aria-label="Dismiss notification" type="button">×</button>
-</div>
-</article>
-<article class="notif-card tone-olive">
-<div class="notif-card-icon icon-critical"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></div>
-<div class="notif-card-main">
-<div class="notif-card-title-row">
-<h3>Driver Speeding Violation<span class="title-dot"></span></h3>
-<span class="notif-level critical">Critical</span>
-</div>
-<p>Driver Arjun (DRV-1041) exceeded speed limit of 80 km/h on NH-48. Recorded speed: 112 km/h.</p>
-<div class="notif-tags">
-<span class="tag red">Driver Violation</span>
-<span class="meta-code">DRV-1041</span>
-</div>
-</div>
-<div class="notif-time">
-<span>3 hours ago</span>
-<span>Mar 06, 2026</span>
-<button aria-label="Dismiss notification" type="button">×</button>
-</div>
-</article>
-<article class="notif-card tone-olive">
-<div class="notif-card-icon icon-document"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 3v5h5"></path></svg></div>
-<div class="notif-card-main">
-<div class="notif-card-title-row">
-<h3>Insurance Certificate Expiring<span class="title-dot"></span></h3>
-<span class="notif-level high">High</span>
-</div>
-<p>Vehicle TN-09-AB-2345 insurance expires on Mar 31, 2026. Please renew immediately.</p>
-<div class="notif-tags">
-<span class="tag yellow">Document Expiry</span>
-<span class="meta-code">TN-09-AB-2345</span>
-</div>
-</div>
-<div class="notif-time">
-<span>5 hours ago</span>
-<span>Mar 06, 2026</span>
-<button aria-label="Dismiss notification" type="button">×</button>
-</div>
-</article>
-<article class="notif-card tone-dark">
-<div class="notif-card-icon icon-lock"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="10" rx="2" width="14" x="5" y="10"></rect><path d="M8 10V7a4 4 0 1 1 8 0v3"></path></svg></div>
-<div class="notif-card-main">
-<div class="notif-card-title-row">
-<h3>Vehicle Blocked</h3>
-<span class="notif-level critical">Critical</span>
-</div>
-<p>Vehicle KA-01-CD-7890 has been blocked due to expired pollution certificate. Unblock after renewal.</p>
-<div class="notif-tags">
-<span class="tag red">Vehicle Blocked</span>
-<span class="meta-code">KA-01-CD-7890</span>
-</div>
-</div>
-<div class="notif-time">
-<span>1 day ago</span>
-<span>Mar 05, 2026</span>
-<button aria-label="Dismiss notification" type="button">×</button>
-</div>
-</article>
-<article class="notif-card tone-dark">
-<div class="notif-card-icon icon-user"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M4 19a5 5 0 0 1 10 0"></path><circle cx="17.5" cy="10.5" r="2"></circle><path d="M16 19v-2"></path><path d="M13 16h6"></path></svg></div>
-<div class="notif-card-main">
-<div class="notif-card-title-row">
-<h3>Driver Account Suspended</h3>
-<span class="notif-level critical">Critical</span>
-</div>
-<p>Driver Suresh (DRV-1062) has been suspended due to 3 violations in the past month.</p>
-<div class="notif-tags">
-<span class="tag red">Driver Suspended</span>
-<span class="meta-code">DRV-1062</span>
-</div>
-</div>
-<div class="notif-time">
-<span>1 day ago</span>
-<span>Mar 05, 2026</span>
-<button aria-label="Dismiss notification" type="button">×</button>
-</div>
-</article>
-</div>
-</div></main></div><script src="../assets/js/fleet-backend-sync.js"></script></body></html>
+
+<body>
+
+  <div class="fleet-layout">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+      <div class="brand">
+        <div
+          class="ds-brand-logo"
+          data-href="dashboard.html"
+          data-size="sm"
+          data-sub="Fleet Manager Portal"
+        ></div>
+      </div>
+
+      <nav class="nav">
+
+        <a href="dashboard.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect height="6" rx="1" width="6" x="4" y="4"></rect>
+              <rect height="6" rx="1" width="6" x="14" y="4"></rect>
+              <rect height="6" rx="1" width="6" x="4" y="14"></rect>
+              <rect height="6" rx="1" width="6" x="14" y="14"></rect>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="vehicles.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M3 14V9a2 2 0 0 1 2-2h8l3 3h3a2 2 0 0 1 2 2v2"></path>
+              <circle cx="7" cy="16.5" r="2"></circle>
+              <circle cx="17" cy="16.5" r="2"></circle>
+            </svg>
+          </span>
+          <span>Vehicles</span>
+        </a>
+
+        <a href="drivers.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="9" cy="8" r="3"></circle>
+              <path d="M4 19a5 5 0 0 1 10 0"></path>
+              <circle cx="17" cy="9" r="2"></circle>
+              <path d="M15 19a4 4 0 0 1 5-3.8"></path>
+            </svg>
+          </span>
+          <span>Drivers</span>
+        </a>
+
+        <a href="compliance.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path>
+            </svg>
+          </span>
+          <span>Compliance</span>
+        </a>
+
+        <a href="trips.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M5 12h12"></path>
+              <path d="M13 6l6 6-6 6"></path>
+            </svg>
+          </span>
+          <span>Trips</span>
+        </a>
+
+        <a href="maintenance.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 0-5.7-3"></path>
+            </svg>
+          </span>
+          <span>Maintenance</span>
+        </a>
+
+        <a href="documents.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
+              <path d="M14 3v5h5"></path>
+            </svg>
+          </span>
+          <span>Documents</span>
+        </a>
+
+        <a href="analytics.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 20V9"></path>
+              <path d="M10 20V4"></path>
+              <path d="M16 20v-7"></path>
+              <path d="M22 20V12"></path>
+            </svg>
+          </span>
+          <span>Analytics</span>
+        </a>
+
+        <a class="active" href="notifications.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
+              <path d="M10 20a2 2 0 0 0 4 0"></path>
+            </svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 20a8 8 0 0 1 16 0"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+
+      </nav>
+
+      <a class="logout" href="../login.html">
+        <span class="ico">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <path d="M16 17l5-5-5-5"></path>
+            <path d="M21 12H9"></path>
+          </svg>
+        </span>
+        <span>Logout</span>
+      </a>
+
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+      <!-- ================= TOPBAR ================= -->
+
+      <div class="topbar">
+
+        <div class="pagehead">
+          <h1>Notifications</h1>
+          <p>Fleet alerts and system notifications</p>
+        </div>
+
+        <div class="toptools">
+
+          <a
+            aria-label="Notifications"
+            class="iconbox iconlink notif-link"
+            href="notifications.html"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
+              <path d="M10 20a2 2 0 0 0 4 0"></path>
+            </svg>
+
+            <span
+              class="dot"
+              id="headerUnreadDot"
+            >
+              0
+            </span>
+          </a>
+
+          <a
+            href="profile.html"
+            style="
+              display:flex;
+              align-items:center;
+              gap:10px;
+              color:inherit;
+              text-decoration:none;
+            "
+          >
+            <div class="avatar">
+              FM
+            </div>
+
+            <div class="usertext">
+              <strong>Fleet Manager</strong>
+              <span>Administrator</span>
+            </div>
+          </a>
+
+        </div>
+
+      </div>
+
+      <!-- ================= CONTENT ================= -->
+
+      <div class="content notifications-view">
+
+        <!-- Toolbar -->
+
+        <div class="notif-toolbar">
+
+          <div class="notif-filters">
+
+            <button
+              class="notif-filter active"
+              data-filter="unread"
+              type="button"
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
+                <path d="M10 20a2 2 0 0 0 4 0"></path>
+              </svg>
+
+              <span id="unreadFilterText">
+                0 Unread
+              </span>
+            </button>
+
+            <button
+              class="notif-filter"
+              data-filter="all"
+              type="button"
+            >
+              <span
+                class="count"
+                id="allCount"
+              >
+                0
+              </span>
+              <span>All</span>
+            </button>
+
+            <button
+              class="notif-filter"
+              data-filter="critical"
+              type="button"
+            >
+              <span
+                class="count critical"
+                id="criticalCount"
+              >
+                0
+              </span>
+              <span>Critical</span>
+            </button>
+
+            <button
+              class="notif-filter"
+              data-filter="high"
+              type="button"
+            >
+              <span
+                class="count high"
+                id="highCount"
+              >
+                0
+              </span>
+              <span>High</span>
+            </button>
+
+          </div>
+
+          <div class="notif-actions">
+
+            <button
+              class="btn btn-ghost btn-small"
+              id="markAllReadBtn"
+              type="button"
+            >
+              Mark All as Read
+            </button>
+
+            <button
+              class="btn btn-ghost btn-small filter-action"
+              id="refreshBtn"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+              >
+                <path d="M20 11a8 8 0 0 0-14-5L4 8"></path>
+                <path d="M4 4v4h4"></path>
+                <path d="M4 13a8 8 0 0 0 14 5l2-2"></path>
+                <path d="M20 20v-4h-4"></path>
+              </svg>
+
+              <span>Refresh</span>
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Notification List -->
+
+        <div
+          class="notif-list"
+          id="notificationList"
+        >
+
+          <div
+            style="
+              padding:40px;
+              text-align:center;
+              color:#9e9e9e;
+            "
+          >
+            Loading notifications...
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ================= BACKEND SCRIPT ================= -->
+
+  <script>
+    (function () {
+
+      var ROLE = "fleet-manager";
+
+      var notifications = [];
+      var currentFilter = "unread";
+
+      var list =
+        document.getElementById("notificationList");
+
+      var unreadFilterText =
+        document.getElementById("unreadFilterText");
+
+      var allCount =
+        document.getElementById("allCount");
+
+      var criticalCount =
+        document.getElementById("criticalCount");
+
+      var highCount =
+        document.getElementById("highCount");
+
+      var headerUnreadDot =
+        document.getElementById("headerUnreadDot");
+
+      var markAllReadBtn =
+        document.getElementById("markAllReadBtn");
+
+      var refreshBtn =
+        document.getElementById("refreshBtn");
+
+      function getArray(result) {
+
+        if (Array.isArray(result)) {
+          return result;
+        }
+
+        if (result && Array.isArray(result.data)) {
+          return result.data;
+        }
+
+        if (result && Array.isArray(result.items)) {
+          return result.items;
+        }
+
+        if (
+          result &&
+          Array.isArray(result.notifications)
+        ) {
+          return result.notifications;
+        }
+
+        return [];
+
+      }
+
+      function escapeHtml(value) {
+
+        return String(value == null ? "" : value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+
+      }
+
+      function normalize(value) {
+
+        return String(value || "")
+          .trim()
+          .toLowerCase();
+
+      }
+
+      function getPriority(notification) {
+
+        var priority =
+          notification.priority ||
+          notification.severity ||
+          notification.level ||
+          notification.type ||
+          "";
+
+        priority = normalize(priority);
+
+        if (
+          priority === "critical" ||
+          priority === "urgent" ||
+          priority === "danger"
+        ) {
+          return "critical";
+        }
+
+        if (
+          priority === "high" ||
+          priority === "important"
+        ) {
+          return "high";
+        }
+
+        var text =
+          normalize(
+            (notification.title || "") +
+            " " +
+            (notification.message || "")
+          );
+
+        if (
+          text.includes("blocked") ||
+          text.includes("suspended") ||
+          text.includes("violation") ||
+          text.includes("critical")
+        ) {
+          return "critical";
+        }
+
+        if (
+          text.includes("expir") ||
+          text.includes("maintenance") ||
+          text.includes("overdue") ||
+          text.includes("warning")
+        ) {
+          return "high";
+        }
+
+        return "normal";
+
+      }
+
+      function getIconClass(notification) {
+
+        var text =
+          normalize(
+            (notification.title || "") +
+            " " +
+            (notification.message || "")
+          );
+
+        if (
+          text.includes("maintenance") ||
+          text.includes("service")
+        ) {
+          return "icon-maintenance";
+        }
+
+        if (
+          text.includes("violation") ||
+          text.includes("blocked") ||
+          text.includes("critical") ||
+          text.includes("warning")
+        ) {
+          return "icon-critical";
+        }
+
+        if (
+          text.includes("document") ||
+          text.includes("insurance") ||
+          text.includes("certificate") ||
+          text.includes("expiry") ||
+          text.includes("expire")
+        ) {
+          return "icon-document";
+        }
+
+        if (
+          text.includes("driver") ||
+          text.includes("user")
+        ) {
+          return "icon-user";
+        }
+
+        if (
+          text.includes("vehicle")
+        ) {
+          return "icon-lock";
+        }
+
+        return "icon-document";
+
+      }
+
+      function getIconSvg(notification) {
+
+        var iconClass =
+          getIconClass(notification);
+
+        if (
+          iconClass === "icon-maintenance"
+        ) {
+
+          return `
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 1-5.7-3"></path>
+            </svg>
+          `;
+
+        }
+
+        if (
+          iconClass === "icon-critical"
+        ) {
+
+          return `
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M12 9v4"></path>
+              <path d="M12 17h.01"></path>
+              <path d="M10.3 3.9 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path>
+            </svg>
+          `;
+
+        }
+
+        if (
+          iconClass === "icon-user"
+        ) {
+
+          return `
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="9" cy="8" r="3"></circle>
+              <path d="M4 19a5 5 0 0 1 10 0"></path>
+              <circle cx="17.5" cy="10.5" r="2"></circle>
+            </svg>
+          `;
+
+        }
+
+        if (
+          iconClass === "icon-lock"
+        ) {
+
+          return `
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect height="10" rx="2" width="14" x="5" y="10"></rect>
+              <path d="M8 10V7a4 4 0 1 1 8 0v3"></path>
+            </svg>
+          `;
+
+        }
+
+        return `
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path>
+            <path d="M14 3v5h5"></path>
+          </svg>
+        `;
+
+      }
+
+      function formatTime(value) {
+
+        if (!value) {
+          return "Recently";
+        }
+
+        var date =
+          new Date(value);
+
+        if (
+          Number.isNaN(
+            date.getTime()
+          )
+        ) {
+          return String(value);
+        }
+
+        return date.toLocaleString(
+          "en-IN",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          }
+        );
+
+      }
+
+      function getNotificationTime(notification) {
+
+        return (
+          notification.time ||
+          notification.createdAt ||
+          notification.updatedAt ||
+          notification.timestamp ||
+          "Recently"
+        );
+
+      }
+
+      function matchesRole(notification) {
+
+        var target =
+          normalize(
+            notification.to ||
+            notification.role ||
+            notification.target ||
+            notification.recipient
+          );
+
+        if (!target) {
+          return true;
+        }
+
+        return (
+          target === ROLE ||
+          target === "fleet-manager" ||
+          target === "fleet manager" ||
+          target === "all" ||
+          target.includes("fleet")
+        );
+
+      }
+
+      function getTone(priority) {
+
+        if (priority === "critical") {
+          return "tone-olive";
+        }
+
+        if (priority === "high") {
+          return "tone-olive";
+        }
+
+        return "tone-dark";
+
+      }
+
+      function render() {
+
+        var unread =
+          notifications.filter(
+            function (n) {
+              return !n.read;
+            }
+          );
+
+        var critical =
+          notifications.filter(
+            function (n) {
+              return getPriority(n) === "critical";
+            }
+          );
+
+        var high =
+          notifications.filter(
+            function (n) {
+              return getPriority(n) === "high";
+            }
+          );
+
+        unreadFilterText.textContent =
+          unread.length + " Unread";
+
+        allCount.textContent =
+          notifications.length;
+
+        criticalCount.textContent =
+          critical.length;
+
+        highCount.textContent =
+          high.length;
+
+        headerUnreadDot.textContent =
+          unread.length;
+
+        var filtered =
+          notifications.filter(
+            function (notification) {
+
+              if (
+                currentFilter === "unread"
+              ) {
+                return !notification.read;
+              }
+
+              if (
+                currentFilter === "critical"
+              ) {
+                return (
+                  getPriority(notification) ===
+                  "critical"
+                );
+              }
+
+              if (
+                currentFilter === "high"
+              ) {
+                return (
+                  getPriority(notification) ===
+                  "high"
+                );
+              }
+
+              return true;
+
+            }
+          );
+
+        if (!filtered.length) {
+
+          list.innerHTML = `
+            <div
+              style="
+                padding:50px 24px;
+                text-align:center;
+                color:#9e9e9e;
+              "
+            >
+              <div
+                style="
+                  font-size:18px;
+                  font-weight:700;
+                  color:#fff;
+                  margin-bottom:8px;
+                "
+              >
+                No notifications found
+              </div>
+
+              <div>
+                There are no notifications in this category.
+              </div>
+            </div>
+          `;
+
+          return;
+
+        }
+
+        list.innerHTML =
+          filtered.map(
+            function (notification) {
+
+              var title =
+                notification.title ||
+                notification.subject ||
+                "Notification";
+
+              var message =
+                notification.message ||
+                notification.description ||
+                notification.body ||
+                "No additional details available.";
+
+              var priority =
+                getPriority(notification);
+
+              var time =
+                getNotificationTime(notification);
+
+              var id =
+                notification.id ||
+                notification.notificationId ||
+                "";
+
+              var tag =
+                notification.category ||
+                notification.type ||
+                notification.event ||
+                "";
+
+              var read =
+                Boolean(notification.read);
+
+              return `
+                <article
+                  class="notif-card ${getTone(priority)}"
+                  data-notification-id="${escapeHtml(id)}"
+                >
+
+                  <div
+                    class="
+                      notif-card-icon
+                      ${getIconClass(notification)}
+                    "
+                  >
+                    ${getIconSvg(notification)}
+                  </div>
+
+                  <div class="notif-card-main">
+
+                    <div class="notif-card-title-row">
+
+                      <h3>
+                        ${escapeHtml(title)}
+
+                        ${
+                          !read
+                            ? `<span class="title-dot"></span>`
+                            : ""
+                        }
+
+                      </h3>
+
+                      ${
+                        priority !== "normal"
+                          ? `
+                            <span
+                              class="
+                                notif-level
+                                ${priority}
+                              "
+                            >
+                              ${
+                                priority === "critical"
+                                  ? "Critical"
+                                  : "High"
+                              }
+                            </span>
+                          `
+                          : ""
+                      }
+
+                    </div>
+
+                    <p>
+                      ${escapeHtml(message)}
+                    </p>
+
+                    <div class="notif-tags">
+
+                      ${
+                        tag
+                          ? `
+                            <span class="tag yellow">
+                              ${escapeHtml(tag)}
+                            </span>
+                          `
+                          : ""
+                      }
+
+                      ${
+                        notification.vehicleId
+                          ? `
+                            <span class="meta-code">
+                              ${escapeHtml(
+                                notification.vehicleId
+                              )}
+                            </span>
+                          `
+                          : ""
+                      }
+
+                      ${
+                        notification.driverId
+                          ? `
+                            <span class="meta-code">
+                              ${escapeHtml(
+                                notification.driverId
+                              )}
+                            </span>
+                          `
+                          : ""
+                      }
+
+                    </div>
+
+                  </div>
+
+                  <div class="notif-time">
+
+                    <span>
+                      ${escapeHtml(
+                        formatTime(time)
+                      )}
+                    </span>
+
+                    ${
+                      notification.createdAt
+                        ? `
+                          <span>
+                            ${escapeHtml(
+                              new Date(
+                                notification.createdAt
+                              ).toLocaleDateString(
+                                "en-IN",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                }
+                              )
+                            )}
+                          </span>
+                        `
+                        : ""
+                    }
+
+                    <button
+                      aria-label="Dismiss notification"
+                      type="button"
+                      class="dismiss-notification"
+                      data-dismiss-id="${escapeHtml(id)}"
+                    >
+                      ×
+                    </button>
+
+                  </div>
+
+                </article>
+              `;
+
+            }
+          ).join("");
+
+      }
+
+      async function loadNotifications() {
+
+        try {
+
+          list.innerHTML = `
+            <div
+              style="
+                padding:40px;
+                text-align:center;
+                color:#9e9e9e;
+              "
+            >
+              Loading notifications...
+            </div>
+          `;
+
+          var result;
+
+          /*
+           * Prefer the shared API client when available.
+           * The direct fetch fallback guarantees the Fleet Manager
+           * role is explicitly sent to the backend.
+           */
+
+          if (
+            window.DeliverySyncAPI &&
+            DeliverySyncAPI.Notifications &&
+            DeliverySyncAPI.Notifications.getAll
+          ) {
+
+            result =
+              await DeliverySyncAPI.Notifications.getAll();
+
+          } else {
+
+            var response =
+              await fetch(
+                "http://localhost:3000/api/notifications",
+                {
+                  method: "GET",
+                  headers: {
+                    "x-user-role": ROLE
+                  }
+                }
+              );
+
+            if (!response.ok) {
+
+              throw new Error(
+                "GET /api/notifications failed with status " +
+                response.status
+              );
+
+            }
+
+            result =
+              await response.json();
+
+          }
+
+          var backendNotifications =
+            getArray(result);
+
+          notifications =
+            backendNotifications.filter(
+              matchesRole
+            );
+
+          console.table({
+            source:
+              "GET /api/notifications",
+
+            role:
+              ROLE,
+
+            backendNotifications:
+              backendNotifications.length,
+
+            fleetManagerNotifications:
+              notifications.length,
+
+            unread:
+              notifications.filter(
+                function (n) {
+                  return !n.read;
+                }
+              ).length
+          });
+
+          render();
+
+        } catch (error) {
+
+          console.error(
+            "Fleet Manager notifications backend error:",
+            error
+          );
+
+          list.innerHTML = `
+            <div
+              style="
+                padding:32px;
+                text-align:center;
+                background:#331717;
+                border:1px solid #ef4444;
+                color:#fecaca;
+              "
+            >
+              <div
+                style="
+                  font-size:17px;
+                  font-weight:800;
+                  margin-bottom:6px;
+                "
+              >
+                Unable to load notifications
+              </div>
+
+              <div>
+                ${escapeHtml(
+                  error.message ||
+                  "Backend request failed."
+                )}
+              </div>
+            </div>
+          `;
+
+        }
+
+      }
+
+      async function markAllRead() {
+
+        try {
+
+          markAllReadBtn.disabled =
+            true;
+
+          markAllReadBtn.textContent =
+            "Marking as Read...";
+
+          var response;
+
+          if (
+            window.DeliverySyncAPI &&
+            DeliverySyncAPI.Notifications &&
+            DeliverySyncAPI.Notifications.markRead
+          ) {
+
+            response =
+              await DeliverySyncAPI.Notifications.markRead();
+
+          } else {
+
+            var result =
+              await fetch(
+                "http://localhost:3000/api/notifications/mark-read",
+                {
+                  method: "PATCH",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json",
+
+                    "x-user-role":
+                      ROLE
+                  },
+
+                  body: JSON.stringify({
+                    to: ROLE
+                  })
+                }
+              );
+
+            if (!result.ok) {
+
+              throw new Error(
+                "PATCH /api/notifications/mark-read failed with status " +
+                result.status
+              );
+
+            }
+
+            response =
+              await result.json();
+
+          }
+
+          console.log(
+            "Fleet Manager mark-read response:",
+            response
+          );
+
+          /*
+           * Reload from backend so the UI reflects
+           * the actual backend state.
+           */
+          await loadNotifications();
+
+          markAllReadBtn.textContent =
+            "All Notifications Read";
+
+          setTimeout(
+            function () {
+              markAllReadBtn.textContent =
+                "Mark All as Read";
+            },
+            1200
+          );
+
+        } catch (error) {
+
+          console.error(
+            "Fleet Manager mark-read error:",
+            error
+          );
+
+          markAllReadBtn.textContent =
+            "Mark All as Read";
+
+          alert(
+            "Unable to mark notifications as read."
+          );
+
+        } finally {
+
+          markAllReadBtn.disabled =
+            false;
+
+        }
+
+      }
+
+      document
+        .querySelectorAll(".notif-filter")
+        .forEach(
+          function (button) {
+
+            button.addEventListener(
+              "click",
+              function () {
+
+                document
+                  .querySelectorAll(
+                    ".notif-filter"
+                  )
+                  .forEach(
+                    function (item) {
+                      item.classList.remove(
+                        "active"
+                      );
+                    }
+                  );
+
+                button.classList.add(
+                  "active"
+                );
+
+                currentFilter =
+                  button.dataset.filter ||
+                  "all";
+
+                render();
+
+              }
+            );
+
+          }
+        );
+
+      markAllReadBtn.addEventListener(
+        "click",
+        markAllRead
+      );
+
+      refreshBtn.addEventListener(
+        "click",
+        loadNotifications
+      );
+
+      /*
+       * Dismiss is intentionally local only.
+       * It does not call a backend DELETE endpoint.
+       */
+      list.addEventListener(
+        "click",
+        function (event) {
+
+          var button =
+            event.target.closest(
+              ".dismiss-notification"
+            );
+
+          if (!button) {
+            return;
+          }
+
+          var id =
+            button.dataset.dismissId;
+
+          var card =
+            button.closest(
+              ".notif-card"
+            );
+
+          if (card) {
+            card.remove();
+          }
+
+          if (id) {
+
+            notifications =
+              notifications.filter(
+                function (notification) {
+
+                  var notificationId =
+                    notification.id ||
+                    notification.notificationId ||
+                    "";
+
+                  return (
+                    String(notificationId) !==
+                    String(id)
+                  );
+
+                }
+              );
+
+            render();
+
+          }
+
+        }
+      );
+
+      loadNotifications();
+
+    })();
+  </script>
+
+</body>
+</html>

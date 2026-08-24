@@ -1,947 +1,858 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Driver Dashboard | DeliverSync</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../assets/css/brand-logo.css" />
-  <link rel="stylesheet" href="../assets/css/driver.css" />
+  <link rel="stylesheet" href="../assets/css/brand-logo.css">
+  <link rel="stylesheet" href="../assets/css/driver-desktop.css">
 
-  <script src="../assets/js/data.js"></script>
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+
+  <style>
+
+/* Dashboard-specific styles */
+.dashboard-content{
+  padding-top:20px;
+}
+
+.driver-stats{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+}
+
+.driver-stat-card{
+  background:linear-gradient(135deg,#1f1f1f,#111);
+  border:1px solid #262626;
+  border-radius:18px;
+  padding:22px;
+}
+
+.driver-stat-card.yellow{
+  background:#ffd400;
+  color:#000;
+}
+
+.driver-stat-icon{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  background:rgba(255,212,0,.12);
+  border:1px solid rgba(255,212,0,.35);
+  color:#ffd400;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
+}
+
+.driver-stat-card.yellow .driver-stat-icon{
+  color:#000;
+  background:rgba(0,0,0,.08);
+  border-color:rgba(0,0,0,.15);
+}
+
+.driver-stat-card h3{
+  margin:0;
+  font-size:38px;
+  line-height:1;
+}
+
+.driver-stat-card p{
+  margin:10px 0 0;
+  color:#9ca3af;
+}
+
+.driver-stat-card.yellow p{
+  color:#111;
+}
+
+.dashboard-section-heading{
+  margin-top:24px;
+  margin-bottom:6px;
+}
+
+.dashboard-section-heading h2{
+  margin:0 0 6px;
+  font-size:32px;
+}
+
+.dashboard-section-heading p{
+  color:#9ca3af;
+  margin:0;
+}
+
+.driver-search-wrap{
+  margin:18px 0;
+  background:#171717;
+  border:1px solid #262626;
+  border-radius:16px;
+  padding:16px;
+}
+
+.driver-search-wrap input{
+  width:100%;
+  height:44px;
+  max-width:450px;
+  border:1px solid #262626;
+  border-radius:12px;
+  background:#050505;
+  color:#fff;
+  padding:0 14px;
+  outline:none;
+}
+
+.delivery-card{
+  background:linear-gradient(135deg,#1b1b1b,#111);
+  border:1px solid #262626;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:16px;
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:20px;
+}
+
+.delivery-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.delivery-title h2{
+  margin:0;
+  font-size:26px;
+}
+
+.status-pill{
+  background:rgba(255,212,0,.16);
+  color:#ffd400;
+  border:1px solid rgba(255,212,0,.35);
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.route-block{
+  display:grid;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.route-line{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.dot{
+  width:14px;
+  height:14px;
+  border-radius:999px;
+  background:#ffd400;
+  margin-top:4px;
+  box-shadow:0 0 0 4px rgba(255,212,0,.18);
+}
+
+.label{
+  color:#9ca3af;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:800;
+}
+
+.value{
+  margin-top:4px;
+  font-weight:900;
+  color:#fff;
+}
+
+.delivery-meta{
+  border-top:1px solid #262626;
+  padding-top:14px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.package-box{
+  border:1px solid #262626;
+  border-radius:16px;
+  padding:16px;
+  background:#101010;
+}
+
+.actions{
+  margin-top:16px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:none;
+  border-radius:12px;
+  padding:12px 18px;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .15s ease,opacity .15s ease;
+}
+
+.btn:hover{transform:translateY(-1px)}
+.btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.btn-yellow{background:#ffd400;color:#000}
+.btn-red{background:#321717;color:#fecaca;border:1px solid #ef4444}
+.btn-dark{background:#0b0b0b;color:#fff;border:1px solid #262626}
+
+@media (max-width:1200px){
+  .driver-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width:1000px){
+  .driver-stats{grid-template-columns:1fr 1fr}
+  .delivery-card{grid-template-columns:1fr}
+}
+
+@media (max-width:700px){
+  .driver-stats{grid-template-columns:1fr}
+  .delivery-meta{grid-template-columns:1fr}
+}
+.icon-circle{
+  width:44px;
+  height:44px;
+  border:1px solid #292929;
+  border-radius:14px;
+  background:#111;
+  color:#f5f5f5;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.icon-circle svg{
+  display:block;
+}
+
+.icon-badge{
+  position:absolute;
+  top:7px;
+  right:7px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ffd400;
+}
+
+  </style>
 </head>
 
-<body class="driver-body" data-page="dashboard">
-  <div class="driver-layout">
-    <aside class="driver-sidebar">
-      <div class="driver-brand">
-        <div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Driver Portal"></div>
-      </div>
+<body class="driver-desktop-page" data-page="dashboard">
+  <div class="driver-shell">
 
-      <nav class="driver-nav">
-        <a href="dashboard.html" class="active">
-          <span>▦</span>
+    <aside class="driver-sidebar">
+      <div class="ds-brand-logo"
+           data-href="dashboard.html"
+           data-size="sm"
+           data-sub="Driver Portal"></div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link active" data-nav="dashboard" href="dashboard.html">
+          <span class="nav-icon icon-dashboard"></span>
           <span>Dashboard</span>
         </a>
 
-        <a href="map.html">
-          <span>☷</span>
+        <a class="nav-link" data-nav="map" href="map.html">
+          <span class="nav-icon icon-map"></span>
           <span>Map</span>
         </a>
 
-        <a href="history.html">
-          <span>◷</span>
+        <a class="nav-link" data-nav="history" href="history.html">
+          <span class="nav-icon icon-history"></span>
           <span>History</span>
         </a>
 
-        <a href="notifications.html">
-          <span>♢</span>
+        <a class="nav-link" data-nav="notifications" href="notifications.html">
+          <span class="nav-icon icon-notifications"></span>
           <span>Notifications</span>
         </a>
 
-        <a href="earnings.html">
-          <span>$</span>
+        <a class="nav-link" data-nav="earnings" href="earnings.html">
+          <span class="nav-icon icon-earnings"></span>
           <span>Earnings</span>
         </a>
 
-        <a href="profile.html">
-          <span>♙</span>
+        <a class="nav-link" data-nav="profile" href="profile.html">
+          <span class="nav-icon icon-profile"></span>
           <span>Profile</span>
         </a>
       </nav>
 
-      <div class="spacer"></div>
-
-      <a class="driver-logout" href="../login.html">
-        <span>↢</span>
-        <span>Logout</span>
-      </a>
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="driverLogout" type="button">
+          <span>Logout</span>
+        </button>
+      </div>
     </aside>
 
     <main class="driver-main">
-      <header class="driver-topbar">
-        <div>
-          <h2 id="driverGreeting">Hello, Driver</h2>
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="driverGreeting">Hello, Driver</h1>
           <p>Ready for today's deliveries</p>
         </div>
 
-        <div class="driver-profile-mini">
-          <button class="driver-bell" type="button">🔔</button>
-          <div class="driver-mini-avatar" id="driverAvatar">R</div>
-          <div>
-            <strong id="driverNameTop">Loading...</strong>
-            <p id="driverEmailTop">driver@deliverysync.com</p>
+        <div class="topbar-right">
+          <div id="notifWrap" style="position:relative">
+  <a class="icon-circle" href="notifications.html" aria-label="Notifications">
+
+    <svg
+      width="21"
+      height="21"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="M18 9C18 5.686 15.314 3 12 3C8.686 3 6 5.686 6 9V13.2C6 14.054 5.728 14.885 5.224 15.574L4 17.25H20L18.776 15.574C18.272 14.885 18 14.054 18 13.2V9Z"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+
+      <path
+        d="M9.5 20C10.1 20.62 11 21 12 21C13 21 13.9 20.62 14.5 20"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+    </svg>
+
+    <span class="icon-badge"></span>
+
+  </a>
+
+  <div class="dropdown" id="notifMenu"></div>
+</div>
+
+          <div id="profileWrap" class="profile-menu" style="position:relative">
+            <button class="profile-chip" id="profileBtn" type="button">
+              <div class="profile-avatar" id="profileInitial">R</div>
+              <div>
+                <div id="quickProfileName" style="font-weight:800">Driver</div>
+                <div id="quickProfileEmail" style="font-size:12px;color:#9e9e9e">
+                  driver@deliverysync.com
+                </div>
+              </div>
+            </button>
+
+            <div class="dropdown" id="profileMenu">
+              <div class="dropdown-item">
+                <strong>Driver Quick Actions</strong>
+                <small><a href="profile.html">Edit profile</a></small>
+                <small><a href="dashboard.html">View dashboard</a></small>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
-      <section class="driver-content">
-        <div
-          id="backendVerification"
-          style="
-            margin-bottom: 24px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            background: #111827;
-            border: 1px solid #1f2937;
-            color: #d1d5db;
-            font-size: 14px;
-          "
-        >
-          Verifying backend driver trips...
-        </div>
-
+      <section class="content dashboard-content">
         <div class="driver-stats">
-          <div class="driver-stat-card">
-            <div class="driver-stat-icon">▣</div>
-            <h3 id="todayCount">0</h3>
-            <p>Today's Deliveries</p>
+            <div class="driver-stat-card">
+              <div class="driver-stat-icon">▣</div>
+              <h3 id="todayCount">0</h3>
+              <p>Today's Deliveries</p>
+            </div>
+
+            <div class="driver-stat-card">
+              <div class="driver-stat-icon">☑</div>
+              <h3 id="completedCount">0</h3>
+              <p>Completed</p>
+            </div>
+
+            <div class="driver-stat-card">
+              <div class="driver-stat-icon">◷</div>
+              <h3 id="pendingCount">0</h3>
+              <p>Pending</p>
+            </div>
+
+            <div class="driver-stat-card yellow">
+              <div class="driver-stat-icon">●</div>
+              <h3 id="driverStatus">Active</h3>
+              <p>Driver Status</p>
+            </div>
           </div>
 
-          <div class="driver-stat-card">
-            <div class="driver-stat-icon">☑</div>
-            <h3 id="completedCount">0</h3>
-            <p>Completed</p>
+          <div class="dashboard-section-heading">
+            <h2>Assigned Deliveries</h2>
+            <p style="color:#9ca3af;margin-top:0">
+              Accept or continue active deliveries directly from the dashboard.
+            </p>
           </div>
 
-          <div class="driver-stat-card">
-            <div class="driver-stat-icon">◷</div>
-            <h3 id="pendingCount">0</h3>
-            <p>Pending</p>
+          <div class="driver-search-wrap">
+            <input id="searchInput" type="text" placeholder="Search by ID, customer, location..." />
           </div>
 
-          <div class="driver-stat-card yellow">
-            <div class="driver-stat-icon">●</div>
-            <h3 id="driverStatus">Active</h3>
-            <p>Driver Status</p>
+          <div id="assignedDeliveriesList">
+            <div style="padding:24px;background:#171717;border:1px solid #262626;border-radius:16px;color:#9ca3af;text-align:center">
+              Loading assigned deliveries...
+            </div>
           </div>
-        </div>
-
-        <div style="margin-top:24px">
-          <h1 style="margin-bottom:6px">Assigned Deliveries</h1>
-          <p style="color:#9ca3af;margin-top:0">
-            Accept or continue active deliveries directly from the dashboard.
-          </p>
-        </div>
-
-        <div class="driver-search-wrap">
-          <input id="searchInput" type="text" placeholder="Search by ID, customer, location..." />
-        </div>
-
-        <div id="assignedDeliveriesList">
-          <div style="padding:24px;background:#171717;border:1px solid #262626;border-radius:16px;color:#9ca3af;text-align:center">
-            Loading assigned deliveries from backend...
-          </div>
-        </div>
       </section>
+
     </main>
   </div>
 
-  <style>
-    .driver-body {
-      margin: 0;
-      background: #050505;
-      color: #fff;
-      font-family: Inter, sans-serif;
-    }
-
-    .driver-layout {
-      display: grid;
-      grid-template-columns: 210px 1fr;
-      min-height: 100vh;
-    }
-
-    .driver-sidebar {
-      background: #050505;
-      border-right: 1px solid #1f1f1f;
-      display: flex;
-      flex-direction: column;
-      padding: 18px 12px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-    }
-
-    .driver-brand {
-      margin-bottom: 28px;
-    }
-
-    .driver-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .driver-nav a,
-    .driver-logout {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 12px 14px;
-      color: #d1d5db;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .driver-nav a.active,
-    .driver-nav a:hover {
-      background: #ffd400;
-      color: #000;
-    }
-
-    .spacer {
-      flex: 1;
-    }
-
-    .driver-main {
-      padding: 22px;
-    }
-
-    .driver-topbar {
-      background: linear-gradient(135deg, #1f1f1f, #111);
-      border: 1px solid #262626;
-      border-radius: 18px;
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .driver-topbar h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .driver-topbar p {
-      margin: 6px 0 0;
-      color: #9ca3af;
-      font-size: 13px;
-    }
-
-    .driver-profile-mini {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #101010;
-      border: 1px solid #262626;
-      padding: 10px 14px;
-      border-radius: 14px;
-    }
-
-    .driver-bell {
-      background: #111827;
-      border: 1px solid #262626;
-      color: #ffd400;
-      border-radius: 12px;
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .driver-mini-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      background: #ffd400;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-    }
-
-    .driver-content {
-      margin-top: 28px;
-    }
-
-    .driver-stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .driver-stat-card {
-      background: linear-gradient(135deg, #1f1f1f, #111);
-      border: 1px solid #262626;
-      border-radius: 18px;
-      padding: 22px;
-    }
-
-    .driver-stat-card.yellow {
-      background: #ffd400;
-      color: #000;
-    }
-
-    .driver-stat-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: rgba(255, 212, 0, 0.12);
-      border: 1px solid rgba(255, 212, 0, 0.35);
-      color: #ffd400;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 14px;
-    }
-
-    .driver-stat-card.yellow .driver-stat-icon {
-      color: #000;
-      background: rgba(0,0,0,0.08);
-      border-color: rgba(0,0,0,0.15);
-    }
-
-    .driver-stat-card h3 {
-      margin: 0;
-      font-size: 38px;
-      line-height: 1;
-    }
-
-    .driver-stat-card p {
-      margin: 10px 0 0;
-      color: #9ca3af;
-    }
-
-    .driver-stat-card.yellow p {
-      color: #111;
-    }
-
-    .driver-search-wrap {
-      margin: 18px 0;
-      background: #171717;
-      border: 1px solid #262626;
-      border-radius: 16px;
-      padding: 16px;
-    }
-
-    .driver-search-wrap input {
-      width: 100%;
-      height: 44px;
-      max-width: 340px;
-      border: 1px solid #262626;
-      border-radius: 12px;
-      background: #050505;
-      color: #fff;
-      padding: 0 14px;
-      outline: none;
-    }
-
-    .delivery-card {
-      background: linear-gradient(135deg, #1b1b1b, #111);
-      border: 1px solid #262626;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 16px;
-      display: grid;
-      grid-template-columns: 1fr 220px;
-      gap: 20px;
-    }
-
-    .delivery-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    .delivery-title h2 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    .status-pill {
-      background: rgba(255, 212, 0, 0.16);
-      color: #ffd400;
-      border: 1px solid rgba(255, 212, 0, 0.35);
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .route-block {
-      display: grid;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .route-line {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      background: #ffd400;
-      margin-top: 4px;
-      box-shadow: 0 0 0 4px rgba(255,212,0,0.18);
-    }
-
-    .label {
-      color: #9ca3af;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-weight: 800;
-    }
-
-    .value {
-      margin-top: 4px;
-      font-weight: 900;
-      color: #fff;
-    }
-
-    .delivery-meta {
-      border-top: 1px solid #262626;
-      padding-top: 14px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .package-box {
-      border: 1px solid #262626;
-      border-radius: 16px;
-      padding: 16px;
-      background: #101010;
-    }
-
-    .actions {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-weight: 900;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s ease, opacity 0.15s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-yellow {
-      background: #ffd400;
-      color: #000;
-    }
-
-    .btn-red {
-      background: #321717;
-      color: #fecaca;
-      border: 1px solid #ef4444;
-    }
-
-    .btn-dark {
-      background: #0b0b0b;
-      color: #fff;
-      border: 1px solid #262626;
-    }
-
-    @media (max-width: 1000px) {
-      .driver-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .driver-sidebar {
-        position: relative;
-        height: auto;
-      }
-
-      .driver-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .delivery-card {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <script src="../assets/js/driver-desktop.js"></script>
 
   <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      const DRIVER_NAME = "Raghav Reddy";
-      const DRIVER_EMAIL = "driver@deliverysync.com";
-      const ROLE = "driver";
+      document.addEventListener("DOMContentLoaded", async () => {
+        const DRIVER_NAME = "Raghav Reddy";
+        const DRIVER_EMAIL = "driver@deliverysync.com";
+        const ROLE = "driver";
 
-      let allTrips = [];
-      let deliveries = [];
-      let activeTrips = [];
-      let completedTrips = [];
-      let pendingTrips = [];
-      let filteredTrips = [];
+        let allTrips = [];
+        let deliveries = [];
+        let activeTrips = [];
+        let completedTrips = [];
+        let pendingTrips = [];
+        let filteredTrips = [];
 
-      const list = document.getElementById("assignedDeliveriesList");
-      const searchInput = document.getElementById("searchInput");
+        const list = document.getElementById("assignedDeliveriesList");
+        const searchInput = document.getElementById("searchInput");
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
+        
 
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+        const getArray = (result) => {
+          if (Array.isArray(result)) return result;
+          if (Array.isArray(result?.data)) return result.data;
+          if (Array.isArray(result?.items)) return result.items;
+          if (Array.isArray(result?.trips)) return result.trips;
+          if (Array.isArray(result?.deliveries)) return result.deliveries;
+          return [];
+        };
 
-      const getArray = (result) => {
-        if (Array.isArray(result)) return result;
-        if (Array.isArray(result?.data)) return result.data;
-        if (Array.isArray(result?.items)) return result.items;
-        if (Array.isArray(result?.trips)) return result.trips;
-        if (Array.isArray(result?.deliveries)) return result.deliveries;
-        return [];
-      };
+        const normalize = (value) => String(value || "").trim().toLowerCase();
 
-      const normalize = (value) => String(value || "").trim().toLowerCase();
+        const esc = (value) => {
+          return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        };
 
-      const esc = (value) => {
-        return String(value ?? "")
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      };
+        const isAssignedToDriver = (trip) => {
+          const driver = normalize(trip.driver || trip.assignedDriver || trip.driverName);
+          return driver === normalize(DRIVER_NAME);
+        };
 
-      const isAssignedToDriver = (trip) => {
-        const driver = normalize(trip.driver || trip.assignedDriver || trip.driverName);
-        return driver === normalize(DRIVER_NAME);
-      };
+        const isCompletedTrip = (trip) => {
+          const status = normalize(trip.status);
 
-      const isCompletedTrip = (trip) => {
-        const status = normalize(trip.status);
+          return [
+            "completed",
+            "delivered"
+          ].includes(status);
+        };
 
-        return [
-          "completed",
-          "delivered"
-        ].includes(status);
-      };
+        const isClosedTrip = (trip) => {
+          const status = normalize(trip.status);
 
-      const isClosedTrip = (trip) => {
-        const status = normalize(trip.status);
+          return [
+            "completed",
+            "delivered",
+            "rejected",
+            "cancelled",
+            "canceled"
+          ].includes(status);
+        };
 
-        return [
-          "completed",
-          "delivered",
-          "rejected",
-          "cancelled",
-          "canceled"
-        ].includes(status);
-      };
+        const isPendingTrip = (trip) => {
+          const status = normalize(trip.status);
 
-      const isPendingTrip = (trip) => {
-        const status = normalize(trip.status);
+          return [
+            "assigned",
+            "pending",
+            "queued",
+            "delayed",
+            "issue reported"
+          ].includes(status);
+        };
 
-        return [
-          "assigned",
-          "pending",
-          "queued",
-          "delayed",
-          "issue reported"
-        ].includes(status);
-      };
+        const getDeliveryForTrip = (trip) => {
+          const requestId =
+            trip.request ||
+            trip.deliveryId ||
+            trip.deliveryRequestId;
 
-      const getDeliveryForTrip = (trip) => {
-        const requestId =
-          trip.request ||
-          trip.deliveryId ||
-          trip.deliveryRequestId;
+          return (
+            deliveries.find((d) => String(d.id) === String(requestId)) ||
+            deliveries.find((d) => String(d.deliveryId) === String(requestId)) ||
+            null
+          );
+        };
 
-        return (
-          deliveries.find((d) => String(d.id) === String(requestId)) ||
-          deliveries.find((d) => String(d.deliveryId) === String(requestId)) ||
-          null
-        );
-      };
+        const updateTripStatusInBackend = async (id, status) => {
+          const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(id)}/status`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "x-user-role": ROLE,
+            },
+            body: JSON.stringify({ status }),
+          });
 
-      const updateTripStatusInBackend = async (id, status) => {
-        const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(id)}/status`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            "x-user-role": ROLE,
-          },
-          body: JSON.stringify({ status }),
-        });
+          if (!response.ok) {
+            throw new Error(`Trip status update failed with status ${response.status}`);
+          }
 
-        if (!response.ok) {
-          throw new Error(`Trip status update failed with status ${response.status}`);
-        }
+          return response.json();
+        };
 
-        return response.json();
-      };
+        const fetchTrips = async () => {
+          if (window.DeliverySyncAPI?.Trips?.getAll) {
+            return getArray(await DeliverySyncAPI.Trips.getAll());
+          }
 
-      const fetchTrips = async () => {
-        if (window.DeliverySyncAPI?.Trips?.getAll) {
-          return getArray(await DeliverySyncAPI.Trips.getAll());
-        }
+          const response = await fetch("http://localhost:3000/api/trips", {
+            headers: {
+              "x-user-role": ROLE,
+            },
+          });
 
-        const response = await fetch("http://localhost:3000/api/trips", {
-          headers: {
-            "x-user-role": ROLE,
-          },
-        });
+          if (!response.ok) {
+            throw new Error(`Trips fetch failed with status ${response.status}`);
+          }
 
-        if (!response.ok) {
-          throw new Error(`Trips fetch failed with status ${response.status}`);
-        }
+          return getArray(await response.json());
+        };
 
-        return getArray(await response.json());
-      };
+        const fetchDeliveries = async () => {
+          if (window.DeliverySyncAPI?.Deliveries?.getAll) {
+            return getArray(await DeliverySyncAPI.Deliveries.getAll());
+          }
 
-      const fetchDeliveries = async () => {
-        if (window.DeliverySyncAPI?.Deliveries?.getAll) {
-          return getArray(await DeliverySyncAPI.Deliveries.getAll());
-        }
+          const response = await fetch("http://localhost:3000/api/deliveries", {
+            headers: {
+              "x-user-role": ROLE,
+            },
+          });
 
-        const response = await fetch("http://localhost:3000/api/deliveries", {
-          headers: {
-            "x-user-role": ROLE,
-          },
-        });
+          if (!response.ok) {
+            throw new Error(`Deliveries fetch failed with status ${response.status}`);
+          }
 
-        if (!response.ok) {
-          throw new Error(`Deliveries fetch failed with status ${response.status}`);
-        }
+          return getArray(await response.json());
+        };
 
-        return getArray(await response.json());
-      };
+        const splitTrips = () => {
+          const driverTrips = allTrips.filter(isAssignedToDriver);
 
-      const splitTrips = () => {
-        const driverTrips = allTrips.filter(isAssignedToDriver);
+          activeTrips = driverTrips.filter((trip) => !isClosedTrip(trip));
+          completedTrips = driverTrips.filter(isCompletedTrip);
+          pendingTrips = activeTrips.filter(isPendingTrip);
 
-        activeTrips = driverTrips.filter((trip) => !isClosedTrip(trip));
-        completedTrips = driverTrips.filter(isCompletedTrip);
-        pendingTrips = activeTrips.filter(isPendingTrip);
+          filteredTrips = [...activeTrips];
+        };
 
-        filteredTrips = [...activeTrips];
-      };
+        const renderStats = () => {
+          document.getElementById("todayCount").textContent = activeTrips.length;
+          document.getElementById("completedCount").textContent = completedTrips.length;
+          document.getElementById("pendingCount").textContent = pendingTrips.length;
+          document.getElementById("driverStatus").textContent = "Active";
 
-      const renderStats = () => {
-        document.getElementById("todayCount").textContent = activeTrips.length;
-        document.getElementById("completedCount").textContent = completedTrips.length;
-        document.getElementById("pendingCount").textContent = pendingTrips.length;
-        document.getElementById("driverStatus").textContent = "Active";
+          document.getElementById("driverGreeting").textContent = `Hello, ${DRIVER_NAME.split(" ")[0]}`;
+          document.getElementById("quickProfileName").textContent = DRIVER_NAME;
+          document.getElementById("quickProfileEmail").textContent = DRIVER_EMAIL;
+          document.getElementById("profileInitial").textContent = DRIVER_NAME[0] || "R";
+        };
 
-        document.getElementById("driverGreeting").textContent = `Hello, ${DRIVER_NAME.split(" ")[0]}`;
-        document.getElementById("driverNameTop").textContent = DRIVER_NAME;
-        document.getElementById("driverEmailTop").textContent = DRIVER_EMAIL;
-        document.getElementById("driverAvatar").textContent = DRIVER_NAME[0] || "R";
-      };
+        const renderTrips = () => {
+          if (!filteredTrips.length) {
+            list.innerHTML = `
+              <div style="padding:24px;background:#171717;border:1px solid #262626;border-radius:16px;color:#9ca3af;text-align:center">
+                No active assigned deliveries found.
+                Completed deliveries are now shown only in History.
+              </div>
+            `;
+            return;
+          }
 
-      const renderTrips = () => {
-        if (!filteredTrips.length) {
-          list.innerHTML = `
-            <div style="padding:24px;background:#171717;border:1px solid #262626;border-radius:16px;color:#9ca3af;text-align:center">
-              No active assigned deliveries found from backend.
-              Completed deliveries are now shown only in History.
-            </div>
-          `;
-          return;
-        }
+          list.innerHTML = filteredTrips
+            .map((trip) => {
+              const delivery = getDeliveryForTrip(trip);
 
-        list.innerHTML = filteredTrips
-          .map((trip) => {
-            const delivery = getDeliveryForTrip(trip);
+              const id = trip.id || trip.tripId || "--";
+              const deliveryId =
+                trip.request ||
+                trip.deliveryId ||
+                trip.deliveryRequestId ||
+                delivery?.id ||
+                id;
 
-            const id = trip.id || trip.tripId || "--";
-            const deliveryId =
-              trip.request ||
-              trip.deliveryId ||
-              trip.deliveryRequestId ||
-              delivery?.id ||
-              id;
+              const pickup =
+                trip.pickup ||
+                trip.pickupLocation ||
+                delivery?.pickup ||
+                "Pickup not available";
 
-            const pickup =
-              trip.pickup ||
-              trip.pickupLocation ||
-              delivery?.pickup ||
-              "Pickup not available";
+              const drop =
+                trip.destination ||
+                trip.dropoff ||
+                trip.dropLocation ||
+                delivery?.dropoff ||
+                delivery?.destination ||
+                "Destination not available";
 
-            const drop =
-              trip.destination ||
-              trip.dropoff ||
-              trip.dropLocation ||
-              delivery?.dropoff ||
-              delivery?.destination ||
-              "Destination not available";
+              const customer =
+                trip.customer ||
+                trip.client ||
+                trip.customerName ||
+                trip.clientName ||
+                delivery?.customer ||
+                delivery?.client ||
+                delivery?.company ||
+                delivery?.businessName ||
+                "Customer not available";
 
-            const customer =
-              trip.customer ||
-              trip.client ||
-              trip.customerName ||
-              trip.clientName ||
-              delivery?.customer ||
-              delivery?.client ||
-              delivery?.company ||
-              delivery?.businessName ||
-              "Customer not available";
+              const eta =
+                trip.eta ||
+                trip.estimatedTime ||
+                delivery?.eta ||
+                "35 mins";
 
-            const eta =
-              trip.eta ||
-              trip.estimatedTime ||
-              delivery?.eta ||
-              "35 mins";
+              const distance =
+                trip.distance ||
+                delivery?.distance ||
+                "Distance not available";
 
-            const distance =
-              trip.distance ||
-              delivery?.distance ||
-              "Distance not available";
+              const status = trip.status || delivery?.status || "Assigned";
 
-            const status = trip.status || delivery?.status || "Assigned";
+              const packageName =
+                trip.package ||
+                trip.packageType ||
+                trip.item ||
+                delivery?.package ||
+                delivery?.item ||
+                "Package";
 
-            const packageName =
-              trip.package ||
-              trip.packageType ||
-              trip.item ||
-              delivery?.package ||
-              delivery?.item ||
-              "Package";
+              const weight =
+                trip.weight ||
+                trip.estimatedWeight ||
+                delivery?.weight ||
+                "--";
 
-            const weight =
-              trip.weight ||
-              trip.estimatedWeight ||
-              delivery?.weight ||
-              "--";
+              const instructions =
+                trip.instructions ||
+                delivery?.instructions ||
+                "Handle package carefully.";
 
-            const instructions =
-              trip.instructions ||
-              delivery?.instructions ||
-              "Handle package carefully.";
+              return `
+                <div class="delivery-card" data-id="${esc(id)}">
+                  <div>
+                    <div class="delivery-title">
+                      <h2>Delivery #${esc(deliveryId)}</h2>
+                      <span class="status-pill">${esc(status)}</span>
+                    </div>
 
-            return `
-              <div class="delivery-card" data-id="${esc(id)}">
-                <div>
-                  <div class="delivery-title">
-                    <h2>Delivery #${esc(deliveryId)}</h2>
-                    <span class="status-pill">${esc(status)}</span>
-                  </div>
+                    <div class="route-block">
+                      <div class="route-line">
+                        <div class="dot"></div>
+                        <div>
+                          <div class="label">Pickup</div>
+                          <div class="value">${esc(pickup)}</div>
+                        </div>
+                      </div>
 
-                  <div class="route-block">
-                    <div class="route-line">
-                      <div class="dot"></div>
-                      <div>
-                        <div class="label">Pickup</div>
-                        <div class="value">${esc(pickup)}</div>
+                      <div class="route-line">
+                        <div class="dot"></div>
+                        <div>
+                          <div class="label">Drop</div>
+                          <div class="value">${esc(drop)}</div>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="route-line">
-                      <div class="dot"></div>
+                    <div class="delivery-meta">
                       <div>
-                        <div class="label">Drop</div>
-                        <div class="value">${esc(drop)}</div>
+                        <div class="label">Customer</div>
+                        <div class="value">${esc(customer)}</div>
+                      </div>
+
+                      <div>
+                        <div class="label">ETA</div>
+                        <div class="value">${esc(eta)}</div>
+                      </div>
+
+                      <div>
+                        <div class="label">Distance</div>
+                        <div class="value">${esc(distance)}</div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="delivery-meta">
-                    <div>
-                      <div class="label">Customer</div>
-                      <div class="value">${esc(customer)}</div>
+                  <div>
+                    <div class="package-box">
+                      <div class="label">Package</div>
+                      <div class="value">${esc(packageName)}</div>
+
+                      <div style="margin-top:12px" class="label">Weight</div>
+                      <div class="value">${esc(weight)}</div>
+
+                      <div style="margin-top:12px" class="label">Instructions</div>
+                      <div style="margin-top:4px;color:#d1d5db;font-size:13px;line-height:1.4">${esc(instructions)}</div>
                     </div>
 
-                    <div>
-                      <div class="label">ETA</div>
-                      <div class="value">${esc(eta)}</div>
-                    </div>
-
-                    <div>
-                      <div class="label">Distance</div>
-                      <div class="value">${esc(distance)}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div class="package-box">
-                    <div class="label">Package</div>
-                    <div class="value">${esc(packageName)}</div>
-
-                    <div style="margin-top:12px" class="label">Weight</div>
-                    <div class="value">${esc(weight)}</div>
-
-                    <div style="margin-top:12px" class="label">Instructions</div>
-                    <div style="margin-top:4px;color:#d1d5db;font-size:13px;line-height:1.4">${esc(instructions)}</div>
-                  </div>
-
-                  <div class="actions">
-                    ${
-                      normalize(status) === "accepted"
-                        ? `
-                          <a class="btn btn-yellow" href="delivery-accepted.html?id=${encodeURIComponent(id)}">
-                            Continue
-                          </a>
-                        `
-                        : normalize(status) === "picked up"
+                    <div class="actions">
+                      ${
+                        normalize(status) === "accepted"
                           ? `
-                            <a class="btn btn-yellow" href="delivery-progress-1.html?id=${encodeURIComponent(id)}">
+                            <a class="btn btn-yellow" href="delivery-accepted.html?id=${encodeURIComponent(id)}">
                               Continue
                             </a>
                           `
-                          : normalize(status) === "in transit"
+                          : normalize(status) === "picked up"
                             ? `
-                              <a class="btn btn-yellow" href="delivery-progress-2.html?id=${encodeURIComponent(id)}">
+                              <a class="btn btn-yellow" href="delivery-progress-1.html?id=${encodeURIComponent(id)}">
                                 Continue
                               </a>
                             `
-                            : normalize(status) === "issue reported"
+                            : normalize(status) === "in transit"
                               ? `
-                                <a class="btn btn-red" href="report-issue.html?id=${encodeURIComponent(id)}">
-                                  Issue Reported
+                                <a class="btn btn-yellow" href="delivery-progress-2.html?id=${encodeURIComponent(id)}">
+                                  Continue
                                 </a>
                               `
-                              : `
-                                <button class="btn btn-yellow" data-action="accept" data-id="${esc(id)}">Accept</button>
-                                <button class="btn btn-red" data-action="reject" data-id="${esc(id)}">Reject</button>
-                              `
-                    }
+                              : normalize(status) === "issue reported"
+                                ? `
+                                  <a class="btn btn-red" href="report-issue.html?id=${encodeURIComponent(id)}">
+                                    Issue Reported
+                                  </a>
+                                `
+                                : `
+                                  <button class="btn btn-yellow" data-action="accept" data-id="${esc(id)}">Accept</button>
+                                  <button class="btn btn-red" data-action="reject" data-id="${esc(id)}">Reject</button>
+                                `
+                      }
 
-                    <a class="btn btn-dark" href="task-details.html?id=${encodeURIComponent(id)}">View Details</a>
+                      <a class="btn btn-dark" href="task-details.html?id=${encodeURIComponent(id)}">View Details</a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            `;
-          })
-          .join("");
+              `;
+            })
+            .join("");
 
-        document.querySelectorAll("[data-action]").forEach((btn) => {
-          btn.addEventListener("click", async () => {
-            const id = btn.dataset.id;
-            const action = btn.dataset.action;
-            const trip = activeTrips.find((t) => String(t.id) === String(id));
+          document.querySelectorAll("[data-action]").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              const id = btn.dataset.id;
+              const action = btn.dataset.action;
+              const trip = activeTrips.find((t) => String(t.id) === String(id));
 
-            if (!trip) return;
+              if (!trip) return;
 
-            const nextStatus = action === "accept" ? "Accepted" : "Rejected";
+              const nextStatus = action === "accept" ? "Accepted" : "Rejected";
 
-            try {
-              btn.disabled = true;
-              btn.textContent = action === "accept" ? "Accepting..." : "Rejecting...";
+              try {
+                btn.disabled = true;
+                btn.textContent = action === "accept" ? "Accepting..." : "Rejecting...";
 
-              const updatedTrip = await updateTripStatusInBackend(id, nextStatus);
+                const updatedTrip = await updateTripStatusInBackend(id, nextStatus);
 
-              console.log("TRIP STATUS UPDATE RESPONSE:", updatedTrip);
+                console.log("TRIP STATUS UPDATE RESPONSE:", updatedTrip);
 
-              console.table({
-                tripStatusUpdatedInBackend: true,
-                tripId: id,
-                deliveryRequest: updatedTrip.request || trip.request || "No request",
-                newStatus: nextStatus,
-                syncedFiles: "trips.json + deliveries.json + notifications.json",
-                source: "PATCH /api/trips/:id/status",
-              });
+              
 
-              setVerification(`Backend verified: Trip status updated ✓ | ${id} → ${nextStatus}`);
+                if (action === "accept") {
+                  setTimeout(() => {
+                    window.location.href = `delivery-accepted.html?id=${encodeURIComponent(id)}`;
+                  }, 500);
+                }
 
-              if (action === "accept") {
-                setTimeout(() => {
-                  window.location.href = `delivery-accepted.html?id=${encodeURIComponent(id)}`;
-                }, 500);
+                if (action === "reject") {
+                  setTimeout(() => {
+                    window.location.href = `report-issue.html?id=${encodeURIComponent(id)}&action=reject`;
+                  }, 500);
+                }
+              } catch (error) {
+                console.error("Trip status update failed:", error);
+                btn.disabled = false;
+                btn.textContent = action === "accept" ? "Accept" : "Reject";
+                console.error(`Trip status update failed: ${error.message}`);
               }
-
-              if (action === "reject") {
-                setTimeout(() => {
-                  window.location.href = `report-issue.html?id=${encodeURIComponent(id)}&action=reject`;
-                }, 500);
-              }
-            } catch (error) {
-              console.error("Trip status update failed:", error);
-              btn.disabled = false;
-              btn.textContent = action === "accept" ? "Accept" : "Reject";
-              setVerification(`Trip status update failed: ${error.message}`, true);
-            }
+            });
           });
-        });
-      };
+        };
 
-      const applySearch = () => {
-        const q = normalize(searchInput.value);
+        const applySearch = () => {
+          const q = normalize(searchInput.value);
 
-        if (!q) {
-          filteredTrips = [...activeTrips];
-        } else {
-          filteredTrips = activeTrips.filter((trip) => {
-            const delivery = getDeliveryForTrip(trip);
-            return JSON.stringify({ trip, delivery }).toLowerCase().includes(q);
-          });
-        }
-
-        renderStats();
-        renderTrips();
-      };
-
-      const loadDashboard = async () => {
-        try {
-          allTrips = await fetchTrips();
-          deliveries = await fetchDeliveries();
-
-          splitTrips();
-
-          console.log("RAW TRIPS API RESULT:", allTrips);
-          console.log("RAW DELIVERIES API RESULT:", deliveries);
-          console.log("ACTIVE TRIPS FOR DRIVER:", activeTrips);
-          console.log("COMPLETED TRIPS FOR DRIVER:", completedTrips);
-
-          console.table({
-            tripsLoadedFromBackend: allTrips.length,
-            deliveriesLoadedFromBackend: deliveries.length,
-            activeForDriver: activeTrips.length,
-            completedForDriver: completedTrips.length,
-            pendingForDriver: pendingTrips.length,
-            driver: DRIVER_NAME,
-            source: "GET /api/trips + GET /api/deliveries",
-          });
+          if (!q) {
+            filteredTrips = [...activeTrips];
+          } else {
+            filteredTrips = activeTrips.filter((trip) => {
+              const delivery = getDeliveryForTrip(trip);
+              return JSON.stringify({ trip, delivery }).toLowerCase().includes(q);
+            });
+          }
 
           renderStats();
           renderTrips();
+        };
 
-          setVerification(
-            `Backend verified: Trips ✓ | Active ${activeTrips.length} | Completed ${completedTrips.length} | Deliveries ${deliveries.length}`
-          );
-        } catch (error) {
-          console.error("Driver dashboard backend sync failed:", error);
+        const loadDashboard = async () => {
+          try {
+            allTrips = await fetchTrips();
+            deliveries = await fetchDeliveries();
 
-          setVerification(`Backend sync failed: ${error.message}`, true);
+            splitTrips();
 
-          list.innerHTML = `
-            <div style="padding:24px;background:#331717;border:1px solid #ef4444;border-radius:16px;color:#fecaca;text-align:center">
-              Could not load assigned deliveries from backend.
-            </div>
-          `;
-        }
-      };
+            renderStats();
+            renderTrips();
 
-      searchInput.addEventListener("input", applySearch);
+            
+          } catch (error) {
+            console.error("Driver dashboard backend sync failed:", error);
 
-      await loadDashboard();
-    });
+            console.error(`Backend sync failed: ${error.message}`);
+
+            list.innerHTML = `
+              <div style="padding:24px;background:#331717;border:1px solid #ef4444;border-radius:16px;color:#fecaca;text-align:center">
+                Could not load assigned deliveries.
+              </div>
+            `;
+          }
+        };
+
+        searchInput.addEventListener("input", applySearch);
+
+        await loadDashboard();
+      });
   </script>
+
 </body>
 </html>

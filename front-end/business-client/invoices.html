@@ -27,47 +27,93 @@
       </div>
 
       <nav class="bc-nav">
-        <a href="dashboard.html" data-nav="dashboard">
-          <span class="ico">▧</span>
-          <span>Dashboard</span>
-        </a>
 
-        <a href="create-delivery.html" data-nav="create-delivery">
-          <span class="ico">↯</span>
-          <span>Create Delivery</span>
-        </a>
+  <a href="dashboard.html" data-nav="dashboard">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+        <path d="M12 22V11"></path>
+        <path d="M20 6.5l-8 4.5-8-4.5"></path>
+      </svg>
+    </span>
+    <span>Dashboard</span>
+  </a>
 
-        <a href="active-deliveries.html" data-nav="active-deliveries">
-          <span class="ico">◇</span>
-          <span>Active Deliveries</span>
-        </a>
+  <a href="create-delivery.html" data-nav="create-delivery">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+      </svg>
+    </span>
+    <span>Create Delivery</span>
+  </a>
 
-        <a href="completed-deliveries.html" data-nav="completed-deliveries">
-          <span class="ico">▤</span>
-          <span>Completed Deliveries</span>
-        </a>
+  <a href="active-deliveries.html" data-nav="active-deliveries">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+        <path d="M12 22V11"></path>
+        <path d="M20 6.5l-8 4.5-8-4.5"></path>
+      </svg>
+    </span>
+    <span>Active Deliveries</span>
+  </a>
 
-        <a href="invoices.html" data-nav="invoices" class="active">
-          <span class="ico">▥</span>
-          <span>Invoices</span>
-        </a>
+  <a href="completed-deliveries.html" data-nav="completed-deliveries">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+        <path d="M9 8h6"></path>
+        <path d="M9 12h6"></path>
+      </svg>
+    </span>
+    <span>Completed Deliveries</span>
+  </a>
 
-        <a href="submit-transaction.html" data-nav="submit-transaction">
-          <span class="ico">▥</span>
-          <span>Submit Transaction</span>
-        </a>
+  <a href="invoices.html" data-nav="invoices" class="active">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+        <path d="M9 8h6"></path>
+        <path d="M9 12h6"></path>
+      </svg>
+    </span>
+    <span>Invoices</span>
+  </a>
 
-        <a href="notifications.html" data-nav="notifications">
-          <span class="ico">♧</span>
-          <span>Notifications</span>
-        </a>
+  <a href="submit-transaction.html" data-nav="submit-transaction">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+        <path d="M9 8h6"></path>
+        <path d="M9 12h6"></path>
+      </svg>
+    </span>
+    <span>Submit Transaction</span>
+  </a>
 
-        <a href="profile.html" data-nav="profile">
-          <span class="ico">◇</span>
-          <span>Profile</span>
-        </a>
-      </nav>
+  <a href="notifications.html" data-nav="notifications">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+        <path d="M10 20a2 2 0 0 0 4 0"></path>
+      </svg>
+    </span>
+    <span>Notifications</span>
+  </a>
 
+  <a href="profile.html" data-nav="profile">
+    <span class="ico">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+        <path d="M12 22V11"></path>
+        <path d="M20 6.5l-8 4.5-8-4.5"></path>
+      </svg>
+    </span>
+    <span>Profile</span>
+  </a>
+
+</nav>
       <div class="spacer"></div>
 
       <a class="bc-logout" href="../login.html">
@@ -78,24 +124,65 @@
 
     <main class="bc-main">
       <header class="bc-topbar">
-        <div>
-          <div class="company">Acme Logistics Inc.</div>
-          <div class="subtitle">Business Client Dashboard</div>
-        </div>
 
-        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
-          🔔
-          <span class="badge">3</span>
-        </a>
-      </header>
+  <div class="bc-topbar-left">
+    <div class="company">Acme Logistics Inc.</div>
+    <div class="subtitle">Business Client Dashboard</div>
+  </div>
+
+  <div class="bc-top-actions">
+
+    <a
+      class="bc-bell"
+      href="notifications.html"
+      aria-label="Notifications"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M18 9C18 5.686 15.314 3 12 3C8.686 3 6 5.686 6 9V13.2C6 14.054 5.728 14.885 5.224 15.574L4 17.25H20L18.776 15.574C18.272 14.885 18 14.054 18 13.2V9Z"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9.5 20C10.1 20.62 11 21 12 21C13 21 13.9 20.62 14.5 20"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <span class="badge">3</span>
+    </a>
+
+    <a class="bc-profile-chip" href="profile.html">
+
+      <div class="bc-profile-avatar">A</div>
+
+      <div class="bc-profile-info">
+        <strong>Acme Logistics</strong>
+        <span>Business Client</span>
+      </div>
+
+    </a>
+
+  </div>
+
+</header>
 
       <section class="bc-content">
         <h1 class="page-title">Invoices</h1>
         <p class="page-subtitle">Manage and track your delivery invoices</p>
 
-        <div id="backendVerification" class="verify-box">
-          Verifying invoices from backend...
-        </div>
+        
 
         <div class="invoice-stats">
           <div class="invoice-stat yellow">
@@ -403,14 +490,7 @@
       const tableBody = document.getElementById("invoiceTableBody");
       const searchInput = document.getElementById("invoiceSearch");
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
-
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      
 
       const esc = (value) => {
         return String(value ?? "")
@@ -758,9 +838,7 @@
             source: "GET /api/transactions/invoices",
           });
 
-          setVerification(
-            `Backend verified: Invoices ✓ | Loaded ${allInvoices.length} | Client invoices ${clientInvoices.length} | Paid ${paid.length} | Pending ${pending.length}`
-          );
+          
         } catch (error) {
           console.error("Invoices backend sync failed:", error);
 
@@ -770,7 +848,7 @@
             </tr>
           `;
 
-          setVerification(`Backend sync failed: ${error.message}`, true);
+          console.error(`History backend sync failed: ${error.message}`);
         }
       };
 

@@ -56,7 +56,17 @@
     "startTime": "2024-03-07 02:30 PM",
     "distance": "18.7 km",
     "status": "Completed",
-    "request": "DR-2024-006"
+    "request": "DR-2024-006",
+    "feedback": {
+      "rating": 5,
+      "comment": "",
+      "deliveryQuality": "",
+      "driverBehavior": "",
+      "overallExperience": "Satisfied",
+      "submittedAt": "2026-08-24T20:51:52.759Z"
+    },
+    "feedbackSubmitted": true,
+    "updatedAt": "2026-08-24T20:51:52.764Z"
   },
   {
     "id": "TRP-2024-005",
@@ -97,14 +107,16 @@
     "destination": "tada 2",
     "startTime": "5/5/2026, 10:54:55 pm",
     "distance": "Distance not available",
-    "status": "Queued",
+    "status": "Cancelled",
     "request": "DR-2024-2025",
     "customer": "Acme Logistics Inc.",
     "package": "Documents",
     "weight": "",
     "instructions": "Handle package carefully.",
     "eta": "35 mins",
-    "createdAt": "2026-05-05T17:24:55.000Z"
+    "createdAt": "2026-05-05T17:24:55.000Z",
+    "cancelReason": "Cancelled by business client",
+    "updatedAt": "2026-08-24T20:36:23.828Z"
   },
   {
     "id": "TRP-2026-001",
@@ -117,7 +129,7 @@
     "destination": "Sullerpeta 2",
     "startTime": "5/5/2026, 11:24:35 pm",
     "distance": "Distance not available",
-    "status": "Issue Reported",
+    "status": "Cancelled",
     "request": "DR-2026-001",
     "customer": "Acme Logistics Inc.",
     "package": "Document",
@@ -127,7 +139,9 @@
     "createdAt": "2026-05-05T17:54:35.841Z",
     "issueType": "Package damaged",
     "issueDescription": "hgjjNs<mbbnmB",
-    "issueReportedAt": "2026-05-05T20:27:44.121Z"
+    "issueReportedAt": "2026-05-05T20:27:44.121Z",
+    "cancelReason": "Cancelled by business client",
+    "updatedAt": "2026-08-24T20:36:20.622Z"
   },
   {
     "id": "TRP-2026-002",
@@ -170,7 +184,7 @@
     "destination": "test 2",
     "startTime": "5/5/2026, 11:33:06 pm",
     "distance": "Distance not available",
-    "status": "Issue Reported",
+    "status": "Cancelled",
     "request": "DR-2026-003",
     "customer": "Acme Logistics Inc.",
     "package": "documents",
@@ -180,7 +194,9 @@
     "createdAt": "2026-05-05T18:03:06.890Z",
     "issueType": "Traffic delay",
     "issueDescription": "sgsgsg",
-    "issueReportedAt": "2026-05-05T18:09:34.407Z"
+    "issueReportedAt": "2026-05-05T18:09:34.407Z",
+    "cancelReason": "Cancelled by business client",
+    "updatedAt": "2026-08-24T20:30:15.595Z"
   },
   {
     "id": "TRP-2026-004",
@@ -223,7 +239,16 @@
     "instructions": "afafafaf",
     "eta": "35 mins",
     "createdAt": "2026-05-05T18:57:17.915Z",
-    "updatedAt": "2026-05-05T18:57:17.915Z"
+    "updatedAt": "2026-08-24T20:51:33.392Z",
+    "feedback": {
+      "rating": 4,
+      "comment": "",
+      "deliveryQuality": "",
+      "driverBehavior": "",
+      "overallExperience": "",
+      "submittedAt": "2026-08-24T20:51:33.387Z"
+    },
+    "feedbackSubmitted": true
   },
   {
     "id": "TRP-2026-006",
@@ -244,7 +269,7 @@
     "instructions": "admnadfnamn",
     "eta": "35 mins",
     "createdAt": "2026-05-05T20:20:51.747Z",
-    "updatedAt": "2026-05-05T20:24:48.043Z",
+    "updatedAt": "2026-08-24T20:51:27.078Z",
     "blockReason": "adnabfnab",
     "feedback": {
       "rating": 5,
@@ -252,7 +277,7 @@
       "deliveryQuality": "Excellent",
       "driverBehavior": "Good",
       "overallExperience": "Neutral",
-      "submittedAt": "2026-05-05T20:24:48.041Z"
+      "submittedAt": "2026-08-24T20:51:27.074Z"
     },
     "feedbackSubmitted": true
   }

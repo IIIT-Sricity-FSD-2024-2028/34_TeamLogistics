@@ -153,22 +153,6 @@
           </button>
         </div>
 
-        <div
-          id="backendVerification"
-          style="
-            margin-top: 16px;
-            margin-bottom: 24px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            background: #111827;
-            border: 1px solid #1f2937;
-            color: #d1d5db;
-            font-size: 14px;
-          "
-        >
-          Verifying backend profile data...
-        </div>
-
         <div class="card" style="max-width:900px;padding:32px">
           <div style="display:flex;align-items:center;gap:22px;margin-bottom:26px">
             <div
@@ -291,14 +275,7 @@
         address: document.getElementById("address"),
       };
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
-
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      
 
       const showStatus = (message, type = "success") => {
         const el = document.getElementById("formStatus");
@@ -417,9 +394,7 @@
             source: "back-end/data/users.json through GET /api/users",
           });
 
-          setVerification(
-            `Backend verified: Profile ✓ | Users loaded ${users.length} | Profile ${currentUser.id || currentUser.email || "matched"}`
-          );
+          
         } catch (error) {
           console.error("Profile backend sync failed:", error);
 
@@ -434,7 +409,7 @@
           };
 
           fillForm(currentUser);
-          setVerification(`Backend sync failed: ${error.message}`, true);
+          console.error(`History backend sync failed: ${error.message}`);
         }
       };
 
@@ -496,9 +471,7 @@ const payload = {
 
           showStatus("Profile updated successfully in backend.", "success");
 
-          setVerification(
-            `Backend verified: Profile update ✓ | ${currentUser.id || currentUser.email}`
-          );
+         
         } catch (error) {
           console.error("Profile update failed:", error);
           showStatus(`Profile update failed: ${error.message}`, "error");

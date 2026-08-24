@@ -82,9 +82,7 @@
       </header>
 
       <section class="driver-content">
-        <div id="backendVerification" class="verify-box">
-          Verifying accepted delivery from backend...
-        </div>
+       
 
         <div class="accepted-grid">
           <div class="map-card">
@@ -620,14 +618,7 @@
         if (el) el.textContent = value || "Not available";
       };
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
-
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      
 
       const getArray = (result) => {
         if (Array.isArray(result)) return result;
@@ -792,12 +783,10 @@
             source: "GET /api/trips/:id + GET /api/deliveries/:requestId",
           });
 
-          setVerification(
-            `Backend verified: Accepted delivery ✓ | Trip ${currentTrip.id} | Delivery ${requestId || "N/A"} ✓`
-          );
+          
         } catch (error) {
           console.error("Accepted delivery backend sync failed:", error);
-          setVerification(`Backend sync failed: ${error.message}`, true);
+          console.error(`History backend sync failed: ${error.message}`);
         }
       };
 
@@ -827,7 +816,7 @@
             syncedFiles: "trips.json + deliveries.json + notifications.json",
           });
 
-          setVerification(`Backend verified: Trip status updated ✓ | ${tripId} → Picked Up`);
+       
 
           setTimeout(() => {
             window.location.href = `delivery-progress-1.html?id=${encodeURIComponent(tripId)}`;

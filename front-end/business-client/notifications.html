@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/business-client.css" />
@@ -18,144 +22,335 @@
 </head>
 
 <body class="bc-body">
-  <div style="max-width: 880px; margin: 0 auto; padding: 32px 20px 60px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
-      <a href="dashboard.html" class="back-btn">← Back</a>
 
-      <a href="../login.html" class="btn outline-yellow" style="padding:10px 18px">
-        Logout
+  <div class="bc-layout">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="bc-sidebar">
+
+      <div class="bc-brand">
+        <div
+          class="ds-brand-logo"
+          data-href="dashboard.html"
+          data-size="sm"
+          data-sub="Business Client"
+        ></div>
+      </div>
+
+      <nav class="bc-nav">
+
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+            </svg>
+          </span>
+          <span>Create Delivery</span>
+        </a>
+
+        <a href="active-deliveries.html" data-nav="active-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Active Deliveries</span>
+        </a>
+
+        <a href="completed-deliveries.html" data-nav="completed-deliveries">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Invoices</span>
+        </a>
+
+        <a
+          href="submit-transaction.html"
+          data-nav="submit-transaction"
+        >
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a
+          href="notifications.html"
+          data-nav="notifications"
+          class="active"
+        >
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 9a6 6 0 1 0-12 0v4l-2 3h16l-2-3V9"></path>
+              <path d="M10 20h4"></path>
+            </svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 20a8 8 0 0 1 16 0"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <path d="M16 17l5-5-5-5"></path>
+            <path d="M21 12H9"></path>
+          </svg>
+        </span>
+        <span>Logout</span>
       </a>
-    </div>
 
-    <div
-      id="backendVerification"
-      style="
-        margin-bottom: 20px;
-        padding: 12px 16px;
-        border-radius: 12px;
-        background: #111827;
-        border: 1px solid #1f2937;
-        color: #d1d5db;
-        font-size: 14px;
-      "
-    >
-      Verifying backend notifications...
-    </div>
+    </aside>
 
-    <section
-      style="
-        background: linear-gradient(135deg, #1f1f1f, #171717);
-        border: 1px solid #262626;
-        padding: 24px 28px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      "
-    >
-      <div>
-        <h1 style="margin:0 0 8px;font-size:24px">Notifications</h1>
-        <p style="margin:0;color:#a8a8a8">Stay updated with your delivery activities</p>
-      </div>
+    <!-- ================= MAIN ================= -->
 
-      <div
-        id="newCountBadge"
-        style="
-          background: var(--yellow);
-          color: #000;
-          font-weight: 900;
-          padding: 8px 18px;
-          border-radius: 999px;
-        "
-      >
-        0 New
-      </div>
-    </section>
+    <main class="bc-main">
 
-    <div style="display:flex;gap:24px;border-bottom:1px solid #262626;margin-top:14px">
-      <button
-        id="allTab"
-        type="button"
-        style="
-          background:none;
-          border:none;
-          color:var(--yellow);
-          border-bottom:2px solid var(--yellow);
-          padding:14px 0;
-          font-weight:800;
-          cursor:pointer;
-        "
-      >
-        All Notifications
-      </button>
+      <!-- ================= TOPBAR ================= -->
 
-      <button
-        id="unreadTab"
-        type="button"
-        style="
-          background:none;
-          border:none;
-          color:#d1d5db;
-          padding:14px 0;
-          font-weight:800;
-          cursor:pointer;
-        "
-      >
-        Unread (<span id="unreadTabCount">0</span>)
-      </button>
-    </div>
+      <header class="bc-topbar">
 
-    <div id="notificationsList" style="margin-top:24px">
-      <div style="padding:24px;background:#171717;border:1px solid #262626;color:#9ca3af;text-align:center">
-        Loading notifications from backend...
-      </div>
-    </div>
+        <div class="bc-topbar-left">
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
+        </div>
 
-    <div style="text-align:center;margin-top:28px">
-      <button
-        id="markAllReadBtn"
-        type="button"
-        class="btn yellow"
-        style="padding:12px 24px"
-      >
-        Mark all as read
-      </button>
-    </div>
+        <div class="bc-top-actions">
+
+          <a
+            class="bc-bell"
+            href="notifications.html"
+            aria-label="Notifications"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M18 9C18 5.686 15.314 3 12 3C8.686 3 6 5.686 6 9V13.2C6 14.054 5.728 14.885 5.224 15.574L4 17.25H20L18.776 15.574C18.272 14.885 18 14.054 18 13.2V9Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9.5 20C10.1 20.62 11 21 12 21C13 21 13.9 20.62 14.5 20"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+
+            <span class="badge">3</span>
+          </a>
+
+          <a
+            class="bc-profile-chip"
+            href="profile.html"
+          >
+            <div class="bc-profile-avatar">
+              A
+            </div>
+
+            <div class="bc-profile-info">
+              <strong>Acme Logistics</strong>
+              <span>Business Client</span>
+            </div>
+          </a>
+
+        </div>
+
+      </header>
+
+      <!-- ================= CONTENT ================= -->
+
+      <section class="bc-content">
+
+        <div class="notifications-page">
+
+          <section class="notifications-header-card">
+
+            <div>
+              <h1>
+                Notifications
+              </h1>
+
+              <p>
+                Stay updated with your delivery activities
+              </p>
+            </div>
+
+            <div
+              class="notifications-count"
+              id="newCountBadge"
+            >
+              0 New
+            </div>
+
+          </section>
+
+          <div class="notifications-tabs">
+
+            <button
+              id="allTab"
+              type="button"
+              class="notification-tab active"
+            >
+              All Notifications
+            </button>
+
+            <button
+              id="unreadTab"
+              type="button"
+              class="notification-tab"
+            >
+              Unread (<span id="unreadTabCount">0</span>)
+            </button>
+
+          </div>
+
+          <div
+            id="notificationsList"
+            class="notifications-list"
+          >
+            <div class="notifications-loading">
+              Loading notifications...
+            </div>
+          </div>
+
+          <div class="notifications-footer">
+
+            <button
+              id="markAllReadBtn"
+              type="button"
+              class="btn yellow"
+            >
+              Mark all as read
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
   </div>
+
+  <!-- ================= NOTIFICATION SCRIPT ================= -->
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
+
       const ROLE = "business-client";
+
       let allNotifications = [];
       let currentFilter = "all";
 
-      const list = document.getElementById("notificationsList");
-      const newCountBadge = document.getElementById("newCountBadge");
-      const unreadTabCount = document.getElementById("unreadTabCount");
-      const allTab = document.getElementById("allTab");
-      const unreadTab = document.getElementById("unreadTab");
-      const markAllReadBtn = document.getElementById("markAllReadBtn");
+      const list =
+        document.getElementById("notificationsList");
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
+      const newCountBadge =
+        document.getElementById("newCountBadge");
 
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      const unreadTabCount =
+        document.getElementById("unreadTabCount");
+
+      const allTab =
+        document.getElementById("allTab");
+
+      const unreadTab =
+        document.getElementById("unreadTab");
+
+      const markAllReadBtn =
+        document.getElementById("markAllReadBtn");
 
       const getArray = (result) => {
-        if (Array.isArray(result)) return result;
-        if (Array.isArray(result?.data)) return result.data;
-        if (Array.isArray(result?.items)) return result.items;
-        if (Array.isArray(result?.notifications)) return result.notifications;
+
+        if (Array.isArray(result)) {
+          return result;
+        }
+
+        if (Array.isArray(result?.data)) {
+          return result.data;
+        }
+
+        if (Array.isArray(result?.items)) {
+          return result.items;
+        }
+
+        if (Array.isArray(result?.notifications)) {
+          return result.notifications;
+        }
+
         return [];
       };
 
-      const normalize = (value) => String(value || "").trim().toLowerCase();
+      const normalize = (value) => {
+        return String(value || "")
+          .trim()
+          .toLowerCase();
+      };
 
       const belongsToClient = (notification) => {
-        const to = normalize(notification.to || notification.role || notification.target || notification.recipient);
+
+        const to = normalize(
+          notification.to ||
+          notification.role ||
+          notification.target ||
+          notification.recipient
+        );
 
         return (
           !to ||
@@ -168,228 +363,792 @@
       };
 
       const escapeHtml = (value) => {
+
         return String(value ?? "")
           .replaceAll("&", "&amp;")
           .replaceAll("<", "&lt;")
           .replaceAll(">", "&gt;")
           .replaceAll('"', "&quot;")
           .replaceAll("'", "&#039;");
+
       };
 
       const getIcon = (notification) => {
-        const text = normalize(`${notification.title} ${notification.message}`);
 
-        if (text.includes("payment") || text.includes("invoice")) return "✓";
-        if (text.includes("delay") || text.includes("overdue")) return "!";
-        if (text.includes("completed") || text.includes("delivered")) return "✓";
+        const text = normalize(
+          `${notification.title} ${notification.message}`
+        );
+
+        if (
+          text.includes("payment") ||
+          text.includes("invoice")
+        ) {
+          return "✓";
+        }
+
+        if (
+          text.includes("delay") ||
+          text.includes("overdue")
+        ) {
+          return "!";
+        }
+
+        if (
+          text.includes("completed") ||
+          text.includes("delivered")
+        ) {
+          return "✓";
+        }
+
         return "◈";
       };
 
       const render = () => {
-        const unreadCount = allNotifications.filter((n) => !n.read).length;
 
-        newCountBadge.textContent = `${unreadCount} New`;
-        unreadTabCount.textContent = unreadCount;
+        const unreadCount =
+          allNotifications.filter(
+            (n) => !n.read
+          ).length;
+
+        newCountBadge.textContent =
+          `${unreadCount} New`;
+
+        unreadTabCount.textContent =
+          unreadCount;
 
         const items =
           currentFilter === "unread"
-            ? allNotifications.filter((n) => !n.read)
+            ? allNotifications.filter(
+                (n) => !n.read
+              )
             : allNotifications;
 
         if (!items.length) {
+
           list.innerHTML = `
-            <div style="padding:24px;background:#171717;border:1px solid #262626;color:#9ca3af;text-align:center">
-              No ${currentFilter === "unread" ? "unread" : ""} notifications found from backend.
+            <div class="notifications-empty">
+              No ${
+                currentFilter === "unread"
+                  ? "unread "
+                  : ""
+              }notifications found.
             </div>
           `;
+
           return;
         }
 
-        list.innerHTML = items
-          .map((notification) => {
-            const title = notification.title || "Notification";
-            const message = notification.message || notification.description || "--";
-            const time = notification.time || notification.createdAt || "Just now";
-            const isUnread = !notification.read;
+        list.innerHTML =
+          items
+            .map((notification) => {
 
-            return `
-              <div
-                style="
-                  display:grid;
-                  grid-template-columns:48px 1fr auto;
-                  gap:18px;
-                  align-items:start;
-                  background:linear-gradient(135deg,#1f1f1f,#171717);
-                  border:1px solid #262626;
-                  border-bottom:none;
-                  padding:22px 24px;
-                "
-              >
-                <div
-                  style="
-                    width:46px;
-                    height:46px;
-                    border-radius:12px;
-                    background:#050505;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    color:var(--yellow);
-                    font-weight:900;
-                  "
-                >
-                  ${escapeHtml(getIcon(notification))}
-                </div>
+              const title =
+                notification.title ||
+                "Notification";
 
-                <div>
-                  <h3 style="margin:0 0 8px;font-size:18px">${escapeHtml(title)}</h3>
-                  <p style="margin:0;color:#cbd5e1;line-height:1.5">${escapeHtml(message)}</p>
-                  <div style="margin-top:12px;color:#9ca3af;font-size:13px">
-                    ◷ ${escapeHtml(time)}
+              const message =
+                notification.message ||
+                notification.description ||
+                "--";
+
+              const time =
+                notification.time ||
+                notification.createdAt ||
+                "Just now";
+
+              const isUnread =
+                !notification.read;
+
+              return `
+                <div class="notification-item">
+
+                  <div class="notification-icon">
+                    ${escapeHtml(
+                      getIcon(notification)
+                    )}
                   </div>
-                </div>
 
-                <div
-                  title="${isUnread ? "Unread" : "Read"}"
-                  style="
-                    width:8px;
-                    height:8px;
-                    border-radius:999px;
-                    background:${isUnread ? "var(--yellow)" : "#4b5563"};
-                    margin-top:10px;
-                  "
-                ></div>
-              </div>
-            `;
-          })
-          .join("");
+                  <div class="notification-content">
+
+                    <h3>
+                      ${escapeHtml(title)}
+                    </h3>
+
+                    <p>
+                      ${escapeHtml(message)}
+                    </p>
+
+                    <div class="notification-time">
+                      ◷ ${escapeHtml(time)}
+                    </div>
+
+                  </div>
+
+                  <div class="notification-actions">
+
+                    ${
+                      isUnread
+                        ? `
+                          <div
+                            class="notification-dot unread"
+                            title="Unread"
+                          ></div>
+                        `
+                        : ""
+                    }
+
+                    <button
+                      type="button"
+                      class="delete-notification"
+                      data-delete-notification="${escapeHtml(
+                        notification.id ||
+                        notification.notificationId ||
+                        ""
+                      )}"
+                      title="Delete notification"
+                      aria-label="Delete notification"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 6h18"></path>
+                        <path d="M8 6V4h8v2"></path>
+                        <path d="M19 6l-1 15H6L5 6"></path>
+                        <path d="M10 11v6"></path>
+                        <path d="M14 11v6"></path>
+                      </svg>
+                    </button>
+
+                  </div>
+
+                </div>
+              `;
+
+            })
+            .join("");
+
       };
 
       const setActiveTab = () => {
+
         if (currentFilter === "all") {
-          allTab.style.color = "var(--yellow)";
-          allTab.style.borderBottom = "2px solid var(--yellow)";
-          unreadTab.style.color = "#d1d5db";
-          unreadTab.style.borderBottom = "none";
+
+          allTab.classList.add("active");
+          unreadTab.classList.remove("active");
+
         } else {
-          unreadTab.style.color = "var(--yellow)";
-          unreadTab.style.borderBottom = "2px solid var(--yellow)";
-          allTab.style.color = "#d1d5db";
-          allTab.style.borderBottom = "none";
+
+          unreadTab.classList.add("active");
+          allTab.classList.remove("active");
+
         }
+
+      };
+
+      const deleteNotificationLocally = (id) => {
+
+        if (!id) {
+          return false;
+        }
+
+        const before =
+          allNotifications.length;
+
+        allNotifications =
+          allNotifications.filter(
+            (notification) => {
+
+              const notificationId =
+                notification.id ||
+                notification.notificationId;
+
+              return String(notificationId) !== String(id);
+
+            }
+          );
+
+        return allNotifications.length !== before;
       };
 
       const loadNotifications = async () => {
+
         try {
+
           if (!window.DeliverySyncAPI) {
-            throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
+            throw new Error(
+              "DeliverySyncAPI is not loaded. Check api-client.js path."
+            );
           }
 
           let result;
 
-          if (DeliverySyncAPI.Notifications && DeliverySyncAPI.Notifications.getAll) {
-            result = await DeliverySyncAPI.Notifications.getAll();
+          if (
+            DeliverySyncAPI.Notifications &&
+            DeliverySyncAPI.Notifications.getAll
+          ) {
+
+            result =
+              await DeliverySyncAPI.Notifications.getAll();
+
           } else {
-            result = await fetch("http://localhost:3000/api/notifications", {
-              headers: {
-                "x-user-role": ROLE,
-              },
-            }).then((res) => {
-              if (!res.ok) throw new Error(`Notifications fetch failed with status ${res.status}`);
-              return res.json();
-            });
+
+            result =
+              await fetch(
+                "http://localhost:3000/api/notifications",
+                {
+                  headers: {
+                    "x-user-role": ROLE
+                  }
+                }
+              ).then((res) => {
+
+                if (!res.ok) {
+                  throw new Error(
+                    `Notifications fetch failed with status ${res.status}`
+                  );
+                }
+
+                return res.json();
+
+              });
+
           }
 
-          const notifications = getArray(result);
-          allNotifications = notifications.filter(belongsToClient);
+          const notifications =
+            getArray(result);
 
-          console.log("RAW NOTIFICATIONS API RESULT:", result);
-          console.log("BUSINESS CLIENT NOTIFICATIONS:", allNotifications);
+          allNotifications =
+            notifications.filter(
+              belongsToClient
+            );
+
+          console.log(
+            "RAW NOTIFICATIONS API RESULT:",
+            result
+          );
+
+          console.log(
+            "BUSINESS CLIENT NOTIFICATIONS:",
+            allNotifications
+          );
 
           console.table({
-            notificationsLoadedFromBackend: notifications.length,
-            clientNotifications: allNotifications.length,
-            unreadForClient: allNotifications.filter((n) => !n.read).length,
-            source: "back-end/data/notifications.json through GET /api/notifications",
+
+            notificationsLoadedFromBackend:
+              notifications.length,
+
+            clientNotifications:
+              allNotifications.length,
+
+            unreadForClient:
+              allNotifications.filter(
+                (n) => !n.read
+              ).length,
+
+            source:
+              "GET /api/notifications"
+
           });
 
           render();
+          setActiveTab();
 
-          setVerification(
-            `Backend verified: Notifications ✓ | Loaded ${notifications.length} | Client notifications ${allNotifications.length} | Unread ${allNotifications.filter((n) => !n.read).length}`
-          );
         } catch (error) {
-          console.error("Notifications backend sync failed:", error);
 
-          setVerification(`Backend sync failed: ${error.message}`, true);
+          console.error(
+            "Notifications backend sync failed:",
+            error
+          );
 
           list.innerHTML = `
-            <div style="padding:24px;background:#331717;border:1px solid #ef4444;color:#fecaca;text-align:center">
+            <div class="notifications-error">
               Could not load notifications from backend.
             </div>
           `;
+
         }
+
       };
 
-      allTab.addEventListener("click", () => {
-        currentFilter = "all";
-        setActiveTab();
-        render();
-      });
+      allTab.addEventListener(
+        "click",
+        () => {
 
-      unreadTab.addEventListener("click", () => {
-        currentFilter = "unread";
-        setActiveTab();
-        render();
-      });
+          currentFilter = "all";
 
-      markAllReadBtn.addEventListener("click", async () => {
-        try {
-          console.log("MARK ALL AS READ CLICKED");
-
-          let response = null;
-
-          if (DeliverySyncAPI.Notifications && DeliverySyncAPI.Notifications.markRead) {
-            response = await DeliverySyncAPI.Notifications.markRead();
-          } else {
-            response = await fetch("http://localhost:3000/api/notifications/mark-read", {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                "x-user-role": ROLE,
-              },
-              body: JSON.stringify({ to: ROLE }),
-            }).then((res) => {
-              if (!res.ok) throw new Error(`Mark read failed with status ${res.status}`);
-              return res.json();
-            });
-          }
-
-          console.log("MARK READ RESPONSE:", response);
-
-          allNotifications = allNotifications.map((n) => ({
-            ...n,
-            read: true,
-          }));
-
+          setActiveTab();
           render();
 
-          console.table({
-            markAllReadSubmitted: true,
-            clientNotificationsMarkedRead: allNotifications.length,
-          });
-
-          setVerification(
-            `Backend verified: Mark all read ✓ | Client notifications ${allNotifications.length}`
-          );
-        } catch (error) {
-          console.error("Mark all read failed:", error);
-          setVerification(`Mark read failed: ${error.message}`, true);
         }
-      });
+      );
+
+      unreadTab.addEventListener(
+        "click",
+        () => {
+
+          currentFilter = "unread";
+
+          setActiveTab();
+          render();
+
+        }
+      );
+
+      markAllReadBtn.addEventListener(
+        "click",
+        async () => {
+
+          try {
+
+            markAllReadBtn.disabled = true;
+            markAllReadBtn.textContent =
+              "Marking as read...";
+
+            console.log(
+              "MARK ALL AS READ CLICKED"
+            );
+
+            let response = null;
+
+            if (
+              DeliverySyncAPI.Notifications &&
+              DeliverySyncAPI.Notifications.markRead
+            ) {
+
+              response =
+                await DeliverySyncAPI.Notifications.markRead();
+
+            } else {
+
+              response =
+                await fetch(
+                  "http://localhost:3000/api/notifications/mark-read",
+                  {
+                    method: "PATCH",
+
+                    headers: {
+                      "Content-Type":
+                        "application/json",
+
+                      "x-user-role":
+                        ROLE
+                    },
+
+                    body: JSON.stringify({
+                      to: ROLE
+                    })
+                  }
+                ).then((res) => {
+
+                  if (!res.ok) {
+                    throw new Error(
+                      `Mark read failed with status ${res.status}`
+                    );
+                  }
+
+                  return res.json();
+
+                });
+
+            }
+
+            console.log(
+              "MARK READ RESPONSE:",
+              response
+            );
+
+            allNotifications =
+              allNotifications.map(
+                (n) => ({
+                  ...n,
+                  read: true
+                })
+              );
+
+            render();
+
+            markAllReadBtn.textContent =
+              "All notifications read";
+
+            console.table({
+
+              markAllReadSubmitted:
+                true,
+
+              clientNotificationsMarkedRead:
+                allNotifications.length
+
+            });
+
+            setTimeout(() => {
+
+              markAllReadBtn.disabled = false;
+
+              markAllReadBtn.textContent =
+                "Mark all as read";
+
+            }, 1200);
+
+          } catch (error) {
+
+            console.error(
+              "Mark all read failed:",
+              error
+            );
+
+            markAllReadBtn.disabled = false;
+
+            markAllReadBtn.textContent =
+              "Mark all as read";
+
+          }
+
+        }
+      );
+
+      list.addEventListener(
+        "click",
+        (event) => {
+
+          const button =
+            event.target.closest(
+              "[data-delete-notification]"
+            );
+
+          if (!button) {
+            return;
+          }
+
+          const id =
+            button.getAttribute(
+              "data-delete-notification"
+            );
+
+          if (!id) {
+            return;
+          }
+
+          const confirmed =
+            window.confirm(
+              "Delete this notification?"
+            );
+
+          if (!confirmed) {
+            return;
+          }
+
+          const deleted =
+            deleteNotificationLocally(id);
+
+          if (deleted) {
+            render();
+          }
+
+        }
+      );
 
       await loadNotifications();
+
     });
   </script>
+
+  <!-- ================= PAGE CSS ================= -->
+
+  <style>
+
+    .notifications-page{
+      width:100%;
+      max-width:none;
+    }
+
+    .notifications-header-card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+
+      padding:28px 32px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1f1f1f,
+          #171717
+        );
+
+      border:1px solid #262626;
+      border-radius:18px;
+    }
+
+    .notifications-header-card h1{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.15;
+    }
+
+    .notifications-header-card p{
+      margin:0;
+      color:#9ca3af;
+      font-size:16px;
+    }
+
+    .notifications-count{
+      flex:none;
+
+      background:var(--yellow);
+      color:#000;
+
+      font-size:16px;
+      font-weight:900;
+
+      padding:10px 18px;
+
+      border-radius:999px;
+      white-space:nowrap;
+    }
+
+    .notifications-tabs{
+      display:flex;
+      align-items:center;
+      gap:28px;
+
+      margin-top:18px;
+
+      border-bottom:1px solid #262626;
+    }
+
+    .notification-tab{
+      appearance:none;
+      border:0;
+      background:none;
+
+      color:#a8a8a8;
+
+      padding:14px 0;
+
+      font:inherit;
+      font-weight:800;
+
+      cursor:pointer;
+
+      border-bottom:2px solid transparent;
+    }
+
+    .notification-tab.active{
+      color:var(--yellow);
+      border-bottom-color:var(--yellow);
+    }
+
+    .notifications-list{
+      margin-top:22px;
+      overflow:hidden;
+
+      border:1px solid #262626;
+      border-radius:18px;
+    }
+
+    .notification-item{
+      display:grid;
+      grid-template-columns:48px minmax(0,1fr) 10px;
+      gap:18px;
+      align-items:start;
+
+      padding:22px 24px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1f1f1f,
+          #171717
+        );
+
+      border-bottom:1px solid #292929;
+    }
+
+    .notification-item:last-child{
+      border-bottom:none;
+    }
+
+    .notification-icon{
+      width:46px;
+      height:46px;
+
+      border-radius:12px;
+
+      background:#050505;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      color:var(--yellow);
+
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .notification-content{
+      min-width:0;
+    }
+
+    .notification-content h3{
+      margin:0 0 8px;
+
+      font-size:18px;
+      font-weight:800;
+
+      color:#fff;
+    }
+
+    .notification-content p{
+      margin:0;
+
+      color:#cbd5e1;
+
+      line-height:1.5;
+
+      font-size:15px;
+    }
+
+    .notification-time{
+      margin-top:12px;
+
+      color:#9ca3af;
+
+      font-size:13px;
+    }
+
+    .notification-actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:4px;
+      flex-shrink:0;
+    }
+
+    .delete-notification{
+      width:34px;
+      height:34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid #343434;
+      border-radius:10px;
+      background:#111;
+      color:#9ca3af;
+      cursor:pointer;
+      transition:.2s ease;
+      flex-shrink:0;
+    }
+
+    .delete-notification svg{
+      width:17px;
+      height:17px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.8;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .delete-notification:hover{
+      color:#ff6b6b;
+      border-color:#ff4444;
+      background:rgba(255,68,68,.08);
+    }
+
+    .delete-notification:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    .notification-dot{
+      width:8px;
+      height:8px;
+
+      border-radius:50%;
+
+      background:#4b5563;
+
+      margin-top:10px;
+    }
+
+    .notification-dot.unread{
+      background:var(--yellow);
+    }
+
+    .notifications-empty,
+    .notifications-error,
+    .notifications-loading{
+      padding:30px;
+
+      text-align:center;
+
+      color:#9ca3af;
+
+      background:#171717;
+    }
+
+    .notifications-error{
+      color:#fecaca;
+      background:#331717;
+      border:1px solid #ef4444;
+    }
+
+    .notifications-footer{
+      display:flex;
+      justify-content:center;
+
+      margin-top:24px;
+    }
+
+    .notifications-footer .btn{
+      min-height:44px;
+      padding:0 22px;
+    }
+
+    @media (max-width:800px){
+
+      .notifications-header-card{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .notifications-count{
+        align-self:flex-start;
+      }
+
+    }
+
+    @media (max-width:600px){
+
+      .notification-item{
+        grid-template-columns:42px minmax(0,1fr);
+        gap:12px;
+        padding:18px;
+      }
+
+      .notification-actions{
+        grid-column:2;
+        justify-content:flex-start;
+        margin-top:2px;
+      }
+
+      .notification-icon{
+        width:42px;
+        height:42px;
+      }
+
+      .notifications-header-card{
+        padding:22px;
+      }
+
+      .notifications-header-card h1{
+        font-size:26px;
+      }
+
+    }
+
+  </style>
+
 </body>
 </html>

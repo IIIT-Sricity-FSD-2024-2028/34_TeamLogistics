@@ -22,7 +22,7 @@
   {
     "id": "FM-101",
     "username": "fleetmanager",
-    "name": "Riya sharma",
+    "name": "Riya",
     "email": "fleet@deliverysync.com",
     "role": "fleet-manager",
     "status": "Active",
@@ -33,7 +33,10 @@
       "companyAddress": "OMR, Chennai",
       "numberOfVehicles": "24"
     },
-    "password": "Fleet@123"
+    "password": "Fleet@123",
+    "companyName": "",
+    "company": "",
+    "address": ""
   },
   {
     "id": "BC-201",
@@ -98,12 +101,12 @@
   {
     "id": "DR-301",
     "username": "driver",
-    "name": "Raghav Reddy",
+    "name": "Raghav Redd",
     "email": "driver@deliverysync.com",
     "password": "Driver@123",
     "role": "driver",
     "status": "Available",
-    "phone": "9440011229",
+    "phone": "944001122",
     "lastLogin": "2026-05-03 06:00 AM",
     "notifications": [
       "Email",
@@ -113,12 +116,12 @@
       "licenseNumber": "TN03201800034521",
       "driverId": "DRV-1032",
       "vehicle": "TN09AB1234",
-      "phone": "9440011229",
+      "phone": "944001122",
       "license": "TN03201800034521",
       "vehicleType": "",
       "status": "Available"
     },
-    "fullName": "Raghav Reddy",
+    "fullName": "Raghav Redd",
     "licenseNumber": "TN03201800034521",
     "license": "TN03201800034521",
     "vehicle": "TN09AB1234",

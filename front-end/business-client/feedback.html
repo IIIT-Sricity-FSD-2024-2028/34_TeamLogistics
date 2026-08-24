@@ -78,16 +78,59 @@
 
     <main class="bc-main">
       <header class="bc-topbar">
-        <div>
-          <div class="company">Acme Logistics Inc.</div>
-          <div class="subtitle">Business Client Dashboard</div>
-        </div>
 
-        <a class="bc-bell" href="notifications.html" aria-label="Notifications">
-          🔔
-          <span class="badge">3</span>
-        </a>
-      </header>
+  <div class="bc-topbar-left">
+    <div class="company">Acme Logistics Inc.</div>
+    <div class="subtitle">Business Client Dashboard</div>
+  </div>
+
+  <div class="bc-top-actions">
+
+    <a
+      class="bc-bell"
+      href="notifications.html"
+      aria-label="Notifications"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M18 9C18 5.686 15.314 3 12 3C8.686 3 6 5.686 6 9V13.2C6 14.054 5.728 14.885 5.224 15.574L4 17.25H20L18.776 15.574C18.272 14.885 18 14.054 18 13.2V9Z"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M9.5 20C10.1 20.62 11 21 12 21C13 21 13.9 20.62 14.5 20"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+      </svg>
+
+      <span class="badge">3</span>
+    </a>
+
+    <a class="bc-profile-chip" href="profile.html">
+
+      <div class="bc-profile-avatar">A</div>
+
+      <div class="bc-profile-info">
+        <strong>Acme Logistics</strong>
+        <span>Business Client</span>
+      </div>
+
+    </a>
+
+  </div>
+
+</header>
 
       <section class="bc-content">
         <a href="completed-deliveries.html" class="back-link">Back</a>
@@ -95,9 +138,7 @@
         <h1 class="page-title">Provide Feedback</h1>
         <p class="page-subtitle">Rate your completed delivery experience</p>
 
-        <div id="backendVerification" class="verify-box">
-          Verifying completed delivery from backend...
-        </div>
+       
 
         <div class="feedback-card">
           <form id="feedbackForm">
@@ -416,14 +457,7 @@
       let trip = null;
       let rating = 4;
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
-
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      
 
       const setMessage = (message, type) => {
         const box = document.getElementById("formMessage");
@@ -502,9 +536,12 @@
 
       const loadPage = async () => {
         if (!deliveryId) {
-          setVerification("Missing delivery id in URL. Example: feedback.html?id=DR-2026-002", true);
-          return;
-        }
+  setMessage(
+    "Missing delivery ID. Please open feedback from a completed delivery.",
+    "error"
+  );
+  return;
+}
 
         delivery = await fetchDelivery(deliveryId);
 
@@ -553,9 +590,7 @@
           source: "GET /api/deliveries/:id + GET /api/trips",
         });
 
-        setVerification(
-          `Backend verified: Feedback ✓ | Delivery ${delivery.id} | Trip ${trip?.id || "--"}`
-        );
+        
       };
 
       document.querySelectorAll("#stars button").forEach((btn) => {
@@ -566,58 +601,66 @@
       });
 
       document.getElementById("feedbackForm").addEventListener("submit", async (event) => {
-        event.preventDefault();
+  event.preventDefault();
 
-        if (!delivery) {
-          setMessage("Delivery is not loaded yet.", "error");
-          return;
-        }
+  if (!delivery) {
+    setMessage("Delivery is not loaded yet.", "error");
+    return;
+  }
 
-        const payload = {
-          rating,
-          comment: document.getElementById("commentInput").value.trim(),
-          deliveryQuality: document.getElementById("deliveryQualityInput").value,
-          driverBehavior: document.getElementById("driverBehaviorInput").value,
-          overallExperience: document.getElementById("overallExperienceInput").value,
-        };
+  const payload = {
+    rating,
+    comment: document.getElementById("commentInput").value.trim(),
+    deliveryQuality: document.getElementById("deliveryQualityInput").value,
+    driverBehavior: document.getElementById("driverBehaviorInput").value,
+    overallExperience: document.getElementById("overallExperienceInput").value
+  };
 
-        const submitBtn = document.getElementById("submitBtn");
+  const submitBtn = document.getElementById("submitBtn");
 
-        try {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Submitting...";
+  try {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
 
-          const updatedDelivery = await submitFeedback(delivery.id, payload);
+    const updatedDelivery = await submitFeedback(
+  delivery.id,
+  payload
+);
 
-          console.log("FEEDBACK SUBMIT RESPONSE:", updatedDelivery);
+console.log("FEEDBACK SUBMIT RESPONSE:", updatedDelivery);
 
-          console.table({
-            feedbackSubmittedInBackend: true,
-            deliveryId: updatedDelivery.id || delivery.id,
-            rating: payload.rating,
-            source: "PATCH /api/deliveries/:id/feedback",
-          });
+setMessage(
+  "Feedback submitted successfully. Redirecting...",
+  "success"
+);
 
-          setMessage("Feedback submitted successfully. Backend synced.", "success");
-          setVerification(`Backend verified: Feedback submitted ✓ | ${delivery.id}`);
+window.location.assign(
+  new URL("completed-deliveries.html", window.location.href).href
+);
 
-          setTimeout(() => {
-            window.location.href = "completed-deliveries.html";
-          }, 900);
-        } catch (error) {
-          console.error("Feedback submit failed:", error);
-          setMessage(`Feedback submit failed: ${error.message}`, "error");
-          setVerification(`Feedback submit failed: ${error.message}`, true);
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Submit Feedback";
-        }
-      });
+return;
+
+  } catch (error) {
+    console.error("Feedback submit failed:", error);
+
+    setMessage(
+      `Feedback submit failed: ${error.message}`,
+      "error"
+    );
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Feedback";
+  }
+});
 
       try {
         await loadPage();
       } catch (error) {
         console.error("Feedback page load failed:", error);
-        setVerification(`Backend sync failed: ${error.message}`, true);
+        setMessage(
+  `Could not load feedback data: ${error.message}`,
+  "error"
+);
       }
     });
   </script>

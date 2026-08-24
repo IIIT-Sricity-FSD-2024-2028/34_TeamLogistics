@@ -248,7 +248,7 @@
     "message": "Delivery DR-2024-2025 from Acme Logistics Inc. needs review.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T09:31:30.542Z"
   },
   {
@@ -257,7 +257,7 @@
     "message": "Delivery DR-2024-2025 from Acme Logistics Inc. needs review.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T09:33:42.435Z"
   },
   {
@@ -266,7 +266,7 @@
     "message": "Delivery DR-2024-2025 from Acme Logistics Inc. needs review.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T10:48:32.138Z"
   },
   {
@@ -275,7 +275,7 @@
     "message": "Delivery DR-2024-2025 from Acme Logistics Inc. needs review.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T11:37:59.640Z"
   },
   {
@@ -284,7 +284,7 @@
     "message": "Trip TRP-2024-2025 was automatically created for delivery DR-2024-2025. Driver and vehicle assignment pending.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T11:37:59.640Z"
   },
   {
@@ -365,7 +365,7 @@
     "message": "Delivery DR-2024-2025 from Acme Logistics Inc. needs review.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:24:55.719Z"
   },
   {
@@ -374,7 +374,7 @@
     "message": "Trip TRP-2024-2025 was automatically created for delivery DR-2024-2025. Driver and vehicle assignment pending.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:24:55.719Z"
   },
   {
@@ -383,7 +383,7 @@
     "message": "Trip TRP-2024-2025 has been reassigned to you.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:34:27.215Z"
   },
   {
@@ -392,7 +392,7 @@
     "message": "Delivery DR-2026-001 has been created and directly assigned to Raghav Reddy.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:54:35.843Z"
   },
   {
@@ -401,7 +401,7 @@
     "message": "Delivery DR-2026-001 is now available in your driver dashboard.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:54:35.843Z"
   },
   {
@@ -410,7 +410,7 @@
     "message": "Trip TRP-2026-001 was automatically created for delivery DR-2026-001.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:54:35.843Z"
   },
   {
@@ -428,7 +428,7 @@
     "message": "Delivery DR-2026-002 has been created and directly assigned to Raghav Reddy.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:55:32.725Z"
   },
   {
@@ -437,7 +437,7 @@
     "message": "Delivery DR-2026-002 is now available in your driver dashboard.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:55:32.725Z"
   },
   {
@@ -446,7 +446,7 @@
     "message": "Trip TRP-2026-002 was automatically created for delivery DR-2026-002.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T17:55:32.725Z"
   },
   {
@@ -464,7 +464,7 @@
     "message": "Delivery DR-2026-003 has been created and directly assigned to Raghav Reddy.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:03:06.891Z"
   },
   {
@@ -473,7 +473,7 @@
     "message": "Delivery DR-2026-003 is now available in your driver dashboard.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:03:06.891Z"
   },
   {
@@ -482,7 +482,7 @@
     "message": "Trip TRP-2026-003 was automatically created for delivery DR-2026-003.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:03:06.891Z"
   },
   {
@@ -554,7 +554,7 @@
     "message": "Trip TRP-2026-003 has been reassigned to you.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:11:43.905Z"
   },
   {
@@ -617,7 +617,7 @@
     "message": "Delivery DR-2026-004 has been created and directly assigned to Raghav Reddy.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:56:15.771Z"
   },
   {
@@ -626,7 +626,7 @@
     "message": "Delivery DR-2026-004 is now available in your driver dashboard.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:56:15.771Z"
   },
   {
@@ -635,7 +635,7 @@
     "message": "Trip TRP-2026-004 was automatically created for delivery DR-2026-004.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:56:15.771Z"
   },
   {
@@ -662,7 +662,7 @@
     "message": "Delivery DR-2026-005 has been created and directly assigned to Raghav Reddy.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:57:17.917Z"
   },
   {
@@ -671,7 +671,7 @@
     "message": "Delivery DR-2026-005 is now available in your driver dashboard.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:57:17.917Z"
   },
   {
@@ -680,7 +680,7 @@
     "message": "Trip TRP-2026-005 was automatically created for delivery DR-2026-005.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T18:57:17.917Z"
   },
   {
@@ -752,7 +752,7 @@
     "message": "Delivery DR-2026-006 has been created and directly assigned to Raghav Reddy.",
     "time": "Just now",
     "to": "superuser",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:20:51.749Z"
   },
   {
@@ -761,7 +761,7 @@
     "message": "Delivery DR-2026-006 is now available in your driver dashboard.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:20:51.749Z"
   },
   {
@@ -770,7 +770,7 @@
     "message": "Trip TRP-2026-006 was automatically created for delivery DR-2026-006.",
     "time": "Just now",
     "to": "fleet-manager",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:20:51.749Z"
   },
   {
@@ -779,7 +779,7 @@
     "message": "Your delivery DR-2026-006 has been created and assigned to a driver.",
     "time": "Just now",
     "to": "business-client",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:20:51.749Z"
   },
   {
@@ -788,7 +788,7 @@
     "message": "Delivery request DR-2026-006 was blocked. Reason: adnabfnab",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:21:27.645Z"
   },
   {
@@ -797,7 +797,7 @@
     "message": "Delivery request DR-2026-006 was unblocked. Reason: aafnabndbanbd",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:22:48.385Z"
   },
   {
@@ -806,7 +806,7 @@
     "message": "Trip TRP-2026-006 has been marked as Accepted.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:23:05.471Z"
   },
   {
@@ -815,7 +815,7 @@
     "message": "Trip TRP-2026-006 has been marked as Picked Up.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:23:10.980Z"
   },
   {
@@ -824,7 +824,7 @@
     "message": "Trip TRP-2026-006 has been marked as In Transit.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:23:23.296Z"
   },
   {
@@ -833,7 +833,7 @@
     "message": "Invoice INV-DR-2026-006 has been generated for delivery DR-2026-006.",
     "time": "Just now",
     "to": "business-client",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:23:54.254Z"
   },
   {
@@ -842,7 +842,7 @@
     "message": "Trip TRP-2026-006 has been marked as Delivered.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:23:54.259Z"
   },
   {
@@ -851,7 +851,7 @@
     "message": "Trip TRP-2026-006 has been marked as Completed.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:24:04.967Z"
   },
   {
@@ -860,7 +860,7 @@
     "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:24:48.045Z"
   },
   {
@@ -869,7 +869,7 @@
     "message": "Trip TRP-2026-001 has been marked as Accepted.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:27:23.321Z"
   },
   {
@@ -878,7 +878,7 @@
     "message": "Trip TRP-2026-001 has been marked as Picked Up.",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:27:26.901Z"
   },
   {
@@ -887,7 +887,7 @@
     "message": "Issue reported for trip TRP-2026-001: Package damaged. hgjjNs<mbbnmB",
     "time": "Just now",
     "to": "all",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:27:44.121Z"
   },
   {
@@ -896,7 +896,430 @@
     "message": "Trip TRP-2024-001 has been reassigned to you.",
     "time": "Just now",
     "to": "driver",
-    "read": false,
+    "read": true,
     "createdAt": "2026-05-05T20:29:15.430Z"
+  },
+  {
+    "id": "N-1787603415600",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2026-003 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:30:15.600Z"
+  },
+  {
+    "id": "N-1787603780626",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2026-001 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:36:20.626Z"
+  },
+  {
+    "id": "N-1787603783832",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2024-2025 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:36:23.832Z"
+  },
+  {
+    "id": "N-1787603787117",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2024-008 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:36:27.117Z"
+  },
+  {
+    "id": "N-1787603823520",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:03.520Z"
+  },
+  {
+    "id": "N-1787603824921",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:04.921Z"
+  },
+  {
+    "id": "N-1787603825742",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:05.742Z"
+  },
+  {
+    "id": "N-1787603826609",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:06.609Z"
+  },
+  {
+    "id": "N-1787603827765",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:07.765Z"
+  },
+  {
+    "id": "N-1787603828635",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:08.635Z"
+  },
+  {
+    "id": "N-1787603829322",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:09.322Z"
+  },
+  {
+    "id": "N-1787603830115",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:10.115Z"
+  },
+  {
+    "id": "N-1787603831064",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:11.064Z"
+  },
+  {
+    "id": "N-1787603869846",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:49.846Z"
+  },
+  {
+    "id": "N-1787603872149",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:37:52.149Z"
+  },
+  {
+    "id": "N-1787604088661",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:28.661Z"
+  },
+  {
+    "id": "N-1787604089626",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:29.626Z"
+  },
+  {
+    "id": "N-1787604090290",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:30.290Z"
+  },
+  {
+    "id": "N-1787604090911",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:30.911Z"
+  },
+  {
+    "id": "N-1787604091362",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:31.362Z"
+  },
+  {
+    "id": "N-1787604091802",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:31.802Z"
+  },
+  {
+    "id": "N-1787604092323",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:32.323Z"
+  },
+  {
+    "id": "N-1787604092755",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:32.755Z"
+  },
+  {
+    "id": "N-1787604093337",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:33.337Z"
+  },
+  {
+    "id": "N-1787604095427",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:41:35.427Z"
+  },
+  {
+    "id": "N-1787604167377",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:42:47.377Z"
+  },
+  {
+    "id": "N-1787604329091",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:29.091Z"
+  },
+  {
+    "id": "N-1787604330385",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:30.385Z"
+  },
+  {
+    "id": "N-1787604331547",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:31.547Z"
+  },
+  {
+    "id": "N-1787604342600",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:42.600Z"
+  },
+  {
+    "id": "N-1787604343576",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:43.576Z"
+  },
+  {
+    "id": "N-1787604344384",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:44.384Z"
+  },
+  {
+    "id": "N-1787604344971",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:44.971Z"
+  },
+  {
+    "id": "N-1787604345375",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:45.375Z"
+  },
+  {
+    "id": "N-1787604345782",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:45.783Z"
+  },
+  {
+    "id": "N-1787604346210",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:46.210Z"
+  },
+  {
+    "id": "N-1787604346952",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:46.952Z"
+  },
+  {
+    "id": "N-1787604347623",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:47.623Z"
+  },
+  {
+    "id": "N-1787604348238",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:45:48.238Z"
+  },
+  {
+    "id": "N-1787604583047",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:49:43.047Z"
+  },
+  {
+    "id": "N-1787604583991",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:49:43.991Z"
+  },
+  {
+    "id": "N-1787604584721",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:49:44.721Z"
+  },
+  {
+    "id": "N-1787604585421",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:49:45.421Z"
+  },
+  {
+    "id": "N-1787604586054",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:49:46.054Z"
+  },
+  {
+    "id": "N-1787604687080",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:51:27.080Z"
+  },
+  {
+    "id": "N-1787604693395",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-005. Rating: 4/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:51:33.395Z"
+  },
+  {
+    "id": "N-1787604712767",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2024-006. Rating: 5/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-24T20:51:52.767Z"
   }
 ]

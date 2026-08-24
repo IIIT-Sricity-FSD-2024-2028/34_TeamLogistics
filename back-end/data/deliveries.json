@@ -87,7 +87,17 @@
     "status": "Delivered",
     "priority": "Low",
     "items": 25,
-    "driver": "Kiran Teja"
+    "driver": "Kiran Teja",
+    "feedback": {
+      "rating": 5,
+      "comment": "",
+      "deliveryQuality": "",
+      "driverBehavior": "",
+      "overallExperience": "Satisfied",
+      "submittedAt": "2026-08-24T20:51:52.759Z"
+    },
+    "feedbackSubmitted": true,
+    "updatedAt": "2026-08-24T20:51:52.759Z"
   },
   {
     "id": "DR-2024-007",
@@ -112,11 +122,13 @@
     "package": "Server equipment - 50kg",
     "type": "Express",
     "requestTime": "2024-03-08 04:00 PM",
-    "status": "Blocked",
+    "status": "Cancelled",
     "priority": "High",
     "items": 1,
     "driver": "Assigning",
-    "blockReason": "Oversized package requires special vehicle clearance"
+    "blockReason": "Oversized package requires special vehicle clearance",
+    "cancelReason": "Cancelled by business client",
+    "updatedAt": "2026-08-24T20:36:27.111Z"
   },
   {
     "id": "DR-2024-2025",
@@ -127,7 +139,7 @@
     "package": "Documents",
     "type": "Express",
     "requestTime": "5/5/2026, 10:54:55 pm",
-    "status": "Queued",
+    "status": "Cancelled",
     "priority": "High",
     "items": 1,
     "driver": "Raghav Reddy",
@@ -140,7 +152,9 @@
     "eta": "35 mins",
     "distance": "Distance not available",
     "weight": "",
-    "instructions": "Handle package carefully."
+    "instructions": "Handle package carefully.",
+    "cancelReason": "Cancelled by business client",
+    "updatedAt": "2026-08-24T20:36:23.823Z"
   },
   {
     "id": "DR-2026-001",
@@ -151,7 +165,7 @@
     "package": "Document",
     "type": "Express",
     "requestTime": "5/5/2026, 11:24:35 pm",
-    "status": "Issue Reported",
+    "status": "Cancelled",
     "priority": "High",
     "items": 1,
     "driver": "Raghav Reddy",
@@ -173,10 +187,11 @@
     "distance": "Distance not available",
     "assignedDriver": "Raghav Reddy",
     "createdAt": "2026-05-05T17:54:35.837Z",
-    "updatedAt": "2026-05-05T17:54:35.837Z",
+    "updatedAt": "2026-08-24T20:36:20.616Z",
     "issueType": "Package damaged",
     "issueDescription": "hgjjNs<mbbnmB",
-    "issueReportedAt": "2026-05-05T20:27:44.121Z"
+    "issueReportedAt": "2026-05-05T20:27:44.121Z",
+    "cancelReason": "Cancelled by business client"
   },
   {
     "id": "DR-2026-002",
@@ -229,7 +244,7 @@
     "package": "documents",
     "type": "Express",
     "requestTime": "5/5/2026, 11:33:06 pm",
-    "status": "Issue Reported",
+    "status": "Cancelled",
     "priority": "High",
     "items": 1,
     "driver": "Raghav Reddy",
@@ -251,10 +266,11 @@
     "distance": "Distance not available",
     "assignedDriver": "Raghav Reddy",
     "createdAt": "2026-05-05T18:03:06.887Z",
-    "updatedAt": "2026-05-05T18:03:06.887Z",
+    "updatedAt": "2026-08-24T20:30:15.586Z",
     "issueType": "Traffic delay",
     "issueDescription": "sgsgsg",
-    "issueReportedAt": "2026-05-05T18:09:34.407Z"
+    "issueReportedAt": "2026-05-05T18:09:34.407Z",
+    "cancelReason": "Cancelled by business client"
   },
   {
     "id": "DR-2026-004",
@@ -321,7 +337,16 @@
     "distance": "Distance not available",
     "assignedDriver": "Raghav Reddy",
     "createdAt": "2026-05-05T18:57:17.914Z",
-    "updatedAt": "2026-05-05T18:57:17.914Z"
+    "updatedAt": "2026-08-24T20:51:33.387Z",
+    "feedback": {
+      "rating": 4,
+      "comment": "",
+      "deliveryQuality": "",
+      "driverBehavior": "",
+      "overallExperience": "",
+      "submittedAt": "2026-08-24T20:51:33.387Z"
+    },
+    "feedbackSubmitted": true
   },
   {
     "id": "DR-2026-006",
@@ -354,7 +379,7 @@
     "distance": "Distance not available",
     "assignedDriver": "Raghav Reddy",
     "createdAt": "2026-05-05T20:20:51.742Z",
-    "updatedAt": "2026-05-05T20:24:48.041Z",
+    "updatedAt": "2026-08-24T20:51:27.074Z",
     "blockReason": "adnabfnab",
     "unblockReason": "aafnabndbanbd",
     "feedback": {
@@ -363,7 +388,7 @@
       "deliveryQuality": "Excellent",
       "driverBehavior": "Good",
       "overallExperience": "Neutral",
-      "submittedAt": "2026-05-05T20:24:48.041Z"
+      "submittedAt": "2026-08-24T20:51:27.074Z"
     },
     "feedbackSubmitted": true
   }

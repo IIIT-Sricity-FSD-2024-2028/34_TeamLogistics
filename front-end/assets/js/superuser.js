@@ -233,10 +233,15 @@
           <header class="topbar">
             <div class="page-title">${title}</div>
             <div class="topbar-right">
-              <div class="search-wrap">${icon.search}<input class="search" placeholder="Search..."></div>
-              <button class="icon-btn" id="bellBtn">${icon.bell}<span class="badge-count">${s.superuser.notifications.length}</span></button>
-              <button class="avatar-mini" id="profileBtn">${(session.name||'A').charAt(0).toUpperCase()}</button>
-            </div>
+  <button class="icon-btn" id="bellBtn">
+    ${icon.bell}
+    <span class="badge-count">${s.superuser.notifications.length}</span>
+  </button>
+
+  <button class="avatar-mini" id="profileBtn">
+    ${(session.name||'A').charAt(0).toUpperCase()}
+  </button>
+</div>
           </header>
           <div class="page-scroll"><div id="pageRoot"></div></div>
         </main>
@@ -2880,8 +2885,8 @@ function renderTripDetail(){
   });
 }
 
- async function renderTransactions(){
-  const s = pageLayout('Transactions','Transactions'); 
+async function renderTransactions(){
+  const s = pageLayout('Transactions', 'Transactions');
   if(!s) return;
 
   $('#pageRoot').innerHTML = `
@@ -2944,36 +2949,6 @@ function renderTripDetail(){
         </table>
       </div>
     </div>
-
-    <div class="content-card table-card" style="margin-top:24px">
-      <div class="table-head">
-        <h3>Transactions & Invoices</h3>
-        <div class="filters">
-          <input id="txnSearch" class="mini-input" placeholder="Search transactions...">
-        </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Client</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-
-        <tbody id="txnBody">
-          <tr>
-            <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
-              Loading all transactions...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   `;
 
   function money(value){
@@ -3002,11 +2977,9 @@ function renderTripDetail(){
 
   async function render(){
     try {
-      const q = ($('#txnSearch')?.value || '').trim();
-
       const [transactions, invoices] = await Promise.all([
-        DeliverySyncAPI.Transactions.getPayments(q),
-        DeliverySyncAPI.Transactions.getInvoices(q)
+        DeliverySyncAPI.Transactions.getPayments(),
+        DeliverySyncAPI.Transactions.getInvoices()
       ]);
 
       const invoiceRows = (invoices || []).filter(function(inv){
@@ -3058,53 +3031,6 @@ function renderTripDetail(){
         </tr>
       `;
 
-      const allRows = [
-        ...(transactions || []).map(function(t){
-          return {
-            id: t.id || t.transactionId || '-',
-            type: t.type || 'Payment',
-            client: t.client || t.customer || '-',
-            amount: money(t.amount),
-            status: t.status || 'Completed',
-            date: t.date || dateText(t.createdAt)
-          };
-        }),
-
-        ...(invoices || []).map(function(inv){
-          return {
-            id: inv.id || inv.invoiceId || '-',
-            type: 'Invoice',
-            client: inv.client || inv.customer || inv.businessClient || '-',
-            amount: money(inv.amount),
-            status: inv.status || 'Unpaid',
-            date: inv.dueDate || dateText(inv.createdAt)
-          };
-        })
-      ];
-
-      $('#txnBody').innerHTML = allRows.map(function(r){
-        return `
-          <tr>
-            <td>${r.id}</td>
-            <td>${r.type}</td>
-            <td>${r.client}</td>
-            <td>${r.amount}</td>
-            <td>
-              <span class="status-pill ${statusClass(r.status)}">
-                ${r.status}
-              </span>
-            </td>
-            <td>${r.date}</td>
-          </tr>
-        `;
-      }).join('') || `
-        <tr>
-          <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
-            No transactions found. Complete a delivery workflow to generate transaction records.
-          </td>
-        </tr>
-      `;
-
     } catch(error) {
       console.error('Failed to load transactions from backend:', error);
 
@@ -3123,18 +3049,8 @@ function renderTripDetail(){
           </td>
         </tr>
       `;
-
-      $('#txnBody').innerHTML = `
-        <tr>
-          <td colspan="6" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load transactions and invoices from backend.
-          </td>
-        </tr>
-      `;
     }
   }
-
-  $('#txnSearch').oninput = render;
 
   await render();
 }

@@ -69,28 +69,48 @@
 
         <div class="topbar-right">
           <div style="position:relative">
-            <button class="icon-circle" type="button">
-              🔔
-              <span class="icon-badge"></span>
-            </button>
+           <a class="icon-circle" href="notifications.html" aria-label="Notifications">
+  <svg
+    width="21"
+    height="21"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M18 9C18 5.686 15.314 3 12 3C8.686 3 6 5.686 6 9V13.2C6 14.054 5.728 14.885 5.224 15.574L4 17.25H20L18.776 15.574C18.272 14.885 18 14.054 18 13.2V9Z"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M9.5 20C10.1 20.62 11 21 12 21C13 21 13.9 20.62 14.5 20"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+    />
+  </svg>
+
+  <span class="icon-badge"></span>
+</a>
           </div>
 
           <div class="profile-menu" style="position:relative">
-            <button class="profile-chip" type="button">
+            <a class="profile-chip" type="button">
               <div class="profile-avatar">R</div>
               <div>
                 <div style="font-weight:800">Raghav Reddy</div>
                 <div style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div>
               </div>
-            </button>
+            </a>
           </div>
         </div>
       </header>
 
       <section class="content">
-        <div id="backendVerification" class="verify-box">
-          Verifying history from backend...
-        </div>
+       
 
         <div class="history-grid">
           <div class="history-card">
@@ -197,43 +217,47 @@
       gap: 14px;
     }
 
-    .timeline-item {
-      position: relative;
-      padding: 16px 16px 16px 42px;
-      background: #0b0b0b;
-      border: 1px solid #262626;
-      border-radius: 16px;
-    }
+    .timeline-item{
+  position:relative;
+  display:block;
+  padding:16px 16px 16px 42px;
+  background:#0b0b0b;
+  border:1px solid #262626;
+  border-radius:16px;
+  min-height:110px;
+}
 
-    .timeline-dot {
-      position: absolute;
-      left: 16px;
-      top: 20px;
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      background: #ffd400;
-      box-shadow: 0 0 0 4px rgba(255, 212, 0, .12);
-    }
+.timeline-dot{
+  position:absolute;
+  left:16px;
+  top:20px;
+  width:14px;
+  height:14px;
+  border-radius:999px;
+  background:#ffd400;
+  box-shadow:0 0 0 4px rgba(255,212,0,.12);
+}
 
-    .timeline-title {
-      font-weight: 900;
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
+.timeline-title{
+  margin:0 0 6px;
+  font-size:16px;
+  font-weight:900;
+  line-height:1.35;
+}
 
-    .timeline-meta {
-      color: #9ca3af;
-      font-size: 13px;
-      line-height: 1.5;
-    }
+.timeline-meta{
+  color:#9ca3af;
+  font-size:13px;
+  line-height:1.6;
+}
 
-    .timeline-time {
-      margin-top: 10px;
-      color: #ffd400;
-      font-size: 12px;
-      font-weight: 900;
-    }
+.timeline-time{
+  margin-top:10px;
+  color:#ffd400;
+  font-size:12px;
+  font-weight:900;
+  line-height:1.4;
+}
 
     .issue-list {
       display: flex;
@@ -333,14 +357,7 @@
       const ROLE = "driver";
       const DRIVER_NAME = "Raghav Reddy";
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
-
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      
 
       const getArray = (result) => {
         if (Array.isArray(result)) return result;
@@ -557,12 +574,10 @@
             source: "GET /api/trips + GET /api/deliveries",
           });
 
-          setVerification(
-            `Backend verified: History ✓ | Trips ${trips.length} | Deliveries ${deliveries.length}`
-          );
+          
         } catch (error) {
           console.error("History backend sync failed:", error);
-          setVerification(`Backend sync failed: ${error.message}`, true);
+          console.error(`History backend sync failed: ${error.message}`);
         }
       };
 

@@ -394,14 +394,7 @@
         if (el) el.textContent = value || "Not available";
       };
 
-      const setVerification = (message, isError = false) => {
-        const box = document.getElementById("backendVerification");
-        if (!box) return;
-
-        box.textContent = message;
-        box.style.borderColor = isError ? "#ef4444" : "#10b981";
-        box.style.color = isError ? "#fecaca" : "#d1fae5";
-      };
+      
 
       const getArray = (result) => {
         if (Array.isArray(result)) return result;
@@ -508,13 +501,11 @@
             source: "back-end/data/trips.json through GET /api/trips or GET /api/trips/:id",
           });
 
-          setVerification(
-            `Backend verified: Trip details ✓ | ${currentTrip.id || tripIdFromUrl} | ${currentTrip.status || "Loaded"}`
-          );
+         
         } catch (error) {
           console.error("Delivery details backend sync failed:", error);
 
-          setVerification(`Backend sync failed: ${error.message}`, true);
+          console.error(`History backend sync failed: ${error.message}`);
 
           setText("deliveryTitle", "Delivery not found");
           setText("deliverySubtitle", "Could not load trip details from backend.");
@@ -534,7 +525,7 @@
           note: "UI updated. Add backend PATCH endpoint for persistent driver status changes.",
         });
 
-        setVerification(`Backend verified: Trip details ✓ | UI status changed to ${status}`);
+       
       };
 
       document.getElementById("acceptBtn").addEventListener("click", () => updateStatusInUI("Accepted"));

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/business-client.css" />
@@ -19,447 +23,1191 @@
 </head>
 
 <body class="bc-body">
-  <div class="track-layout">
-    <a href="active-deliveries.html" class="back-btn">Back to Deliveries</a>
 
-    <h1 class="page-title">Live Tracking</h1>
-    <p class="page-subtitle">Track your delivery in real-time</p>
+  <div class="bc-layout">
 
-    <!-- Backend Verification Box -->
-    <div
-      id="backendVerification"
-      style="
-        margin-top: 16px;
-        margin-bottom: 24px;
-        padding: 12px 16px;
-        border-radius: 12px;
-        background: #111827;
-        border: 1px solid #1f2937;
-        color: #d1d5db;
-        font-size: 14px;
-      "
-    >
-      Verifying backend data...
-    </div>
+    <!-- ================= SIDEBAR ================= -->
 
-    <div class="track-grid">
-      <div>
-        <!-- Estimated Arrival -->
-        <div class="yellow-banner">
-          <div class="small">Estimated Arrival</div>
-          <div class="big" id="etaTime">Loading...</div>
-          <div id="etaDate">Please wait</div>
-        </div>
+    <aside class="bc-sidebar">
 
-        <!-- Delivery Progress -->
-        <div class="card progress-card">
-          <h2>Delivery Progress</h2>
-
-          <div class="timeline">
-            <div class="t-item">
-              <div class="t-dot complete">✓</div>
-
-              <div class="t-title">
-                Package Picked Up
-                <span class="pill green">Complete</span>
-              </div>
-
-              <div class="t-sub" id="pickupInfo">Loading...</div>
-            </div>
-
-            <div class="t-item">
-              <div class="t-dot">
-                <svg viewBox="0 0 24 24">
-                  <path d="M10 17h4V5H2v12h2"></path>
-                  <path d="M14 8h4l4 4v5h-2"></path>
-                  <circle cx="7" cy="17" r="2"></circle>
-                  <circle cx="17" cy="17" r="2"></circle>
-                </svg>
-              </div>
-
-              <div class="t-title">
-                In Transit
-                <span class="pill bright">Active</span>
-              </div>
-
-              <div class="t-sub" id="transitInfo">Loading...</div>
-
-              <div class="live-box">
-                <div
-                  style="
-                    font-size: 13px;
-                    font-weight: 800;
-                    color: var(--yellow);
-                    text-transform: uppercase;
-                    letter-spacing: .08em;
-                  "
-                >
-                  Live Location
-                </div>
-
-                <div id="liveLocation" style="margin-top: 10px; color: #d4d4d4;">
-                  Loading live location...
-                </div>
-              </div>
-            </div>
-
-            <div class="t-item" style="opacity: .35; padding-bottom: 0;">
-              <div class="t-dot">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2l7 4v8l-7 4-7-4V6l7-4z"></path>
-                  <path d="M5 8l7 4 7-4"></path>
-                  <path d="M12 12v6"></path>
-                </svg>
-              </div>
-
-              <div class="t-title">
-                Delivery Complete
-                <span class="pill bright">Pending</span>
-              </div>
-
-              <div class="t-sub" id="completeInfo">Loading...</div>
-            </div>
-          </div>
-        </div>
+      <div class="bc-brand">
+        <div
+          class="ds-brand-logo"
+          data-href="dashboard.html"
+          data-size="sm"
+          data-sub="Business Client"
+        ></div>
       </div>
 
-      <div>
-        <!-- Package Information -->
-        <div class="card side-card">
-          <h3>Package Information</h3>
+      <nav class="bc-nav">
 
-          <div class="kv">
-            <div class="k">Tracking ID</div>
-            <div class="v" id="trackingId" style="color: var(--yellow);">Loading...</div>
-          </div>
+        <a href="dashboard.html" data-nav="dashboard">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
 
-          <div class="kv">
-            <div class="k">Delivery Method</div>
-            <div class="v" id="deliveryMethod">Loading...</div>
-          </div>
+        <a href="create-delivery.html" data-nav="create-delivery">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+            </svg>
+          </span>
+          <span>Create Delivery</span>
+        </a>
 
-          <div class="kv">
-            <div class="k">Estimated Weight</div>
-            <div class="v" id="packageWeight">Loading...</div>
-          </div>
+        <a
+          href="active-deliveries.html"
+          data-nav="active-deliveries"
+          class="active"
+        >
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path>
+              <path d="M12 22V11"></path>
+              <path d="M20 6.5l-8 4.5-8-4.5"></path>
+            </svg>
+          </span>
+          <span>Active Deliveries</span>
+        </a>
 
-          <div class="kv" style="margin-bottom: 0;">
-            <div class="k">Package Size</div>
-            <div class="v" id="packageSize">Loading...</div>
-          </div>
+        <a
+          href="completed-deliveries.html"
+          data-nav="completed-deliveries"
+        >
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Completed Deliveries</span>
+        </a>
+
+        <a href="invoices.html" data-nav="invoices">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Invoices</span>
+        </a>
+
+        <a
+          href="submit-transaction.html"
+          data-nav="submit-transaction"
+        >
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </span>
+          <span>Submit Transaction</span>
+        </a>
+
+        <a href="notifications.html" data-nav="notifications">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 9a6 6 0 1 0-12 0v4l-2 3h16l-2-3V9"></path>
+              <path d="M10 20h4"></path>
+            </svg>
+          </span>
+          <span>Notifications</span>
+        </a>
+
+        <a href="profile.html" data-nav="profile">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 20a8 8 0 0 1 16 0"></path>
+            </svg>
+          </span>
+          <span>Profile</span>
+        </a>
+
+      </nav>
+
+      <div class="spacer"></div>
+
+      <a class="bc-logout" href="../login.html">
+        <span class="ico">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <path d="M16 17l5-5-5-5"></path>
+            <path d="M21 12H9"></path>
+          </svg>
+        </span>
+        <span>Logout</span>
+      </a>
+
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="bc-main">
+
+      <!-- ================= TOPBAR ================= -->
+
+      <header class="bc-topbar">
+
+        <div class="bc-topbar-left">
+          <div class="company">Acme Logistics Inc.</div>
+          <div class="subtitle">Business Client Dashboard</div>
         </div>
 
-        <!-- Driver Information -->
-        <div class="card side-card" style="margin-top: 24px;">
-          <h3>Driver Information</h3>
+        <div class="bc-top-actions">
 
-          <div class="driver-head">
-            <div class="driver-avatar">
-              <svg viewBox="0 0 24 24">
-                <path d="M20 21a8 8 0 0 0-16 0"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
+          <a
+            class="bc-bell"
+            href="notifications.html"
+            aria-label="Notifications"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                d="M18 9C18 5.686 15.314 3 12 3C8.686 3 6 5.686 6 9V13.2C6 14.054 5.728 14.885 5.224 15.574L4 17.25H20L18.776 15.574C18.272 14.885 18 14.054 18 13.2V9Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9.5 20C10.1 20.62 11 21 12 21C13 21 13.9 20.62 14.5 20"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+
+            <span class="badge">3</span>
+          </a>
+
+          <a class="bc-profile-chip" href="profile.html">
+
+            <div class="bc-profile-avatar">
+              A
             </div>
+
+            <div class="bc-profile-info">
+              <strong>Acme Logistics</strong>
+              <span>Business Client</span>
+            </div>
+
+          </a>
+
+        </div>
+
+      </header>
+
+      <!-- ================= CONTENT ================= -->
+
+      <section class="bc-content">
+
+        <div class="track-layout">
+
+          <a
+            href="active-deliveries.html"
+            class="back-btn"
+          >
+            ← Back to Deliveries
+          </a>
+
+          <h1 class="page-title">
+            Live Tracking
+          </h1>
+
+          <p class="page-subtitle">
+            Track your delivery in real-time
+          </p>
+
+          <div class="track-grid">
+
+            <!-- ================= LEFT ================= -->
 
             <div>
-              <div id="driverName" style="font-size: 18px; font-weight: 800;">
-                Loading...
+
+              <!-- Estimated Arrival -->
+
+              <div class="yellow-banner">
+
+                <div class="small">
+                  Estimated Arrival
+                </div>
+
+                <div
+                  class="big"
+                  id="etaTime"
+                >
+                  Loading...
+                </div>
+
+                <div id="etaDate">
+                  Please wait
+                </div>
+
               </div>
 
-              <div id="driverRating" style="margin-top: 6px; color: #9f9f9f;">
-                Loading...
+              <!-- Delivery Progress -->
+
+              <div class="card progress-card">
+
+                <h2>
+                  Delivery Progress
+                </h2>
+
+                <div class="timeline">
+
+                  <!-- Pickup -->
+
+                  <div class="t-item">
+
+                    <div class="t-dot complete">
+                      ✓
+                    </div>
+
+                    <div class="t-title">
+                      Package Picked Up
+                      <span class="pill green">
+                        Complete
+                      </span>
+                    </div>
+
+                    <div
+                      class="t-sub"
+                      id="pickupInfo"
+                    >
+                      Loading...
+                    </div>
+
+                  </div>
+
+                  <!-- In Transit -->
+
+                  <div class="t-item">
+
+                    <div class="t-dot">
+
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 17h4V5H2v12h2"></path>
+                        <path d="M14 8h4l4 4v5h-2"></path>
+                        <circle cx="7" cy="17" r="2"></circle>
+                        <circle cx="17" cy="17" r="2"></circle>
+                      </svg>
+
+                    </div>
+
+                    <div class="t-title">
+                      In Transit
+
+                      <span class="pill bright">
+                        Active
+                      </span>
+                    </div>
+
+                    <div
+                      class="t-sub"
+                      id="transitInfo"
+                    >
+                      Loading...
+                    </div>
+
+                    <div class="live-box">
+
+                      <div
+                        style="
+                          font-size:13px;
+                          font-weight:800;
+                          color:var(--yellow);
+                          text-transform:uppercase;
+                          letter-spacing:.08em;
+                        "
+                      >
+                        Live Location
+                      </div>
+
+                      <div
+                        id="liveLocation"
+                        style="
+                          margin-top:10px;
+                          color:#d4d4d4;
+                        "
+                      >
+                        Loading live location...
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <!-- Delivery Complete -->
+
+                  <div
+                    class="t-item"
+                    style="
+                      opacity:.35;
+                      padding-bottom:0;
+                    "
+                  >
+
+                    <div class="t-dot">
+
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2l7 4v8l-7 4-7-4V6l7-4z"></path>
+                        <path d="M5 8l7 4 7-4"></path>
+                        <path d="M12 12v6"></path>
+                      </svg>
+
+                    </div>
+
+                    <div class="t-title">
+
+                      Delivery Complete
+
+                      <span class="pill bright">
+                        Pending
+                      </span>
+
+                    </div>
+
+                    <div
+                      class="t-sub"
+                      id="completeInfo"
+                    >
+                      Loading...
+                    </div>
+
+                  </div>
+
+                </div>
+
               </div>
+
             </div>
+
+            <!-- ================= RIGHT ================= -->
+
+            <div>
+
+              <!-- Package Information -->
+
+              <div class="card side-card">
+
+                <h3>
+                  Package Information
+                </h3>
+
+                <div class="kv">
+
+                  <div class="k">
+                    Tracking ID
+                  </div>
+
+                  <div
+                    class="v"
+                    id="trackingId"
+                    style="color:var(--yellow)"
+                  >
+                    Loading...
+                  </div>
+
+                </div>
+
+                <div class="kv">
+
+                  <div class="k">
+                    Delivery Method
+                  </div>
+
+                  <div
+                    class="v"
+                    id="deliveryMethod"
+                  >
+                    Loading...
+                  </div>
+
+                </div>
+
+                <div class="kv">
+
+                  <div class="k">
+                    Estimated Weight
+                  </div>
+
+                  <div
+                    class="v"
+                    id="packageWeight"
+                  >
+                    Loading...
+                  </div>
+
+                </div>
+
+                <div
+                  class="kv"
+                  style="margin-bottom:0"
+                >
+
+                  <div class="k">
+                    Package Size
+                  </div>
+
+                  <div
+                    class="v"
+                    id="packageSize"
+                  >
+                    Loading...
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- Driver Information -->
+
+              <div
+                class="card side-card"
+                style="margin-top:24px"
+              >
+
+                <h3>
+                  Driver Information
+                </h3>
+
+                <div class="driver-head">
+
+                  <div class="driver-avatar">
+
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 21a8 8 0 0 0-16 0"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+
+                  </div>
+
+                  <div>
+
+                    <div
+                      id="driverName"
+                      style="
+                        font-size:18px;
+                        font-weight:800;
+                      "
+                    >
+                      Loading...
+                    </div>
+
+                    <div
+                      id="driverRating"
+                      style="
+                        margin-top:6px;
+                        color:#9f9f9f;
+                      "
+                    >
+                      Loading...
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <!-- Contact -->
+
+                <div class="driver-box">
+
+                  <div
+                    style="
+                      display:flex;
+                      align-items:center;
+                      gap:12px;
+                    "
+                  >
+
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.5 6.5l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z"></path>
+                    </svg>
+
+                    <div>
+
+                      <div class="k">
+                        Contact
+                      </div>
+
+                      <div
+                        class="v"
+                        id="driverContact"
+                      >
+                        Loading...
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <!-- Vehicle -->
+
+                <div class="driver-box">
+
+                  <div
+                    style="
+                      display:flex;
+                      align-items:center;
+                      gap:12px;
+                    "
+                  >
+
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M10 17h4V5H2v12h2"></path>
+                      <path d="M14 8h4l4 4v5h-2"></path>
+                      <circle cx="7" cy="17" r="2"></circle>
+                      <circle cx="17" cy="17" r="2"></circle>
+                    </svg>
+
+                    <div>
+
+                      <div class="k">
+                        Vehicle
+                      </div>
+
+                      <div
+                        class="v"
+                        id="vehicleInfo"
+                      >
+                        Loading...
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
           </div>
 
-          <div class="driver-box">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <svg viewBox="0 0 24 24">
-                <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.5 6.5l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z"></path>
-              </svg>
-
-              <div>
-                <div class="k">Contact</div>
-                <div class="v" id="driverContact">Loading...</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="driver-box">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <svg viewBox="0 0 24 24">
-                <path d="M10 17h4V5H2v12h2"></path>
-                <path d="M14 8h4l4 4v5h-2"></path>
-                <circle cx="7" cy="17" r="2"></circle>
-                <circle cx="17" cy="17" r="2"></circle>
-              </svg>
-
-              <div>
-                <div class="k">Vehicle</div>
-                <div class="v" id="vehicleInfo">Loading...</div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Backend Sync Script -->
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        const params = new URLSearchParams(window.location.search);
-        const deliveryIdFromUrl = params.get("id");
+      </section>
 
-        const setText = (id, value) => {
-          const el = document.getElementById(id);
-          if (el) {
-            el.textContent = value || "Not available";
+    </main>
+
+  </div>
+
+  <!-- ================= LIVE TRACKING SCRIPT ================= -->
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      const deliveryIdFromUrl =
+        params.get("id");
+
+      const setText = (id, value) => {
+
+        const el =
+          document.getElementById(id);
+
+        if (el) {
+          el.textContent =
+            value || "Not available";
+        }
+
+      };
+
+      const getArray = (result) => {
+
+        if (Array.isArray(result)) {
+          return result;
+        }
+
+        if (Array.isArray(result?.data)) {
+          return result.data;
+        }
+
+        if (Array.isArray(result?.items)) {
+          return result.items;
+        }
+
+        return [];
+      };
+
+      const calculatePackageSize =
+        (packageText = "") => {
+
+          const text =
+            String(packageText)
+              .toLowerCase();
+
+          if (text.includes("small")) {
+            return "Small";
           }
-        };
 
-        const setVerification = (message, isError = false) => {
-          const box = document.getElementById("backendVerification");
-          if (!box) return;
+          if (text.includes("medium")) {
+            return "Medium";
+          }
 
-          box.textContent = message;
-          box.style.borderColor = isError ? "#ef4444" : "#10b981";
-          box.style.color = isError ? "#fecaca" : "#d1fae5";
-        };
+          if (text.includes("large")) {
+            return "Large";
+          }
 
-        const getArray = (result) => {
-          if (Array.isArray(result)) return result;
-          if (Array.isArray(result?.data)) return result.data;
-          if (Array.isArray(result?.items)) return result.items;
-          return [];
-        };
+          const weightMatch =
+            text.match(
+              /(\d+)\s*(kg|kgs|lb|lbs)/i
+            );
 
-        const calculatePackageSize = (packageText = "") => {
-          const text = String(packageText).toLowerCase();
+          if (!weightMatch) {
+            return "Medium";
+          }
 
-          if (text.includes("small")) return "Small";
-          if (text.includes("medium")) return "Medium";
-          if (text.includes("large")) return "Large";
+          const weight =
+            Number(weightMatch[1]);
 
-          const weightMatch = text.match(/(\d+)\s*(kg|kgs|lb|lbs)/i);
+          if (weight <= 5) {
+            return "Small";
+          }
 
-          if (!weightMatch) return "Medium";
+          if (weight <= 20) {
+            return "Medium";
+          }
 
-          const weight = Number(weightMatch[1]);
-
-          if (weight <= 5) return "Small";
-          if (weight <= 20) return "Medium";
           return "Large";
         };
 
-        const extractWeight = (packageText = "") => {
-          const text = String(packageText);
-          const weightMatch = text.match(/(\d+)\s*(kg|kgs|lb|lbs)/i);
-          return weightMatch ? weightMatch[0] : "Not available";
+      const extractWeight =
+        (packageText = "") => {
+
+          const text =
+            String(packageText);
+
+          const weightMatch =
+            text.match(
+              /(\d+)\s*(kg|kgs|lb|lbs)/i
+            );
+
+          return weightMatch
+            ? weightMatch[0]
+            : "Not available";
         };
 
-        try {
-          if (!window.DeliverySyncAPI) {
-            throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
-          }
+      try {
 
-          const deliveriesResult = await DeliverySyncAPI.Deliveries.getAll();
-          const tripsResult = await DeliverySyncAPI.Trips.getAll();
-          const driversResult = await DeliverySyncAPI.Drivers.getAll();
-          const vehiclesResult = await DeliverySyncAPI.Vehicles.getAll();
+        if (!window.DeliverySyncAPI) {
+          throw new Error(
+            "DeliverySyncAPI is not loaded. Check api-client.js path."
+          );
+        }
 
-          const deliveries = getArray(deliveriesResult);
-          const trips = getArray(tripsResult);
-          const drivers = getArray(driversResult);
-          const vehicles = getArray(vehiclesResult);
+        const deliveriesResult =
+          await DeliverySyncAPI.Deliveries.getAll();
 
-          let delivery = null;
+        const tripsResult =
+          await DeliverySyncAPI.Trips.getAll();
 
-          if (deliveryIdFromUrl && DeliverySyncAPI.Deliveries.getOne) {
-            try {
-              delivery = await DeliverySyncAPI.Deliveries.getOne(deliveryIdFromUrl);
-            } catch (error) {
-              delivery = deliveries.find((d) => String(d.id) === String(deliveryIdFromUrl));
-            }
-          }
+        const driversResult =
+          await DeliverySyncAPI.Drivers.getAll();
 
-          if (!delivery) {
+        const vehiclesResult =
+          await DeliverySyncAPI.Vehicles.getAll();
+
+        const deliveries =
+          getArray(deliveriesResult);
+
+        const trips =
+          getArray(tripsResult);
+
+        const drivers =
+          getArray(driversResult);
+
+        const vehicles =
+          getArray(vehiclesResult);
+
+        let delivery = null;
+
+        if (
+          deliveryIdFromUrl &&
+          DeliverySyncAPI.Deliveries.getOne
+        ) {
+
+          try {
+
             delivery =
-              deliveries.find((d) => {
-                const status = String(d.status || "").toLowerCase();
-                return status !== "delivered" && status !== "cancelled" && status !== "completed";
-              }) || deliveries[0];
+              await DeliverySyncAPI.Deliveries.getOne(
+                deliveryIdFromUrl
+              );
+
+          } catch (error) {
+
+            delivery =
+              deliveries.find(
+                (d) =>
+                  String(d.id) ===
+                  String(deliveryIdFromUrl)
+              );
+
           }
+        }
 
-          if (!delivery) {
-            throw new Error("No delivery found from backend.");
-          }
-const trip =
-  trips.find((t) => String(t.deliveryId) === String(delivery.id)) ||
-  trips.find((t) => String(t.delivery_id) === String(delivery.id)) ||
-  trips.find((t) => String(t.request) === String(delivery.id)) ||
-  trips.find((t) => String(t.requestId) === String(delivery.id)) ||
-  trips.find((t) => String(t.deliveryRequestId) === String(delivery.id)) ||
-  trips.find((t) => String(t.id) === String(delivery.tripId)) ||
-  null;
+        if (!delivery) {
 
-          const driver =
-            drivers.find((d) => String(d.id) === String(delivery.driverId)) ||
-            drivers.find((d) => String(d.id) === String(trip?.driverId)) ||
-            drivers.find((d) => String(d.name) === String(trip?.driver)) ||
-            drivers.find((d) => String(d.fullName) === String(trip?.driver)) ||
-            null;
+          delivery =
+            deliveries.find((d) => {
 
-          const vehicle =
-            vehicles.find((v) => String(v.id) === String(delivery.vehicleId)) ||
-            vehicles.find((v) => String(v.id) === String(trip?.vehicleId)) ||
-            vehicles.find((v) => String(v.plateNumber) === String(trip?.vehicle)) ||
-            vehicles.find((v) => String(v.registrationNumber) === String(trip?.vehicle)) ||
-            vehicles.find((v) => String(v.vehicleNumber) === String(trip?.vehicle)) ||
-            null;
+              const status =
+                String(
+                  d.status || ""
+                ).toLowerCase();
 
-          const trackingId =
-            delivery.id ||
-            delivery.trackingId ||
-            delivery.tracking_id ||
-            "Not available";
+              return (
+                status !== "delivered" &&
+                status !== "cancelled" &&
+                status !== "completed"
+              );
 
-          const deliveryMethod =
-            delivery.type ||
-            delivery.deliveryMethod ||
-            delivery.method ||
-            "Standard Delivery";
+            }) || deliveries[0];
+        }
 
-          const packageText =
-            delivery.package ||
-            delivery.packageDetails ||
-            delivery.packageInfo ||
-            delivery.description ||
-            "";
+        if (!delivery) {
+          throw new Error(
+            "No delivery found from backend."
+          );
+        }
 
-          const pickupLocation =
-            delivery.pickup ||
-            delivery.pickupLocation ||
-            trip?.pickup ||
-            trip?.pickupLocation ||
-            "Pickup location not available";
+        const trip =
+          trips.find(
+            (t) =>
+              String(t.deliveryId) ===
+              String(delivery.id)
+          ) ||
 
-          const dropLocation =
-            delivery.dropoff ||
-            delivery.dropLocation ||
-            delivery.destination ||
-            trip?.destination ||
-            trip?.dropoff ||
-            "Drop location not available";
+          trips.find(
+            (t) =>
+              String(t.delivery_id) ===
+              String(delivery.id)
+          ) ||
 
-          const liveLocation =
-            vehicle?.location ||
-            vehicle?.currentLocation ||
-            trip?.currentLocation ||
-            delivery.currentLocation ||
-            pickupLocation;
+          trips.find(
+            (t) =>
+              String(t.request) ===
+              String(delivery.id)
+          ) ||
 
-          const distance =
-            trip?.distance ||
-            delivery.distance ||
-            "Distance not available";
+          trips.find(
+            (t) =>
+              String(t.requestId) ===
+              String(delivery.id)
+          ) ||
 
-          const eta =
-            trip?.eta ||
-            delivery.eta ||
-            delivery.estimatedArrival ||
-            delivery.estimatedTime ||
-            "30 minutes";
+          trips.find(
+            (t) =>
+              String(t.deliveryRequestId) ===
+              String(delivery.id)
+          ) ||
 
-          const driverName =
-            driver?.name ||
-            driver?.fullName ||
-            trip?.driver ||
-            delivery.driver ||
-            "Driver not assigned";
+          trips.find(
+            (t) =>
+              String(t.id) ===
+              String(delivery.tripId)
+          ) ||
 
-          const driverPhone =
-            driver?.phone ||
-            driver?.contact ||
-            driver?.mobile ||
-            trip?.phone ||
-            delivery.driverPhone ||
-            "Contact not available";
+          null;
 
-          const driverRating =
-            driver?.rating
-              ? `Professional Driver • ${driver.rating}★ Rating`
-              : "Professional Driver";
+        const driver =
 
-          const vehicleText = vehicle
+          drivers.find(
+            (d) =>
+              String(d.id) ===
+              String(delivery.driverId)
+          ) ||
+
+          drivers.find(
+            (d) =>
+              String(d.id) ===
+              String(trip?.driverId)
+          ) ||
+
+          drivers.find(
+            (d) =>
+              String(d.name) ===
+              String(trip?.driver)
+          ) ||
+
+          drivers.find(
+            (d) =>
+              String(d.fullName) ===
+              String(trip?.driver)
+          ) ||
+
+          null;
+
+        const vehicle =
+
+          vehicles.find(
+            (v) =>
+              String(v.id) ===
+              String(delivery.vehicleId)
+          ) ||
+
+          vehicles.find(
+            (v) =>
+              String(v.id) ===
+              String(trip?.vehicleId)
+          ) ||
+
+          vehicles.find(
+            (v) =>
+              String(v.plateNumber) ===
+              String(trip?.vehicle)
+          ) ||
+
+          vehicles.find(
+            (v) =>
+              String(v.registrationNumber) ===
+              String(trip?.vehicle)
+          ) ||
+
+          vehicles.find(
+            (v) =>
+              String(v.vehicleNumber) ===
+              String(trip?.vehicle)
+          ) ||
+
+          null;
+
+        const trackingId =
+          delivery.id ||
+          delivery.trackingId ||
+          delivery.tracking_id ||
+          "Not available";
+
+        const deliveryMethod =
+          delivery.type ||
+          delivery.deliveryMethod ||
+          delivery.method ||
+          "Standard Delivery";
+
+        const packageText =
+          delivery.package ||
+          delivery.packageDetails ||
+          delivery.packageInfo ||
+          delivery.description ||
+          "";
+
+        const pickupLocation =
+          delivery.pickup ||
+          delivery.pickupLocation ||
+          trip?.pickup ||
+          trip?.pickupLocation ||
+          "Pickup location not available";
+
+        const dropLocation =
+          delivery.dropoff ||
+          delivery.dropLocation ||
+          delivery.destination ||
+          trip?.destination ||
+          trip?.dropoff ||
+          "Drop location not available";
+
+        const liveLocation =
+          vehicle?.location ||
+          vehicle?.currentLocation ||
+          trip?.currentLocation ||
+          delivery.currentLocation ||
+          pickupLocation;
+
+        const distance =
+          trip?.distance ||
+          delivery.distance ||
+          "Distance not available";
+
+        const eta =
+          trip?.eta ||
+          delivery.eta ||
+          delivery.estimatedArrival ||
+          delivery.estimatedTime ||
+          "30 minutes";
+
+        const driverName =
+          driver?.name ||
+          driver?.fullName ||
+          trip?.driver ||
+          delivery.driver ||
+          "Driver not assigned";
+
+        const driverPhone =
+          driver?.phone ||
+          driver?.contact ||
+          driver?.mobile ||
+          trip?.phone ||
+          delivery.driverPhone ||
+          "Contact not available";
+
+        const driverRating =
+          driver?.rating
+            ? `Professional Driver • ${driver.rating}★ Rating`
+            : "Professional Driver";
+
+        const vehicleText =
+          vehicle
             ? `${vehicle.type || vehicle.category || "Vehicle"} – ${
                 vehicle.plateNumber ||
                 vehicle.registrationNumber ||
                 vehicle.vehicleNumber ||
                 vehicle.id
               }`
-            : trip?.vehicle || "Vehicle not assigned";
+            : trip?.vehicle ||
+              "Vehicle not assigned";
 
-          setText("etaTime", eta);
-          setText("etaDate", "Estimated arrival based on backend data");
+        setText(
+          "etaTime",
+          eta
+        );
 
-          setText("trackingId", `#${trackingId}`);
-          setText("deliveryMethod", deliveryMethod);
-          setText("packageWeight", extractWeight(packageText));
-          setText("packageSize", calculatePackageSize(packageText));
+        setText(
+          "etaDate",
+          "Estimated arrival based on backend data"
+        );
 
-          setText("pickupInfo", `${pickupLocation} • Picked up`);
-          setText("transitInfo", `Vehicle en route to ${dropLocation}. Distance: ${distance}`);
-          setText("liveLocation", `Currently near ${liveLocation}`);
-          setText("completeInfo", `${dropLocation} • Pending delivery`);
+        setText(
+          "trackingId",
+          `#${trackingId}`
+        );
 
-          setText("driverName", driverName);
-          setText("driverRating", driverRating);
-          setText("driverContact", driverPhone);
-          setText("vehicleInfo", vehicleText);
+        setText(
+          "deliveryMethod",
+          deliveryMethod
+        );
 
-          const verification = {
-            deliveryVerified: Boolean(delivery),
-            deliveryId: trackingId,
-            tripLinked: Boolean(trip),
-            tripId: trip?.id || "Not linked",
-            driverVerified: Boolean(driver),
-            driver: driverName,
-            vehicleVerified: Boolean(vehicle),
-            vehicle: vehicleText,
-          };
+        setText(
+          "packageWeight",
+          extractWeight(packageText)
+        );
 
-          console.table(verification);
+        setText(
+          "packageSize",
+          calculatePackageSize(packageText)
+        );
 
-          setVerification(
-            `Backend verified: Delivery ✓ | Trip ${trip ? "✓" : "✗"} | Driver ${
-              driver ? "✓" : "✗"
-            } | Vehicle ${vehicle ? "✓" : "✗"}`
-          );
-        } catch (error) {
-          console.error("Live tracking backend sync failed:", error);
+        setText(
+          "pickupInfo",
+          `${pickupLocation} • Picked up`
+        );
 
-          setVerification(`Backend sync failed: ${error.message}`, true);
+        setText(
+          "transitInfo",
+          `Vehicle en route to ${dropLocation}. Distance: ${distance}`
+        );
 
-          setText("etaTime", "Unavailable");
-          setText("etaDate", "Could not load backend data");
+        setText(
+          "liveLocation",
+          `Currently near ${liveLocation}`
+        );
 
-          setText("trackingId", "Not available");
-          setText("deliveryMethod", "Not available");
-          setText("packageWeight", "Not available");
-          setText("packageSize", "Not available");
+        setText(
+          "completeInfo",
+          `${dropLocation} • Pending delivery`
+        );
 
-          setText("pickupInfo", "Not available");
-          setText("transitInfo", "Not available");
-          setText("liveLocation", "Not available");
-          setText("completeInfo", "Not available");
+        setText(
+          "driverName",
+          driverName
+        );
 
-          setText("driverName", "Not available");
-          setText("driverRating", "Not available");
-          setText("driverContact", "Not available");
-          setText("vehicleInfo", "Not available");
-        }
-      });
-    </script>
-  </div>
+        setText(
+          "driverRating",
+          driverRating
+        );
+
+        setText(
+          "driverContact",
+          driverPhone
+        );
+
+        setText(
+          "vehicleInfo",
+          vehicleText
+        );
+
+        console.table({
+          deliveryVerified:
+            Boolean(delivery),
+
+          deliveryId:
+            trackingId,
+
+          tripLinked:
+            Boolean(trip),
+
+          tripId:
+            trip?.id || "Not linked",
+
+          driverVerified:
+            Boolean(driver),
+
+          driver:
+            driverName,
+
+          vehicleVerified:
+            Boolean(vehicle),
+
+          vehicle:
+            vehicleText
+        });
+
+      } catch (error) {
+
+        console.error(
+          "Live tracking backend sync failed:",
+          error
+        );
+
+        setText(
+          "etaTime",
+          "Unavailable"
+        );
+
+        setText(
+          "etaDate",
+          "Could not load backend data"
+        );
+
+        setText(
+          "trackingId",
+          "Not available"
+        );
+
+        setText(
+          "deliveryMethod",
+          "Not available"
+        );
+
+        setText(
+          "packageWeight",
+          "Not available"
+        );
+
+        setText(
+          "packageSize",
+          "Not available"
+        );
+
+        setText(
+          "pickupInfo",
+          "Not available"
+        );
+
+        setText(
+          "transitInfo",
+          "Not available"
+        );
+
+        setText(
+          "liveLocation",
+          "Not available"
+        );
+
+        setText(
+          "completeInfo",
+          "Not available"
+        );
+
+        setText(
+          "driverName",
+          "Not available"
+        );
+
+        setText(
+          "driverRating",
+          "Not available"
+        );
+
+        setText(
+          "driverContact",
+          "Not available"
+        );
+
+        setText(
+          "vehicleInfo",
+          "Not available"
+        );
+
+      }
+
+    });
+  </script>
+
+  <!-- ================= LIVE TRACKING LAYOUT OVERRIDES ================= -->
+
+  <style>
+
+    .bc-content .track-layout{
+      width:100%;
+      max-width:none;
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    .bc-content .track-layout .back-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:18px;
+    }
+
+    .bc-content .track-grid{
+      width:100%;
+      max-width:none;
+    }
+
+    .bc-content .track-grid > div{
+      min-width:0;
+    }
+
+    .bc-content .yellow-banner,
+    .bc-content .card{
+      box-sizing:border-box;
+    }
+
+    .bc-content .track-grid{
+      align-items:start;
+    }
+
+    @media (max-width:900px){
+
+      .bc-content .track-grid{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
+
 </body>
 </html>
