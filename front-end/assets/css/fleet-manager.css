@@ -21,7 +21,7 @@
 @media (max-width:1200px){.stats,.stats.six,.mini-stats{grid-template-columns:repeat(2,1fr)}.split,.settings-shell{grid-template-columns:1fr}.fleet-layout{grid-template-columns:1fr}.sidebar{display:none}}
 
 
-/* Dashboard layout fixes */
+
 .hero{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .hero h2{margin:0 0 8px;font-size:24px;line-height:1.2}
 .hero p{margin:0;color:var(--text);font-size:16px}
@@ -42,7 +42,7 @@
 @media (max-width: 1100px){.grid2{grid-template-columns:1fr}.bars,.linechart{height:220px}}
 
 
-/* Fixed table action dropdowns */
+
 .table .actions{
   position: relative;
   display: inline-flex;
@@ -109,7 +109,7 @@
 
 
 
-/* ===== Sidebar refresh + bell alignment ===== */
+
 .fleet-layout{grid-template-columns:240px 1fr}
 .sidebar{background:#050505;border-right:1px solid #232323}
 .brand{padding:18px 22px;gap:12px;min-height:78px}
@@ -130,9 +130,11 @@
 .iconbox{display:flex;align-items:center;justify-content:center}
 .notif-link{flex:0 0 40px;color:#cfcfcf}
 .dot{right:-5px;top:-6px;width:18px;height:18px;font-size:10px;font-weight:700}
+.sidebar{scrollbar-width:none;-ms-overflow-style:none;}
+.sidebar::-webkit-scrollbar{width:0;height:0;display:none;}
 @media (max-width:1200px){.fleet-layout{grid-template-columns:1fr}}
 
-/* ===== Notification page refresh ===== */
+
 .notifications-view{padding-top:22px}
 .notif-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
 .notif-filters,.notif-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -171,7 +173,7 @@
 
 
 
-/* ===== Vehicles + Drivers filter chips ===== */
+
 .chiprow{
   display:flex;
   align-items:center;

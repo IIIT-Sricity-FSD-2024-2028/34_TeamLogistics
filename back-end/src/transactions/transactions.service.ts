@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   DataStoreService,
   Transaction,
@@ -7,7 +12,11 @@ import {
 import {
   CreateTransactionDto,
   CreateInvoiceDto,
+  PayDeliveryDto,
 } from './dto/transaction.dto';
+
+const SUCCESS_STATUSES = ['completed', 'approved', 'paid'];
+const PLATFORM_COMMISSION_RATE = 0.1;
 
 @Injectable()
 export class TransactionsService {
@@ -59,6 +68,7 @@ export class TransactionsService {
       paymentMode: (dto as any).paymentMode || 'Bank Transfer',
       reference: (dto as any).reference || '',
       receiptName: (dto as any).receiptName || 'No receipt uploaded',
+      receiptUrl: (dto as any).receiptUrl || '',
     } as Transaction;
 
     this.store.transactions.push(txn);
@@ -85,7 +95,6 @@ export class TransactionsService {
     return txn;
   }
 
-  // Alias method: useful if controller calls this.transactionsService.create(dto)
   create(dto: CreateTransactionDto): Transaction {
     return this.createTransaction(dto);
   }
@@ -103,7 +112,6 @@ export class TransactionsService {
         new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
       createdAt: now.toISOString(),
 
-      // Optional fields for invoice linkage/details
       address: (dto as any).address || '',
       deliveryId: (dto as any).deliveryId || '',
       baseCost: Number((dto as any).baseCost || dto.amount || 0),
@@ -127,7 +135,6 @@ export class TransactionsService {
 
     const cleanDeliveryId = String(deliveryId).replace(/^#/, '').trim();
 
-    // 1. If invoice already exists, return it.
     const existingInvoice: any = this.store.invoices.find(
       (invoice: any) =>
         String(invoice.deliveryId || '').replace(/^#/, '').trim() === cleanDeliveryId ||
@@ -141,7 +148,6 @@ export class TransactionsService {
       return existingInvoice as Invoice;
     }
 
-    // 2. Find delivery from backend data.
     const delivery: any = this.store.deliveryRequests.find(
       (d: any) =>
         String(d.id || '').replace(/^#/, '').trim() === cleanDeliveryId ||
@@ -155,7 +161,6 @@ export class TransactionsService {
       throw new NotFoundException(`Delivery ${cleanDeliveryId} not found`);
     }
 
-    // 3. Find linked trip.
     const trip: any = this.store.trips.find(
       (t: any) =>
         String(t.request || '').replace(/^#/, '').trim() === cleanDeliveryId ||
@@ -166,7 +171,6 @@ export class TransactionsService {
         String(t.delivery || '').replace(/^#/, '').trim() === cleanDeliveryId,
     );
 
-    // 4. Invoice should be generated only for delivered/completed delivery.
     const deliveryStatus = String(delivery.status || '').toLowerCase();
     const tripStatus = String(trip?.status || '').toLowerCase();
 
@@ -182,7 +186,6 @@ export class TransactionsService {
       );
     }
 
-    // 5. Decide invoice date.
     const rawInvoiceDate =
       delivery.completedAt ||
       delivery.deliveryDate ||
@@ -204,7 +207,6 @@ export class TransactionsService {
       .toISOString()
       .split('T')[0];
 
-    // 6. Calculate amount.
     const distanceRaw =
       trip?.distance ||
       trip?.distanceKm ||
@@ -222,7 +224,6 @@ export class TransactionsService {
     const taxAmount = Math.round(baseCost * 0.1);
     const totalAmount = baseCost + taxAmount;
 
-    // 7. Create invoice.
     const invoice: any = {
       id: `INV-${cleanDeliveryId}`,
       invoiceId: `INV-${cleanDeliveryId}`,
@@ -288,7 +289,6 @@ export class TransactionsService {
     this.store.invoices.push(invoice as Invoice);
     this.store.persistInvoices();
 
-    // 8. Optional notification for business client.
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'Invoice generated',
@@ -388,5 +388,162 @@ export class TransactionsService {
     this.store.persistTransactions();
 
     return transaction as Transaction;
+  }
+
+  payDelivery(dto: PayDeliveryDto, userId?: string): Transaction {
+    const identifier = dto.invoiceId || dto.deliveryId;
+
+    if (!identifier) {
+      throw new BadRequestException('invoiceId or deliveryId is required');
+    }
+
+    const cleanIdentifier = String(identifier).replace(/^#/, '').trim();
+
+    const invoice: any = this.store.invoices.find(
+      (inv: any) =>
+        String(inv.id || '').replace(/^#/, '').trim() === cleanIdentifier ||
+        String(inv.invoiceId || '').replace(/^#/, '').trim() === cleanIdentifier ||
+        String(inv.deliveryId || '').replace(/^#/, '').trim() === cleanIdentifier ||
+        String(inv.request || '').replace(/^#/, '').trim() === cleanIdentifier,
+    );
+
+    if (!invoice) {
+      throw new NotFoundException(`Invoice for "${identifier}" not found`);
+    }
+
+    if (userId) {
+      const user: any = this.store.users.find((u: any) => u.id === userId);
+
+      if (user) {
+        const ownerNames = [
+          user.name,
+          user.username,
+          user.companyName,
+          user.company,
+          user.profileDetails?.companyName,
+          user.profileDetails?.fullName,
+        ]
+          .filter(Boolean)
+          .map((v: string) => String(v).toLowerCase().trim());
+
+        const invoiceClient = String(invoice.client || '').toLowerCase().trim();
+
+        const isOwner = ownerNames.some(
+          (name) => invoiceClient === name || invoiceClient.includes(name) || name.includes(invoiceClient),
+        );
+
+        if (!isOwner) {
+          throw new ForbiddenException('You are not authorized to pay this invoice');
+        }
+      }
+    }
+
+    if (String(invoice.status || '').toLowerCase() === 'paid') {
+      throw new BadRequestException('This invoice has already been paid');
+    }
+
+    const grossAmount = Number(invoice.total ?? invoice.totalAmount ?? invoice.amount ?? 0);
+
+    if (!grossAmount || grossAmount <= 0) {
+      throw new BadRequestException('Invoice does not have a valid payable amount');
+    }
+
+    const now = new Date();
+    const simulateFailure = dto.simulate === 'fail';
+
+    if (simulateFailure) {
+      const failedTxn: Transaction = {
+        id: `TXN-${Date.now()}`,
+        type: 'Payment',
+        client: invoice.client,
+        amount: grossAmount,
+        status: 'Failed',
+        date: now.toISOString().split('T')[0],
+        createdAt: now.toISOString(),
+        invoiceId: invoice.id,
+        deliveryId: invoice.deliveryId || dto.deliveryId || '',
+        paymentMode: dto.paymentMode || 'Demo Payment',
+        reference: dto.reference || `PAY-${Date.now()}`,
+        transactionType: 'delivery-payment',
+        grossAmount,
+        platformCommission: 0,
+        fleetManagerAmount: 0,
+        userId,
+      };
+
+      this.store.transactions.push(failedTxn);
+      this.store.persistTransactions();
+
+      return failedTxn;
+    }
+
+    const platformCommission = Number((grossAmount * PLATFORM_COMMISSION_RATE).toFixed(2));
+    const fleetManagerAmount = Number((grossAmount - platformCommission).toFixed(2));
+
+    const transaction: Transaction = {
+      id: `TXN-${Date.now()}`,
+      type: 'Payment',
+      client: invoice.client,
+      amount: grossAmount,
+      status: 'Completed',
+      date: now.toISOString().split('T')[0],
+      createdAt: now.toISOString(),
+      invoiceId: invoice.id,
+      deliveryId: invoice.deliveryId || dto.deliveryId || '',
+      paymentMode: dto.paymentMode || 'Demo Payment',
+      reference: dto.reference || `PAY-${Date.now()}`,
+      transactionType: 'delivery-payment',
+      grossAmount,
+      platformCommission,
+      fleetManagerAmount,
+      userId,
+    };
+
+    this.store.transactions.push(transaction);
+    this.store.persistTransactions();
+
+    invoice.status = 'Paid';
+    invoice.paymentStatus = 'Paid';
+    invoice.paidAt = now.toISOString();
+    this.store.persistInvoices();
+
+    this.store.notifications.unshift({
+      id: `N-${Date.now()}`,
+      title: 'Payment successful',
+      message: `Payment of ₹${grossAmount.toLocaleString('en-IN')} received for invoice ${invoice.id}.`,
+      time: 'Just now',
+      to: 'business-client',
+      read: false,
+      createdAt: now.toISOString(),
+    } as any);
+    this.store.persistNotifications();
+
+    return transaction;
+  }
+
+  getRevenueSummary() {
+    const isSuccess = (t: Transaction) =>
+      SUCCESS_STATUSES.includes(String(t.status || '').toLowerCase());
+
+    const subscriptionRevenue = this.store.transactions
+      .filter((t) => t.transactionType === 'subscription' && isSuccess(t))
+      .reduce((sum, t) => sum + Number(t.amount || 0), 0);
+
+    const deliveryCommission = this.store.transactions
+      .filter((t) => t.transactionType === 'delivery-payment' && isSuccess(t))
+      .reduce((sum, t) => sum + Number(t.platformCommission || 0), 0);
+
+    const totalRevenue = subscriptionRevenue + deliveryCommission;
+
+    const activeSubscriptions = this.store.subscriptions.filter((s) => s.status === 'active');
+    const activeFleetManagers = new Set(activeSubscriptions.map((s) => s.userId)).size;
+
+    return {
+      subscriptionRevenue: Number(subscriptionRevenue.toFixed(2)),
+      deliveryCommission: Number(deliveryCommission.toFixed(2)),
+      totalRevenue: Number(totalRevenue.toFixed(2)),
+      activeFleetManagers,
+      activeSubscriptions: activeSubscriptions.length,
+    };
   }
 }

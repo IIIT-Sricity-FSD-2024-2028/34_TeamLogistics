@@ -1,12 +1,6 @@
-/**
- * DeliverSync API Client
- * Replaces localStorage-based mock data with backend API calls.
- * Include this file BEFORE data.js and role-specific JS files.
- */
 (function () {
   const API_BASE = 'http://localhost:3000/api';
 
-  // Get current user role from session or default
   function getCurrentRole() {
     try {
       const session = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
@@ -25,24 +19,29 @@
     }
   }
 
-  // Standard headers for all API calls
-  function getHeaders() {
-    return {
-      'Content-Type': 'application/json',
+  function getHeaders(isFormData) {
+    const headers = {
       'x-user-role': getCurrentRole(),
       'x-user-id': getCurrentUserId(),
     };
+
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    return headers;
   }
 
-  // Generic fetch wrapper with error handling
   async function apiRequest(method, endpoint, body = null) {
+    const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+
     const options = {
       method,
-      headers: getHeaders(),
+      headers: getHeaders(isFormData),
     };
 
     if (body && method !== 'GET') {
-      options.body = JSON.stringify(body);
+      options.body = isFormData ? body : JSON.stringify(body);
     }
 
     try {
@@ -68,7 +67,11 @@
     }
   }
 
-  // ─── Users API ───
+  const AuthAPI = {
+    login: (email, password) =>
+      apiRequest('POST', '/auth/login', { email, password }),
+  };
+
   const UsersAPI = {
     getAll: (role, search) => {
       const params = new URLSearchParams();
@@ -80,6 +83,9 @@
 
       return apiRequest('GET', `/users${qs ? '?' + qs : ''}`);
     },
+
+    getById: (id) =>
+      apiRequest('GET', `/users/${encodeURIComponent(id)}`),
 
     getOne: (id) =>
       apiRequest('GET', `/users/${encodeURIComponent(id)}`),
@@ -97,7 +103,6 @@
       apiRequest('DELETE', `/users/${encodeURIComponent(id)}`),
   };
 
-  // ─── Vehicles API ───
   const VehiclesAPI = {
     getAll: (search, status) => {
       const params = new URLSearchParams();
@@ -123,7 +128,6 @@
       apiRequest('DELETE', `/vehicles/${encodeURIComponent(id)}`),
   };
 
-  // ─── Drivers API ───
   const DriversAPI = {
     getAll: (search) => {
       const params = new URLSearchParams();
@@ -148,7 +152,6 @@
       apiRequest('DELETE', `/drivers/${encodeURIComponent(id)}`),
   };
 
-  // ─── Deliveries API ───
   const DeliveriesAPI = {
     getAll: (search, status) => {
       const params = new URLSearchParams();
@@ -177,7 +180,6 @@
       apiRequest('PATCH', `/deliveries/${encodeURIComponent(id)}/cancel`, { reason }),
   };
 
-  // ─── Trips API ───
   const TripsAPI = {
     getAll: (search) => {
       const params = new URLSearchParams();
@@ -202,7 +204,6 @@
       apiRequest('PATCH', `/trips/${encodeURIComponent(id)}/report-issue`, { issue }),
   };
 
-  // ─── Maintenance API ───
   const MaintenanceAPI = {
     getAll: (search) => {
       const params = new URLSearchParams();
@@ -227,7 +228,6 @@
       apiRequest('DELETE', `/maintenance/${encodeURIComponent(id)}`),
   };
 
-  // ─── Documents API ───
   const DocumentsAPI = {
     getAll: (search) => {
       const params = new URLSearchParams();
@@ -252,7 +252,6 @@
       apiRequest('DELETE', `/documents/${encodeURIComponent(id)}`),
   };
 
-  // ─── Notifications API ───
   const NotificationsAPI = {
     getAll: () =>
       apiRequest('GET', '/notifications'),
@@ -264,10 +263,7 @@
       apiRequest('PATCH', '/notifications/mark-read'),
   };
 
-  // ─── Transactions API ───
   const TransactionsAPI = {
-    // Used by Superuser Transactions page
-    // Backend returns: { transactions: [...], invoices: [...] }
     getAll: (search) => {
       const params = new URLSearchParams();
 
@@ -278,7 +274,6 @@
       return apiRequest('GET', `/transactions${qs ? '?' + qs : ''}`);
     },
 
-    // Used when only payment/transaction records are needed
     getPayments: (search) => {
       const params = new URLSearchParams();
 
@@ -289,7 +284,6 @@
       return apiRequest('GET', `/transactions/payments${qs ? '?' + qs : ''}`);
     },
 
-    // Used by Business Client invoices page and invoice-view page
     getInvoices: (search) => {
       const params = new URLSearchParams();
 
@@ -300,32 +294,43 @@
       return apiRequest('GET', `/transactions/invoices${qs ? '?' + qs : ''}`);
     },
 
-    // Business Client submits payment transaction
     createPayment: (data) =>
       apiRequest('POST', '/transactions', data),
 
-    // Superuser can create invoice manually if needed
     createInvoice: (data) =>
       apiRequest('POST', '/transactions/invoices', data),
 
-    // Business Client invoice-view can auto-generate invoice for completed delivery
     generateInvoiceForDelivery: (deliveryId) =>
       apiRequest(
         'POST',
         `/transactions/invoices/generate/${encodeURIComponent(deliveryId)}`
       ),
 
-    // Superuser approves/rejects submitted payment.
-    // This syncs transaction status and linked invoice status in backend.
     updatePaymentStatus: (transactionId, status) =>
       apiRequest(
         'PATCH',
         `/transactions/payments/${encodeURIComponent(transactionId)}/status`,
         { status }
       ),
+
+    payDelivery: (data) =>
+      apiRequest('POST', '/transactions/pay-delivery', data),
+
+    getRevenueSummary: () =>
+      apiRequest('GET', '/transactions/revenue-summary'),
   };
 
-  // ─── Settings API ───
+  const SubscriptionsAPI = {
+    getPlans: () =>
+      apiRequest('GET', '/subscriptions/plans'),
+
+    getCurrent: () =>
+      apiRequest('GET', '/subscriptions/current'),
+
+    pay: (plan, paymentMode) =>
+      apiRequest('POST', '/subscriptions/pay', { plan, paymentMode }),
+  };
+
   const SettingsAPI = {
     getPlatform: () =>
       apiRequest('GET', '/settings/platform'),
@@ -351,7 +356,6 @@
       }),
   };
 
-  // ─── Dashboard API ───
   const DashboardAPI = {
     getSuperuser: () =>
       apiRequest('GET', '/dashboard/superuser'),
@@ -366,7 +370,6 @@
       apiRequest('GET', '/dashboard/driver'),
   };
 
-  // Expose globally
   window.DeliverySyncAPI = {
     API_BASE,
     getCurrentRole,
@@ -374,6 +377,7 @@
     getHeaders,
     apiRequest,
 
+    Auth: AuthAPI,
     Users: UsersAPI,
     Vehicles: VehiclesAPI,
     Drivers: DriversAPI,
@@ -383,6 +387,7 @@
     Maintenance: MaintenanceAPI,
     Notifications: NotificationsAPI,
     Transactions: TransactionsAPI,
+    Subscriptions: SubscriptionsAPI,
     Settings: SettingsAPI,
     Dashboard: DashboardAPI,
   };

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -16,6 +16,7 @@
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/business-backend-sync.js" defer></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body" data-page="create-delivery">
@@ -129,7 +130,7 @@
       <header class="bc-topbar">
 
   <div class="bc-topbar-left">
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -168,11 +169,11 @@
 
     <a class="bc-profile-chip" href="profile.html">
 
-      <div class="bc-profile-avatar">A</div>
+      <div class="bc-profile-avatar" data-current-user-avatar></div>
 
       <div class="bc-profile-info">
-        <strong>Acme Logistics</strong>
-        <span>Business Client</span>
+        <strong data-current-user-name></strong>
+        <span data-current-user-role></span>
       </div>
 
     </a>
@@ -233,8 +234,57 @@
               </div>
             </div>
 
-            <div class="field-label">Package Details</div>
-            <input class="input" id="packageDetails" placeholder="e.g., Documents, Electronics, Clothing" />
+            <div class="field-label">Package Type <span style="color:#ff5b5b">*</span></div>
+            <select class="input" id="packageType" required>
+              <option value="" disabled selected>Select package type</option>
+              <option value="Documents">Documents</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Food">Food</option>
+              <option value="Medical Supplies">Medical Supplies</option>
+              <option value="Fragile Items">Fragile Items</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Retail Goods">Retail Goods</option>
+              <option value="Industrial Parts">Industrial Parts</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <div class="field-label" style="margin-top:18px">Package Dimensions <span style="color:#ff5b5b">*</span></div>
+            <div class="form-grid form-grid-3">
+              <div>
+                <label class="dim-label" for="pkgLength">Length</label>
+                <div class="dim-input-wrap">
+                  <input class="input" id="pkgLength" type="number" min="1" max="1000" step="any" placeholder="0" required />
+                  <span class="dim-unit">cm</span>
+                </div>
+              </div>
+              <div>
+                <label class="dim-label" for="pkgWidth">Width</label>
+                <div class="dim-input-wrap">
+                  <input class="input" id="pkgWidth" type="number" min="1" max="1000" step="any" placeholder="0" required />
+                  <span class="dim-unit">cm</span>
+                </div>
+              </div>
+              <div>
+                <label class="dim-label" for="pkgHeight">Height</label>
+                <div class="dim-input-wrap">
+                  <input class="input" id="pkgHeight" type="number" min="1" max="1000" step="any" placeholder="0" required />
+                  <span class="dim-unit">cm</span>
+                </div>
+              </div>
+            </div>
+
+            <style>
+              .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+              .dim-label { display: block; font-size: 0.82rem; color: rgba(255,255,255,.55); margin-bottom: 6px; }
+              .dim-input-wrap { position: relative; }
+              .dim-input-wrap .input { padding-right: 40px; }
+              .dim-unit {
+                position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+                font-size: 0.82rem; color: rgba(255,255,255,.4); pointer-events: none;
+              }
+              @media (max-width: 540px) { .form-grid-3 { grid-template-columns: 1fr; } }
+            </style>
 
             <div class="field-label">Upload Delivery List (PDF, CSV)</div>
             <label class="upload-box" for="delivery-list-upload">

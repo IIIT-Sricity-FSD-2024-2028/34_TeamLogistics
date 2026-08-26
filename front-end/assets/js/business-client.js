@@ -1,10 +1,8 @@
 
 (function(){
-  // Shared state store (used across all portals)
   const DS = window.DeliverySyncData;
   if(DS && typeof DS.seed === 'function') DS.seed();
 
-  // ---- Session Guard ----
   (function(){
     var session = DS && DS.getSession ? DS.getSession() : null;
     if(!session || session.role !== 'business-client'){
@@ -13,7 +11,6 @@
     }
   })();
 
-  // ---- Toast utility ----
   function bcToast(msg){
     var t=document.getElementById('bcToastEl');
     if(!t){t=document.createElement('div');t.id='bcToastEl';t.style.cssText='position:fixed;top:24px;right:24px;background:#1e1e2f;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(-20px);opacity:0;transition:all .3s ease;border-left:4px solid #facc15;pointer-events:none';document.body.appendChild(t);}
@@ -46,13 +43,10 @@
   function applyBusinessClientBranding(){
     const p = getBusinessClientProfile();
     if(!p) return;
-    // Top bar company name
     document.querySelectorAll('.bc-topbar .company, .bc-topbar .title, .bc-topbar .client-name').forEach(el=>{
       el.textContent = p.companyName || el.textContent;
     });
-    // Common header/subheader in some pages
     document.querySelectorAll('[data-bc-company]').forEach(el=>{ el.textContent = p.companyName; });
-    // Profile card header (profile page)
     const nameEl = document.querySelector('.profile-card h2, [data-bc-company]');
     if(nameEl) nameEl.textContent = p.companyName || nameEl.textContent;
     const avatar = document.querySelector('.profile-card .avatar-square');
@@ -124,7 +118,7 @@
   function updateBusinessClientNotificationUI(){
     const workflowItems = getWorkflowBusinessNotifications();
     const newCount = workflowItems.filter(item => item.read !== true).length;
-    const totalVisible = 3 + newCount; // keep existing static design count + dynamic reminders
+    const totalVisible = 3 + newCount;
 
     document.querySelectorAll('.bc-bell .badge').forEach(badge => {
       badge.textContent = String(totalVisible);
@@ -143,10 +137,8 @@
   const page = document.body.dataset.page || '';
   ensureNotificationsNav();
   updateBusinessClientNotificationUI();
-  // Apply business client profile/company name on every page
   applyBusinessClientBranding();
   refreshBusinessClientProfileFields();
-  // Keep in sync if another portal updates the shared state in another tab
   window.addEventListener('storage', (e)=>{
     if(e.key === 'deliverysync-state-v1' || e.key === 'deliverysync-session-v1'){
       applyBusinessClientBranding();
@@ -162,53 +154,6 @@
   document.querySelectorAll('[data-mark-read]').forEach(btn=>btn.addEventListener('click',()=>{ bcToast('All notifications marked as read'); }));
   document.querySelectorAll('[data-download]').forEach(btn=>btn.addEventListener('click',(e)=>{e.preventDefault(); bcToast('Prototype: download started');}));
   document.querySelectorAll('[data-print]').forEach(btn=>btn.addEventListener('click',(e)=>{e.preventDefault(); window.print();}));
-  const createForm=document.getElementById('bc-create-form');
-  if(createForm){ createForm.addEventListener('submit',function(e){
-    e.preventDefault();
-    const inputs = createForm.querySelectorAll('.input');
-    const pickup = (inputs[0]?.value || '').trim();
-    const drop = (inputs[1]?.value || '').trim();
-    const packageDetails = (inputs[2]?.value || '').trim();
-    const preferredDate = (inputs[3]?.value || '').trim();
-    const preferredTime = (inputs[4]?.value || '').trim();
-    const instructions = (createForm.querySelector('.textarea')?.value || '').trim();
-    const deliveryType = (document.getElementById('delivery-type-input')?.value || 'standard').trim();
-    const uploadName = (document.getElementById('delivery-list-file-name')?.textContent || '').trim();
-    if(!pickup || !drop || !packageDetails || !preferredDate || !preferredTime){
-      bcToast('Please fill all required delivery fields.');
-      return;
-    }
-    const items = getCreatedDeliveries();
-    items.unshift({
-      id: generateDeliveryId(),
-      pickup,
-      drop,
-      packageDetails,
-      preferredDate,
-      preferredTime,
-      instructions,
-      uploadName,
-      deliveryType: deliveryType === 'express' ? 'Express' : 'Standard',
-      driver: 'Assigning',
-      eta: deliveryType === 'express' ? '18' : '35',
-      status: deliveryType === 'express' ? 'PICKED UP' : 'IN TRANSIT',
-      createdAt: new Date().toISOString()
-    });
-    saveCreatedDeliveries(items);
-    const created = items[0];
-    const params = new URLSearchParams({
-      created: '1',
-      id: created.id,
-      pickup: created.pickup,
-      drop: created.drop,
-      driver: created.driver,
-      eta: String(created.eta),
-      status: created.status,
-      deliveryType: created.deliveryType
-    });
-    bcToast('Delivery request submitted successfully');
-    location.href='active-deliveries.html?' + params.toString();
-  }); }
   const payForm=document.getElementById('bc-payment-form');
   if(payForm){ payForm.addEventListener('submit',function(e){ e.preventDefault(); bcToast('Transaction submitted successfully'); location.href='invoices.html'; }); }
   document.querySelectorAll('[data-cancel-order]').forEach(btn=>btn.addEventListener('click',(e)=>{ e.preventDefault(); location.href='cancel-order.html'; }));
@@ -291,7 +236,6 @@ document.addEventListener("DOMContentLoaded", function(){
       ["phone","profile-phone"],
       ["address","profile-address"]
     ];
-    // Load from shared state (so edits in Superuser portal are reflected here)
     const sessionUser = getSessionUser && getSessionUser();
     const profileFromState = (function(){
       if(!sessionUser) return null;

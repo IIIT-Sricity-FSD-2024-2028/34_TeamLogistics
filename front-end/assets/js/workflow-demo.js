@@ -1,17 +1,3 @@
-/*
-DeliverySync – Demo Workflow Glue (localStorage)
-----------------------------------------------
-This script implements an end-to-end demo workflow for a static frontend.
-It stores data in localStorage so it works without a backend.
-
-Keys:
-- dsWorkflowOrders
-- dsWorkflowInvoices
-- dsWorkflowTransactions
-- dsWorkflowNotifications
-
-It injects small panels into existing pages and wires button actions.
-*/
 
 (function () {
   const ORDERS_KEY = 'dsWorkflowOrders';
@@ -23,11 +9,11 @@ It injects small panels into existing pages and wires button actions.
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  function wfToast(msg){
-    var t=document.getElementById('wfToastEl');
-    if(!t){t=document.createElement('div');t.id='wfToastEl';t.style.cssText='position:fixed;top:24px;right:24px;background:#1e1e2f;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(-20px);opacity:0;transition:all .3s ease;border-left:4px solid #facc15;pointer-events:none';document.body.appendChild(t);}
-    t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';
-    clearTimeout(t._tid);t._tid=setTimeout(function(){t.style.opacity='0';t.style.transform='translateY(-20px)';},2800);
+  function wfToast(msg) {
+    var t = document.getElementById('wfToastEl');
+    if (!t) { t = document.createElement('div'); t.id = 'wfToastEl'; t.style.cssText = 'position:fixed;top:24px;right:24px;background:#1e1e2f;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(-20px);opacity:0;transition:all .3s ease;border-left:4px solid #facc15;pointer-events:none'; document.body.appendChild(t); }
+    t.textContent = msg; t.style.opacity = '1'; t.style.transform = 'translateY(0)';
+    clearTimeout(t._tid); t._tid = setTimeout(function () { t.style.opacity = '0'; t.style.transform = 'translateY(-20px)'; }, 2800);
   }
 
   function readJSON(key, fallback) {
@@ -213,75 +199,13 @@ It injects small panels into existing pages and wires button actions.
   }
 
   function ensureSeed() {
-    // Create at least one demo driver name list for reassignment.
     if (!localStorage.getItem('dsDemoDrivers')) {
       writeJSON('dsDemoDrivers', ['Raghav Reddy', 'Srujan', 'Sarath', 'David', 'Rajesh']);
     }
   }
 
   function createOrderFromBCForm() {
-    const form = $('#bc-create-form');
-    if (!form) return;
-
-    form.addEventListener('submit', function (e) {
-      // Let existing handler run, but ensure our storage exists.
-      // We intercept and do the redirect ourselves for reliability.
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      const inputs = $$('.input', form);
-      const pickup = (inputs[0]?.value || '').trim();
-      const drop = (inputs[1]?.value || '').trim();
-      const packageDetails = (inputs[2]?.value || '').trim();
-      const preferredDate = (inputs[3]?.value || '').trim();
-      const preferredTime = (inputs[4]?.value || '').trim();
-      const instructions = ($('.textarea', form)?.value || '').trim();
-      const deliveryTypeValue = ($('#delivery-type-input')?.value || 'standard').trim();
-      const deliveryType = deliveryTypeValue === 'express' ? 'Express' : 'Standard';
-
-      if (!pickup || !drop || !packageDetails || !preferredDate || !preferredTime) {
-        wfToast('Please fill all required delivery fields.');
-        return;
-      }
-
-      const orders = getOrders();
-      const id = nextId('DS', 2040);
-      const assignedDriver = 'Raghav Reddy';
-      const amount = deliveryType === 'Express' ? 80 : 40;
-
-      const currentBusinessProfile = getBusinessClientProfileData();
-      orders.unshift({
-        id,
-        client: getCurrentBusinessClientCompany(),
-        clientFullName: getCurrentBusinessClientFullName(),
-        clientAddress: currentBusinessProfile.address || '',
-        pickup,
-        drop,
-        packageDetails,
-        preferredDate,
-        preferredTime,
-        instructions,
-        deliveryType,
-        status: 'ASSIGNED',
-        assignedDriver,
-        eta: deliveryType === 'Express' ? 18 : 35,
-        createdAt: nowISO(),
-        steps: {
-          createdAt: nowISO(),
-          assignedAt: nowISO()
-        },
-        pricing: {
-          base: amount,
-          total: deliveryType === 'Express' ? 1900 : 145 // for demo visuals
-        }
-      });
-
-      saveOrders(orders);
-
-      wfToast('Delivery request submitted successfully');
-      const params = new URLSearchParams({ created: '1', order: id });
-      location.href = `active-deliveries.html?${params.toString()}`;
-    }, true);
+    return;
   }
 
   function renderBCActiveDeliveries() {
@@ -291,7 +215,6 @@ It injects small panels into existing pages and wires button actions.
     const cancelled = readJSON('bcCancelledOrders', []);
     const orders = getOrders().filter((o) => !cancelled.includes(o.id));
 
-    // Remove previously injected cards
     $$('[data-workflow-card="1"]', container).forEach((n) => n.remove());
 
     orders.slice().reverse().forEach((o) => {
@@ -330,7 +253,6 @@ It injects small panels into existing pages and wires button actions.
   }
 
   function renderBCLiveTracking() {
-    // Use order id query param to show progress.
     const params = new URLSearchParams(location.search);
     const orderId = params.get('order');
     if (!orderId) return;
@@ -338,43 +260,35 @@ It injects small panels into existing pages and wires button actions.
     const order = getOrders().find((o) => o.id === orderId);
     if (!order) return;
 
-    // Update tracking id
     const trackingIdEl = document.querySelector('.kv .v[style*="yellow"], .kv .v');
     if (trackingIdEl && trackingIdEl.textContent.includes('#DS-')) {
       trackingIdEl.textContent = `#${order.id}`;
     }
 
-    // Update driver name
     const driverNameEl = document.querySelector('.driver-head div[style*="font-size:18px"], .driver-head div');
     if (driverNameEl) driverNameEl.textContent = order.assignedDriver || 'Assigning';
 
-    // Update timeline pills
     const tItems = $$('.timeline .t-item');
     if (tItems.length >= 3) {
       const picked = order.status === 'PICKED_UP' || order.status === 'IN_TRANSIT' || order.status === 'DELIVERED';
       const transit = order.status === 'IN_TRANSIT' || order.status === 'DELIVERED';
       const delivered = order.status === 'DELIVERED';
 
-      // 1) picked up
       const pill1 = $('.pill', tItems[0]);
       if (pill1) pill1.textContent = picked ? 'Complete' : 'Pending';
 
-      // 2) in transit
       const pill2 = $('.pill', tItems[1]);
       if (pill2) pill2.textContent = transit ? 'Active' : (picked ? 'Pending' : 'Pending');
 
-      // 3) delivered
       const pill3 = $('.pill', tItems[2]);
       if (pill3) pill3.textContent = delivered ? 'Complete' : 'Pending';
     }
 
-    // ETA banner
     const etaBig = document.querySelector('.yellow-banner .big');
     if (etaBig) etaBig.textContent = `${order.eta} minutes`;
   }
 
   function injectDriverTasks() {
-    // Driver tasks page in the new driver portal is simple HTML.
     const isTasks = location.pathname.endsWith('/driver/tasks.html');
     const isDetails = location.pathname.endsWith('/driver/task-details.html');
     const isAccepted = location.pathname.endsWith('/driver/delivery-accepted.html');
@@ -521,7 +435,6 @@ It injects small panels into existing pages and wires button actions.
   }
 
   function injectMonitoringTable(where) {
-    // where: 'fm' | 'su'
     const orders = getOrders();
     if (!orders.length) return;
 
@@ -548,8 +461,8 @@ It injects small panels into existing pages and wires button actions.
             </thead>
             <tbody>
               ${orders
-                .map(
-                  (o) => `
+        .map(
+          (o) => `
                 <tr style="border-bottom:1px solid rgba(255,255,255,0.06)">
                   <td style="padding:10px 8px;font-weight:800">${o.id}</td>
                   <td style="padding:10px 8px">${o.client}</td>
@@ -561,8 +474,8 @@ It injects small panels into existing pages and wires button actions.
                     <a href="${where === 'fm' ? 'live-tracking.html' : 'trip-details.html'}?order=${encodeURIComponent(o.id)}" class="btn-dark" style="padding:8px 10px;border-radius:10px;margin-left:6px;display:inline-block">View</a>
                   </td>
                 </tr>`
-                )
-                .join('')}
+        )
+        .join('')}
             </tbody>
           </table>
         </div>
@@ -602,7 +515,6 @@ It injects small panels into existing pages and wires button actions.
   function renderFleetManagerTripsSection() {
     if (!location.pathname.endsWith('/fleet-manager/trips.html')) return;
 
-    // Remove old injected monitoring panel if present
     const oldPanel = document.querySelector('[data-workflow-monitor="1"]');
     if (oldPanel) oldPanel.remove();
 
@@ -646,7 +558,7 @@ It injects small panels into existing pages and wires button actions.
       return 'TR-' + num.slice(-4).padStart(4, '0');
     };
 
-    const renderRows = (query='') => {
+    const renderRows = (query = '') => {
       const q = query.trim().toLowerCase();
       const filtered = orders.filter(o => {
         if (!q) return true;
@@ -666,7 +578,7 @@ It injects small panels into existing pages and wires button actions.
 
       theadRow.innerHTML = '<th>Trip ID</th><th>Order ID</th><th>Client</th><th>Driver</th><th>Vehicle</th><th>Route</th><th>Status</th><th>Actions</th>';
       tbody.innerHTML = filtered.length ? filtered.map((o, idx) => {
-        const menuId = `tripMenu_${idx}_${String(o.id).replace(/[^a-zA-Z0-9]/g,'')}`;
+        const menuId = `tripMenu_${idx}_${String(o.id).replace(/[^a-zA-Z0-9]/g, '')}`;
         return `
           <tr data-trip-row="1">
             <td class="em">${makeTripId(o.id)}</td>
@@ -687,7 +599,6 @@ It injects small panels into existing pages and wires button actions.
           </tr>`;
       }).join('') : '<tr><td colspan="6" style="padding:16px;color:#8f8f8f">No trips found.</td></tr>';
 
-      // counts
       if (chipRow) {
         const assigned = orders.filter(o => o.status === 'ASSIGNED').length;
         const picked = orders.filter(o => o.status === 'PICKED_UP' || o.status === 'ACCEPTED').length;
@@ -705,7 +616,6 @@ It injects small panels into existing pages and wires button actions.
 
     renderRows();
 
-    // replace footer summary text if present
     const footer = Array.from(section.children).find(el => el.tagName === 'DIV' && el.textContent.includes('Showing'));
     if (footer) footer.innerHTML = `<span>Showing workflow trips</span><span class="btn btn-yellow btn-small">Live</span>`;
 
@@ -738,7 +648,7 @@ It injects small panels into existing pages and wires button actions.
         const orderId = openReassignBtn.getAttribute('data-open-reassign');
         const targetId = openReassignBtn.getAttribute('data-submenu-target');
         const submenu = document.getElementById(targetId);
-        const drivers = readJSON('dsDemoDrivers', ['Raghav Reddy','Srujan','Sarath','David','Rajesh Kumar','Kiran Teja']);
+        const drivers = readJSON('dsDemoDrivers', ['Raghav Reddy', 'Srujan', 'Sarath', 'David', 'Rajesh Kumar', 'Kiran Teja']);
         if (submenu) {
           submenu.innerHTML = drivers.map(driver => `<button data-pick-driver="${driver}" data-order-id="${orderId}" style="display:block;width:100%;text-align:left;padding:11px 14px;background:#05070b;border:0;border-bottom:1px solid #1f2937;color:#ffffff;cursor:pointer">${driver}</button>`).join('');
           document.querySelectorAll('.workflow-submenu').forEach(m => { if (m !== submenu) m.style.display = 'none'; });
@@ -785,11 +695,11 @@ It injects small panels into existing pages and wires button actions.
       return 'TR-' + num.slice(-4).padStart(4, '0');
     };
     const tripStatus = (s) => {
-      if (s === 'ASSIGNED') return {label:'Assigning', cls:'pill-yellow'};
-      if (s === 'PICKED_UP' || s === 'ACCEPTED') return {label:'Picked Up', cls:'pill-yellow'};
-      if (s === 'IN_TRANSIT') return {label:'In Transit', cls:'pill-blue'};
-      if (s === 'DELIVERED') return {label:'Delivered', cls:'pill-green'};
-      return {label:'Assigning', cls:'pill-yellow'};
+      if (s === 'ASSIGNED') return { label: 'Assigning', cls: 'pill-yellow' };
+      if (s === 'PICKED_UP' || s === 'ACCEPTED') return { label: 'Picked Up', cls: 'pill-yellow' };
+      if (s === 'IN_TRANSIT') return { label: 'In Transit', cls: 'pill-blue' };
+      if (s === 'DELIVERED') return { label: 'Delivered', cls: 'pill-green' };
+      return { label: 'Assigning', cls: 'pill-yellow' };
     };
 
     target.innerHTML = `
@@ -805,9 +715,9 @@ It injects small panels into existing pages and wires button actions.
         </thead>
         <tbody>
           ${orders.map((o, idx) => {
-            const status = tripStatus(o.status);
-            const menuId = `dashMenu_${idx}_${String(o.id).replace(/[^a-zA-Z0-9]/g,'')}`;
-            return `
+      const status = tripStatus(o.status);
+      const menuId = `dashMenu_${idx}_${String(o.id).replace(/[^a-zA-Z0-9]/g, '')}`;
+      return `
               <tr>
                 <td class="em">${makeTripId(o.id)}</td>
                 <td class="em">${o.id}</td>
@@ -825,7 +735,7 @@ It injects small panels into existing pages and wires button actions.
                   <div id="${menuId}_drivers" class="workflow-submenu" style="display:none;position:fixed;background:#05070b;border:1px solid #1f2937;border-radius:14px;min-width:190px;max-height:260px;overflow-y:auto;box-shadow:0 16px 32px rgba(0,0,0,.45);z-index:21"></div>
                 </td>
               </tr>`;
-          }).join('')}
+    }).join('')}
         </tbody>
       </table>`;
 
@@ -849,7 +759,7 @@ It injects small panels into existing pages and wires button actions.
         const orderId = openReassignBtn.getAttribute('data-open-reassign');
         const targetId = openReassignBtn.getAttribute('data-submenu-target');
         const submenu = document.getElementById(targetId);
-        const drivers = readJSON('dsDemoDrivers', ['Raghav Reddy','Srujan','Sarath','David','Rajesh Kumar','Kiran Teja']);
+        const drivers = readJSON('dsDemoDrivers', ['Raghav Reddy', 'Srujan', 'Sarath', 'David', 'Rajesh Kumar', 'Kiran Teja']);
         if (submenu) {
           submenu.innerHTML = drivers.map(driver => `<button data-pick-driver=\"${driver}\" data-order-id=\"${orderId}\" style=\"display:block;width:100%;text-align:left;padding:11px 14px;background:#05070b;border:0;border-bottom:1px solid #1f2937;color:#ffffff;cursor:pointer\">${driver}</button>`).join('');
           const rect = openReassignBtn.getBoundingClientRect();
@@ -898,13 +808,13 @@ It injects small panels into existing pages and wires button actions.
       'Rajesh Kumar': 'TN-05-IJ-9012'
     };
     const tripStatus = (s) => {
-      if (s === 'ASSIGNED') return {label:'Assigning', cls:'pill-yellow'};
-      if (s === 'PICKED_UP' || s === 'ACCEPTED') return {label:'Picked Up', cls:'pill-yellow'};
-      if (s === 'IN_TRANSIT') return {label:'In Transit', cls:'pill-blue'};
-      if (s === 'DELIVERED') return {label:'Delivered', cls:'pill-green'};
-      return {label:'Assigning', cls:'pill-yellow'};
+      if (s === 'ASSIGNED') return { label: 'Assigning', cls: 'pill-yellow' };
+      if (s === 'PICKED_UP' || s === 'ACCEPTED') return { label: 'Picked Up', cls: 'pill-yellow' };
+      if (s === 'IN_TRANSIT') return { label: 'In Transit', cls: 'pill-blue' };
+      if (s === 'DELIVERED') return { label: 'Delivered', cls: 'pill-green' };
+      return { label: 'Assigning', cls: 'pill-yellow' };
     };
-    const initials = (name) => String(name||'DR').split(/\s+/).map(x=>x[0]||'').join('').slice(0,2).toUpperCase();
+    const initials = (name) => String(name || 'DR').split(/\s+/).map(x => x[0] || '').join('').slice(0, 2).toUpperCase();
 
     const headTitle = document.querySelector('.pagehead h1');
     const headSub = document.querySelector('.pagehead p');
@@ -934,7 +844,7 @@ It injects small panels into existing pages and wires button actions.
       if (avatar) avatar.textContent = initials(order.assignedDriver);
       if (strong) strong.textContent = order.assignedDriver;
       const muted = driverCard.querySelectorAll('.muted');
-      if (muted[0]) muted[0].textContent = `DRV-${String(order.id).replace(/\D/g,'').slice(-4)} · ★ 4.7`;
+      if (muted[0]) muted[0].textContent = `DRV-${String(order.id).replace(/\D/g, '').slice(-4)} · ★ 4.7`;
     }
 
     const vehicleCard = Array.from(document.querySelectorAll('.detail-card')).find(card => card.textContent.includes('Vehicle'));
@@ -994,7 +904,7 @@ It injects small panels into existing pages and wires button actions.
 
   function getSharedAppState() {
     try { return JSON.parse(localStorage.getItem('deliverysync-state-v1') || '{}') || {}; }
-    catch(e){ return {}; }
+    catch (e) { return {}; }
   }
 
   function saveSharedAppState(state) {
@@ -1014,10 +924,10 @@ It injects small panels into existing pages and wires button actions.
     const totalVehicles = vehicles.length;
     const totalMaint = maint.length;
     const totalTrips = orders.length;
-    const completedTrips = orders.filter(o => String(o.status||'').toUpperCase() === 'DELIVERED').length;
+    const completedTrips = orders.filter(o => String(o.status || '').toUpperCase() === 'DELIVERED').length;
 
     const values = [totalVehicles, totalMaint, totalTrips, completedTrips];
-    const subs = ['Fleet registered','Scheduled records','All assigned trips','Closed successfully'];
+    const subs = ['Fleet registered', 'Scheduled records', 'All assigned trips', 'Closed successfully'];
     stats.forEach((card, idx) => {
       const v = card.querySelector('.v');
       const s = card.querySelector('.s');
@@ -1049,13 +959,13 @@ It injects small panels into existing pages and wires button actions.
         const matchF = currentFilter === 'all' ? true : String(v.status || '').toLowerCase() === currentFilter;
         return matchQ && matchF;
       });
-      tbody.innerHTML = filtered.map(v=>`<tr><td class='em'>${v.id}</td><td>${v.plate}</td><td>${v.type}</td><td><span class='pill ${pill(v.status)}'>${v.status}</span></td><td>${v.maintenance || '—'}</td><td><span class='pill ${pill(v.availability || (v.status==='Active'?'Available':'Unavailable'))}'>${v.availability || (v.status==='Active'?'Available':'Unavailable')}</span></td><td><div class='actions'><button class='dots'>⋮</button><div class='menu'><a href='edit-vehicle.html?id=${v.id}'>Edit</a><a href='schedule-maintenance.html?id=${v.id}'>Schedule Maint.</a><button class='danger'>Block</button></div></div></td></tr>`).join('') || `<tr><td colspan="7" style="text-align:center;color:#8f8f8f;padding:18px">No vehicles found.</td></tr>`;
+      tbody.innerHTML = filtered.map(v => `<tr><td class='em'>${v.id}</td><td>${v.plate}</td><td>${v.type}</td><td><span class='pill ${pill(v.status)}'>${v.status}</span></td><td>${v.maintenance || '—'}</td><td><span class='pill ${pill(v.availability || (v.status === 'Active' ? 'Available' : 'Unavailable'))}'>${v.availability || (v.status === 'Active' ? 'Available' : 'Unavailable')}</span></td><td><div class='actions'><button class='dots'>⋮</button><div class='menu'><a href='edit-vehicle.html?id=${v.id}'>Edit</a><a href='schedule-maintenance.html?id=${v.id}'>Schedule Maint.</a><button class='danger'>Block</button></div></div></td></tr>`).join('') || `<tr><td colspan="7" style="text-align:center;color:#8f8f8f;padding:18px">No vehicles found.</td></tr>`;
     };
-    if (searchInput && !searchInput.dataset.workflowVehicles) { searchInput.dataset.workflowVehicles='1'; searchInput.addEventListener('input', render); }
-    filterButtons.forEach(btn=>{
+    if (searchInput && !searchInput.dataset.workflowVehicles) { searchInput.dataset.workflowVehicles = '1'; searchInput.addEventListener('input', render); }
+    filterButtons.forEach(btn => {
       const txt = btn.textContent.trim().toLowerCase();
-      if(['all vehicles','active','on trip','maintenance','blocked'].includes(txt)){
-        btn.addEventListener('click', ()=>{ currentFilter = txt === 'all vehicles' ? 'all' : txt; render(); });
+      if (['all vehicles', 'active', 'on trip', 'maintenance', 'blocked'].includes(txt)) {
+        btn.addEventListener('click', () => { currentFilter = txt === 'all vehicles' ? 'all' : txt; render(); });
       }
     });
     render();
@@ -1074,13 +984,13 @@ It injects small panels into existing pages and wires button actions.
     if (color) color.placeholder = 'e.g. White';
     const buttons = panel.querySelectorAll('.footer-actions button');
     const cancelBtn = buttons[0], createBtn = buttons[1];
-    panel.querySelectorAll('.field').forEach((field)=>{ if(!field.querySelector('.helper.error-inline')){ const err=document.createElement('div'); err.className='helper error-inline'; err.style.color='#ff8d8d'; err.style.marginTop='6px'; field.appendChild(err);} });
+    panel.querySelectorAll('.field').forEach((field) => { if (!field.querySelector('.helper.error-inline')) { const err = document.createElement('div'); err.className = 'helper error-inline'; err.style.color = '#ff8d8d'; err.style.marginTop = '6px'; field.appendChild(err); } });
     const errs = panel.querySelectorAll('.error-inline');
-    if (cancelBtn) cancelBtn.onclick = ()=>location.href='vehicles.html';
+    if (cancelBtn) cancelBtn.onclick = () => location.href = 'vehicles.html';
     if (createBtn && !createBtn.dataset.workflowVehicle) {
-      createBtn.dataset.workflowVehicle='1';
-      createBtn.onclick = ()=>{
-        errs.forEach(e=>e.textContent='');
+      createBtn.dataset.workflowVehicle = '1';
+      createBtn.onclick = () => {
+        errs.forEach(e => e.textContent = '');
         const plateVal = (plate?.value || '').trim().toUpperCase();
         const typeVal = (type?.value || '').trim();
         const modelVal = (model?.value || '').trim();
@@ -1088,16 +998,16 @@ It injects small panels into existing pages and wires button actions.
         const colorVal = (color?.value || '').trim();
         const insuranceVal = (insurance?.value || '').trim();
         let ok = true;
-        if (!/^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/.test(plateVal)) { errs[0].textContent='Enter a valid plate number like TN09AB1234'; ok=false; }
-        if (!typeVal) { errs[1].textContent='Select vehicle type'; ok=false; }
-        if (!/^[A-Za-z0-9][A-Za-z0-9\s-]{1,39}$/.test(modelVal)) { errs[2].textContent='Enter a valid model name'; ok=false; }
-        if (!/^\d+(?:\.\d+)?\s?(?:Tons?|Kg|kgs?)$/i.test(capacityVal)) { errs[3].textContent='Enter valid capacity like 2 Tons or 500 Kg'; ok=false; }
-        if (!/^[A-Za-z][A-Za-z\s-]{2,19}$/.test(colorVal)) { errs[4].textContent='Enter a valid color'; ok=false; }
-        if (!insuranceVal) { errs[5].textContent='Select last maintenance date'; ok=false; }
-        if (insuranceVal && new Date(insuranceVal) <= new Date()) { errs[5].textContent='Last maintenance date must be a future date'; ok=false; }
+        if (!/^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/.test(plateVal)) { errs[0].textContent = 'Enter a valid plate number like TN09AB1234'; ok = false; }
+        if (!typeVal) { errs[1].textContent = 'Select vehicle type'; ok = false; }
+        if (!/^[A-Za-z0-9][A-Za-z0-9\s-]{1,39}$/.test(modelVal)) { errs[2].textContent = 'Enter a valid model name'; ok = false; }
+        if (!/^\d+(?:\.\d+)?\s?(?:Tons?|Kg|kgs?)$/i.test(capacityVal)) { errs[3].textContent = 'Enter valid capacity like 2 Tons or 500 Kg'; ok = false; }
+        if (!/^[A-Za-z][A-Za-z\s-]{2,19}$/.test(colorVal)) { errs[4].textContent = 'Enter a valid color'; ok = false; }
+        if (!insuranceVal) { errs[5].textContent = 'Select last maintenance date'; ok = false; }
+        if (insuranceVal && new Date(insuranceVal) <= new Date()) { errs[5].textContent = 'Last maintenance date must be a future date'; ok = false; }
         const state = getSharedAppState();
         state.vehicles = Array.isArray(state.vehicles) ? state.vehicles : [];
-        if (state.vehicles.some(v => String(v.plate).toUpperCase() === plateVal)) { errs[0].textContent='Plate number already exists'; ok=false; }
+        if (state.vehicles.some(v => String(v.plate).toUpperCase() === plateVal)) { errs[0].textContent = 'Plate number already exists'; ok = false; }
         if (!ok) return;
         const nextNum = 1000 + state.vehicles.length + 1;
         state.vehicles.push({
@@ -1112,7 +1022,7 @@ It injects small panels into existing pages and wires button actions.
           availability: 'Available'
         });
         saveSharedAppState(state);
-        location.href='vehicles.html';
+        location.href = 'vehicles.html';
       };
     }
   }
@@ -1166,10 +1076,10 @@ It injects small panels into existing pages and wires button actions.
     const content = document.querySelector('.content');
     if (!content) return;
 
-    const vehicles = ['TN09AB1234','KA03PQ9876','TS08XY2045'];
-    const issueTypes = ['Engine Oil Change','Brake Pad Replacement','Tire Rotation & Balance','Air Filter Replacement','Transmission Service'];
-    const priorities = ['Low','Medium','High','Critical'];
-    const mechanics = ['Ravi Auto Service','SpeedFix Workshop','AutoCare Pro'];
+    const vehicles = ['TN09AB1234', 'KA03PQ9876', 'TS08XY2045'];
+    const issueTypes = ['Engine Oil Change', 'Brake Pad Replacement', 'Tire Rotation & Balance', 'Air Filter Replacement', 'Transmission Service'];
+    const priorities = ['Low', 'Medium', 'High', 'Critical'];
+    const mechanics = ['Ravi Auto Service', 'SpeedFix Workshop', 'AutoCare Pro'];
     const state = getSharedAppState();
     state.maintenanceSchedules = Array.isArray(state.maintenanceSchedules) ? state.maintenanceSchedules : [];
     const editId = new URLSearchParams(location.search).get('id');
@@ -1180,21 +1090,21 @@ It injects small panels into existing pages and wires button actions.
         <div class="stack">
           <div class="info-card">
             <h3>Vehicle &amp; Issue Details</h3>
-            <div class="field"><label>Vehicle *</label><select id="fmMaintVehicle">${vehicles.map(v => `<option ${existing&&existing.vehicle===v?'selected':''}>${v}</option>`).join('')}</select><div class="helper" id="err-fmMaintVehicle" style="color:#ff8d8d"></div></div>
-            <div class="field"><label>Issue Type *</label><select id="fmMaintIssue">${issueTypes.map(v => `<option ${existing&&existing.issue===v?'selected':''}>${v}</option>`).join('')}</select><div class="helper" id="err-fmMaintIssue" style="color:#ff8d8d"></div></div>
-            <div class="field"><label>Priority *</label><select id="fmMaintPriority">${priorities.map(v => `<option ${existing&&existing.priority===v?'selected':''} ${!existing&&v==='Medium'?'selected':''}>${v}</option>`).join('')}</select></div>
+            <div class="field"><label>Vehicle *</label><select id="fmMaintVehicle">${vehicles.map(v => `<option ${existing && existing.vehicle === v ? 'selected' : ''}>${v}</option>`).join('')}</select><div class="helper" id="err-fmMaintVehicle" style="color:#ff8d8d"></div></div>
+            <div class="field"><label>Issue Type *</label><select id="fmMaintIssue">${issueTypes.map(v => `<option ${existing && existing.issue === v ? 'selected' : ''}>${v}</option>`).join('')}</select><div class="helper" id="err-fmMaintIssue" style="color:#ff8d8d"></div></div>
+            <div class="field"><label>Priority *</label><select id="fmMaintPriority">${priorities.map(v => `<option ${existing && existing.priority === v ? 'selected' : ''} ${!existing && v === 'Medium' ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
           </div>
           <div class="info-card">
             <h3>Additional Notes</h3>
-            <div class="field"><textarea id="fmMaintNotes" style="min-height:200px" placeholder="Enter any special instructions or notes for the mechanic...">${existing&&existing.notes?existing.notes:''}</textarea></div>
+            <div class="field"><textarea id="fmMaintNotes" style="min-height:200px" placeholder="Enter any special instructions or notes for the mechanic...">${existing && existing.notes ? existing.notes : ''}</textarea></div>
           </div>
         </div>
         <div class="stack">
           <div class="info-card">
             <h3>Scheduling &amp; Assignment</h3>
-            <div class="field"><label>Scheduled Date *</label><input id="fmMaintDate" type="date" value="${existing?existing.date:''}"><div class="helper" id="err-fmMaintDate" style="color:#ff8d8d"></div></div>
-            <div class="field"><label>Assigned Mechanic *</label><select id="fmMaintMechanic">${mechanics.map(v => `<option ${existing&&existing.mechanic===v?'selected':''}>${v}</option>`).join('')}</select><div class="helper" id="err-fmMaintMechanic" style="color:#ff8d8d"></div></div>
-            <div class="field"><label>Estimated Cost (₹)</label><input id="fmMaintCost" placeholder="e.g. 2500" value="${existing?String(existing.cost).replace(/[^\d.]/g,''):''}"><div class="helper" id="err-fmMaintCost" style="color:#ff8d8d"></div></div>
+            <div class="field"><label>Scheduled Date *</label><input id="fmMaintDate" type="date" value="${existing ? existing.date : ''}"><div class="helper" id="err-fmMaintDate" style="color:#ff8d8d"></div></div>
+            <div class="field"><label>Assigned Mechanic *</label><select id="fmMaintMechanic">${mechanics.map(v => `<option ${existing && existing.mechanic === v ? 'selected' : ''}>${v}</option>`).join('')}</select><div class="helper" id="err-fmMaintMechanic" style="color:#ff8d8d"></div></div>
+            <div class="field"><label>Estimated Cost (₹)</label><input id="fmMaintCost" placeholder="e.g. 2500" value="${existing ? String(existing.cost).replace(/[^\d.]/g, '') : ''}"><div class="helper" id="err-fmMaintCost" style="color:#ff8d8d"></div></div>
           </div>
           <div class="info-card">
             <h3>Summary Preview</h3>
@@ -1219,7 +1129,7 @@ It injects small panels into existing pages and wires button actions.
     }
 
     const update = () => {
-      const set = (id,val)=>{ const el=document.getElementById(id); if(el) el.textContent = val || '—'; };
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
       set('sumFmVehicle', document.getElementById('fmMaintVehicle').value);
       set('sumFmIssue', document.getElementById('fmMaintIssue').value);
       set('sumFmPriority', document.getElementById('fmMaintPriority').value);
@@ -1228,14 +1138,14 @@ It injects small panels into existing pages and wires button actions.
       const cost = document.getElementById('fmMaintCost').value.trim();
       set('sumFmCost', cost ? `₹${cost}` : '—');
     };
-    ['fmMaintVehicle','fmMaintIssue','fmMaintPriority','fmMaintDate','fmMaintMechanic','fmMaintCost'].forEach(id => {
+    ['fmMaintVehicle', 'fmMaintIssue', 'fmMaintPriority', 'fmMaintDate', 'fmMaintMechanic', 'fmMaintCost'].forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.addEventListener('input', update); el.addEventListener('change', update); }
     });
     update();
 
     document.getElementById('fmMaintSave').addEventListener('click', () => {
-      ['fmMaintVehicle','fmMaintIssue','fmMaintDate','fmMaintMechanic','fmMaintCost'].forEach(id => { const err = document.getElementById('err-'+id); if (err) err.textContent = ''; });
+      ['fmMaintVehicle', 'fmMaintIssue', 'fmMaintDate', 'fmMaintMechanic', 'fmMaintCost'].forEach(id => { const err = document.getElementById('err-' + id); if (err) err.textContent = ''; });
       const vehicle = document.getElementById('fmMaintVehicle').value;
       const issue = document.getElementById('fmMaintIssue').value;
       const priority = document.getElementById('fmMaintPriority').value;
@@ -1264,16 +1174,16 @@ It injects small panels into existing pages and wires button actions.
 
 
   const FEEDBACK_KEY = 'dsWorkflowFeedback';
-  function getFeedbacks(){ return readJSON(FEEDBACK_KEY, []); }
-  function saveFeedbacks(items){ writeJSON(FEEDBACK_KEY, items); }
-  function getBusinessClientProfileData(){
+  function getFeedbacks() { return readJSON(FEEDBACK_KEY, []); }
+  function saveFeedbacks(items) { writeJSON(FEEDBACK_KEY, items); }
+  function getBusinessClientProfileData() {
     try {
       const state = JSON.parse(localStorage.getItem('deliverysync-state-v1') || '{}');
       const session = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
       const fallbackSaved = JSON.parse(localStorage.getItem('bcProfileData') || '{}');
       let user = null;
       if (session && Array.isArray(state.users)) {
-        user = state.users.find(u => String(u.email||'').toLowerCase() === String(session.email||'').toLowerCase());
+        user = state.users.find(u => String(u.email || '').toLowerCase() === String(session.email || '').toLowerCase());
       }
       const pd = user && user.profileDetails ? user.profileDetails : {};
       return {
@@ -1281,13 +1191,13 @@ It injects small panels into existing pages and wires button actions.
         address: pd.businessAddress || pd.address || user?.address || fallbackSaved.address || fallbackSaved['address'] || '123 Business Avenue'
       };
     } catch (e) {
-      return { companyName:'Acme Logistics Inc.', address:'123 Business Avenue' };
+      return { companyName: 'Acme Logistics Inc.', address: '123 Business Avenue' };
     }
   }
   function renderBCCompletedDeliveriesDynamic() {
     if (!location.pathname.endsWith('/business-client/completed-deliveries.html')) return;
-    const orders = getOrders().filter(o => String(o.status||'').toUpperCase() === 'DELIVERED');
-    const sorted = orders.slice().sort((a,b)=> new Date(b.steps?.deliveredAt || b.createdAt || 0) - new Date(a.steps?.deliveredAt || a.createdAt || 0));
+    const orders = getOrders().filter(o => String(o.status || '').toUpperCase() === 'DELIVERED');
+    const sorted = orders.slice().sort((a, b) => new Date(b.steps?.deliveredAt || b.createdAt || 0) - new Date(a.steps?.deliveredAt || a.createdAt || 0));
     const subtitle = document.querySelector('.page-subtitle');
     if (subtitle) subtitle.textContent = `${sorted.length} most recent deliveries`;
     const stats = document.querySelector('.stats-row');
@@ -1295,7 +1205,7 @@ It injects small panels into existing pages and wires button actions.
       const cards = Array.from(stats.querySelectorAll('.card'));
       cards.forEach((card, idx) => { if (idx > 1) card.remove(); });
       const now = new Date();
-      const weekAgo = new Date(); weekAgo.setDate(now.getDate()-6); weekAgo.setHours(0,0,0,0);
+      const weekAgo = new Date(); weekAgo.setDate(now.getDate() - 6); weekAgo.setHours(0, 0, 0, 0);
       const thisWeek = sorted.filter(o => new Date(o.steps?.deliveredAt || o.createdAt || 0) >= weekAgo).length;
       const thisMonth = sorted.filter(o => {
         const d = new Date(o.steps?.deliveredAt || o.createdAt || 0);
@@ -1318,9 +1228,9 @@ It injects small panels into existing pages and wires button actions.
     const feedbacks = getFeedbacks();
     const invoices = getInvoices();
     sorted.forEach(o => {
-      const inv = invoices.find(i => i.orderId === o.id) || { id: `INV-${String(o.id).replace(/\D/g,'')}` };
+      const inv = invoices.find(i => i.orderId === o.id) || { id: `INV-${String(o.id).replace(/\D/g, '')}` };
       const dt = new Date(o.steps?.deliveredAt || o.createdAt || Date.now());
-      const dateText = dt.toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'});
+      const dateText = dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       const route = `${o.pickup} → ${o.drop}`;
       const fb = feedbacks.find(f => f.orderId === o.id);
       const tr = document.createElement('tr');
@@ -1353,11 +1263,11 @@ It injects small panels into existing pages and wires button actions.
     if (!invoice) {
       const fallbackOrderId = order.id || orderId || 'DS-2045';
       invoice = {
-        id: `INV-${String(fallbackOrderId).replace(/\D/g,'')}`,
+        id: `INV-${String(fallbackOrderId).replace(/\D/g, '')}`,
         orderId: fallbackOrderId,
         amount: order.pricing?.total || 145,
         createdAt: order.steps?.deliveredAt || order.createdAt || new Date().toISOString(),
-        dueDate: new Date(Date.now()+7*24*3600*1000).toISOString().slice(0,10),
+        dueDate: new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString().slice(0, 10),
         status: 'Unpaid',
         client: order.client
       };
@@ -1368,12 +1278,12 @@ It injects small panels into existing pages and wires button actions.
     const billedToAddress = invoice.clientAddress || order.clientAddress || prof.address;
     const created = new Date(invoice.createdAt || order.steps?.deliveredAt || order.createdAt || Date.now());
     const due = new Date(invoice.dueDate || created);
-    const createdText = created.toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'});
-    const dueText = due.toLocaleDateString('en-US',{month:'short', day:'numeric', year:'numeric'});
+    const createdText = created.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const dueText = due.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
     const total = Number(invoice.amount || order.pricing?.total || 145);
-    const base = Math.max(0, Math.round((total/1.1)*100)/100);
-    const tax = Math.round((total-base)*100)/100;
+    const base = Math.max(0, Math.round((total / 1.1) * 100) / 100);
+    const tax = Math.round((total - base) * 100) / 100;
     const shell = document.querySelector('.invoice-shell');
     if (!shell) return;
 
@@ -1383,7 +1293,7 @@ It injects small panels into existing pages and wires button actions.
     const drop = order.drop || '--';
     const distance = order.distance || `${order.eta || 0} mins`;
 
-    shell.innerHTML = `<div class="invoice-top"><div><div class="invoice-logo">DeliverSync</div><div class="invoice-sub">Logistics Technology Platform</div><div style="height:36px"></div><div style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Billed To</div><div class="invoice-mini"><div class="value" style="font-size:28px">${billedToName}</div><div style="margin-top:12px;font-size:18px">${billedToAddress}</div></div></div><div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div></div><div><div class="invoice-chip"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg> INVOICE</div><div class="invoice-number">${invoice.id}</div></div></div><div class="invoice-grid-top"><div class="invoice-mini"><div class="label">Invoice Date</div><div class="value">${createdText}</div></div><div class="invoice-mini"><div class="label">Due Date</div><div class="value">${dueText}</div></div></div></div></div><div class="invoice-section"><h2>Delivery Details</h2><div class="detail-card"><div class="detail-row"><div class="left">Delivery ID</div><div class="right yellow">#${orderCode}</div></div><div class="detail-row"><div class="left">Driver</div><div class="right">${driver}</div></div><div class="detail-row"><div class="left">Pickup Location</div><div class="right">${pickup}</div></div><div class="detail-row"><div class="left">Drop Location</div><div class="right">${drop}</div></div><div class="detail-row"><div class="left">Distance Traveled</div><div class="right yellow">${distance}</div></div></div></div><div class="invoice-section"><h2>Cost Breakdown</h2><div class="detail-card"><div class="detail-row"><div class="left">Base Cost</div><div class="right">₹${base.toFixed(2)}</div></div><div class="detail-row"><div class="left">Tax (10%)</div><div class="right">₹${tax.toFixed(2)}</div></div><div class="total-row"><span>Total Amount</span><span>₹${total.toFixed(2)}</span></div></div></div><div class="invoice-section"><h2>Payment Status</h2><div class="status-card"><div class="status-ico">${String(invoice.status||'').toLowerCase()==='paid' ? '✓' : '!'}</div><div><div style="font-size:18px;font-weight:800;color:${String(invoice.status||'').toLowerCase()==='paid' ? '#69e38f' : '#ffe27a'}">${String(invoice.status||'').toLowerCase()==='paid' ? 'Payment Received' : 'Payment Pending'}</div><div style="margin-top:8px;color:${String(invoice.status||'').toLowerCase()==='paid' ? '#d4f5db' : '#f1e0a6'}">${String(invoice.status||'').toLowerCase()==='paid' ? 'Paid successfully and recorded in the system.' : 'Please submit transaction details to complete payment.'}</div></div></div></div><div class="invoice-section"><h2>Payment Instructions</h2><div class="detail-card"><div style="padding:18px 0;color:#a8a8a8">For future payments, please make transfers to the following account:</div><div class="detail-row"><div class="left">Bank Name</div><div class="right">First National Bank</div></div><div class="detail-row"><div class="left">Account Name</div><div class="right">DeliverSync Inc.</div></div><div class="detail-row"><div class="left">Account Number</div><div class="right">**** **** **** 2741</div></div><div class="detail-row"><div class="left">Reference</div><div class="right">${invoice.id}</div></div></div></div>`;
+    shell.innerHTML = `<div class="invoice-top"><div><div class="invoice-logo">DeliverSync</div><div class="invoice-sub">Logistics Technology Platform</div><div style="height:36px"></div><div style="font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Billed To</div><div class="invoice-mini"><div class="value" style="font-size:28px">${billedToName}</div><div style="margin-top:12px;font-size:18px">${billedToAddress}</div></div></div><div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div></div><div><div class="invoice-chip"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg> INVOICE</div><div class="invoice-number">${invoice.id}</div></div></div><div class="invoice-grid-top"><div class="invoice-mini"><div class="label">Invoice Date</div><div class="value">${createdText}</div></div><div class="invoice-mini"><div class="label">Due Date</div><div class="value">${dueText}</div></div></div></div></div><div class="invoice-section"><h2>Delivery Details</h2><div class="detail-card"><div class="detail-row"><div class="left">Delivery ID</div><div class="right yellow">#${orderCode}</div></div><div class="detail-row"><div class="left">Driver</div><div class="right">${driver}</div></div><div class="detail-row"><div class="left">Pickup Location</div><div class="right">${pickup}</div></div><div class="detail-row"><div class="left">Drop Location</div><div class="right">${drop}</div></div><div class="detail-row"><div class="left">Distance Traveled</div><div class="right yellow">${distance}</div></div></div></div><div class="invoice-section"><h2>Cost Breakdown</h2><div class="detail-card"><div class="detail-row"><div class="left">Base Cost</div><div class="right">₹${base.toFixed(2)}</div></div><div class="detail-row"><div class="left">Tax (10%)</div><div class="right">₹${tax.toFixed(2)}</div></div><div class="total-row"><span>Total Amount</span><span>₹${total.toFixed(2)}</span></div></div></div><div class="invoice-section"><h2>Payment Status</h2><div class="status-card"><div class="status-ico">${String(invoice.status || '').toLowerCase() === 'paid' ? '✓' : '!'}</div><div><div style="font-size:18px;font-weight:800;color:${String(invoice.status || '').toLowerCase() === 'paid' ? '#69e38f' : '#ffe27a'}">${String(invoice.status || '').toLowerCase() === 'paid' ? 'Payment Received' : 'Payment Pending'}</div><div style="margin-top:8px;color:${String(invoice.status || '').toLowerCase() === 'paid' ? '#d4f5db' : '#f1e0a6'}">${String(invoice.status || '').toLowerCase() === 'paid' ? 'Paid successfully and recorded in the system.' : 'Please submit transaction details to complete payment.'}</div></div></div></div><div class="invoice-section"><h2>Payment Instructions</h2><div class="detail-card"><div style="padding:18px 0;color:#a8a8a8">For future payments, please make transfers to the following account:</div><div class="detail-row"><div class="left">Bank Name</div><div class="right">First National Bank</div></div><div class="detail-row"><div class="left">Account Name</div><div class="right">DeliverSync Inc.</div></div><div class="detail-row"><div class="left">Account Number</div><div class="right">**** **** **** 2741</div></div><div class="detail-row"><div class="left">Reference</div><div class="right">${invoice.id}</div></div></div></div>`;
   }
 
   function renderBCFeedbackDynamic() {
@@ -1391,23 +1301,23 @@ It injects small panels into existing pages and wires button actions.
     const params = new URLSearchParams(location.search);
     const orderId = params.get('order');
     const orders = getOrders();
-    const order = (orderId ? orders.find(o => o.id === orderId) : null) || orders.filter(o => String(o.status||'').toUpperCase() === 'DELIVERED').sort((a,b)=>new Date(b.steps?.deliveredAt||b.createdAt)-new Date(a.steps?.deliveredAt||a.createdAt))[0];
+    const order = (orderId ? orders.find(o => o.id === orderId) : null) || orders.filter(o => String(o.status || '').toUpperCase() === 'DELIVERED').sort((a, b) => new Date(b.steps?.deliveredAt || b.createdAt) - new Date(a.steps?.deliveredAt || a.createdAt))[0];
     if (!order) return;
     const content = document.querySelector('.bc-content');
     if (!content) return;
-    content.innerHTML = `<div class="feedback-shell"><a href="completed-deliveries.html" class="back-btn">Back</a><h1 class="page-title small">Provide Feedback</h1><p class="page-subtitle">Rate your completed delivery experience</p><div class="card feedback-card"><div class="field-label">Delivery ID</div><div class="value-box">#${String(order.id).replace(/^[A-Z]+-/, '')}</div><div class="field-label">Driver</div><div class="value-box">${order.assignedDriver || 'Assigning'}</div><div class="field-label">Overall Rating</div><div class="stars" id="feedbackStars">${[1,2,3,4,5].map(n=>`<span data-star="${n}" class="${n<=4?'active':''}">★</span>`).join('')}</div><div class="field-label">Share your experience</div><textarea class="textarea" id="feedbackMessage" placeholder="Tell us what went well and what can be improved"></textarea><div class="field-label">Delivery Quality</div><select class="input" id="feedbackQuality"><option>Excellent</option><option>Good</option><option>Average</option><option>Poor</option></select><div style="margin-top:22px"><button class="btn yellow full" id="feedbackSubmitBtn">Submit Feedback</button></div><div id="feedbackErr" style="margin-top:12px;color:#ff6b6b;font-size:13px"></div></div></div>`;
+    content.innerHTML = `<div class="feedback-shell"><a href="completed-deliveries.html" class="back-btn">Back</a><h1 class="page-title small">Provide Feedback</h1><p class="page-subtitle">Rate your completed delivery experience</p><div class="card feedback-card"><div class="field-label">Delivery ID</div><div class="value-box">#${String(order.id).replace(/^[A-Z]+-/, '')}</div><div class="field-label">Driver</div><div class="value-box">${order.assignedDriver || 'Assigning'}</div><div class="field-label">Overall Rating</div><div class="stars" id="feedbackStars">${[1, 2, 3, 4, 5].map(n => `<span data-star="${n}" class="${n <= 4 ? 'active' : ''}">★</span>`).join('')}</div><div class="field-label">Share your experience</div><textarea class="textarea" id="feedbackMessage" placeholder="Tell us what went well and what can be improved"></textarea><div class="field-label">Delivery Quality</div><select class="input" id="feedbackQuality"><option>Excellent</option><option>Good</option><option>Average</option><option>Poor</option></select><div style="margin-top:22px"><button class="btn yellow full" id="feedbackSubmitBtn">Submit Feedback</button></div><div id="feedbackErr" style="margin-top:12px;color:#ff6b6b;font-size:13px"></div></div></div>`;
     let rating = 4;
     const paint = () => document.querySelectorAll('#feedbackStars [data-star]').forEach(el => el.classList.toggle('active', Number(el.dataset.star) <= rating));
     paint();
-    document.querySelectorAll('#feedbackStars [data-star]').forEach(el => el.addEventListener('click', ()=>{ rating = Number(el.dataset.star); paint(); }));
+    document.querySelectorAll('#feedbackStars [data-star]').forEach(el => el.addEventListener('click', () => { rating = Number(el.dataset.star); paint(); }));
     const btn = document.getElementById('feedbackSubmitBtn');
-    if (btn) btn.addEventListener('click', ()=>{
+    if (btn) btn.addEventListener('click', () => {
       const message = (document.getElementById('feedbackMessage').value || '').trim();
       const quality = document.getElementById('feedbackQuality').value;
       const err = document.getElementById('feedbackErr');
-      if (!message) { if(err) err.textContent = 'Please share your experience.'; return; }
+      if (!message) { if (err) err.textContent = 'Please share your experience.'; return; }
       const feedbacks = getFeedbacks().filter(f => f.orderId !== order.id);
-      feedbacks.unshift({ id:`FDB-${Date.now()}`, orderId: order.id, driver: order.assignedDriver || '', rating, message, quality, createdAt: nowISO() });
+      feedbacks.unshift({ id: `FDB-${Date.now()}`, orderId: order.id, driver: order.assignedDriver || '', rating, message, quality, createdAt: nowISO() });
       saveFeedbacks(feedbacks);
       location.href = 'completed-deliveries.html';
     });
@@ -1524,9 +1434,9 @@ It injects small panels into existing pages and wires button actions.
 
       const cardsHtml = unpaidInvoices.length
         ? unpaidInvoices
-            .map((inv) => {
-              const isSelected = inv.id === selectedInvoiceId;
-              return `
+          .map((inv) => {
+            const isSelected = inv.id === selectedInvoiceId;
+            return `
                 <div class="driver-box" data-select-invoice="${inv.id}" tabindex="0" role="button" style="cursor:pointer;border:${isSelected ? '1px solid rgba(245,209,13,0.95)' : '1px solid transparent'};box-shadow:${isSelected ? '0 0 0 1px rgba(245,209,13,0.22) inset' : 'none'};transition:border-color .2s ease, box-shadow .2s ease">
                   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
                     <div>
@@ -1540,8 +1450,8 @@ It injects small panels into existing pages and wires button actions.
                   </div>
                   <div style="margin-top:10px;font-size:24px;font-weight:800">${currency(inv.amount)}</div>
                 </div>`;
-            })
-            .join('')
+          })
+          .join('')
         : '<div class="driver-box" style="color:#a3a3a3">No unpaid invoices available.</div>';
 
       unpaidCard.innerHTML = `
@@ -1627,9 +1537,6 @@ It injects small panels into existing pages and wires button actions.
     }, true);
   }
 
-
-
-
   function renderFleetManagerNotificationSearch() {
     if (!location.pathname.endsWith('/fleet-manager/notifications.html')) return;
     const filters = document.querySelector('.notif-filters');
@@ -1649,7 +1556,7 @@ It injects small panels into existing pages and wires button actions.
       });
     };
     document.getElementById('fmNotifSearchBtn')?.addEventListener('click', run);
-    document.getElementById('fmNotifSearch')?.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); run(); }});
+    document.getElementById('fmNotifSearch')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
   }
 
   function renderFleetManagerIncidents() {
@@ -1657,17 +1564,16 @@ It injects small panels into existing pages and wires button actions.
     const list = document.querySelector('.notif-list');
     if (!list) return;
     const incidents = getIncidents();
-    // remove existing static and previously injected cards on Fleet Manager notifications page
     list.innerHTML = '';
     if (!incidents.length) { list.innerHTML = '<div style="padding:18px;color:#9ca3af">No notifications available.</div>'; return; }
 
-    const drivers = readJSON('dsDemoDrivers', ['Raghav Reddy','Srujan','Sarath','David','Rajesh Kumar','Kiran Teja']);
+    const drivers = readJSON('dsDemoDrivers', ['Raghav Reddy', 'Srujan', 'Sarath', 'David', 'Rajesh Kumar', 'Kiran Teja']);
 
     incidents.slice().reverse().forEach((i, idx) => {
       const menuId = `fmIncidentDrivers_${idx}_${String(i.id)}`;
       const card = document.createElement('article');
       card.className = 'notif-card tone-dark';
-      card.setAttribute('data-incident-card','fm');
+      card.setAttribute('data-incident-card', 'fm');
       card.style.position = 'relative';
       card.innerHTML = `
         <div class="notif-card-icon icon-critical"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></div>
@@ -1728,11 +1634,11 @@ It injects small panels into existing pages and wires button actions.
         const incidents = getIncidents();
         const inc = incidents.find(x => String(x.id) === String(incId));
         const orders = getOrders();
-        const order = orders.find(o => String(o.id).replace(/\D/g,'') === String(inc.orderId).replace(/\D/g,''));
+        const order = orders.find(o => String(o.id).replace(/\D/g, '') === String(inc.orderId).replace(/\D/g, ''));
         if (order) { order.assignedDriver = driver; order.status = 'ASSIGNED'; saveOrders(orders); }
         if (inc) { inc.status = 'Reassigned'; saveIncidents(incidents); }
         const notifs = getNotifs();
-        notifs.unshift({id:`N-${Date.now()}`,to:'business-client',title:'Driver Reassigned',message:`Order ${inc.orderId} has been reassigned to ${driver}.`,createdAt:nowISO()});
+        notifs.unshift({ id: `N-${Date.now()}`, to: 'business-client', title: 'Driver Reassigned', message: `Order ${inc.orderId} has been reassigned to ${driver}.`, createdAt: nowISO() });
         saveNotifs(notifs);
         location.reload();
       }
@@ -1741,7 +1647,7 @@ It injects small panels into existing pages and wires button actions.
         const incidents = getIncidents();
         const inc = incidents.find(x => String(x.id) === String(incId));
         const notifs = getNotifs();
-        notifs.unshift({id:`N-${Date.now()}`,to:'business-client',title:'Incident Update',message:`Fleet Manager is reviewing the reported incident for order ${inc.orderId}. We will keep you updated.`,createdAt:nowISO()});
+        notifs.unshift({ id: `N-${Date.now()}`, to: 'business-client', title: 'Incident Update', message: `Fleet Manager is reviewing the reported incident for order ${inc.orderId}. We will keep you updated.`, createdAt: nowISO() });
         saveNotifs(notifs);
         wfToast('Business client notification sent.');
       }
@@ -1751,35 +1657,34 @@ It injects small panels into existing pages and wires button actions.
         saveIncidents(incidents);
         location.reload();
       }
-    }, { once:false });
+    }, { once: false });
   }
 
   function renderSuperuserIncidentMonitor() {
     if (!location.pathname.endsWith('/superuser/notifications.html')) return;
     const root = document.querySelector('#pageRoot') || document.body;
     if (!root) return;
-    root.querySelectorAll('[data-su-incident-notif="1"]').forEach(n=>n.remove());
+    root.querySelectorAll('[data-su-incident-notif="1"]').forEach(n => n.remove());
     const incidents = getIncidents();
     const suNotifs = getNotifs().filter(n => n.to === 'super-user');
-    const items = incidents.map(i=>({title:`${i.type} reported`,message:`Driver reported an incident for order ${i.orderId}. Status: ${i.status}.`,time:i.createdAt})).concat(suNotifs.map(n=>({title:n.title,message:n.message,time:new Date(n.createdAt).toLocaleString()})));
+    const items = incidents.map(i => ({ title: `${i.type} reported`, message: `Driver reported an incident for order ${i.orderId}. Status: ${i.status}.`, time: i.createdAt })).concat(suNotifs.map(n => ({ title: n.title, message: n.message, time: new Date(n.createdAt).toLocaleString() })));
     if (!items.length) return;
     const card = document.createElement('div');
-    card.setAttribute('data-su-incident-notif','1');
+    card.setAttribute('data-su-incident-notif', '1');
     card.className = 'content-card profile-card';
     card.style.maxWidth = '860px';
-    card.innerHTML = `<div style="font-weight:800;font-size:20px;margin-bottom:14px">Incident Notifications</div>${items.map(n=>`<div class="notify-item"><strong>${n.title}</strong><span>${n.message}</span><span>${n.time}</span></div>`).join('')}<div style="text-align:right;margin-top:18px"><button class="btn-yellow" id="suMarkReadWorkflow">Mark all as read</button></div>`;
+    card.innerHTML = `<div style="font-weight:800;font-size:20px;margin-bottom:14px">Incident Notifications</div>${items.map(n => `<div class="notify-item"><strong>${n.title}</strong><span>${n.message}</span><span>${n.time}</span></div>`).join('')}<div style="text-align:right;margin-top:18px"><button class="btn-yellow" id="suMarkReadWorkflow">Mark all as read</button></div>`;
     root.insertAdjacentElement('afterbegin', card);
-    const btn = document.getElementById('suMarkReadWorkflow'); if(btn) btn.onclick=()=>wfToast('Incident notifications marked as read.');
+    const btn = document.getElementById('suMarkReadWorkflow'); if (btn) btn.onclick = () => wfToast('Incident notifications marked as read.');
   }
 
-  
+
 
   function renderBusinessClientNotifications() {
     if (!location.pathname.endsWith('/business-client/notifications.html')) return;
     const container = document.querySelector('.notif-card');
     if (!container) return;
 
-    // Remove previously injected workflow items
     container.querySelectorAll('[data-workflow-notif="1"]').forEach(n => n.remove());
 
     const notifs = getNotifs().filter((n) => n.to === 'business-client');
@@ -1795,7 +1700,6 @@ It injects small panels into existing pages and wires button actions.
 
     const ico = `<svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2z"></path><path d="M18 16v-5a6 6 0 0 0-5-5.9V4a1 1 0 1 0-2 0v1.1A6 6 0 0 0 6 11v5l-2 2v1h16v-1l-2-2z"></path></svg>`;
 
-    // Prepend newest first in the same style as existing Business Client notifications
     notifs.slice().reverse().forEach((n) => {
       const item = document.createElement('div');
       item.className = 'notif-item';
@@ -1815,7 +1719,6 @@ It injects small panels into existing pages and wires button actions.
   function init() {
     ensureSeed();
 
-    // Business client
     if (location.pathname.endsWith('/business-client/create-delivery.html')) {
       createOrderFromBCForm();
     }
@@ -1844,10 +1747,8 @@ It injects small panels into existing pages and wires button actions.
     document.addEventListener('DOMContentLoaded', wireSubmitTransaction);
     document.addEventListener('DOMContentLoaded', renderBusinessClientNotifications);
 
-    // Driver
     document.addEventListener('DOMContentLoaded', injectDriverTasks);
 
-    // Fleet manager & superuser
     document.addEventListener('DOMContentLoaded', renderFleetManagerDashboardLiveOrders);
     document.addEventListener('DOMContentLoaded', renderFleetManagerDashboardStats);
     document.addEventListener('DOMContentLoaded', renderFleetManagerTripsSection);
@@ -1861,7 +1762,6 @@ It injects small panels into existing pages and wires button actions.
     document.addEventListener('DOMContentLoaded', wireFleetManagerScheduleMaintenance);
     document.addEventListener('DOMContentLoaded', injectSuperuserMonitoring);
     document.addEventListener('DOMContentLoaded', renderSuperuserIncidentMonitor);
-    document.addEventListener('DOMContentLoaded', renderSuperuserReportsAndNotifications);
   }
 
   init();

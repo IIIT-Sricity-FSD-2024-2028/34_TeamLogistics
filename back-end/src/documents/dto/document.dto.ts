@@ -2,9 +2,9 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 
 export class CreateDocumentDto {
-  @ApiProperty({ example: 'vehicle', enum: ['vehicle', 'driver'] })
+  @ApiProperty({ example: 'vehicle', enum: ['vehicle', 'driver', 'delivery', 'business-client'] })
   @IsString()
-  @IsIn(['vehicle', 'driver'])
+  @IsIn(['vehicle', 'driver', 'delivery', 'business-client'])
   ownerType!: string;
 
   @ApiPropertyOptional({ example: 'TN-09-AB-2345' })
@@ -16,6 +16,11 @@ export class CreateDocumentDto {
   @IsOptional()
   @IsString()
   driver?: string;
+
+  @ApiPropertyOptional({ example: 'DR-2024-001' })
+  @IsOptional()
+  @IsString()
+  delivery?: string;
 
   @ApiProperty({ example: 'Registration' })
   @IsString()

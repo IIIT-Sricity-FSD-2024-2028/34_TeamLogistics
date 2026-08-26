@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -17,6 +17,7 @@
 
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body" data-page="completed-deliveries">
@@ -80,7 +81,7 @@
       <header class="bc-topbar">
 
   <div class="bc-topbar-left">
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -119,11 +120,11 @@
 
     <a class="bc-profile-chip" href="profile.html">
 
-      <div class="bc-profile-avatar">A</div>
+      <div class="bc-profile-avatar" data-current-user-avatar></div>
 
       <div class="bc-profile-info">
-        <strong>Acme Logistics</strong>
-        <span>Business Client</span>
+        <strong data-current-user-name></strong>
+        <span data-current-user-role></span>
       </div>
 
     </a>
@@ -562,11 +563,18 @@
 
         document.getElementById("pickupText").textContent = getPickup(delivery);
         document.getElementById("dropoffText").textContent = getDropoff(delivery);
-        document.getElementById("packageText").textContent =
-          delivery.package ||
-          delivery.packageType ||
-          delivery.item ||
-          "--";
+        // ── Show structured package info when available ──
+        const pkgType = delivery.packageType || '';
+        const pkgDims = delivery.packageDimensions;
+        let packageDisplay = '--';
+        if (pkgType && pkgDims && pkgDims.length) {
+          packageDisplay = pkgType + ' — ' + pkgDims.length + ' × ' + pkgDims.width + ' × ' + pkgDims.height + ' ' + (pkgDims.unit || 'cm');
+        } else if (pkgType) {
+          packageDisplay = pkgType;
+        } else {
+          packageDisplay = delivery.package || delivery.item || '--';
+        }
+        document.getElementById("packageText").textContent = packageDisplay;
 
         if (delivery.feedback) {
           rating = Number(delivery.feedback.rating || 4);

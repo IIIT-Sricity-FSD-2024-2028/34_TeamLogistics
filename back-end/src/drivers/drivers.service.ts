@@ -37,12 +37,10 @@ export class DriversService {
       phone: dto.phone || '',
       status: dto.status || 'Available',
 
-      // Existing backend Driver fields
       zone: (dto as any).zone || 'Unassigned',
       rating: (dto as any).rating || 4.5,
       license: dto.licenseNumber || (dto as any).license || '',
 
-      // Extra profile fields used by driver profile page
       licenseNumber: dto.licenseNumber || (dto as any).license || '',
       vehicle: dto.vehicle || '',
       vehicleType: dto.vehicleType || '',
@@ -71,14 +69,12 @@ export class DriversService {
     phone: dto.phone ?? existing.phone,
     status: dto.status ?? existing.status,
 
-    // old backend compatible field
     license:
       dto.licenseNumber ??
       (dto as any).license ??
       (existing as any).license ??
       '',
 
-    // new frontend profile fields
     licenseNumber:
       dto.licenseNumber ??
       (existing as any).licenseNumber ??
@@ -94,9 +90,6 @@ export class DriversService {
   this.store.drivers[index] = updatedDriver;
   this.store.persistDrivers();
 
-  // --------------------------------------------------
-  // SYNC DRIVER PROFILE UPDATE INTO users.json ALSO
-  // --------------------------------------------------
   const usersStore = this.store as any;
 
   if (Array.isArray(usersStore.users)) {

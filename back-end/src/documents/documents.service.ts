@@ -8,10 +8,13 @@ type DocumentRecord = {
   ownerType: string;
   vehicle?: string;
   driver?: string;
+  delivery?: string;
   documentType: string;
   issueDate?: string;
   expiryDate?: string;
   status?: string;
+  fileName?: string;
+  fileUrl?: string;
 };
 
 @Injectable()
@@ -74,8 +77,14 @@ export class DocumentsService {
     return doc;
   }
 
-  create(dto: CreateDocumentDto) {
-    const nextNumber = this.documents.length + 1;
+  create(dto: CreateDocumentDto, file?: Express.Multer.File) {
+    const nums = this.documents
+      .map((d) => {
+        const match = String(d.id || '').match(/(\d+)/);
+        return match ? Number(match[1]) : 0;
+      })
+      .filter(Boolean);
+    const nextNumber = (nums.length ? Math.max(...nums) : 0) + 1;
     const id = `DOC-${String(nextNumber).padStart(3, '0')}`;
 
     const doc: DocumentRecord = {
@@ -83,10 +92,13 @@ export class DocumentsService {
       ownerType: dto.ownerType,
       vehicle: dto.vehicle,
       driver: dto.driver,
+      delivery: dto.delivery,
       documentType: dto.documentType,
       issueDate: dto.issueDate || '',
       expiryDate: dto.expiryDate || '',
       status: dto.status || 'Valid',
+      fileName: file?.originalname,
+      fileUrl: file ? `/uploads/documents/${file.filename}` : undefined,
     };
 
     this.documents.push(doc);

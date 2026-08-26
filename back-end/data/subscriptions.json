@@ -1,0 +1,33 @@
+[
+  {
+    "id": "SUB-001",
+    "userId": "FM-101",
+    "role": "fleet-manager",
+    "plan": "Enterprise",
+    "amount": 5999,
+    "vehicleLimit": 100,
+    "billingCycle": "monthly",
+    "status": "active",
+    "startDate": "2026-08-26",
+    "endDate": "2026-09-25",
+    "paymentStatus": "paid",
+    "transactionId": "TXN-1787777072437",
+    "createdAt": "2026-08-26T20:31:04.520Z",
+    "updatedAt": "2026-08-26T20:44:32.437Z"
+  },
+  {
+    "id": "SUB-002",
+    "userId": "FM-306",
+    "role": "fleet-manager",
+    "plan": "Business",
+    "amount": 2499,
+    "vehicleLimit": 25,
+    "billingCycle": "monthly",
+    "status": "active",
+    "startDate": "2026-08-26",
+    "endDate": "2026-09-25",
+    "paymentStatus": "paid",
+    "transactionId": "TXN-1787776919442",
+    "createdAt": "2026-08-26T20:41:59.442Z"
+  }
+]

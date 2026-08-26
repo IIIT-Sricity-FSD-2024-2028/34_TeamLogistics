@@ -79,7 +79,7 @@ a{text-decoration:none;color:inherit}
 @media (max-width:380px){.page-title{font-size:24px}.trip-meta{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr}.action-3{grid-template-columns:1fr}.top-summary{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr 1fr}}
 
 
-/* --- monochrome yellow/black theme overrides --- */
+
 :root{
   --bg:#f3f3f3;
   --surface:#ffffff;
@@ -122,7 +122,7 @@ a{text-decoration:none;color:inherit}
 .logo-badge::before{content:''}
 
 
-/* desktop login page while driver portal remains mobile */
+
 body.driver-login-page{margin:0;min-height:100vh;background:#050505;display:flex;align-items:center;justify-content:center;padding:40px 16px;color:#fff}
 .driver-login-page .login-wrap{min-height:auto;background:transparent;padding:0;display:flex;flex-direction:column;justify-content:center;max-width:460px;width:100%}
 .driver-login-page .login-card{max-width:440px;width:100%;margin:0 auto}
@@ -148,7 +148,7 @@ body.driver-login-page{margin:0;min-height:100vh;background:#050505;display:flex
 html,body{overflow-y:auto}
 
 
-/* Enforce driver portal palette: yellow/white/black only */
+
 .metric-icon.green,.metric-icon.orange,.metric-icon.blue,.metric-icon.purple{background:var(--yellow)!important;color:var(--black)!important}
 .route-dot.pick,.route-dot.drop{background:var(--yellow)!important;color:var(--black)!important}
 .pill.green,.pill.red,.pill.blue,.pill.orange{background:var(--yellow)!important;color:var(--black)!important}

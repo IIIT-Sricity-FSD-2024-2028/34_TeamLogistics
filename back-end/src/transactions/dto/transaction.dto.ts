@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTransactionDto {
   @IsOptional()
@@ -43,7 +43,33 @@ export class CreateTransactionDto {
 
   @IsOptional()
   @IsString()
+  receiptUrl?: string;
+
+  @IsOptional()
+  @IsString()
   createdAt?: string;
+}
+
+export class PayDeliveryDto {
+  @IsOptional()
+  @IsString()
+  invoiceId?: string;
+
+  @IsOptional()
+  @IsString()
+  deliveryId?: string;
+
+  @IsOptional()
+  @IsString()
+  paymentMode?: string;
+
+  @IsOptional()
+  @IsString()
+  reference?: string;
+
+  @IsOptional()
+  @IsIn(['success', 'fail'])
+  simulate?: string;
 }
 
 export class CreateInvoiceDto {

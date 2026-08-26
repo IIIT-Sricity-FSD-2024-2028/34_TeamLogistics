@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,13 +20,14 @@
 
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body>
 
   <div class="su-shell">
 
-    <!-- ================= SIDEBAR ================= -->
+
 
     <aside class="su-sidebar">
 
@@ -174,20 +175,22 @@
 
       </nav>
 
-      <a class="logout" href="../login.html">
-        <span class="ico">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <path d="M16 17l5-5-5-5"></path>
-            <path d="M21 12H9"></path>
-          </svg>
-        </span>
-        <span>Logout</span>
-      </a>
+      <div class="side-footer">
+        <a class="logout-btn" href="../login.html">
+          <span class="ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <path d="M16 17l5-5-5-5"></path>
+              <path d="M21 12H9"></path>
+            </svg>
+          </span>
+          <span>Logout</span>
+        </a>
+      </div>
 
     </aside>
 
-    <!-- ================= MAIN ================= -->
+
 
     <main class="su-main">
 
@@ -241,15 +244,14 @@
             class="avatar-mini"
             href="profile.html"
             aria-label="Profile"
-          >
-            A
-          </a>
+            data-current-user-avatar
+          ></a>
 
         </div>
 
       </header>
 
-      <!-- ================= CONTENT ================= -->
+
 
       <section class="page-scroll">
 
@@ -272,7 +274,7 @@
 
           </div>
 
-          <!-- FILTER BAR -->
+
 
           <div class="notification-toolbar">
 
@@ -358,7 +360,7 @@
 
           </div>
 
-          <!-- NOTIFICATION LIST -->
+
 
           <div
             class="notification-list"

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -20,13 +20,14 @@
 
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="driver-desktop-page" data-page="notifications">
 
   <div class="driver-shell">
 
-    <!-- ================= SIDEBAR ================= -->
+
 
     <aside class="driver-sidebar">
 
@@ -108,11 +109,11 @@
 
     </aside>
 
-    <!-- ================= MAIN ================= -->
+
 
     <main class="driver-main">
 
-      <!-- ================= TOPBAR ================= -->
+
 
       <header class="topbar">
 
@@ -130,7 +131,7 @@
 
         <div class="topbar-right">
 
-          <!-- Notification -->
+
 
           <a
             class="icon-circle notification-link"
@@ -170,16 +171,14 @@
 
           </a>
 
-          <!-- Driver Profile -->
+
 
           <a
             class="profile-chip"
             href="profile.html"
           >
 
-            <div class="profile-avatar">
-              R
-            </div>
+            <div class="profile-avatar" data-current-user-avatar></div>
 
             <div>
 
@@ -188,18 +187,15 @@
                   font-weight:800;
                   color:#fff;
                 "
-              >
-                Raghav Reddy
-              </div>
+               data-current-user-name></div>
 
               <div
                 style="
                   font-size:12px;
                   color:#9e9e9e;
                 "
-              >
-                driver@deliverysync.com
-              </div>
+                data-current-user-email
+              ></div>
 
             </div>
 
@@ -209,7 +205,7 @@
 
       </header>
 
-      <!-- ================= CONTENT ================= -->
+
 
       <section class="content">
 
@@ -217,7 +213,7 @@
 
           <div class="notifications-card">
 
-            <!-- Header -->
+
 
             <div class="notif-header">
 
@@ -254,7 +250,7 @@
 
             </div>
 
-            <!-- Tabs -->
+
 
             <div class="tabs">
 
@@ -284,7 +280,7 @@
 
             </div>
 
-            <!-- Notifications -->
+
 
             <div
               id="notificationsList"
@@ -305,7 +301,7 @@
 
   </div>
 
-  <!-- ================= PAGE CSS ================= -->
+
 
   <style>
 
@@ -625,7 +621,7 @@
 
   </style>
 
-  <!-- ================= JAVASCRIPT ================= -->
+
 
   <script>
 

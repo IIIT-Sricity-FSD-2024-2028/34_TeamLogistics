@@ -27,29 +27,57 @@
         <a class="white-link" href="#">Forgot Password?</a>
       </div>
       <button id="driverLoginBtn" class="btn gray full mt-24" style="max-width:160px;margin-left:auto;margin-right:auto">Login</button>
+      <div id="driverLoginError" class="login-muted" style="color:#ff8080;display:none"></div>
       <div class="center mt-24" style="color:#666666">Don't have an account? <a class="white-link" href="register.html">Get started</a></div>
     </div>
   </div>
   <script>
     (function () {
-      const storage = document.getElementById('rememberMe').checked ? localStorage : sessionStorage;
-      const existing = localStorage.getItem('driverLoggedIn') || sessionStorage.getItem('driverLoggedIn');
-      if (existing === 'true') {
+      const existing = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
+      if (existing && existing.userId && existing.role === 'driver') {
         window.location.replace('dashboard.html');
         return;
       }
-      document.getElementById('driverLoginBtn').addEventListener('click', function (e) {
+
+      const errorBox = document.getElementById('driverLoginError');
+
+      document.getElementById('driverLoginBtn').addEventListener('click', async function (e) {
         e.preventDefault();
+        errorBox.style.display = 'none';
+
         const email = document.getElementById('driverEmail').value.trim();
-        const password = document.getElementById('driverPassword').value.trim();
+        const password = document.getElementById('driverPassword').value;
         const remember = document.getElementById('rememberMe').checked;
-        const targetStorage = remember ? localStorage : sessionStorage;
-        const otherStorage = remember ? sessionStorage : localStorage;
-        targetStorage.setItem('driverLoggedIn', 'true');
-        targetStorage.setItem('driverEmail', email || 'driver@deliversync.com');
-        otherStorage.removeItem('driverLoggedIn');
-        otherStorage.removeItem('driverEmail');
-        window.location.replace('dashboard.html');
+
+        if (!window.DeliverySyncAPI || !window.DeliverySyncAPI.Auth) {
+          errorBox.textContent = 'DeliverySyncAPI is not loaded.';
+          errorBox.style.display = 'block';
+          return;
+        }
+
+        try {
+          const user = await window.DeliverySyncAPI.Auth.login(email, password);
+
+          if (user.role !== 'driver') {
+            errorBox.textContent = 'This account is not a Driver account.';
+            errorBox.style.display = 'block';
+            return;
+          }
+
+          localStorage.setItem('deliverysync-session-v1', JSON.stringify({
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            remembered: remember,
+            loggedInAt: new Date().toISOString(),
+          }));
+
+          window.location.replace('dashboard.html');
+        } catch (error) {
+          errorBox.textContent = error.message || 'Login failed. Please try again.';
+          errorBox.style.display = 'block';
+        }
       });
     })();
   </script>

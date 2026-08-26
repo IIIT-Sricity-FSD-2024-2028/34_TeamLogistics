@@ -41,17 +41,14 @@ export class UsersController {
   ) {
     const users = this.usersService.findAll(role, search);
 
-    // Admin roles can view all users
     if (userRole === Role.SUPERUSER || userRole === Role.FLEET_MANAGER) {
       return users;
     }
 
-    // If frontend sends x-user-id, return only that user's profile
     if (userId) {
       return users.filter((u: any) => u.id === userId);
     }
 
-    // Demo fallback: return users matching current role
     if (userRole) {
       return users.filter((u: any) => u.role === userRole);
     }
@@ -70,17 +67,14 @@ export class UsersController {
     @Headers('x-user-role') userRole?: string,
     @Headers('x-user-id') userId?: string,
   ) {
-    // Admin roles can view any profile
     if (userRole === Role.SUPERUSER || userRole === Role.FLEET_MANAGER) {
       return this.usersService.findOne(id);
     }
 
-    // If x-user-id is provided, enforce own-profile rule
     if (userId && userId !== id) {
       throw new ForbiddenException('You can only view your own profile');
     }
 
-    // Demo fallback: allow if x-user-id is missing
     return this.usersService.findOne(id);
   }
 
@@ -113,17 +107,14 @@ export class UsersController {
     @Headers('x-user-role') userRole?: string,
     @Headers('x-user-id') userId?: string,
   ) {
-    // Admin roles can update any profile
     if (userRole === Role.SUPERUSER || userRole === Role.FLEET_MANAGER) {
       return this.usersService.update(id, dto);
     }
 
-    // If x-user-id exists, enforce own-profile update rule
     if (userId && userId !== id) {
       throw new ForbiddenException('You can only update your own profile');
     }
 
-    // Demo fallback: allow update when x-user-id is missing
     return this.usersService.update(id, dto);
   }
 

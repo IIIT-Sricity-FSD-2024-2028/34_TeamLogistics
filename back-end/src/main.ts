@@ -1,24 +1,42 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ForbiddenException, ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import helmet from 'helmet';
+import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common';
+import { startLogMaintenance } from './middleware';
 import * as fs from 'fs';
 import * as path from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Enable CORS for frontend integration
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+      contentSecurityPolicy: false,
+    }),
+  );
+
+  app.use(json({ limit: '2mb' }));
+  app.use(urlencoded({ extended: true, limit: '2mb' }));
+
   app.enableCors({
-    origin: '*',
+    origin: (origin, callback) => {
+      if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new ForbiddenException(`Origin ${origin} is not allowed by CORS`), false);
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Accept,x-user-role,x-user-id',
   });
 
-  // Global prefix
   app.setGlobalPrefix('api');
 
-  // Global validation pipe using class-validator DTOs
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -27,7 +45,16 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger API documentation
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  startLogMaintenance();
+
+  const uploadsDir = path.resolve(__dirname, '..', 'uploads');
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.useStaticAssets(uploadsDir, { prefix: '/uploads' });
+
   const config = new DocumentBuilder()
     .setTitle('DeliverSync API')
     .setDescription(
@@ -55,7 +82,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  // Export swagger.json to docs/ directory
   const docsDir = path.resolve(__dirname, '..', 'docs');
   if (!fs.existsSync(docsDir)) {
     fs.mkdirSync(docsDir, { recursive: true });

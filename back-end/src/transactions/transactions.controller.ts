@@ -6,11 +6,16 @@ import {
   Body,
   Query,
   Param,
+  Headers,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto, CreateInvoiceDto } from './dto/transaction.dto';
+import {
+  CreateTransactionDto,
+  CreateInvoiceDto,
+  PayDeliveryDto,
+} from './dto/transaction.dto';
 import { RolesGuard, Roles, Role } from '../common';
 
 @ApiTags('Transactions')
@@ -63,6 +68,23 @@ export class TransactionsController {
   @ApiParam({ name: 'deliveryId', required: true })
   generateInvoiceForDelivery(@Param('deliveryId') deliveryId: string) {
     return this.transactionsService.generateInvoiceForDelivery(deliveryId);
+  }
+
+  @Get('revenue-summary')
+  @Roles(Role.SUPERUSER)
+  @ApiOperation({ summary: 'Platform revenue summary: subscription revenue, delivery commission, totals' })
+  getRevenueSummary() {
+    return this.transactionsService.getRevenueSummary();
+  }
+
+  @Post('pay-delivery')
+  @Roles(Role.BUSINESS_CLIENT)
+  @ApiOperation({ summary: 'Business Client pays a delivery invoice; backend calculates the 10% platform commission' })
+  payDelivery(
+    @Body() dto: PayDeliveryDto,
+    @Headers('x-user-id') userId?: string,
+  ) {
+    return this.transactionsService.payDelivery(dto, userId);
   }
 
   @Patch('payments/:transactionId/status')

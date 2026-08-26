@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -15,6 +15,7 @@
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body" data-page="submit-transaction">
@@ -129,7 +130,7 @@
       <header class="bc-topbar">
 
   <div class="bc-topbar-left">
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -168,11 +169,11 @@
 
     <a class="bc-profile-chip" href="profile.html">
 
-      <div class="bc-profile-avatar">A</div>
+      <div class="bc-profile-avatar" data-current-user-avatar></div>
 
       <div class="bc-profile-info">
-        <strong>Acme Logistics</strong>
-        <span>Business Client</span>
+        <strong data-current-user-name></strong>
+        <span data-current-user-role></span>
       </div>
 
     </a>
@@ -292,7 +293,22 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
-      const CLIENT_NAME = "Acme Logistics Inc.";
+      const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
+      let sessionUser = null;
+      try {
+        if (session && session.userId && window.DeliverySyncAPI && window.DeliverySyncAPI.Users) {
+          sessionUser = await window.DeliverySyncAPI.Users.getById(session.userId);
+        }
+      } catch (e) {
+        console.error("Failed to resolve current business client from backend:", e);
+      }
+      const CLIENT_NAME =
+        sessionUser?.companyName ||
+        sessionUser?.company ||
+        sessionUser?.profileDetails?.companyName ||
+        sessionUser?.name ||
+        session?.name ||
+        "";
       let unpaidInvoices = [];
 
       const form = document.getElementById("transactionForm");
@@ -327,11 +343,11 @@
 
       const belongsToClient = (invoice) => {
         const client = normalize(invoice.client || invoice.customer || invoice.billedTo);
+        const target = normalize(CLIENT_NAME);
 
-        return (
-          client === normalize(CLIENT_NAME) ||
-          client.includes("acme")
-        );
+        if (!target || !client) return false;
+
+        return client === target || client.includes(target) || target.includes(client);
       };
 
      const isUnpaid = (invoice) => {
@@ -543,6 +559,17 @@
           };
 
           try {
+            if (receiptFile) {
+              const receiptFormData = new FormData();
+              receiptFormData.append("ownerType", "business-client");
+              receiptFormData.append("documentType", "Payment Receipt");
+              receiptFormData.append("status", "Valid");
+              receiptFormData.append("file", receiptFile);
+
+              const uploadedReceipt = await DeliverySyncAPI.Documents.create(receiptFormData);
+              payload.receiptUrl = uploadedReceipt?.fileUrl || "";
+            }
+
             console.log("SUBMITTING TRANSACTION PAYLOAD:", payload);
 
             let createdTransaction = null;

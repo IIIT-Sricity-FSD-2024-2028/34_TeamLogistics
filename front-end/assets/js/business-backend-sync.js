@@ -51,6 +51,29 @@
     if (el) el.textContent = value;
   }
 
+  async function getCurrentClientNames() {
+    try {
+      const session = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
+      if (!session || !session.userId || !D || !D.Users) return [];
+      const getById = D.Users.getById || D.Users.getOne;
+      const user = await getById(session.userId);
+      if (!user) return [];
+      return [user.name, user.username, user.companyName, user.company, user.profileDetails?.companyName]
+        .filter(Boolean)
+        .map((v) => String(v).trim().toLowerCase());
+    } catch (e) {
+      console.error('Failed to resolve current business client identity:', e);
+      return [];
+    }
+  }
+
+  function belongsToCurrentClient(delivery, clientNames) {
+    if (!clientNames.length) return false;
+    const c = String(delivery.customer || delivery.client || '').trim().toLowerCase();
+    if (!c) return false;
+    return clientNames.some((name) => c === name || c.includes(name) || name.includes(c));
+  }
+
   function toast(message) {
     const t = document.createElement('div');
 
@@ -93,14 +116,20 @@
     }
 
     try {
-      const [deliveries, invoices] = await Promise.all([
+      const [deliveries, invoices, clientNames] = await Promise.all([
         D.Deliveries.getAll(),
         D.Transactions && D.Transactions.getInvoices
           ? D.Transactions.getInvoices()
-          : Promise.resolve([])
+          : Promise.resolve([]),
+        getCurrentClientNames()
       ]);
 
-      const allDeliveries = deliveries || [];
+      const allDeliveries = (deliveries || []).filter(function (d) {
+        return belongsToCurrentClient(d, clientNames);
+      });
+      const myInvoices = (invoices || []).filter(function (inv) {
+        return belongsToCurrentClient({ customer: inv.client }, clientNames);
+      });
 
       const activeDeliveries = allDeliveries.filter(function (d) {
         return isActiveStatus(d.status);
@@ -110,7 +139,7 @@
         return isCompletedStatus(d.status);
       });
 
-      const unpaidInvoices = (invoices || []).filter(function (inv) {
+      const unpaidInvoices = myInvoices.filter(function (inv) {
         const s = String(inv.status || '').toLowerCase();
         return s.includes('unpaid') || s.includes('pending');
       });
@@ -192,7 +221,11 @@
 
     const pickupInput = document.getElementById('pickupLocation');
     const dropInput = document.getElementById('dropLocation');
-    const packageInput = document.getElementById('packageDetails');
+
+    const packageTypeSelect = document.getElementById('packageType');
+    const pkgLengthInput = document.getElementById('pkgLength');
+    const pkgWidthInput = document.getElementById('pkgWidth');
+    const pkgHeightInput = document.getElementById('pkgHeight');
 
     const fileInput = document.getElementById('delivery-list-upload');
     const fileName = document.getElementById('delivery-list-file-name');
@@ -232,12 +265,13 @@
 
       const pickup = pickupInput ? pickupInput.value.trim() : '';
       const destination = dropInput ? dropInput.value.trim() : '';
-      const packageDetails = packageInput ? packageInput.value.trim() : '';
+
+      const packageType = packageTypeSelect ? packageTypeSelect.value : '';
+      const pkgLength = pkgLengthInput ? parseFloat(pkgLengthInput.value) : NaN;
+      const pkgWidth = pkgWidthInput ? parseFloat(pkgWidthInput.value) : NaN;
+      const pkgHeight = pkgHeightInput ? parseFloat(pkgHeightInput.value) : NaN;
 
       const deliveryType = typeInput ? typeInput.value : 'standard';
-
-      const selectedCard = document.querySelector('.option-card.selected');
-      const amount = Number(selectedCard?.dataset.price || 40);
 
       const file = fileInput && fileInput.files ? fileInput.files[0] : null;
 
@@ -257,13 +291,28 @@
         valid = false;
       }
 
-      if (!packageDetails) {
-        setError(packageInput, 'Package details are required');
+      if (!packageType) {
+        setError(packageTypeSelect, 'Package type is required');
+        valid = false;
+      }
+
+      if (isNaN(pkgLength) || pkgLength <= 0 || pkgLength > 1000) {
+        setError(pkgLengthInput, 'Length must be between 1 and 1000 cm');
+        valid = false;
+      }
+
+      if (isNaN(pkgWidth) || pkgWidth <= 0 || pkgWidth > 1000) {
+        setError(pkgWidthInput, 'Width must be between 1 and 1000 cm');
+        valid = false;
+      }
+
+      if (isNaN(pkgHeight) || pkgHeight <= 0 || pkgHeight > 1000) {
+        setError(pkgHeightInput, 'Height must be between 1 and 1000 cm');
         valid = false;
       }
 
       if (file) {
-        const ext = file.name.split('.').pop().toLowerCase();
+        var ext = file.name.split('.').pop().toLowerCase();
 
         if (!['pdf', 'csv'].includes(ext)) {
           toast('Only PDF or CSV files are allowed');
@@ -278,16 +327,23 @@
         return;
       }
 
-   const payload = {
-  customer: 'Acme Logistics Inc.',
-  pickup: pickup,
-  dropoff: destination,
-  package: packageDetails,
-  type: deliveryType === 'express' ? 'Express' : 'Standard',
-  priority: deliveryType === 'express' ? 'High' : 'Medium',
-  items: 1,
-  instructions: instructions || ''
-};
+      var payload = {
+        customer: 'Acme Logistics Inc.',
+        pickup: pickup,
+        dropoff: destination,
+        packageType: packageType,
+        packageDimensions: {
+          length: pkgLength,
+          width: pkgWidth,
+          height: pkgHeight,
+          unit: 'cm'
+        },
+        type: deliveryType === 'express' ? 'Express' : 'Standard',
+        priority: deliveryType === 'express' ? 'High' : 'Medium',
+        items: 1,
+        instructions: instructions || ''
+      };
+
       try {
         await D.Deliveries.create(payload);
 
@@ -378,10 +434,13 @@
     }
 
     try {
-      const deliveries = await D.Deliveries.getAll();
+      const [deliveries, clientNames] = await Promise.all([
+        D.Deliveries.getAll(),
+        getCurrentClientNames()
+      ]);
 
       const activeDeliveries = (deliveries || []).filter(function (d) {
-        return isActiveStatus(d.status);
+        return isActiveStatus(d.status) && belongsToCurrentClient(d, clientNames);
       });
 
       root.innerHTML = `

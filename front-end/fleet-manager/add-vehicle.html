@@ -15,6 +15,7 @@
   <script src="../assets/js/fleet-manager.js"></script>
   <script src="../assets/js/workflow-demo.js" defer></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body>
@@ -63,7 +64,7 @@
               aria-hidden="true" viewBox="0 0 24 24">
               <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
               <path d="M10 20a2 2 0 0 0 4 0"></path>
-            </svg></span><span>Notifications</span></a><a class="" href="profile.html"><span class="ico"><svg
+            </svg></span><span>Notifications</span></a><a class="" href="subscription.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="2" width="20" x="2" y="5"></rect><path d="M2 10h20"></path></svg></span><span>Subscription</span></a><a class="" href="profile.html"><span class="ico"><svg
               aria-hidden="true" viewBox="0 0 24 24">
               <circle cx="12" cy="8" r="4"></circle>
               <path d="M4 20a8 8 0 0 1 16 0"></path>
@@ -80,8 +81,8 @@
               <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
               <path d="M10 20a2 2 0 0 0 4 0"></path>
             </svg><span class="dot">3</span></a>
-          <div class="avatar">FM</div>
-          <div class="usertext"><strong>Fleet Manager</strong><span>Administrator</span></div>
+          <div class="avatar" data-current-user-avatar></div>
+          <div class="usertext"><strong data-current-user-name></strong><span data-current-user-role></span></div>
         </div>
       </div>
       <div class="content"><a class="muted" href="vehicles.html">← Back</a>

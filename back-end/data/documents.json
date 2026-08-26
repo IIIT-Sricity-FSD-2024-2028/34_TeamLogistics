@@ -36,7 +36,7 @@
     "status": "Expired"
   },
   {
-    "id": "DOC-005",
+    "id": "DOC-007",
     "ownerType": "vehicle",
     "vehicle": "AP-07-RS-6543",
     "driver": "",
@@ -54,5 +54,26 @@
     "issueDate": "2026-05-05",
     "expiryDate": "2026-05-20",
     "status": "Expiring Soon"
+  },
+  {
+    "id": "DOC-008",
+    "ownerType": "vehicle",
+    "vehicle": "TN-09-AB-2345",
+    "documentType": "Insurance",
+    "issueDate": "",
+    "expiryDate": "",
+    "status": "Valid",
+    "fileName": "test-doc.pdf",
+    "fileUrl": "/uploads/documents/1787783251153-210627120.pdf"
+  },
+  {
+    "id": "DOC-010",
+    "ownerType": "business-client",
+    "documentType": "Payment Receipt",
+    "issueDate": "",
+    "expiryDate": "",
+    "status": "Valid",
+    "fileName": "receipt.png",
+    "fileUrl": "/uploads/documents/1787784860811-488507635.png"
   }
 ]

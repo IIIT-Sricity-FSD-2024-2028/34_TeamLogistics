@@ -184,7 +184,7 @@
     "destination": "test 2",
     "startTime": "5/5/2026, 11:33:06 pm",
     "distance": "Distance not available",
-    "status": "Cancelled",
+    "status": "Queued",
     "request": "DR-2026-003",
     "customer": "Acme Logistics Inc.",
     "package": "documents",
@@ -280,5 +280,64 @@
       "submittedAt": "2026-08-24T20:51:27.074Z"
     },
     "feedbackSubmitted": true
+  },
+  {
+    "id": "TRP-2026-007",
+    "assignment": "ASN-1787767324503",
+    "driver": "Raghav Reddy",
+    "phone": "+91 9440011223",
+    "vehicle": "TN09AB1234",
+    "vehicleType": "Tempo",
+    "pickup": "inida",
+    "destination": "ince",
+    "startTime": "8/26/2026, 11:32:04 PM",
+    "distance": "Distance not available",
+    "status": "Delivered",
+    "request": "DR-2026-007",
+    "customer": "Acme Logistics Inc.",
+    "package": "icea",
+    "weight": "",
+    "instructions": "Handle package carefully.",
+    "eta": "35 mins",
+    "createdAt": "2026-08-26T18:02:04.503Z",
+    "updatedAt": "2026-08-26T18:05:10.570Z",
+    "feedback": {
+      "rating": 4,
+      "comment": "",
+      "deliveryQuality": "",
+      "driverBehavior": "",
+      "overallExperience": "",
+      "submittedAt": "2026-08-26T18:05:10.568Z"
+    },
+    "feedbackSubmitted": true
+  },
+  {
+    "id": "TRP-2026-008",
+    "assignment": "ASN-1787772877532",
+    "driver": "Raghav Reddy",
+    "phone": "+91 9440011223",
+    "vehicle": "TN09AB1234",
+    "vehicleType": "Tempo",
+    "pickup": "OMR, Chennai",
+    "destination": "Tambaram, Chennai",
+    "startTime": "8/27/2026, 1:04:37 AM",
+    "distance": "Distance not available",
+    "status": "Cancelled",
+    "request": "DR-2026-008",
+    "customer": "Acme Logistics",
+    "package": "Electronics — 30 × 20 × 15 cm",
+    "packageType": "Electronics",
+    "packageDimensions": {
+      "length": 30,
+      "width": 20,
+      "height": 15,
+      "unit": "cm"
+    },
+    "weight": "",
+    "instructions": "Handle with care",
+    "eta": "35 mins",
+    "createdAt": "2026-08-26T19:34:37.532Z",
+    "updatedAt": "2026-08-26T19:35:44.993Z",
+    "cancelReason": "Automated test delivery - cleanup"
   }
 ]

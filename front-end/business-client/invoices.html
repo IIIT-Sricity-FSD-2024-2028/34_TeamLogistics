@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -17,6 +17,7 @@
 
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body" data-page="invoices">
@@ -126,7 +127,7 @@
       <header class="bc-topbar">
 
   <div class="bc-topbar-left">
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -165,11 +166,11 @@
 
     <a class="bc-profile-chip" href="profile.html">
 
-      <div class="bc-profile-avatar">A</div>
+      <div class="bc-profile-avatar" data-current-user-avatar></div>
 
       <div class="bc-profile-info">
-        <strong>Acme Logistics</strong>
-        <span>Business Client</span>
+        <strong data-current-user-name></strong>
+        <span data-current-user-role></span>
       </div>
 
     </a>
@@ -481,7 +482,22 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
-      const CLIENT_NAME = "Acme Logistics Inc.";
+      const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
+      let sessionUser = null;
+      try {
+        if (session && session.userId && window.DeliverySyncAPI && window.DeliverySyncAPI.Users) {
+          sessionUser = await window.DeliverySyncAPI.Users.getById(session.userId);
+        }
+      } catch (e) {
+        console.error("Failed to resolve current business client from backend:", e);
+      }
+      const CLIENT_NAME =
+        sessionUser?.companyName ||
+        sessionUser?.company ||
+        sessionUser?.profileDetails?.companyName ||
+        sessionUser?.name ||
+        session?.name ||
+        "";
 
       let allInvoices = [];
       let clientInvoices = [];
@@ -803,12 +819,11 @@
 
           clientInvoices = allInvoices.filter((invoice) => {
             const client = normalize(getClient(invoice));
+            const target = normalize(CLIENT_NAME);
 
-            return (
-              client === normalize(CLIENT_NAME) ||
-              client.includes("acme") ||
-              !client
-            );
+            if (!target || !client) return false;
+
+            return client === target || client.includes(target) || target.includes(client);
           });
 
           clientInvoices.sort((a, b) => {

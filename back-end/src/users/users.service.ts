@@ -71,7 +71,6 @@ export class UsersService {
       notifications: ['Email'],
       profileDetails: dto.profileDetails || {},
 
-      // Business Client profile fields
       companyName: (dto as any).companyName || '',
       company: (dto as any).company || (dto as any).companyName || '',
       address: (dto as any).address || '',
@@ -120,7 +119,6 @@ export class UsersService {
     const updated: User = {
       ...user,
 
-      // Normal allowed user fields
       name: dto.name ?? user.name,
       email: dto.email ?? user.email,
       password: dto.password ?? user.password,
@@ -129,7 +127,6 @@ export class UsersService {
       phone: dto.phone ?? user.phone,
       notifications: dto.notifications ?? user.notifications,
 
-      // Business Client profile fields
       companyName: (dto as any).companyName ?? user.companyName ?? '',
       company: (dto as any).company ?? user.company ?? (dto as any).companyName ?? '',
       address: (dto as any).address ?? user.address ?? '',

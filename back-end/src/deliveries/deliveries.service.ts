@@ -4,15 +4,12 @@ import {
   DeliveryRequest,
   Trip,
 } from '../data-store/data-store.service';
-import { CreateDeliveryDto } from './dto/delivery.dto';
+import { CreateDeliveryDto, PACKAGE_TYPES } from './dto/delivery.dto';
 
 @Injectable()
 export class DeliveriesService {
   constructor(private readonly store: DataStoreService) {}
 
-  // --------------------------------------------------
-  // GET ALL DELIVERIES
-  // --------------------------------------------------
   findAll(search?: string, statusFilter?: string): DeliveryRequest[] {
     let items = [...this.store.deliveryRequests];
 
@@ -32,9 +29,6 @@ export class DeliveriesService {
     return items;
   }
 
-  // --------------------------------------------------
-  // GET ONE DELIVERY
-  // --------------------------------------------------
   findOne(id: string): DeliveryRequest {
     const item = this.store.deliveryRequests.find((r) => r.id === id);
 
@@ -45,10 +39,6 @@ export class DeliveriesService {
     return item;
   }
 
-  // --------------------------------------------------
-  // UNIQUE DELIVERY ID GENERATOR
-  // Creates DR-2026-001, DR-2026-002, ...
-  // --------------------------------------------------
   private generateDeliveryId(): string {
     const year = new Date().getFullYear();
 
@@ -65,17 +55,10 @@ export class DeliveriesService {
     return `DR-${year}-${String(nextNumber).padStart(3, '0')}`;
   }
 
-  // --------------------------------------------------
-  // UNIQUE TRIP ID FROM DELIVERY ID
-  // DR-2026-001 -> TRP-2026-001
-  // --------------------------------------------------
   private generateTripIdFromDelivery(deliveryId: string): string {
     return `TRP-${deliveryId.replace('DR-', '')}`;
   }
 
-  // --------------------------------------------------
-  // DEFAULT DRIVER FOR NEW FLOW
-  // --------------------------------------------------
   private getDefaultDriverName(): string {
     return 'Raghav Reddy';
   }
@@ -92,10 +75,6 @@ export class DeliveriesService {
     );
   }
 
-  // --------------------------------------------------
-  // NORMALIZE DELIVERY INPUT
-  // Supports many frontend field names
-  // --------------------------------------------------
   private normalizeDeliveryInput(dto: any) {
     const pickup =
       dto.pickup ||
@@ -128,13 +107,40 @@ export class DeliveriesService {
       customer ||
       '--';
 
+    const packageType = dto.packageType || '';
+    if (!packageType || !(PACKAGE_TYPES as readonly string[]).includes(packageType)) {
+      throw new BadRequestException(
+        `Invalid packageType "${packageType}". Allowed: ${PACKAGE_TYPES.join(', ')}`,
+      );
+    }
+
+    const rawDims = dto.packageDimensions;
+    if (!rawDims || typeof rawDims !== 'object') {
+      throw new BadRequestException('packageDimensions is required');
+    }
+
+    const length = Number(rawDims.length);
+    const width = Number(rawDims.width);
+    const height = Number(rawDims.height);
+    const unit = rawDims.unit || 'cm';
+
+    if (!length || length <= 0 || length > 1000 || Number.isNaN(length)) {
+      throw new BadRequestException('packageDimensions.length must be > 0 and <= 1000');
+    }
+    if (!width || width <= 0 || width > 1000 || Number.isNaN(width)) {
+      throw new BadRequestException('packageDimensions.width must be > 0 and <= 1000');
+    }
+    if (!height || height <= 0 || height > 1000 || Number.isNaN(height)) {
+      throw new BadRequestException('packageDimensions.height must be > 0 and <= 1000');
+    }
+    if (unit !== 'cm') {
+      throw new BadRequestException('packageDimensions.unit must be "cm"');
+    }
+
+    const packageDimensions = { length, width, height, unit };
+
     const packageName =
-      dto.package ||
-      dto.packageType ||
-      dto.item ||
-      dto.goods ||
-      dto.description ||
-      'Package';
+      `${packageType} — ${length} × ${width} × ${height} ${unit}`;
 
     const weight =
       dto.weight ||
@@ -161,6 +167,8 @@ export class DeliveriesService {
       customer,
       contact,
       packageName,
+      packageType,
+      packageDimensions,
       weight,
       instructions,
       type,
@@ -171,9 +179,6 @@ export class DeliveriesService {
     };
   }
 
-  // --------------------------------------------------
-  // CREATE OR SYNC TRIP FOR DELIVERY
-  // --------------------------------------------------
   private createOrSyncTripForDelivery(delivery: DeliveryRequest): Trip {
     const defaultDriverName = this.getDefaultDriverName();
     const driver = this.findDefaultDriver();
@@ -238,7 +243,6 @@ export class DeliveriesService {
       request: delivery.id,
     } as Trip;
 
-    // Extra frontend-compatible fields
     (tripData as any).customer =
       (delivery as any).customer ||
       (delivery as any).client ||
@@ -247,9 +251,15 @@ export class DeliveriesService {
 
     (tripData as any).package =
       (delivery as any).package ||
-      (delivery as any).packageType ||
       (delivery as any).item ||
       'Package';
+
+    if ((delivery as any).packageType) {
+      (tripData as any).packageType = (delivery as any).packageType;
+    }
+    if ((delivery as any).packageDimensions) {
+      (tripData as any).packageDimensions = (delivery as any).packageDimensions;
+    }
 
     (tripData as any).weight =
       (delivery as any).weight ||
@@ -292,9 +302,6 @@ export class DeliveriesService {
       : tripData;
   }
 
-  // --------------------------------------------------
-  // CREATE DELIVERY - NEW FLOW
-  // --------------------------------------------------
   create(dto: CreateDeliveryDto): DeliveryRequest {
     const id = this.generateDeliveryId();
     const normalized = this.normalizeDeliveryInput(dto as any);
@@ -311,21 +318,20 @@ export class DeliveriesService {
       dropoff: normalized.dropoff,
 
       package: normalized.packageName,
+      packageType: normalized.packageType,
+      packageDimensions: normalized.packageDimensions,
       type: normalized.type,
 
       requestTime: new Date().toLocaleString(),
 
-      // Queued means visible in Driver Portal and ready to accept/reject.
       status: 'Queued',
 
       priority: normalized.priority,
       items: normalized.items,
 
-      // Directly assign to Raghav.
       driver: defaultDriverName,
     } as DeliveryRequest;
 
-    // Extra compatible fields for all portals
     (delivery as any).client = normalized.customer;
     (delivery as any).company = normalized.customer;
 
@@ -337,7 +343,6 @@ export class DeliveriesService {
     (delivery as any).destination = normalized.dropoff;
     (delivery as any).dropAddress = normalized.dropoff;
 
-    (delivery as any).packageType = normalized.packageName;
     (delivery as any).item = normalized.packageName;
 
     (delivery as any).weight = normalized.weight;
@@ -409,10 +414,6 @@ export class DeliveriesService {
     } as any;
   }
 
-  // --------------------------------------------------
-  // SUBMIT FEEDBACK
-  // Syncs deliveries.json + trips.json + notifications.json
-  // --------------------------------------------------
   submitFeedback(
     id: string,
     body: {
@@ -479,9 +480,6 @@ export class DeliveriesService {
     return this.store.deliveryRequests[index];
   }
 
-  // --------------------------------------------------
-  // BLOCK DELIVERY
-  // --------------------------------------------------
   block(id: string, reason: string): DeliveryRequest {
     const idx = this.store.deliveryRequests.findIndex((r) => r.id === id);
 
@@ -524,9 +522,6 @@ export class DeliveriesService {
     return this.store.deliveryRequests[idx];
   }
 
-  // --------------------------------------------------
-  // UNBLOCK DELIVERY
-  // --------------------------------------------------
   unblock(id: string, reason: string): DeliveryRequest {
     const idx = this.store.deliveryRequests.findIndex((r) => r.id === id);
 
@@ -575,9 +570,6 @@ export class DeliveriesService {
     return this.store.deliveryRequests[idx];
   }
 
-  // --------------------------------------------------
-  // CANCEL DELIVERY
-  // --------------------------------------------------
   cancel(id: string, reason?: string): DeliveryRequest {
     const idx = this.store.deliveryRequests.findIndex((r) => r.id === id);
 

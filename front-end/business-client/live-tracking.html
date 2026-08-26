@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,13 +20,14 @@
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/business-backend-sync.js" defer></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body">
 
   <div class="bc-layout">
 
-    <!-- ================= SIDEBAR ================= -->
+
 
     <aside class="bc-sidebar">
 
@@ -152,16 +153,16 @@
 
     </aside>
 
-    <!-- ================= MAIN ================= -->
+
 
     <main class="bc-main">
 
-      <!-- ================= TOPBAR ================= -->
+
 
       <header class="bc-topbar">
 
         <div class="bc-topbar-left">
-          <div class="company">Acme Logistics Inc.</div>
+          <div class="company" data-current-user-name="company">Loading...</div>
           <div class="subtitle">Business Client Dashboard</div>
         </div>
 
@@ -200,13 +201,11 @@
 
           <a class="bc-profile-chip" href="profile.html">
 
-            <div class="bc-profile-avatar">
-              A
-            </div>
+            <div class="bc-profile-avatar" data-current-user-avatar></div>
 
             <div class="bc-profile-info">
-              <strong>Acme Logistics</strong>
-              <span>Business Client</span>
+              <strong data-current-user-name></strong>
+              <span data-current-user-role></span>
             </div>
 
           </a>
@@ -215,7 +214,7 @@
 
       </header>
 
-      <!-- ================= CONTENT ================= -->
+
 
       <section class="bc-content">
 
@@ -238,11 +237,11 @@
 
           <div class="track-grid">
 
-            <!-- ================= LEFT ================= -->
+
 
             <div>
 
-              <!-- Estimated Arrival -->
+
 
               <div class="yellow-banner">
 
@@ -263,7 +262,7 @@
 
               </div>
 
-              <!-- Delivery Progress -->
+
 
               <div class="card progress-card">
 
@@ -273,7 +272,7 @@
 
                 <div class="timeline">
 
-                  <!-- Pickup -->
+
 
                   <div class="t-item">
 
@@ -297,7 +296,7 @@
 
                   </div>
 
-                  <!-- In Transit -->
+
 
                   <div class="t-item">
 
@@ -355,7 +354,7 @@
 
                   </div>
 
-                  <!-- Delivery Complete -->
+
 
                   <div
                     class="t-item"
@@ -400,11 +399,11 @@
 
             </div>
 
-            <!-- ================= RIGHT ================= -->
+
 
             <div>
 
-              <!-- Package Information -->
+
 
               <div class="card side-card">
 
@@ -429,56 +428,28 @@
                 </div>
 
                 <div class="kv">
-
-                  <div class="k">
-                    Delivery Method
-                  </div>
-
-                  <div
-                    class="v"
-                    id="deliveryMethod"
-                  >
-                    Loading...
-                  </div>
-
+                  <div class="k">Delivery Method</div>
+                  <div class="v" id="deliveryMethod">Loading...</div>
                 </div>
 
                 <div class="kv">
-
-                  <div class="k">
-                    Estimated Weight
-                  </div>
-
-                  <div
-                    class="v"
-                    id="packageWeight"
-                  >
-                    Loading...
-                  </div>
-
+                  <div class="k">Package Type</div>
+                  <div class="v" id="packageTypeDisplay">Loading...</div>
                 </div>
 
-                <div
-                  class="kv"
-                  style="margin-bottom:0"
-                >
+                <div class="kv">
+                  <div class="k">Estimated Weight</div>
+                  <div class="v" id="packageWeight">Loading...</div>
+                </div>
 
-                  <div class="k">
-                    Package Size
-                  </div>
-
-                  <div
-                    class="v"
-                    id="packageSize"
-                  >
-                    Loading...
-                  </div>
-
+                <div class="kv" style="margin-bottom:0">
+                  <div class="k">Package Dimensions</div>
+                  <div class="v" id="packageSize">Loading...</div>
                 </div>
 
               </div>
 
-              <!-- Driver Information -->
+
 
               <div
                 class="card side-card"
@@ -529,7 +500,7 @@
 
                 </div>
 
-                <!-- Contact -->
+
 
                 <div class="driver-box">
 
@@ -564,7 +535,7 @@
 
                 </div>
 
-                <!-- Vehicle -->
+
 
                 <div class="driver-box">
 
@@ -616,7 +587,7 @@
 
   </div>
 
-  <!-- ================= LIVE TRACKING SCRIPT ================= -->
+
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
@@ -1009,10 +980,25 @@
           extractWeight(packageText)
         );
 
+        // ── Structured package type ──
         setText(
-          "packageSize",
-          calculatePackageSize(packageText)
+          "packageTypeDisplay",
+          delivery.packageType || "Not available"
         );
+
+        // ── Structured package dimensions (prefer real data over text parsing) ──
+        if (delivery.packageDimensions && delivery.packageDimensions.length) {
+          const dims = delivery.packageDimensions;
+          setText(
+            "packageSize",
+            dims.length + " × " + dims.width + " × " + dims.height + " " + (dims.unit || "cm")
+          );
+        } else {
+          setText(
+            "packageSize",
+            "Not available"
+          );
+        }
 
         setText(
           "pickupInfo",
@@ -1113,6 +1099,11 @@
         );
 
         setText(
+          "packageTypeDisplay",
+          "Not available"
+        );
+
+        setText(
           "packageSize",
           "Not available"
         );
@@ -1162,7 +1153,7 @@
     });
   </script>
 
-  <!-- ================= LIVE TRACKING LAYOUT OVERRIDES ================= -->
+
 
   <style>
 
