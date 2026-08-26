@@ -1,179 +1,67 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import { CreateDocumentDto, UpdateDocumentDto } from './dto/document.dto';
 
-import {
-  CreateDocumentDto,
-  UpdateDocumentDto,
-} from './dto/document.dto';
-
-export type DocumentRecord = {
+type DocumentRecord = {
   id: string;
-
   ownerType: string;
-
   vehicle?: string;
   driver?: string;
-
+  delivery?: string;
   documentType: string;
-
   issueDate?: string;
   expiryDate?: string;
-
   status?: string;
-
-  // Uploaded file information
   fileName?: string;
-  originalFileName?: string;
-  filePath?: string;
-  mimeType?: string;
-  fileSize?: number;
+  fileUrl?: string;
 };
 
 @Injectable()
 export class DocumentsService {
-  private readonly filePath = path.join(
-    process.cwd(),
-    'data',
-    'documents.json',
-  );
-
-  private readonly uploadDirectory = path.join(
-    process.cwd(),
-    'uploads',
-    'documents',
-  );
-
+  private readonly filePath = path.join(process.cwd(), 'data', 'documents.json');
+  private readonly uploadDirectory = path.join(process.cwd(), 'uploads', 'documents');
   private documents: DocumentRecord[] = [];
 
   constructor() {
-    this.ensureDirectories();
     this.load();
   }
 
-  private ensureDirectories(): void {
-    const dataDirectory = path.dirname(
-      this.filePath,
-    );
-
-    if (!fs.existsSync(dataDirectory)) {
-      fs.mkdirSync(dataDirectory, {
-        recursive: true,
-      });
-    }
-
-    if (!fs.existsSync(this.uploadDirectory)) {
-      fs.mkdirSync(this.uploadDirectory, {
-        recursive: true,
-      });
-    }
-  }
-
-  private load(): void {
-    this.ensureDirectories();
-
+  private load() {
     if (!fs.existsSync(this.filePath)) {
       this.documents = [];
       this.save();
       return;
     }
 
-    try {
-      const raw =
-        fs.readFileSync(
-          this.filePath,
-          'utf-8',
-        );
-
-      this.documents =
-        raw.trim()
-          ? JSON.parse(raw)
-          : [];
-
-      if (!Array.isArray(this.documents)) {
-        this.documents = [];
-      }
-    } catch (error) {
-      console.error(
-        'Failed to load documents.json:',
-        error,
-      );
-
-      this.documents = [];
-    }
+    const raw = fs.readFileSync(this.filePath, 'utf-8');
+    this.documents = raw ? JSON.parse(raw) : [];
   }
 
-  private save(): void {
-    this.ensureDirectories();
-
-    fs.writeFileSync(
-      this.filePath,
-      JSON.stringify(
-        this.documents,
-        null,
-        2,
-      ),
-      'utf-8',
-    );
-  }
-
-  private generateId(): string {
-    let nextNumber =
-      this.documents.length + 1;
-
-    let id =
-      `DOC-${String(nextNumber).padStart(3, '0')}`;
-
-    while (
-      this.documents.some(
-        (document) =>
-          document.id === id,
-      )
-    ) {
-      nextNumber++;
-
-      id =
-        `DOC-${String(nextNumber).padStart(
-          3,
-          '0',
-        )}`;
-    }
-
-    return id;
+  private save() {
+    fs.writeFileSync(this.filePath, JSON.stringify(this.documents, null, 2));
   }
 
   findAll(search?: string) {
     let rows = [...this.documents];
 
     if (search) {
-      const q =
-        search
-          .trim()
-          .toLowerCase();
+      const q = search.toLowerCase();
 
-      rows = rows.filter(
-        (doc) =>
-          [
-            doc.id,
-            doc.ownerType,
-            doc.vehicle,
-            doc.driver,
-            doc.documentType,
-            doc.issueDate,
-            doc.expiryDate,
-            doc.status,
-            doc.fileName,
-            doc.originalFileName,
-            doc.mimeType,
-          ]
-            .filter(
-              (value) =>
-                value !== undefined &&
-                value !== null,
-            )
-            .join(' ')
-            .toLowerCase()
-            .includes(q),
+      rows = rows.filter((doc) =>
+        [
+          doc.id,
+          doc.ownerType,
+          doc.vehicle,
+          doc.driver,
+          doc.documentType,
+          doc.issueDate,
+          doc.expiryDate,
+          doc.status,
+        ]
+          .join(' ')
+          .toLowerCase()
+          .includes(q),
       );
     }
 
@@ -181,113 +69,50 @@ export class DocumentsService {
   }
 
   findOne(id: string) {
-    const doc =
-      this.documents.find(
-        (document) =>
-          document.id === id,
-      );
+    const doc = this.documents.find((d) => d.id === id);
 
     if (!doc) {
-      throw new NotFoundException(
-        `Document ${id} not found`,
-      );
+      throw new NotFoundException(`Document ${id} not found`);
     }
 
     return doc;
   }
 
-  create(dto: CreateDocumentDto) {
+  create(dto: CreateDocumentDto, file?: Express.Multer.File) {
+    const nums = this.documents
+      .map((d) => {
+        const match = String(d.id || '').match(/(\d+)/);
+        return match ? Number(match[1]) : 0;
+      })
+      .filter(Boolean);
+    const nextNumber = (nums.length ? Math.max(...nums) : 0) + 1;
+    const id = `DOC-${String(nextNumber).padStart(3, '0')}`;
+
     const doc: DocumentRecord = {
-      id: this.generateId(),
-
+      id,
       ownerType: dto.ownerType,
-
       vehicle: dto.vehicle,
       driver: dto.driver,
-
-      documentType:
-        dto.documentType,
-
-      issueDate:
-        dto.issueDate || '',
-
-      expiryDate:
-        dto.expiryDate || '',
-
-      status:
-        dto.status || 'Valid',
+      delivery: dto.delivery,
+      documentType: dto.documentType,
+      issueDate: dto.issueDate || '',
+      expiryDate: dto.expiryDate || '',
+      status: dto.status || 'Valid',
+      fileName: file?.originalname,
+      fileUrl: file ? `/uploads/documents/${file.filename}` : undefined,
     };
 
     this.documents.push(doc);
-
     this.save();
 
     return doc;
   }
 
-  /**
-   * Creates a document record for an uploaded file.
-   */
-  createFromUpload(
-    file: Express.Multer.File,
-    ownerType: string,
-    documentType = 'Uploaded Document',
-  ) {
-    const today =
-      new Date()
-        .toISOString()
-        .split('T')[0];
-
-    const doc: DocumentRecord = {
-      id: this.generateId(),
-
-      ownerType,
-
-      documentType,
-
-      issueDate: today,
-
-      expiryDate: '',
-
-      status: 'Uploaded',
-
-      fileName:
-        file.filename,
-
-      originalFileName:
-        file.originalname,
-
-      filePath:
-        file.path,
-
-      mimeType:
-        file.mimetype,
-
-      fileSize:
-        file.size,
-    };
-
-    this.documents.push(doc);
-
-    this.save();
-
-    return doc;
-  }
-
-  update(
-    id: string,
-    dto: UpdateDocumentDto,
-  ) {
-    const index =
-      this.documents.findIndex(
-        (document) =>
-          document.id === id,
-      );
+  update(id: string, dto: UpdateDocumentDto) {
+    const index = this.documents.findIndex((d) => d.id === id);
 
     if (index === -1) {
-      throw new NotFoundException(
-        `Document ${id} not found`,
-      );
+      throw new NotFoundException(`Document ${id} not found`);
     }
 
     this.documents[index] = {
@@ -301,53 +126,28 @@ export class DocumentsService {
   }
 
   delete(id: string) {
-    const index =
-      this.documents.findIndex(
-        (document) =>
-          document.id === id,
-      );
+    const index = this.documents.findIndex((d) => d.id === id);
 
     if (index === -1) {
-      throw new NotFoundException(
-        `Document ${id} not found`,
-      );
+      throw new NotFoundException(`Document ${id} not found`);
     }
 
-    const deleted =
-      this.documents.splice(
-        index,
-        1,
-      )[0];
+    const deleted = this.documents.splice(index, 1)[0];
+    this.save();
 
-    /*
-     * Also delete the physical uploaded file
-     * when this document came from an upload.
-     */
-    if (deleted.filePath) {
+    if (deleted.fileUrl) {
+      const storedFilePath = path.join(this.uploadDirectory, path.basename(deleted.fileUrl));
       try {
-        if (
-          fs.existsSync(
-            deleted.filePath,
-          )
-        ) {
-          fs.unlinkSync(
-            deleted.filePath,
-          );
+        if (fs.existsSync(storedFilePath)) {
+          fs.unlinkSync(storedFilePath);
         }
       } catch (error) {
-        console.error(
-          `Failed to delete uploaded file for ${id}:`,
-          error,
-        );
+        console.error(`Failed to delete uploaded file for ${id}:`, error);
       }
     }
 
-    this.save();
-
     return {
-      message:
-        'Document deleted successfully',
-
+      message: 'Document deleted successfully',
       deleted,
     };
   }

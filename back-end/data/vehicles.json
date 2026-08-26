@@ -40,7 +40,7 @@
     "availability": "Available"
   },
   {
-    "id": "VH-1008",
+    "id": "VH-1011",
     "plate": "TS08XY1256",
     "type": "Mini Truck",
     "capacity": "20 kg",
@@ -49,7 +49,7 @@
     "maintenance": ""
   },
   {
-    "id": "VH-1008",
+    "id": "VH-1012",
     "plate": "TN09AB1000",
     "type": "Truck",
     "capacity": "2 Tons",
@@ -58,7 +58,7 @@
     "maintenance": "2026-05-01"
   },
   {
-    "id": "VH-1008",
+    "id": "VH-1013",
     "plate": "TN09AB1056",
     "type": "Truck",
     "capacity": "2 Tons",
@@ -67,7 +67,7 @@
     "maintenance": "2026-05-04"
   },
   {
-    "id": "VH-1009",
+    "id": "VH-1014",
     "plate": "TN09AB9654",
     "type": "Van",
     "capacity": "2 Tons",
@@ -76,7 +76,7 @@
     "maintenance": "2026-05-01"
   },
   {
-    "id": "VH-1009",
+    "id": "VH-1015",
     "plate": "TN09AB0000",
     "type": "SUV",
     "capacity": "2 Tons",

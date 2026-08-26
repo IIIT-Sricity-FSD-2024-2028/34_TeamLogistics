@@ -4,10 +4,10 @@
     "username": "superuser",
     "name": "John Doe",
     "email": "johndeye@deliverysync.com",
-    "role": "fleet-manager",
+    "role": "superuser",
     "status": "Active",
     "phone": "9876543210",
-    "lastLogin": "2026-05-03 09:00 AM",
+    "lastLogin": "2026-08-26T23:40:23.490Z",
     "profileDetails": {
       "fullName": "Aarav Menon"
     },
@@ -27,7 +27,7 @@
     "role": "fleet-manager",
     "status": "Active",
     "phone": "9000000052",
-    "lastLogin": "2026-05-03 08:45 AM",
+    "lastLogin": "2026-08-26T23:32:18.401Z",
     "profileDetails": {
       "companyName": "DeliverSync Logistics Pvt Ltd",
       "companyAddress": "OMR, Chennai",
@@ -46,7 +46,7 @@
     "role": "business-client",
     "status": "Active",
     "phone": "9988776655",
-    "lastLogin": "2026-05-03 10:00 AM",
+    "lastLogin": "2026-08-26T23:32:26.768Z",
     "profileDetails": {
       "companyName": "Acme Logistics",
       "fullName": "Acme Logistics",
@@ -67,7 +67,7 @@
     "role": "business-client",
     "status": "Active",
     "phone": "+91 9123456780",
-    "lastLogin": "2026-05-02 03:15 PM",
+    "lastLogin": "2026-08-26T21:31:20.262Z",
     "notifications": [
       "Email"
     ],
@@ -107,7 +107,7 @@
     "role": "driver",
     "status": "Available",
     "phone": "944001122",
-    "lastLogin": "2026-05-03 06:00 AM",
+    "lastLogin": "2026-08-26T23:32:30.866Z",
     "notifications": [
       "Email",
       "SMS"
@@ -136,7 +136,7 @@
     "role": "driver",
     "status": "Active",
     "phone": "+91 9555500011",
-    "lastLogin": "2026-05-03 06:30 AM",
+    "lastLogin": "2026-08-26T22:53:17.509Z",
     "notifications": [
       "Email"
     ],

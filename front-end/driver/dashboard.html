@@ -429,9 +429,19 @@
 
   <script>
       document.addEventListener("DOMContentLoaded", async () => {
-        const DRIVER_NAME = "Raghav Reddy";
-        const DRIVER_EMAIL = "driver@deliverysync.com";
         const ROLE = "driver";
+
+        const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
+        let sessionUser = null;
+        try {
+          if (session && session.userId && window.DeliverySyncAPI && window.DeliverySyncAPI.Users) {
+            sessionUser = await window.DeliverySyncAPI.Users.getById(session.userId);
+          }
+        } catch (e) {
+          console.error("Failed to resolve current driver from backend:", e);
+        }
+        const DRIVER_NAME = sessionUser?.name || session?.name || "";
+        const DRIVER_EMAIL = sessionUser?.email || session?.email || "";
 
         let allTrips = [];
         let deliveries = [];
@@ -652,13 +662,12 @@
 
               const status = trip.status || delivery?.status || "Assigned";
 
-              const packageName =
-                trip.package ||
-                trip.packageType ||
-                trip.item ||
-                delivery?.package ||
-                delivery?.item ||
-                "Package";
+              // ── Prefer structured package data for new records ──
+              const _dbType = trip.packageType || delivery?.packageType || '';
+              const _dbDims = trip.packageDimensions || delivery?.packageDimensions;
+              const packageName = (_dbType && _dbDims && _dbDims.length)
+                ? _dbType + ' — ' + _dbDims.length + ' × ' + _dbDims.width + ' × ' + _dbDims.height + ' ' + (_dbDims.unit || 'cm')
+                : trip.package || trip.packageType || trip.item || delivery?.package || delivery?.item || 'Package';
 
               const weight =
                 trip.weight ||

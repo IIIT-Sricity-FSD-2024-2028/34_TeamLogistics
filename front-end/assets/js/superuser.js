@@ -3,7 +3,6 @@
   const page = document.body.dataset.page;
   const role = 'superuser';
 
-  // Local showToast – utils.js is not loaded in superuser pages
   function showToast(message){
     let t = document.getElementById('su-toast');
     if(!t){
@@ -118,7 +117,6 @@
     s.superuser.platform = s.superuser.platform || {name:'DeliverSync',timezone:'Asia/Kolkata',language:'English',logo:''};
     s.superuser.security = s.superuser.security || {passwordLength:8,failedAttempts:5,sessionTimeout:30,twoFactor:true};
     
-    // Shared maintenance schedules (created by Fleet Manager, visible to Super User)
     s.maintenanceSchedules = s.maintenanceSchedules || [
       {id:'MT-2026-001',vehicle:'TN-09-AB-2345',issue:'Engine Oil Change',priority:'High',status:'Scheduled',date:'Mar 10, 2026',mechanic:'Ravi Auto Service',cost:'₹1200'},
       {id:'MT-2026-002',vehicle:'KA-01-CD-7890',issue:'Brake Pad Replacement',priority:'Critical',status:'In Progress',date:'Mar 06, 2026',mechanic:'SpeedFix Workshop',cost:'₹2800'},
@@ -178,23 +176,6 @@
     ['Profile','profile.html','profile']
   ];
 
-  function getWorkflowOrders(){
-    try { return JSON.parse(localStorage.getItem('dsWorkflowOrders') || '[]') || []; }
-    catch(e){ return []; }
-  }
-
-  function getBusinessClientCompanyName(){
-    try{
-      const st = DS.readState();
-      const bc = (st.users||[]).find(u => String(u.role||'').toLowerCase()==='business-client') || {};
-      const pd = bc.profileDetails || {};
-      return pd.companyName || bc.companyName || bc.name || 'Acme Logistics Inc.';
-    }catch(e){
-      return 'Acme Logistics Inc.';
-    }
-  }
-
-
   function metric(label,val,delta){
     return `<div class="content-card kpi"><div class="label">${label}</div><div class="value">${val}</div><div class="delta">↗ ${delta}</div></div>`;
   }
@@ -238,9 +219,7 @@
     <span class="badge-count">${s.superuser.notifications.length}</span>
   </button>
 
-  <button class="avatar-mini" id="profileBtn">
-    ${(session.name||'A').charAt(0).toUpperCase()}
-  </button>
+  <button class="avatar-mini" id="profileBtn" data-current-user-avatar></button>
 </div>
           </header>
           <div class="page-scroll"><div id="pageRoot"></div></div>
@@ -253,27 +232,49 @@
     return s;
   }
 
-  function renderDashboard(){
+  function niceYTicks(values){
+    const max = Math.max(1, ...values);
+    const rawStep = max / 4;
+    const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
+    const step = Math.ceil(rawStep / magnitude) * magnitude || 1;
+    return [step * 4, step * 3, step * 2, step, 0].map(n => Math.round(n).toLocaleString('en-IN'));
+  }
+
+  async function renderDashboard(){
     const s = pageLayout('Super User Control Center','Dashboard'); if(!s) return;
-    const users = s.users || [];
-    const totalUsers = users.length;
-    const fleetManagers = users.filter(u => u.role === 'fleet-manager').length;
-    const businessClients = users.filter(u => u.role === 'business-client').length;
-    const drivers = users.filter(u => u.role === 'driver').length;
-    $('#pageRoot').innerHTML = `
-      <div class="kpi-grid">
-        ${metric('Total Users', totalUsers.toLocaleString('en-IN'), 'Live')}
-        ${metric('Fleet Managers', fleetManagers.toLocaleString('en-IN'), 'Live')}
-        ${metric('Business Clients', businessClients.toLocaleString('en-IN'), 'Live')}
-        ${metric('Drivers', drivers.toLocaleString('en-IN'), 'Live')}
-        ${metric('Active Deliveries', ((s.superuser.deliveryRequests||[]).length + getWorkflowOrders().length).toLocaleString('en-IN'), 'Live')}
-        ${metric('System Alerts', s.superuser.notifications.length.toString(), 'Live')}
-      </div>
-      <div class="grid-2">
-        ${barCard('Delivery Performance',[680,720,850,790,920,640,580],['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],['1000','750','500','250','0'])}
-        ${barCard('Revenue Trends',[42000,48000,51000,58000,62000,69000],['Jan','Feb','Mar','Apr','May','Jun'],['80000','60000','40000','20000','0'])}
-      </div>
-      ${barCard('Fleet Status Overview',[240,90,12,7],['Available','In Transit','Maintenance','Offline'],['240','180','120','60','0'],'full bar-row')}`;
+    $('#pageRoot').innerHTML = `<div class="content-card" style="padding:24px;text-align:center;color:#b9b9b9">Loading dashboard...</div>`;
+
+    try {
+      const stats = await DeliverySyncAPI.Dashboard.getSuperuser();
+      const fleetStatusValues = [
+        stats.fleetStatus.available,
+        stats.fleetStatus.inTransit,
+        stats.fleetStatus.maintenance,
+        stats.fleetStatus.offline
+      ];
+
+      $('#pageRoot').innerHTML = `
+        <div class="kpi-grid">
+          ${metric('Total Users', stats.totalUsers.toLocaleString('en-IN'), 'Live')}
+          ${metric('Fleet Managers', stats.fleetManagers.toLocaleString('en-IN'), 'Live')}
+          ${metric('Business Clients', stats.businessClients.toLocaleString('en-IN'), 'Live')}
+          ${metric('Drivers', stats.drivers.toLocaleString('en-IN'), 'Live')}
+          ${metric('Active Deliveries', stats.activeDeliveries.toLocaleString('en-IN'), 'Live')}
+          ${metric('System Alerts', stats.systemAlerts.toString(), 'Live')}
+        </div>
+        <div class="grid-2">
+          ${barCard('Delivery Performance', stats.deliveryPerformance, stats.deliveryPerformanceLabels, niceYTicks(stats.deliveryPerformance))}
+          ${barCard('Revenue Trends', stats.revenueTrends, stats.revenueTrendsLabels, niceYTicks(stats.revenueTrends))}
+        </div>
+        ${barCard('Fleet Status Overview', fleetStatusValues, ['Available','In Transit','Maintenance','Offline'], niceYTicks(fleetStatusValues), 'full bar-row')}`;
+    } catch(error) {
+      console.error('Failed to load superuser dashboard from backend:', error);
+      $('#pageRoot').innerHTML = `
+        <div class="content-card" style="padding:24px;text-align:center;color:#ff6b6b">
+          Unable to load dashboard data from backend.
+        </div>
+      `;
+    }
   }
 
  async function renderUsers(){
@@ -1538,43 +1539,51 @@ async function renderUnblockOrder(){
     `;
   }
 }
-  function renderRequestDetail(){
+  async function renderRequestDetail(){
     const session = sessionGuard(); if(!session) return;
-    const s = ensureState();
     const requestId = params().get('id');
-    const wf = getWorkflowOrders().find(x=>x.id===requestId);
-    const raw = wf || s.superuser.deliveryRequests.find(x=>x.id===requestId) || s.superuser.deliveryRequests[0] || {};
-    const mappedStatus = ({ASSIGNED:'Assigned',ACCEPTED:'Accepted',PICKED_UP:'Picked Up',IN_TRANSIT:'In Transit',DELIVERED:'Delivered',INCIDENT_REPORTED:'Incident Reported',BLOCKED:'Blocked'}[String(raw.status||'').toUpperCase()] || raw.status || 'Pending');
-    const requestTimeValue = raw.requestTime || raw.time || raw.createdAt || '2024-03-08 09:30 AM';
-    const r = {
-      id: raw.id || raw.requestId || requestId || 'DR-2024-001',
-      customer: raw.customer || raw.clientCompany || raw.client || 'Tech Solutions',
-      contact: raw.contact || raw.contactName || raw.fullName || '--',
-      pickup: raw.pickup || raw.pickupAddress || '--',
-      dropoff: raw.dropoff || raw.dropAddress || raw.drop || raw.destination || '--',
-      package: raw.package || raw.packageDetails || raw.instructions || '--',
-      type: raw.type || raw.deliveryType || 'Standard',
-      requestTime: requestTimeValue,
-      status: mappedStatus
-    };
     document.body.className = 'standalone-detail-page';
     document.body.innerHTML = `
       <div class="standalone-detail-wrap">
         <div class="content-card details-card modal-detail-card standalone-modal">
           <div class="details-top"><div class="details-title">Request Details</div><button class="close-icon" onclick="location.href='delivery-requests.html'">×</button></div>
-          <div class="details-body modal-detail-body one-col">
-            <div class="detail-block full"><div class="detail-label">Request ID</div><div class="detail-main">${icon.doc}${r.id}</div></div>
-            <div class="detail-block full"><div class="detail-label">Client Company</div><div class="detail-main">${icon.user}${r.customer}</div><div class="detail-sub">${r.contact}</div></div>
-            <div class="detail-block full"><div class="detail-label">Pickup Address</div><div class="detail-main">${icon.map}${r.pickup}</div></div>
-            <div class="detail-block full"><div class="detail-label">Drop Address</div><div class="detail-main">${icon.map}${r.dropoff}</div></div>
-            <div class="detail-block full"><div class="detail-label">Package Details</div><div class="detail-main">${icon.package}${r.package}</div></div>
-            <div class="detail-block full"><div class="detail-label">Delivery Type</div><div class="detail-main"><span class="small-pill">${r.type}</span></div></div>
-            <div class="detail-block full"><div class="detail-label">Request Time</div><div class="detail-main">${icon.calendar}${r.requestTime}</div></div>
-            <div class="detail-block full"><div class="detail-label">Current Status</div><div class="detail-main">${icon.map}<span>${r.status}</span></div></div>
+          <div class="details-body modal-detail-body one-col" id="requestDetailBody">
+            <div style="text-align:center;color:#b9b9b9;padding:24px">Loading request from backend...</div>
           </div>
           <div class="detail-footer"><a class="btn-yellow close-wide" href="delivery-requests.html">Close</a></div>
         </div>
       </div>`;
+
+    try {
+      const raw = await DeliverySyncAPI.Deliveries.getOne(requestId);
+      const r = {
+        id: raw.id || requestId,
+        customer: raw.customer || '--',
+        contact: raw.contact || '--',
+        pickup: raw.pickup || '--',
+        dropoff: raw.dropoff || '--',
+        package: raw.package || '--',
+        type: raw.type || 'Standard',
+        requestTime: raw.requestTime || '--',
+        status: raw.status || 'Pending'
+      };
+
+      document.getElementById('requestDetailBody').innerHTML = `
+        <div class="detail-block full"><div class="detail-label">Request ID</div><div class="detail-main">${icon.doc}${r.id}</div></div>
+        <div class="detail-block full"><div class="detail-label">Client Company</div><div class="detail-main">${icon.user}${r.customer}</div><div class="detail-sub">${r.contact}</div></div>
+        <div class="detail-block full"><div class="detail-label">Pickup Address</div><div class="detail-main">${icon.map}${r.pickup}</div></div>
+        <div class="detail-block full"><div class="detail-label">Drop Address</div><div class="detail-main">${icon.map}${r.dropoff}</div></div>
+        <div class="detail-block full"><div class="detail-label">Package Details</div><div class="detail-main">${icon.package}${r.package}</div></div>
+        <div class="detail-block full"><div class="detail-label">Delivery Type</div><div class="detail-main"><span class="small-pill">${r.type}</span></div></div>
+        <div class="detail-block full"><div class="detail-label">Request Time</div><div class="detail-main">${icon.calendar}${r.requestTime}</div></div>
+        <div class="detail-block full"><div class="detail-label">Current Status</div><div class="detail-main">${icon.map}<span>${r.status}</span></div></div>
+      `;
+    } catch(error) {
+      console.error('Failed to load request from backend:', error);
+      document.getElementById('requestDetailBody').innerHTML = `
+        <div style="text-align:center;color:#ff6b6b;padding:24px">Failed to load request details from backend.</div>
+      `;
+    }
   }
 
   async function renderTrips(){
@@ -2651,51 +2660,11 @@ async function renderScheduleMaintenance(){
     }
   };
 }
-function renderTripDetail(){
-  const session = sessionGuard(); 
+async function renderTripDetail(){
+  const session = sessionGuard();
   if(!session) return;
 
-  const s = ensureState();
-  const orderId = params().get('order');
-
-  const wf = orderId ? getWorkflowOrders().find(x => x.id === orderId) : null;
-
-  const raw = wf ? {
-    id: params().get('id') || `TR-${String(wf.id).replace(/\D/g,'')}`,
-    assignment: `ASN-${String(wf.id).replace(/\D/g,'')}`,
-    driver: wf.assignedDriver || 'Assigning',
-    phone: '',
-    vehicle: 'TN-09-AB-2345',
-    vehicleType: wf.deliveryType || 'Standard',
-    pickup: wf.pickup || '--',
-    destination: wf.drop || '--',
-    startTime: wf.createdAt || '--',
-    distance: `${wf.eta || 35} mins`,
-    status: ({
-      ASSIGNED:'Assigning',
-      ACCEPTED:'Accepted',
-      PICKED_UP:'Picked Up',
-      IN_TRANSIT:'In Transit',
-      DELIVERED:'Delivered',
-      INCIDENT_REPORTED:'Incident Reported',
-      BLOCKED:'Blocked'
-    }[wf.status] || 'Pending'),
-    _workflowOrderId: wf.id
-  } : (s.superuser.trips.find(x => x.id === params().get('id')) || s.superuser.trips[0] || {});
-
-  const r = {
-    id: raw.id || raw.tripId || 'TRP-2024-001',
-    assignment: raw.assignment || raw.assignmentId || 'ASN-2024-156',
-    driver: raw.driver || raw.driverName || 'Rahul',
-    phone: raw.phone || raw.driverPhone || '+91 98765 43210',
-    vehicle: raw.vehicle || raw.vehicleNumber || 'DL-01-AB-1234',
-    vehicleType: raw.vehicleType || raw.vehicleModel || 'Cargo Van',
-    pickup: raw.pickup || raw.pickupLocation || 'Gurgaon, Haryana',
-    destination: raw.destination || raw.dropoff || 'Connaught Place, New Delhi',
-    startTime: raw.startTime || raw.time || '2024-03-08 09:00 AM',
-    distance: raw.distance || '28.5 km',
-    status: raw.status || 'In Transit'
-  };
+  const tripId = params().get('id');
 
   document.body.className = 'standalone-detail-page';
 
@@ -2715,57 +2684,8 @@ function renderTripDetail(){
           <button class="close-icon" onclick="location.href='trip-monitoring.html'">×</button>
         </div>
 
-        <div class="details-body modal-detail-body">
-          <div class="detail-block">
-            <div class="detail-label">Trip ID</div>
-            <div class="detail-main">${icon.vehicle}${r.id}</div>
-          </div>
-
-          <div class="detail-block">
-            <div class="detail-label">Assignment ID</div>
-            <div class="detail-main">${icon.doc}${r.assignment}</div>
-          </div>
-
-          <div class="detail-block full">
-            <div class="detail-label">Driver Information</div>
-            <div class="value-box">
-              <div class="detail-main">${icon.user}${r.driver}</div>
-              <div class="detail-sub">${r.phone}</div>
-            </div>
-          </div>
-
-          <div class="detail-block full">
-            <div class="detail-label">Vehicle Details</div>
-            <div class="value-box">
-              <div class="detail-main">${icon.vehicle}${r.vehicle}</div>
-              <div class="detail-sub">${r.vehicleType}</div>
-            </div>
-          </div>
-
-          <div class="detail-block full">
-            <div class="detail-label">Pickup Location</div>
-            <div class="detail-main">${icon.map}${r.pickup}</div>
-          </div>
-
-          <div class="detail-block full">
-            <div class="detail-label">Destination</div>
-            <div class="detail-main">${icon.map}${r.destination}</div>
-          </div>
-
-          <div class="detail-block">
-            <div class="detail-label">Start Time</div>
-            <div class="detail-main">${icon.calendar}${r.startTime}</div>
-          </div>
-
-          <div class="detail-block">
-            <div class="detail-label">Distance</div>
-            <div class="detail-main"><span class="small-pill">${r.distance}</span></div>
-          </div>
-
-          <div class="detail-block full">
-            <div class="detail-label">Trip Status</div>
-            <div class="detail-main">${icon.vehicle}${r.status}</div>
-          </div>
+        <div class="details-body modal-detail-body" id="tripDetailBody">
+          <div style="text-align:center;color:#b9b9b9;padding:24px;grid-column:1/-1">Loading trip from backend...</div>
         </div>
 
         <div class="detail-footer">
@@ -2792,7 +2712,83 @@ function renderTripDetail(){
     </div>
   `;
 
-  // Trip actions menu
+  let r = { id: tripId };
+
+  try {
+    const raw = await DeliverySyncAPI.Trips.getOne(tripId);
+    r = {
+      id: raw.id || tripId,
+      assignment: raw.assignment || '--',
+      driver: raw.driver || '--',
+      phone: raw.phone || '--',
+      vehicle: raw.vehicle || '--',
+      vehicleType: raw.vehicleType || '--',
+      pickup: raw.pickup || '--',
+      destination: raw.destination || '--',
+      startTime: raw.startTime || '--',
+      distance: raw.distance || '--',
+      status: raw.status || '--'
+    };
+
+    document.getElementById('tripDetailBody').innerHTML = `
+      <div class="detail-block">
+        <div class="detail-label">Trip ID</div>
+        <div class="detail-main">${icon.vehicle}${r.id}</div>
+      </div>
+
+      <div class="detail-block">
+        <div class="detail-label">Assignment ID</div>
+        <div class="detail-main">${icon.doc}${r.assignment}</div>
+      </div>
+
+      <div class="detail-block full">
+        <div class="detail-label">Driver Information</div>
+        <div class="value-box">
+          <div class="detail-main">${icon.user}${r.driver}</div>
+          <div class="detail-sub">${r.phone}</div>
+        </div>
+      </div>
+
+      <div class="detail-block full">
+        <div class="detail-label">Vehicle Details</div>
+        <div class="value-box">
+          <div class="detail-main">${icon.vehicle}${r.vehicle}</div>
+          <div class="detail-sub">${r.vehicleType}</div>
+        </div>
+      </div>
+
+      <div class="detail-block full">
+        <div class="detail-label">Pickup Location</div>
+        <div class="detail-main">${icon.map}${r.pickup}</div>
+      </div>
+
+      <div class="detail-block full">
+        <div class="detail-label">Destination</div>
+        <div class="detail-main">${icon.map}${r.destination}</div>
+      </div>
+
+      <div class="detail-block">
+        <div class="detail-label">Start Time</div>
+        <div class="detail-main">${icon.calendar}${r.startTime}</div>
+      </div>
+
+      <div class="detail-block">
+        <div class="detail-label">Distance</div>
+        <div class="detail-main"><span class="small-pill">${r.distance}</span></div>
+      </div>
+
+      <div class="detail-block full">
+        <div class="detail-label">Trip Status</div>
+        <div class="detail-main">${icon.vehicle}${r.status}</div>
+      </div>
+    `;
+  } catch(error) {
+    console.error('Failed to load trip from backend:', error);
+    document.getElementById('tripDetailBody').innerHTML = `
+      <div style="text-align:center;color:#ff6b6b;padding:24px;grid-column:1/-1">Failed to load trip details from backend.</div>
+    `;
+  }
+
   const actBtn = document.getElementById('tripActionsBtn');
   const actMenu = document.getElementById('tripActionsMenu');
 
@@ -2890,6 +2886,23 @@ async function renderTransactions(){
   if(!s) return;
 
   $('#pageRoot').innerHTML = `
+    <div class="content-card table-card" style="margin-bottom:18px">
+      <div class="table-head">
+        <div>
+          <h3>Platform Revenue</h3>
+          <div class="subdued" style="margin-top:6px">
+            Subscription revenue and delivery commission, calculated from successful backend transactions.
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="revenueSummaryBody" style="margin-top:16px">
+        <div style="grid-column:1/-1;text-align:center;color:#b9b9b9;padding:18px">
+          Loading revenue...
+        </div>
+      </div>
+    </div>
+
     <div class="content-card table-card">
       <div class="table-head">
         <div>
@@ -2975,6 +2988,28 @@ async function renderTransactions(){
     return value;
   }
 
+  async function renderRevenueSummary(){
+    try {
+      const revenue = await DeliverySyncAPI.Transactions.getRevenueSummary();
+
+      $('#revenueSummaryBody').innerHTML = [
+        metric('Subscription Revenue', money(revenue.subscriptionRevenue), 'Live'),
+        metric('Delivery Commission', money(revenue.deliveryCommission), 'Live'),
+        metric('Total Platform Revenue', money(revenue.totalRevenue), 'Live'),
+        metric('Active Fleet Managers', String(revenue.activeFleetManagers), 'Live'),
+        metric('Active Subscriptions', String(revenue.activeSubscriptions), 'Live')
+      ].join('');
+    } catch(error) {
+      console.error('Failed to load revenue summary from backend:', error);
+
+      $('#revenueSummaryBody').innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;color:#ff6b6b;padding:18px">
+          Failed to load revenue summary from backend.
+        </div>
+      `;
+    }
+  }
+
   async function render(){
     try {
       const [transactions, invoices] = await Promise.all([
@@ -3052,7 +3087,7 @@ async function renderTransactions(){
     }
   }
 
-  await render();
+  await Promise.all([render(), renderRevenueSummary()]);
 }
 
 async function renderNotifications(){
@@ -3309,9 +3344,7 @@ async function renderProfile(){
     };
     (routes[page]||renderDashboard)();
 
-    // Live refresh across tabs when other portals update shared state
     window.addEventListener('storage', (e)=>{
-      // Only re-render safe views (lists/details). Avoid clobbering forms in progress.
       if(e.key === 'deliverysync-state-v1'){
         if(page === 'manage-users') renderUsers();
         if(page === 'view-user') renderUserView();

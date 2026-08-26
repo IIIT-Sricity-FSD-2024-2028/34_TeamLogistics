@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// ──────────────────────── Interfaces ────────────────────────
 
 export interface ProfileDetails {
   companyName?: string;
@@ -70,6 +69,13 @@ export interface DeliveryRequest {
   pickup: string;
   dropoff: string;
   package: string;
+  packageType?: string;
+  packageDimensions?: {
+    length: number;
+    width: number;
+    height: number;
+    unit: string;
+  };
   type: string;
   requestTime: string;
   status: string;
@@ -126,6 +132,20 @@ export interface Transaction {
   status: string;
   date: string;
   createdAt: string;
+  updatedAt?: string;
+
+  invoiceId?: string;
+  deliveryId?: string;
+  paymentMode?: string;
+  reference?: string;
+  receiptName?: string;
+  receiptUrl?: string;
+  userId?: string;
+
+  transactionType?: string;
+  grossAmount?: number;
+  platformCommission?: number;
+  fleetManagerAmount?: number;
 }
 
 export interface Invoice {
@@ -135,6 +155,23 @@ export interface Invoice {
   status: string;
   dueDate: string;
   createdAt: string;
+}
+
+export interface Subscription {
+  id: string;
+  userId: string;
+  role: string;
+  plan: string;
+  amount: number;
+  vehicleLimit: number;
+  billingCycle: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  paymentStatus: string;
+  transactionId?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export interface PlatformSettings {
@@ -173,16 +210,12 @@ export interface Setting {
   status: string;
 }
 
-// ──────────────────────── Data Store Service ────────────────────────
-// Reads from / writes to JSON files in the backend/data/ directory.
-// Acts as a "JSON-file database" — no external DB needed.
 
 @Injectable()
 export class DataStoreService {
   private readonly logger = new Logger(DataStoreService.name);
   private readonly dataDir: string;
 
-  // In-memory caches (loaded from JSON files on startup)
   users: User[] = [];
   vehicles: Vehicle[] = [];
   drivers: Driver[] = [];
@@ -194,19 +227,18 @@ export class DataStoreService {
   invoices: Invoice[] = [];
   documents: Document[] = [];
   settings: Setting[] = [];
+  subscriptions: Subscription[] = [];
 
   platformSettings: PlatformSettings = { name: '', timezone: '', language: '', logo: '' };
   securitySettings: SecuritySettings = { passwordLength: 8, failedAttempts: 5, sessionTimeout: 30, twoFactor: true };
   permissions: Permissions = {};
 
   constructor() {
-    // Resolve path to backend/data/ directory
     this.dataDir = path.resolve(__dirname, '..', '..', 'data');
     this.logger.log(`📂 JSON data directory: ${this.dataDir}`);
     this.loadAllFromFiles();
   }
 
-  // ──────── File I/O helpers ────────
 
   private readJsonFile<T>(filename: string, fallback: T): T {
     const filePath = path.join(this.dataDir, filename);
@@ -228,7 +260,6 @@ export class DataStoreService {
   private writeJsonFile(filename: string, data: any): void {
     const filePath = path.join(this.dataDir, filename);
     try {
-      // Ensure data directory exists
       if (!fs.existsSync(this.dataDir)) {
         fs.mkdirSync(this.dataDir, { recursive: true });
       }
@@ -238,7 +269,6 @@ export class DataStoreService {
     }
   }
 
-  // ──────── Load all data from JSON files ────────
 
   private loadAllFromFiles(): void {
     this.logger.log('🔄 Loading data from JSON files...');
@@ -253,8 +283,8 @@ export class DataStoreService {
     this.transactions = this.readJsonFile<Transaction[]>('transactions.json', []);
     this.invoices = this.readJsonFile<Invoice[]>('invoices.json', []);
     this.documents = this.readJsonFile<Document[]>('documents.json', []);
+    this.subscriptions = this.readJsonFile<Subscription[]>('subscriptions.json', []);
 
-    // Settings is a combined file
     const settingsData = this.readJsonFile<any>('settings.json', {});
     this.platformSettings = settingsData.platform || { name: 'DeliverSync', timezone: 'Asia/Kolkata', language: 'English', logo: '' };
     this.securitySettings = settingsData.security || { passwordLength: 8, failedAttempts: 5, sessionTimeout: 30, twoFactor: true };
@@ -268,7 +298,6 @@ export class DataStoreService {
     );
   }
 
-  // ──────── Persist helpers (called after every mutation) ────────
 
   persistUsers(): void {
     this.writeJsonFile('users.json', this.users);
@@ -310,6 +339,10 @@ export class DataStoreService {
     this.writeJsonFile('documents.json', this.documents);
   }
 
+  persistSubscriptions(): void {
+    this.writeJsonFile('subscriptions.json', this.subscriptions);
+  }
+
   persistSettings(): void {
     this.writeJsonFile('settings.json', {
       platform: this.platformSettings,
@@ -319,7 +352,6 @@ export class DataStoreService {
     });
   }
 
-  // ──────── Helper: Generate unique ID ────────
   generateId(prefix: string, collection: { id: string }[]): string {
     const nums = collection
       .map((item) => {

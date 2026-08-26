@@ -1,5 +1,50 @@
 [
   {
+    "id": "N-1787777072439",
+    "title": "Subscription activated successfully",
+    "message": "Your Enterprise plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:44:32.437Z"
+  },
+  {
+    "id": "N-1787777067995",
+    "title": "Subscription activated successfully",
+    "message": "Your Starter plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:44:27.989Z"
+  },
+  {
+    "id": "N-1787776919445",
+    "title": "Subscription activated successfully",
+    "message": "Your Business plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:41:59.442Z"
+  },
+  {
+    "id": "N-1787776286243",
+    "title": "Payment successful",
+    "message": "Payment of ₹9,800 received for invoice INV-002.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-26T20:31:26.241Z"
+  },
+  {
+    "id": "N-1787776264526",
+    "title": "Subscription activated successfully",
+    "message": "Your Business plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:31:04.520Z"
+  },
+  {
     "id": "N-001",
     "title": "New delivery request assigned",
     "message": "DR-2024-001 requires super user review.",
@@ -1321,5 +1366,158 @@
     "to": "all",
     "read": true,
     "createdAt": "2026-08-24T20:51:52.767Z"
+  },
+  {
+    "id": "N-1787767324504",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-007 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:04.504Z"
+  },
+  {
+    "id": "N-1787767324505",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-007 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": false,
+    "createdAt": "2026-08-26T18:02:04.504Z"
+  },
+  {
+    "id": "N-1787767324506",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-007 was automatically created for delivery DR-2026-007.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T18:02:04.504Z"
+  },
+  {
+    "id": "N-1787767324507",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-007 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-26T18:02:04.504Z"
+  },
+  {
+    "id": "N-1787767346674",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-007 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:26.674Z"
+  },
+  {
+    "id": "N-1787767351670",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-007 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:31.670Z"
+  },
+  {
+    "id": "N-1787767352556",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-007 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:32.556Z"
+  },
+  {
+    "id": "N-1787767353427",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-007 has been generated for delivery DR-2026-007.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-26T18:02:33.424Z"
+  },
+  {
+    "id": "N-1787767353431",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-007 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:33.431Z"
+  },
+  {
+    "id": "N-1787767510572",
+    "title": "Feedback submitted",
+    "message": "Feedback submitted for delivery DR-2026-007. Rating: 4/5.",
+    "time": "Just now",
+    "to": "all",
+    "read": true,
+    "createdAt": "2026-08-26T18:05:10.572Z"
+  },
+  {
+    "id": "N-1787772877534",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-008 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-08-26T19:34:37.534Z"
+  },
+  {
+    "id": "N-1787772877535",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-008 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": false,
+    "createdAt": "2026-08-26T19:34:37.534Z"
+  },
+  {
+    "id": "N-1787772877536",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-008 was automatically created for delivery DR-2026-008.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T19:34:37.534Z"
+  },
+  {
+    "id": "N-1787772877537",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-008 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-26T19:34:37.534Z"
+  },
+  {
+    "id": "N-1787772944994",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2026-008 was cancelled. Reason: Automated test delivery - cleanup",
+    "time": "Just now",
+    "to": "all",
+    "read": false,
+    "createdAt": "2026-08-26T19:35:44.994Z"
+  },
+  {
+    "id": "N-1787784799838",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-003 has been generated for delivery DR-2026-003.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-26T22:53:19.837Z"
+  },
+  {
+    "id": "N-1787784799841",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-003 has been marked as Completed.",
+    "time": "Just now",
+    "to": "all",
+    "read": false,
+    "createdAt": "2026-08-26T22:53:19.841Z"
   }
 ]

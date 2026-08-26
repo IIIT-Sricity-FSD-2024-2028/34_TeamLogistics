@@ -21,13 +21,14 @@
   <script src="../assets/js/fleet-manager.js"></script>
   <script src="../assets/js/workflow-demo.js" defer></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body>
 
   <div class="fleet-layout">
 
-    <!-- ================= SIDEBAR ================= -->
+
 
     <aside class="sidebar">
 
@@ -137,6 +138,16 @@
           <span>Notifications</span>
         </a>
 
+        <a href="subscription.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect height="14" rx="2" width="20" x="2" y="5"></rect>
+              <path d="M2 10h20"></path>
+            </svg>
+          </span>
+          <span>Subscription</span>
+        </a>
+
         <a href="profile.html">
           <span class="ico">
             <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -162,11 +173,11 @@
 
     </aside>
 
-    <!-- ================= MAIN ================= -->
+
 
     <main class="main">
 
-      <!-- ================= TOPBAR ================= -->
+
 
       <div class="topbar">
 
@@ -205,13 +216,11 @@
               text-decoration:none;
             "
           >
-            <div class="avatar">
-              FM
-            </div>
+            <div class="avatar" data-current-user-avatar></div>
 
             <div class="usertext">
-              <strong>Fleet Manager</strong>
-              <span>Administrator</span>
+              <strong data-current-user-name></strong>
+              <span data-current-user-role></span>
             </div>
           </a>
 
@@ -219,11 +228,11 @@
 
       </div>
 
-      <!-- ================= CONTENT ================= -->
+
 
       <div class="content notifications-view">
 
-        <!-- Toolbar -->
+
 
         <div class="notif-toolbar">
 
@@ -320,7 +329,7 @@
 
         </div>
 
-        <!-- Notification List -->
+
 
         <div
           class="notif-list"
@@ -345,7 +354,7 @@
 
   </div>
 
-  <!-- ================= BACKEND SCRIPT ================= -->
+
 
   <script>
     (function () {

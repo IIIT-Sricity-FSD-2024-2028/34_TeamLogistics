@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -17,6 +17,7 @@
 
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body" data-page="active-deliveries">
@@ -152,7 +153,7 @@
 
       <header class="bc-topbar">
   <div>
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -191,13 +192,11 @@
 
   <a class="bc-profile-chip" href="profile.html">
 
-    <div class="bc-profile-avatar">
-      A
-    </div>
+    <div class="bc-profile-avatar" data-current-user-avatar></div>
 
     <div class="bc-profile-info">
-      <strong>Acme Logistics</strong>
-      <span>Business Client</span>
+      <strong data-current-user-name></strong>
+      <span data-current-user-role></span>
     </div>
 
   </a>
@@ -250,7 +249,7 @@
     </main>
   </div>
 
-  <!-- Cancel Order Modal -->
+
 
   <div id="cancelModal" class="cancel-modal">
 

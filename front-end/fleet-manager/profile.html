@@ -56,6 +56,7 @@
   </style>
 
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body>
@@ -169,6 +170,16 @@
           <span>Notifications</span>
         </a>
 
+        <a href="subscription.html">
+          <span class="ico">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <rect height="14" rx="2" width="20" x="2" y="5"></rect>
+              <path d="M2 10h20"></path>
+            </svg>
+          </span>
+          <span>Subscription</span>
+        </a>
+
         <a class="active" href="profile.html">
           <span class="ico">
             <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -216,11 +227,11 @@
             <span class="dot">3</span>
           </a>
 
-          <div class="avatar">FM</div>
+          <div class="avatar" data-current-user-avatar></div>
 
           <div class="usertext">
-            <strong>Fleet Manager</strong>
-            <span>Administrator</span>
+            <strong data-current-user-name></strong>
+            <span data-current-user-role></span>
           </div>
 
         </div>

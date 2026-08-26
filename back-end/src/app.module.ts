@@ -1,12 +1,8 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
-
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { DataStoreModule } from './data-store/data-store.module';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { DocumentsModule } from './documents/documents.module';
@@ -16,17 +12,24 @@ import { TripsModule } from './trips/trips.module';
 import { MaintenanceModule } from './maintenance/maintenance.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { TransactionsController } from './transactions/transactions.controller';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { SubscriptionsController } from './subscriptions/subscriptions.controller';
 import { SettingsModule } from './settings/settings.module';
 import { DashboardModule } from './dashboard/dashboard.module';
-
 import { RolesGuard } from './common';
-
-import { LoggingMiddleware } from './middleware/logging.middleware';
-import { PortalAccessMiddleware } from './middleware/portal-access.middleware';
+import { LoggingMiddleware, AuditMiddleware } from './middleware';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     DataStoreModule,
+    AuthModule,
     UsersModule,
     VehiclesModule,
     DriversModule,
@@ -36,11 +39,15 @@ import { PortalAccessMiddleware } from './middleware/portal-access.middleware';
     MaintenanceModule,
     NotificationsModule,
     TransactionsModule,
+    SubscriptionsModule,
     SettingsModule,
     DashboardModule,
   ],
-
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
@@ -48,31 +55,8 @@ import { PortalAccessMiddleware } from './middleware/portal-access.middleware';
   ],
 })
 export class AppModule implements NestModule {
-  configure(
-    consumer: MiddlewareConsumer,
-  ): void {
-    consumer
-
-      // Global request logging middleware
-      .apply(LoggingMiddleware)
-      .forRoutes('*');
-
-    consumer
-
-      // Router-level portal access middleware
-      .apply(PortalAccessMiddleware)
-      .forRoutes(
-        'users',
-        'vehicles',
-        'drivers',
-        'deliveries',
-        'documents',
-        'trips',
-        'maintenance',
-        'notifications',
-        'transactions',
-        'settings',
-        'dashboard',
-      );
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggingMiddleware).forRoutes('*');
+    consumer.apply(AuditMiddleware).forRoutes(TransactionsController, SubscriptionsController);
   }
 }

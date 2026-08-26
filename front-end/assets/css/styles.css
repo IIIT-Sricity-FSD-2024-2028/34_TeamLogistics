@@ -720,9 +720,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--yellow-2); }
 }
 
 
-/* Landing page dynamic platform branding */
+
 .brand{display:inline-flex;align-items:center;gap:12px}
-/* FINAL FIX FOR LOGO TEXT */
+
 .brand .brand-word {
   font-weight: 900 !important;
   font-size: 26px !important;

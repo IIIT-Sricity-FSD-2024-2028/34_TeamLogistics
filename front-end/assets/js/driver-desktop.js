@@ -1,12 +1,9 @@
 (function(){
   const STORAGE_KEY = 'deliverysync-driver-desktop-v2';
-  // Shared state used across portals (Superuser/Fleet Manager/Business Client)
-  // See: front-end/assets/js/data.js
   const CORE_STORAGE_KEY = 'deliverysync-state-v1';
   const SESSION_KEY = 'deliverysync-session-v1';
   const DRIVER_USER_ID = 'DR-301';
 
-  // ---- Session Guard ----
   (function(){
     var raw = localStorage.getItem(SESSION_KEY);
     var session = null;
@@ -19,7 +16,6 @@
 
   const seedData = {currentOrderId:322,profile:{name:'Raghava',fullName:'Raghava Reddy',email:'driver@deliverysync.com',phone:'+91 94400 11223',vehicle:'TN09AB1234',zone:'Chennai North',status:'Available',licenseNumber:'TN03201800034521'},orders:[{id:321,customer:'Icecream Store',pickup:'Warehouse',drop:'IIIT SRICITY BH-1',package:'Frozen Goods',weight:'8.2 kg',eta:'35 mins',distance:'12.4 km',status:'assigned',amount:850,instructions:'Deliver to hostel BH-1 reception. Keep package upright.',proofRecipient:'',proofNote:'',proofTime:'',note:'Morning slot'},{id:322,customer:'Laxmi Pvt Ltd.',pickup:'Sullurupeta Warehouse',drop:'BH1, IIIT Sri City',package:'Apparel',weight:'11.5 kg',eta:'42 mins',distance:'15.8 km',status:'assigned',amount:560.75,instructions:'Call customer on arrival. Deliver at main gate and collect signature.',proofRecipient:'',proofNote:'',proofTime:'',note:'Handle with care'},{id:323,customer:'Retail Store Ltd.',pickup:'Warehouse A, Industrial Zone',drop:'Tada Main Road',package:'Electronics',weight:'8.5 kg',eta:'31 mins',distance:'12.4 km',status:'accepted',amount:1040,instructions:'Ask for manager Mr. Patel. Fragile electronics.',proofRecipient:'',proofNote:'',proofTime:'',note:''},{id:324,customer:'Green Mart',pickup:'Central Warehouse',drop:'Sunrise Apartments',package:'Groceries',weight:'5.3 kg',eta:'18 mins',distance:'5.3 km',status:'in_transit',amount:420,instructions:'Deliver at security desk.',proofRecipient:'',proofNote:'',proofTime:'',note:''},{id:325,customer:'MediCare',pickup:'Pharma Hub',drop:'Clinic Block A',package:'Medical Supplies',weight:'6.2 kg',eta:'Delivered',distance:'9.0 km',status:'completed',amount:900,instructions:'Temperature-sensitive cargo.',proofRecipient:'Nurse Anita',proofNote:'Delivered safely',proofTime:'09:40 AM',note:''}],notifications:[{id:1,title:'New Delivery Assigned',message:'Delivery #322 has been assigned to you.',time:'2 mins ago'},{id:2,title:'Delivery Completed',message:'Delivery #325 was marked as delivered successfully.',time:'50 mins ago'},{id:3,title:'Route Update',message:'Traffic cleared on NH16. ETA improved by 8 mins.',time:'1 hour ago'}],messages:[{id:1,from:'Dispatch',subject:'Urgent',body:'Please prioritize Delivery #322 after acceptance.',time:'10:45 AM'},{id:2,from:'Fleet Manager',subject:'Vehicle Check',body:'Upload the fuel receipt after today\'s route.',time:'Yesterday'}],issues:[{id:1,orderId:322,type:'Delay Risk',description:'Heavy traffic near toll plaza.',photo:'',createdAt:'Today, 10:20 AM',status:'Open'}],notes:[{id:1,orderId:322,text:'Customer prefers call before arrival.',createdAt:'Today, 09:30 AM'},{id:2,orderId:321,text:'Pickup dock opens at 11 AM.',createdAt:'Today, 08:10 AM'}],earnings:[{id:1,label:'Today',amount:560.75},{id:2,label:'This Week',amount:3240.00},{id:3,label:'This Month',amount:12480.50}],history:[{id:1,orderId:325,event:'Order delivered',time:'09:40 AM',detail:'Proof uploaded and customer signature collected.'},{id:2,orderId:323,event:'Order accepted',time:'08:15 AM',detail:'Driver accepted assignment.'}]};
 
-  // ---- Toast utility (replaces alert for non-blocking UX) ----
   function driverToast(msg){
     var t=document.getElementById('driverToastEl');
     if(!t){t=document.createElement('div');t.id='driverToastEl';t.style.cssText='position:fixed;top:24px;right:24px;background:#1e1e2f;color:#fff;padding:14px 28px;border-radius:12px;font-size:14px;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(-20px);opacity:0;transition:all .3s ease;border-left:4px solid #facc15;pointer-events:none';document.body.appendChild(t);}
@@ -27,7 +23,6 @@
     clearTimeout(t._tid);t._tid=setTimeout(function(){t.style.opacity='0';t.style.transform='translateY(-20px)';},2800);
   }
 
-  // ---- Shared profile sync (Driver <-> Superuser Manage Users) ----
   function readCoreState(){
     try{
       if(window.DeliverySyncData && typeof window.DeliverySyncData.readState==='function'){
@@ -67,7 +62,6 @@
     }
     if(!u && !(driverState.profile && (driverState.profile.fullName || driverState.profile.name))) u = core.users.find(x=>x.id===DRIVER_USER_ID) || core.users.find(x=>String(x.role||'').toLowerCase()==='driver');
     if(!u) return driverState;
-    // Map shared fields into driver portal profile
     driverState.profile = driverState.profile || {};
     driverState.profile.fullName = u.name || driverState.profile.fullName;
     driverState.profile.name = (u.name||driverState.profile.fullName||driverState.profile.name||'Driver').split(' ')[0];
@@ -111,7 +105,6 @@
         licenseNumber: p.licenseNumber || (u.profileDetails && u.profileDetails.licenseNumber) || ''
       }
     };
-    // Also update driver roster (if present) so other mock screens reflect latest name/phone.
     if(Array.isArray(core.drivers)){
       const did = (u.profileDetails && u.profileDetails.driverId) || 'DRV-1032';
       const dIdx = core.drivers.findIndex(d=>String(d.id)===String(did));
@@ -139,7 +132,7 @@
         customer:w.client||'Business Client',
         pickup:w.pickup||'Pickup',
         drop:w.drop||'Drop',
-        package:w.packageDetails||w.package||'Package',
+        package:(w.packageType&&w.packageDimensions&&w.packageDimensions.length)?(w.packageType+' — '+w.packageDimensions.length+' × '+w.packageDimensions.width+' × '+w.packageDimensions.height+' '+(w.packageDimensions.unit||'cm')):(w.packageDetails||w.package||'Package'),
         weight:w.weight||'5.0 kg',
         eta:w.status==='DELIVERED'?'Delivered':`${w.eta||25} mins`,
         distance:w.distance||`${w.eta||25} km`,
@@ -161,7 +154,6 @@
       try{ data = JSON.parse(raw) || clone; }catch(e){ data = clone; }
     }
 
-    // basic shape guarantees
     if(!Array.isArray(data.orders) || !data.orders.length) data.orders = clone.orders;
     if(!Array.isArray(data.notes)) data.notes = clone.notes;
     if(!Array.isArray(data.notifications)) data.notifications = clone.notifications;
@@ -172,7 +164,6 @@
     let workflowOrders = [];
     try{workflowOrders=JSON.parse(localStorage.getItem('dsWorkflowOrders')||'[]')||[]}catch(e){workflowOrders=[]}
 
-    // Keep a few seeded active orders present only when workflow orders are absent so real workflow data is not blocked.
     const active = data.orders.filter(o=>['assigned','accepted','in_transit'].includes(o.status));
     if(!workflowOrders.length && active.length < 3){
       clone.orders.slice(0,3).forEach(seed=>{
@@ -191,7 +182,6 @@
 
     data = syncWorkflowOrders(data);
 
-    // Pull latest driver details from the shared core store (updated by Superuser)
     data = syncProfileFromCore(data);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -199,7 +189,7 @@
   }
   function save(state){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
   let state=load();
-  const page=document.body.dataset.page||'dashboard',content=document.getElementById('driver-content'),pageTitle=document.getElementById('page-title'),pageSubtitle=document.getElementById('page-subtitle'),notifBtn=document.getElementById('notifBtn'),profileBtn=document.getElementById('profileBtn'),notifMenu=document.getElementById('notifMenu'),profileMenu=document.getElementById('profileMenu'),profileInitial=document.getElementById('profileInitial'); if(profileInitial){profileInitial.textContent=(state.profile.name||'D')[0].toUpperCase();}
+  const page=document.body.dataset.page||'dashboard',content=document.getElementById('driver-content'),pageTitle=document.getElementById('page-title'),pageSubtitle=document.getElementById('page-subtitle'),notifBtn=document.getElementById('notifBtn'),profileBtn=document.getElementById('profileBtn'),notifMenu=document.getElementById('notifMenu'),profileMenu=document.getElementById('profileMenu'),profileInitial=document.getElementById('profileInitial'); if(profileInitial&&!profileInitial.hasAttribute('data-current-user-avatar')){profileInitial.textContent=(state.profile.name||'D')[0].toUpperCase();}
   function rupee(n){return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(n)}
   function orderById(id){return state.orders.find(o=>String(o.id)===String(id))}
   function statusLabel(s){return s==='in_transit'?'In Transit':s.charAt(0).toUpperCase()+s.slice(1)}
@@ -321,7 +311,6 @@
       }
       if(cancelBtn){
         cancelBtn.onclick=function(){
-          // reset to last saved (and re-pull from core if available)
           state.ui = state.ui || {};
           state.ui.profileEdit = false;
       state = syncProfileFromCore(state);
@@ -350,7 +339,6 @@
         state.profile.licenseNumber=license;
         state.profile.status=document.getElementById('profileStatus').value;
 
-        // Mirror into shared core state so Superuser edits reflect here and vice-versa.
         syncProfileToCore(state.profile);
 
         state.ui = state.ui || {};
@@ -368,15 +356,14 @@
   if(notifBtn){notifBtn.onclick=function(){location.href='notifications.html';};} if(profileBtn){profileBtn.onclick=function(){location.href='profile.html';};}
   document.addEventListener('click', function(e){if(!e.target.closest('#notifWrap')) notifMenu&&notifMenu.classList.remove('open'); if(!e.target.closest('#profileWrap')) profileMenu&&profileMenu.classList.remove('open');});
   const logoutBtn=document.getElementById('driverLogout'); if(logoutBtn){logoutBtn.onclick=function(){localStorage.removeItem('driverLoggedIn'); sessionStorage.removeItem('driverLoggedIn'); localStorage.removeItem('deliverysync-session-v1'); location.href='../login.html';};}
-  document.getElementById('quickProfileName').textContent=state.profile.fullName; document.getElementById('quickProfileEmail').textContent=state.profile.email;
+  const quickProfileName=document.getElementById('quickProfileName'),quickProfileEmail=document.getElementById('quickProfileEmail'); if(quickProfileName&&!quickProfileName.hasAttribute('data-current-user-name')) quickProfileName.textContent=state.profile.fullName; if(quickProfileEmail&&!quickProfileEmail.hasAttribute('data-current-user-email')) quickProfileEmail.textContent=state.profile.email;
   function renderDropdowns(){if(notifMenu){notifMenu.innerHTML=`<h3>Recent Notifications</h3>`+state.notifications.slice(0,4).map(n=>`<div class="dropdown-item"><strong>${n.title}</strong><small>${n.message}</small><small>${n.time}</small></div>`).join('');}}
-  // React to cross-portal edits (Superuser/Fleet Manager) by re-syncing profile.
   window.addEventListener('storage', (e)=>{
     if(e.key === CORE_STORAGE_KEY){
       try{
         state = syncProfileFromCore(load());
         render();
-      }catch(_){/* ignore */}
+      }catch(_){}
     }
   });
 

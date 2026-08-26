@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Headers, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import { RolesGuard, Roles, Role } from '../common';
@@ -18,9 +18,9 @@ export class DashboardController {
 
   @Get('business-client')
   @Roles(Role.BUSINESS_CLIENT, Role.SUPERUSER)
-  @ApiOperation({ summary: 'Get business client dashboard stats' })
-  getBusinessClientDashboard() {
-    return this.dashboardService.getBusinessClientDashboard();
+  @ApiOperation({ summary: "Get the current business client's dashboard stats" })
+  getBusinessClientDashboard(@Headers('x-user-id') userId?: string) {
+    return this.dashboardService.getBusinessClientDashboard(userId);
   }
 
   @Get('fleet-manager')
@@ -32,8 +32,8 @@ export class DashboardController {
 
   @Get('driver')
   @Roles(Role.DRIVER, Role.SUPERUSER)
-  @ApiOperation({ summary: 'Get driver dashboard stats' })
-  getDriverDashboard() {
-    return this.dashboardService.getDriverDashboard();
+  @ApiOperation({ summary: "Get the current driver's dashboard stats" })
+  getDriverDashboard(@Headers('x-user-id') userId?: string) {
+    return this.dashboardService.getDriverDashboard(userId);
   }
 }

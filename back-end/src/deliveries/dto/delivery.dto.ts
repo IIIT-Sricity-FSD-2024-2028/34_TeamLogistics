@@ -1,5 +1,55 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsOptional, IsNumber, IsIn } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsIn,
+  IsPositive,
+  Max,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+
+export const PACKAGE_TYPES = [
+  'Documents',
+  'Electronics',
+  'Clothing',
+  'Food',
+  'Medical Supplies',
+  'Fragile Items',
+  'Furniture',
+  'Retail Goods',
+  'Industrial Parts',
+  'Other',
+] as const;
+
+
+export class PackageDimensionsDto {
+  @ApiProperty({ example: 30 })
+  @IsNumber()
+  @IsPositive()
+  @Max(1000)
+  length!: number;
+
+  @ApiProperty({ example: 20 })
+  @IsNumber()
+  @IsPositive()
+  @Max(1000)
+  width!: number;
+
+  @ApiProperty({ example: 15 })
+  @IsNumber()
+  @IsPositive()
+  @Max(1000)
+  height!: number;
+
+  @ApiProperty({ example: 'cm', enum: ['cm'] })
+  @IsString()
+  @IsIn(['cm'])
+  unit!: string;
+}
+
 
 export class CreateDeliveryDto {
   @ApiProperty({ example: 'Acme Logistics' })
@@ -23,6 +73,19 @@ export class CreateDeliveryDto {
   @IsOptional()
   @IsString()
   package?: string;
+
+  @ApiProperty({
+    example: 'Electronics',
+    enum: PACKAGE_TYPES,
+  })
+  @IsString()
+  @IsIn(PACKAGE_TYPES)
+  packageType!: string;
+
+  @ApiProperty({ type: PackageDimensionsDto })
+  @ValidateNested()
+  @Type(() => PackageDimensionsDto)
+  packageDimensions!: PackageDimensionsDto;
 
   @ApiPropertyOptional({ example: 'Express', enum: ['Standard', 'Express'] })
   @IsOptional()

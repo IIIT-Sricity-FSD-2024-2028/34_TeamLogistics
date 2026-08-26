@@ -1,14 +1,15 @@
-﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Business Client Dashboard | DeliverSync</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Business Client Dashboard | DeliverSync</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/brand-logo.css"><link rel="stylesheet" href="../assets/css/business-client.css"><script src="../assets/js/data.js"></script>
 <script src="../assets/js/api-client.js"></script>
 <script src="../assets/js/business-client.js" defer></script>
 <script src="../assets/js/business-backend-sync.js" defer></script>
 <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head><body class="bc-body" data-page="dashboard"><div class="bc-layout"><aside class="bc-sidebar"><div class="bc-brand"><div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Business Client"></div></div><nav class="bc-nav"><a href="dashboard.html" data-nav="dashboard" class="active"><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Dashboard</span></a><a href="create-delivery.html" data-nav="create-delivery" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path></svg></span><span>Create Delivery</span></a><a href="active-deliveries.html" data-nav="active-deliveries" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Active Deliveries</span></a><a href="completed-deliveries.html" data-nav="completed-deliveries" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Completed Deliveries</span></a><a href="invoices.html" data-nav="invoices" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Invoices</span></a><a href="submit-transaction.html" data-nav="submit-transaction" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 3h10v18l-2-1-2 1-2-1-2 1-2-1V3z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span><span>Submit Transaction</span></a><a href="profile.html" data-nav="profile" class=""><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2z"></path><path d="M12 22V11"></path><path d="M20 6.5l-8 4.5-8-4.5"></path></svg></span><span>Profile</span></a></nav><div class="spacer"></div><a class="bc-logout" href="../login.html"><span class="ico"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside><main class="bc-main">
   <header class="bc-topbar">
 
   <div class="bc-topbar-left">
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -47,11 +48,11 @@
 
     <a class="bc-profile-chip" href="profile.html">
 
-      <div class="bc-profile-avatar">A</div>
+      <div class="bc-profile-avatar" data-current-user-avatar></div>
 
       <div class="bc-profile-info">
-        <strong>Acme Logistics</strong>
-        <span>Business Client</span>
+        <strong data-current-user-name></strong>
+        <span data-current-user-role></span>
       </div>
 
     </a>

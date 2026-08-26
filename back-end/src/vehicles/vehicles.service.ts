@@ -38,7 +38,7 @@ export class VehiclesService {
   }
 
   create(dto: CreateVehicleDto): Vehicle {
-    const id = 'VH-' + (1000 + this.store.vehicles.length + 1);
+    const id = this.store.generateId('VH', this.store.vehicles);
 
     const vehicle: Vehicle = {
       id,

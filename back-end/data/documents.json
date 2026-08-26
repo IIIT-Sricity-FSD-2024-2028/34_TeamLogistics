@@ -36,7 +36,7 @@
     "status": "Expired"
   },
   {
-    "id": "DOC-005",
+    "id": "DOC-007",
     "ownerType": "vehicle",
     "vehicle": "AP-07-RS-6543",
     "driver": "",
@@ -56,16 +56,24 @@
     "status": "Expiring Soon"
   },
   {
-    "id": "DOC-007",
-    "ownerType": "superuser",
-    "documentType": "Uploaded Document",
-    "issueDate": "2026-08-25",
+    "id": "DOC-008",
+    "ownerType": "vehicle",
+    "vehicle": "TN-09-AB-2345",
+    "documentType": "Insurance",
+    "issueDate": "",
     "expiryDate": "",
-    "status": "Uploaded",
-    "fileName": "1787652373534-882818945.png",
-    "originalFileName": "yolo_train_verification.png",
-    "filePath": "uploads\\documents\\1787652373534-882818945.png",
-    "mimeType": "image/png",
-    "fileSize": 156396
+    "status": "Valid",
+    "fileName": "test-doc.pdf",
+    "fileUrl": "/uploads/documents/1787783251153-210627120.pdf"
+  },
+  {
+    "id": "DOC-010",
+    "ownerType": "business-client",
+    "documentType": "Payment Receipt",
+    "issueDate": "",
+    "expiryDate": "",
+    "status": "Valid",
+    "fileName": "receipt.png",
+    "fileUrl": "/uploads/documents/1787784860811-488507635.png"
   }
 ]

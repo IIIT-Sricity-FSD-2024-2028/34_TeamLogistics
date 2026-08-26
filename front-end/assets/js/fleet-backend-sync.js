@@ -1,8 +1,3 @@
-/**
- * Fleet Manager backend sync layer.
- * Converts Fleet Manager pages from static/localStorage rows to DeliverySyncAPI calls.
- * It intentionally preserves existing HTML/CSS layout classes.
- */
 (function(){
   const D = window.DeliverySyncAPI;
   const page = (location.pathname.split('/').pop() || '').toLowerCase();
@@ -55,11 +50,7 @@
   function today(){ return new Date().toISOString().split('T')[0]; }
 
   function setTopbarFromUser(user){
-    if(!user) return;
-    const name = user.name || 'Fleet Manager';
-    const initials = name.trim().split(/\s+/).slice(0,2).map(p=>p[0]).join('').toUpperCase() || 'FM';
-    $$('.toptools .usertext strong').forEach(el => el.textContent = name);
-    $$('.toptools .avatar').forEach(el => el.textContent = initials);
+    return user || null;
   }
 
   async function loadCurrentUser(){

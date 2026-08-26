@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -15,6 +15,7 @@
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body">
@@ -40,7 +41,7 @@
       <header class="bc-topbar">
 
   <div class="bc-topbar-left">
-    <div class="company">Acme Logistics Inc.</div>
+    <div class="company" data-current-user-name="company">Loading...</div>
     <div class="subtitle">Business Client Dashboard</div>
   </div>
 
@@ -79,11 +80,11 @@
 
     <a class="bc-profile-chip" href="profile.html">
 
-      <div class="bc-profile-avatar">A</div>
+      <div class="bc-profile-avatar" data-current-user-avatar></div>
 
       <div class="bc-profile-info">
-        <strong>Acme Logistics</strong>
-        <span>Business Client</span>
+        <strong data-current-user-name></strong>
+        <span data-current-user-role></span>
       </div>
 
     </a>
@@ -205,6 +206,8 @@
             <div id="paymentInfo" style="margin-top:8px;color:#d4f5db">Loading...</div>
           </div>
         </div>
+
+        <div id="payActionBox" style="margin-top:16px"></div>
       </div>
 
       <div class="invoice-section">
@@ -645,6 +648,47 @@
 
         setStatusStyle(paymentStatus);
 
+        const payBox = document.getElementById("payActionBox");
+
+        if (payBox) {
+          const normalizedStatus = normalize(paymentStatus);
+          const isPaid =
+            normalizedStatus.includes("paid") ||
+            normalizedStatus.includes("received") ||
+            normalizedStatus.includes("completed");
+
+          if (invoiceExists && !isPaid) {
+            payBox.innerHTML = `
+              <button id="payNowBtn" class="btn yellow" style="width:100%;justify-content:center">
+                Pay ${money(total)} Now
+              </button>
+            `;
+
+            document.getElementById("payNowBtn").addEventListener("click", async () => {
+              const btn = document.getElementById("payNowBtn");
+              btn.disabled = true;
+              btn.textContent = "Processing payment...";
+
+              try {
+                await DeliverySyncAPI.Transactions.payDelivery({
+                  invoiceId: invoice.id || invoiceNumber,
+                  deliveryId: linkedDeliveryId,
+                  paymentMode: "Demo Payment",
+                });
+
+                alert("Payment Successful");
+                location.reload();
+              } catch (error) {
+                console.error("Delivery payment failed:", error);
+                alert(`Payment failed: ${error.message}`);
+                btn.disabled = false;
+                btn.textContent = `Pay ${money(total)} Now`;
+              }
+            });
+          } else {
+            payBox.innerHTML = "";
+          }
+        }
 
         console.table({
           invoiceVerified: invoiceExists,

@@ -100,11 +100,10 @@ window.FleetManagerData.getSessionFleetManagerUser = function(){
   try { session = sessionRaw ? JSON.parse(sessionRaw) : null; } catch(e) { session = null; }
   const users = Array.isArray(state.users) ? state.users : [];
   if(session && session.role === 'fleet-manager'){
-    const match = users.find(u => String(u.id||'') === String(session.userId||''))
-      || users.find(u => (u.email||'').toLowerCase() === String(session.email||'').toLowerCase());
+    const match = users.find(u => String(u.id||'') === String(session.userId||''));
     if(match) return match;
   }
-  return users.find(u => String(u.role||'').toLowerCase() === 'fleet-manager') || null;
+  return null;
 };
 window.FleetManagerData.getFleetManagerProfile = function(){
   const user = window.FleetManagerData.getSessionFleetManagerUser();
@@ -125,18 +124,13 @@ window.FleetManagerData.applyFleetManagerProfile = function(){
   var fullName = profile.fullName, companyName = profile.companyName, companyAddress = profile.companyAddress;
   var numberOfVehicles = profile.numberOfVehicles, phone = profile.phone, email = profile.email, initials = profile.initials;
 
-  // --- Patch topbar avatar + username across ALL FM pages ---
-  document.querySelectorAll('.toptools .usertext strong').forEach(function(el){ el.textContent = fullName; });
-  document.querySelectorAll('.toptools .avatar').forEach(function(el){ el.textContent = initials; });
 
-  // --- Patch notification badge to reflect actual workflow notification count ---
   (function(){
     var count = 0;
     try {
       var wfNotifs = JSON.parse(localStorage.getItem('dsWorkflowNotifications') || '[]') || [];
       count += wfNotifs.filter(function(n){ return n.to === 'fleet-manager' || n.to === 'all'; }).length;
     } catch(e){}
-    // Fallback: also count core state notifications if present
     try {
       var st = window.FleetManagerData.readCoreState() || {};
       if(st.superuser && Array.isArray(st.superuser.notifications)) count = count || st.superuser.notifications.length;
@@ -147,7 +141,6 @@ window.FleetManagerData.applyFleetManagerProfile = function(){
     });
   })();
 
-  // --- Profile page elements ---
   document.querySelectorAll('#fm-profile-heading').forEach(function(el){ el.textContent = fullName; });
   document.querySelectorAll('#fm-profile-avatar').forEach(function(el){ el.textContent = initials; });
   document.querySelectorAll('#fm-full-name').forEach(function(el){ if(document.activeElement !== el) el.value = fullName; });
@@ -172,7 +165,6 @@ window.FleetManagerData.applyFleetManagerProfile = function(){
 
 
 document.addEventListener('DOMContentLoaded', function(){
-  // ---- Session Guard: redirect if not logged in as fleet-manager ----
   var sessionRaw = localStorage.getItem('deliverysync-session-v1');
   var session = null;
   try { session = sessionRaw ? JSON.parse(sessionRaw) : null; } catch(e) { session = null; }
@@ -181,15 +173,12 @@ document.addEventListener('DOMContentLoaded', function(){
     return;
   }
 
-  // ---- Permission Enforcement: read SU-configured flags ----
   (function enforcePermissions(){
     var state = window.FleetManagerData.readCoreState() || {};
     var perms = (state.superuser && state.superuser.permissions && state.superuser.permissions['fleet-manager']) || [];
-    // Permission map: label -> enabled boolean
     var permMap = {};
     perms.forEach(function(p){ permMap[p[0]] = p[2]; });
 
-    // Map permission labels to sidebar page hrefs
     var restrictedLinks = {
       'System Configuration Access': 'settings.html',
       'Role & Permissions Access': 'settings.html',
@@ -200,12 +189,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     Object.keys(restrictedLinks).forEach(function(label){
       if(permMap[label] === false){
-        // Hide the sidebar link
         var href = restrictedLinks[label];
         document.querySelectorAll('.nav a[href="'+href+'"], .sidebar .nav a[href="'+href+'"]').forEach(function(link){
           link.style.display = 'none';
         });
-        // Block the page if user navigated directly
         if(currentPage === href){
           document.querySelector('.main .content') && (document.querySelector('.main .content').innerHTML = '<div style="padding:60px;text-align:center;color:#b5b5b5;font-size:18px"><strong>Access Restricted</strong><br>You do not have permission to view this page. Contact your Super User administrator.</div>');
         }
@@ -215,15 +202,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
   window.FleetManagerData.applyFleetManagerProfile();
 
-  // Clicking the top-right avatar (initials circle) should open the profile page.
-  // Keep behavior lightweight and consistent across Fleet Manager pages.
   document.querySelectorAll('.toptools .avatar').forEach(function(el){
     el.addEventListener('click', function(){
       window.location.href = 'profile.html';
     });
   });
 
-  // ---- Logout handler: clear session properly ----
   document.querySelectorAll('.logout').forEach(function(el){
     el.addEventListener('click', function(e){
       e.preventDefault();

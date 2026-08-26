@@ -121,8 +121,13 @@
 
       <div class="info-grid">
         <div class="info-box">
-          <div class="small-label">Package</div>
-          <div id="packageName" class="main-value">Package</div>
+          <div class="small-label">Package Type</div>
+          <div id="packageTypeDisplay" class="main-value">Not available</div>
+        </div>
+
+        <div class="info-box">
+          <div class="small-label">Dimensions</div>
+          <div id="packageDimsDisplay" class="main-value">Not available</div>
         </div>
 
         <div class="info-box">
@@ -434,7 +439,20 @@
         setText("vehicleType", vehicleType);
         setText("assignment", trip.assignment || "Not available");
 
-        setText("packageName", trip.package || trip.packageType || trip.item || "Package");
+        // ── Prefer structured package data for new records ──
+        const _pkgType = trip.packageType || '';
+        const _pkgDims = trip.packageDimensions;
+
+        // Package Type
+        setText("packageTypeDisplay", _pkgType || trip.package || trip.item || 'Not available');
+
+        // Package Dimensions
+        if (_pkgDims && _pkgDims.length) {
+          setText("packageDimsDisplay", _pkgDims.length + ' × ' + _pkgDims.width + ' × ' + _pkgDims.height + ' ' + (_pkgDims.unit || 'cm'));
+        } else {
+          setText("packageDimsDisplay", "Not available");
+        }
+
         setText("weight", trip.weight || trip.estimatedWeight || "Not available");
         setText("instructions", trip.instructions || "Handle package carefully.");
 

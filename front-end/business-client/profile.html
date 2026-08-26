@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -15,6 +15,7 @@
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 
 <body class="bc-body" data-page="profile">
@@ -128,7 +129,7 @@
     <main class="bc-main">
       <header class="bc-topbar">
         <div>
-          <div class="company" id="topCompanyName">Loading...</div>
+          <div class="company" id="topCompanyName" data-current-user-name="company"></div>
           <div class="subtitle">Business Client Dashboard</div>
         </div>
 
@@ -138,6 +139,14 @@
             <path d="M10 20a2 2 0 0 0 4 0"></path>
           </svg>
           <span class="badge">3</span>
+        </a>
+
+        <a class="bc-profile-chip" href="profile.html">
+          <div class="bc-profile-avatar" data-current-user-avatar></div>
+          <div class="bc-profile-info">
+            <strong data-current-user-name></strong>
+            <span data-current-user-role></span>
+          </div>
         </a>
       </header>
 
@@ -302,13 +311,20 @@
         const first = user.firstName || "";
         const last = user.lastName || "";
         const full = user.fullName || user.name || `${first} ${last}`.trim();
+        const profileDetails = user.profileDetails || {};
 
         return {
-          companyName: user.company || user.companyName || user.organization || "Acme Logistics Inc.",
-          fullName: full || user.customer || "Acme Logistics",
-          email: user.email || DEFAULT_EMAIL,
-          phone: user.phone || user.contact || "--",
-          address: user.address || user.location || "123 Business Avenue",
+          companyName:
+            user.company ||
+            user.companyName ||
+            user.organization ||
+            profileDetails.companyName ||
+            full ||
+            "Not available",
+          fullName: full || profileDetails.fullName || user.customer || "Not available",
+          email: user.email || "Not available",
+          phone: user.phone || user.contact || profileDetails.companyContactNumber || "--",
+          address: user.address || user.location || profileDetails.businessAddress || "Not available",
         };
       };
 
@@ -353,63 +369,46 @@
             throw new Error("DeliverySyncAPI is not loaded. Check api-client.js path.");
           }
 
-          let result;
+          const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
 
-          if (DeliverySyncAPI.Users && DeliverySyncAPI.Users.getAll) {
-            result = await DeliverySyncAPI.Users.getAll();
-          } else {
-            result = await fetch("http://localhost:3000/api/users", {
-              headers: {
-                "x-user-role": ROLE,
-              },
-            }).then((res) => {
-              if (!res.ok) throw new Error(`Users fetch failed with status ${res.status}`);
-              return res.json();
-            });
+          if (!session || !session.userId) {
+            throw new Error("No active session. Please log in again.");
           }
 
-          const users = getArray(result);
+          const getById = DeliverySyncAPI.Users && (DeliverySyncAPI.Users.getById || DeliverySyncAPI.Users.getOne);
 
-          currentUser =
-            users.find((u) => normalize(u.role) === ROLE) ||
-            users.find((u) => normalize(u.email) === DEFAULT_EMAIL) ||
-            users.find((u) => normalize(u.role).includes("client")) ||
-            users[0];
+          if (typeof getById !== "function") {
+            throw new Error("DeliverySyncAPI.Users.getById is unavailable.");
+          }
 
-          if (!currentUser) {
-            throw new Error("Business client profile not found in backend users.json.");
+          currentUser = await getById(session.userId);
+
+          if (!currentUser || String(currentUser.id) !== String(session.userId)) {
+            throw new Error("Backend did not return the logged-in business client's profile.");
           }
 
           fillForm(currentUser);
 
-          console.log("RAW USERS API RESULT:", result);
           console.log("BUSINESS CLIENT PROFILE:", currentUser);
 
           console.table({
-            usersLoadedFromBackend: users.length,
-            profileMatched: Boolean(currentUser),
             profileId: currentUser.id || "No ID",
             role: currentUser.role || "No role",
             email: currentUser.email || "No email",
-            source: "back-end/data/users.json through GET /api/users",
+            source: `back-end/data/users.json through GET /api/users/${session.userId}`,
           });
 
-          
         } catch (error) {
           console.error("Profile backend sync failed:", error);
+          currentUser = null;
 
-          currentUser = {
-            id: "local-business-client",
-            companyName: "Acme Logistics Inc.",
-            name: "Acme Logistics",
-            email: "client@deliverysync.com",
-            phone: "--",
-            address: "123 Business Avenue",
-            role: "business-client",
-          };
-
-          fillForm(currentUser);
-          console.error(`History backend sync failed: ${error.message}`);
+          const errorBox = document.getElementById("profileError");
+          if (errorBox) {
+            errorBox.textContent = `Unable to load your profile from the backend: ${error.message}`;
+            errorBox.style.display = "block";
+          } else {
+            alert(`Unable to load your profile from the backend: ${error.message}`);
+          }
         }
       };
 

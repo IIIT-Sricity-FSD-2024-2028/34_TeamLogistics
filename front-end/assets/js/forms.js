@@ -129,7 +129,6 @@
       if (!config.validate(values, form)) return;
       const payload = config.transform(values, state, form);
 
-      // Try to create user via backend API first
       try {
         if (window.DeliverySyncAPI && window.DeliverySyncAPI.Users) {
           const apiPayload = {
@@ -147,7 +146,6 @@
         console.log('Backend API registration (may be offline):', apiErr.message);
       }
 
-      // Also save to localStorage for offline/fallback
       state.users.push(payload.user);
       state[payload.collection].push(payload.record);
       (payload.extra || []).forEach((item) => state[item.collection].push(item.record));

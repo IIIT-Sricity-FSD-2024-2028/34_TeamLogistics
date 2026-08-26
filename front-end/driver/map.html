@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../assets/css/brand-logo.css">
   <link rel="stylesheet" href="../assets/css/driver-desktop.css">
 <script src="../assets/js/workflow-demo.js" defer></script><script src="../assets/js/api-client.js"></script><script src="../assets/js/brand-logo.js"></script>
+  <script src="../assets/js/current-user.js" defer></script>
 </head>
 <body class="driver-desktop-page" data-page="map">
   <div class="driver-shell">
@@ -57,7 +58,7 @@
 
   <span class="icon-badge"></span>
 </a><div class="dropdown" id="notifMenu"></div></div>
-          <div id="profileWrap" class="profile-menu" style="position:relative"><a class="profile-chip" id="profileBtn" type="button"><div class="profile-avatar" id="profileInitial">R</div><div><div id="quickProfileName" style="font-weight:800">Driver</div><div id="quickProfileEmail" style="font-size:12px;color:#9e9e9e">driver@deliverysync.com</div></div></a><div class="dropdown" id="profileMenu"><div class="dropdown-item"><strong>Driver Quick Actions</strong><small><a href="profile.html">Edit profile</a></small><small><a href="dashboard.html">View dashboard</a></small></div></div></div>
+          <div id="profileWrap" class="profile-menu" style="position:relative"><a class="profile-chip" id="profileBtn" type="button"><div class="profile-avatar" id="profileInitial" data-current-user-avatar></div><div><div id="quickProfileName" style="font-weight:800" data-current-user-name></div><div id="quickProfileEmail" style="font-size:12px;color:#9e9e9e" data-current-user-email></div></div></a><div class="dropdown" id="profileMenu"><div class="dropdown-item"><strong>Driver Quick Actions</strong><small><a href="profile.html">Edit profile</a></small><small><a href="dashboard.html">View dashboard</a></small></div></div></div>
         </div>
       </header>
       <section class="content" id="driver-content"></section>

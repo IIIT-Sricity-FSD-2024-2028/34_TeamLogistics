@@ -189,7 +189,7 @@ th{font-size:13px;color:#90939c;font-weight:600;text-transform:uppercase;letter-
 .standalone-detail-page .detail-main svg,.standalone-detail-page .notif-chip svg{width:20px;height:20px;flex:0 0 20px;stroke:var(--yellow);fill:none;stroke-width:2}
 @media (max-width:700px){.standalone-detail-wrap{padding:28px 16px}.standalone-detail-page .details-title{font-size:22px}}
 
-/* Modal overlay (used for trip reassign driver) */
+
 .modal-overlay{
   position:fixed;
   inset:0;
@@ -214,7 +214,7 @@ th{font-size:13px;color:#90939c;font-weight:600;text-transform:uppercase;letter-
 
 .dots-trigger{width:44px;min-width:44px;padding:0;display:grid;place-items:center;font-size:28px;line-height:1;font-weight:700;border-radius:12px;}.dots-trigger:hover{background:#1a1a1a;border-color:#353535;color:var(--yellow);} .action-menu-wrap:hover .action-menu{display:block;} .action-menu button.action-item{cursor:pointer;}
 
-/* Add User alignment and upload fixes */
+
 .form-card .grid-2{
   align-items:start;
 }
@@ -230,7 +230,7 @@ th{font-size:13px;color:#90939c;font-weight:600;text-transform:uppercase;letter-
   cursor:not-allowed;
 }
 
-/* Upload preview alignment */
+
 .upload-preview-box{
   width:100%;
   border:1px solid rgba(255,255,255,0.08);
@@ -280,7 +280,7 @@ th{font-size:13px;color:#90939c;font-weight:600;text-transform:uppercase;letter-
 .upload-preview-box{padding:14px;min-height:auto;}
 .upload-file-name{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-/* Upload box alignment and equal sizing */
+
 .upload-preview-centered{
   min-height:56px;
   height:56px;
@@ -312,7 +312,7 @@ th{font-size:13px;color:#90939c;font-weight:600;text-transform:uppercase;letter-
   border-radius:18px;
 }
 
-/* Ensure full file text is visible inside upload box */
+
 .upload-preview-centered{
   min-height:72px !important;
   height:72px !important;
