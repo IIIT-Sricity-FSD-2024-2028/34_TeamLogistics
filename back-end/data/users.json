@@ -7,7 +7,7 @@
     "role": "superuser",
     "status": "Active",
     "phone": "9876543210",
-    "lastLogin": "2026-08-26T22:56:19.985Z",
+    "lastLogin": "2026-08-26T23:40:23.490Z",
     "profileDetails": {
       "fullName": "Aarav Menon"
     },
@@ -27,7 +27,7 @@
     "role": "fleet-manager",
     "status": "Active",
     "phone": "9000000052",
-    "lastLogin": "2026-08-26T22:55:57.880Z",
+    "lastLogin": "2026-08-26T23:32:18.401Z",
     "profileDetails": {
       "companyName": "DeliverSync Logistics Pvt Ltd",
       "companyAddress": "OMR, Chennai",
@@ -46,7 +46,7 @@
     "role": "business-client",
     "status": "Active",
     "phone": "9988776655",
-    "lastLogin": "2026-08-26T22:56:06.619Z",
+    "lastLogin": "2026-08-26T23:32:26.768Z",
     "profileDetails": {
       "companyName": "Acme Logistics",
       "fullName": "Acme Logistics",
@@ -107,7 +107,7 @@
     "role": "driver",
     "status": "Available",
     "phone": "944001122",
-    "lastLogin": "2026-08-26T22:56:10.909Z",
+    "lastLogin": "2026-08-26T23:32:30.866Z",
     "notifications": [
       "Email",
       "SMS"

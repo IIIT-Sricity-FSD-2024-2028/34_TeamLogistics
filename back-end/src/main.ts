@@ -3,6 +3,7 @@ import { ForbiddenException, ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common';
@@ -22,6 +23,20 @@ async function bootstrap() {
 
   app.use(json({ limit: '2mb' }));
   app.use(urlencoded({ extended: true, limit: '2mb' }));
+
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 200,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: {
+        success: false,
+        statusCode: 429,
+        message: 'Too many requests. Please try again later.',
+      },
+    }),
+  );
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -98,4 +113,3 @@ async function bootstrap() {
   console.log(`📚 Swagger docs at http://localhost:3000/api/docs`);
 }
 bootstrap();
-

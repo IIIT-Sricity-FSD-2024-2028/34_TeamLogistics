@@ -48,6 +48,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: status,
       error: errorName,
       message,
+      ip: request.ip || request.headers['x-forwarded-for']?.toString() || 'unknown',
       role: request.headers['x-user-role'],
       userId: request.headers['x-user-id'],
       stack: exception instanceof Error ? exception.stack : undefined,

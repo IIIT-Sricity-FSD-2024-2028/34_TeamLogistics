@@ -20,6 +20,7 @@ type DocumentRecord = {
 @Injectable()
 export class DocumentsService {
   private readonly filePath = path.join(process.cwd(), 'data', 'documents.json');
+  private readonly uploadDirectory = path.join(process.cwd(), 'uploads', 'documents');
   private documents: DocumentRecord[] = [];
 
   constructor() {
@@ -133,6 +134,17 @@ export class DocumentsService {
 
     const deleted = this.documents.splice(index, 1)[0];
     this.save();
+
+    if (deleted.fileUrl) {
+      const storedFilePath = path.join(this.uploadDirectory, path.basename(deleted.fileUrl));
+      try {
+        if (fs.existsSync(storedFilePath)) {
+          fs.unlinkSync(storedFilePath);
+        }
+      } catch (error) {
+        console.error(`Failed to delete uploaded file for ${id}:`, error);
+      }
+    }
 
     return {
       message: 'Document deleted successfully',
