@@ -9,6 +9,7 @@ export class LoggingMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
     const start = Date.now();
     const { method, originalUrl } = req;
+    const ip = req.ip || req.headers['x-forwarded-for']?.toString() || 'unknown';
     const role = req.headers['x-user-role'] || '';
     const userId = req.headers['x-user-id'] || '';
 
@@ -20,6 +21,7 @@ export class LoggingMiddleware implements NestMiddleware {
         url: originalUrl,
         statusCode: res.statusCode,
         durationMs,
+        ip,
         role,
         userId,
       };
