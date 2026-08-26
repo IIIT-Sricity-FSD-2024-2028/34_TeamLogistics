@@ -1255,6 +1255,7 @@
             "name": "search",
             "required": false,
             "in": "query",
+            "description": "Search documents by ID, owner, vehicle, driver, type, dates, status or file name",
             "schema": {
               "type": "string"
             }
@@ -1337,7 +1338,7 @@
             "description": ""
           }
         },
-        "summary": "Create a document",
+        "summary": "Create a document record",
         "tags": [
           "Documents"
         ]
@@ -1351,6 +1352,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Document ID",
             "schema": {
               "type": "string"
             }
@@ -1397,6 +1399,7 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Document ID",
             "schema": {
               "type": "string"
             }
@@ -1447,12 +1450,14 @@
         ]
       },
       "delete": {
+        "description": "Deletes the document record and, if present, the associated uploaded file.",
         "operationId": "DocumentsController_delete",
         "parameters": [
           {
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "Document ID",
             "schema": {
               "type": "string"
             }
@@ -1488,6 +1493,60 @@
           }
         },
         "summary": "Delete a document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/documents/upload": {
+      "post": {
+        "description": "Accepts PDF, JPG/JPEG and PNG files up to 5 MB. The uploaded file is stored in uploads/documents and a document record is saved in documents.json.",
+        "operationId": "DocumentsController_uploadDocument",
+        "parameters": [
+          {
+            "name": "x-user-role",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-user-id",
+            "in": "header",
+            "required": false,
+            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "PDF, JPG/JPEG or PNG file (maximum 5 MB)"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Upload a document file and save its metadata",
         "tags": [
           "Documents"
         ]

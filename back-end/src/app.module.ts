@@ -1,5 +1,11 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
+
 import { APP_GUARD } from '@nestjs/core';
+
 import { DataStoreModule } from './data-store/data-store.module';
 import { UsersModule } from './users/users.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
@@ -12,7 +18,11 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { SettingsModule } from './settings/settings.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+
 import { RolesGuard } from './common';
+
+import { LoggingMiddleware } from './middleware/logging.middleware';
+import { PortalAccessMiddleware } from './middleware/portal-access.middleware';
 
 @Module({
   imports: [
@@ -29,12 +39,40 @@ import { RolesGuard } from './common';
     SettingsModule,
     DashboardModule,
   ],
+
   providers: [
-    // Apply RolesGuard globally as a fallback
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(
+    consumer: MiddlewareConsumer,
+  ): void {
+    consumer
+
+      // Global request logging middleware
+      .apply(LoggingMiddleware)
+      .forRoutes('*');
+
+    consumer
+
+      // Router-level portal access middleware
+      .apply(PortalAccessMiddleware)
+      .forRoutes(
+        'users',
+        'vehicles',
+        'drivers',
+        'deliveries',
+        'documents',
+        'trips',
+        'maintenance',
+        'notifications',
+        'transactions',
+        'settings',
+        'dashboard',
+      );
+  }
+}

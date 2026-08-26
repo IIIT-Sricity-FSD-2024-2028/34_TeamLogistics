@@ -1,0 +1,7 @@
+2026-08-25T04:56:21.496Z | POST | /api/documents/upload | 500 | IP=::1 | ROLE=superuser | USER=unknown | MESSAGE=Only PDF, JPG and PNG files are allowed.
+2026-08-25T04:56:36.818Z | POST | /api/documents/upload | 400 | IP=::1 | ROLE=superuser | USER=unknown | MESSAGE=Validation failed (current file type is image/jpeg, expected type is /(pdf|jpg|jpeg|png)$/)
+2026-08-25T04:56:59.361Z | POST | /api/documents/upload | 400 | IP=::1 | ROLE=superuser | USER=unknown | MESSAGE=Validation failed (current file type is image/png, expected type is /(pdf|jpg|jpeg|png)$/)
+2026-08-25T04:59:08.769Z | POST | /api/documents/upload | 400 | IP=::1 | ROLE=superuser | USER=unknown | MESSAGE=Validation failed (current file type is image/jpeg, expected type is /^(application\/pdf|image\/jpeg|image\/png)$/)
+2026-08-25T09:46:50.778Z | GET | /api/vehicles | 403 | IP=::1 | ROLE=business-client | USER=unknown | MESSAGE=Only superuser or fleet-manager can access this API area.
+2026-08-25T09:47:07.834Z | GET | /api/vehicles | 403 | IP=::1 | ROLE=business-client | USER=unknown | MESSAGE=Only superuser or fleet-manager can access this API area.
+2026-08-25T10:00:16.303Z | POST | /api/documents/upload | 400 | IP=::1 | ROLE=SuperUser | USER=unknown | MESSAGE=Invalid x-user-role "SuperUser". Valid roles: superuser, fleet-manager, business-client, driver
