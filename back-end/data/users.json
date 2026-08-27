@@ -3,11 +3,11 @@
     "id": "SU-001",
     "username": "superuser",
     "name": "John Doe",
-    "email": "super@deliverysync.com",
+    "email": "superuser@deliverysync.com",
     "role": "superuser",
     "status": "Active",
     "phone": "9876543210",
-    "lastLogin": "2026-08-27T00:17:00.708Z",
+    "lastLogin": "2026-08-27T00:21:38.457Z",
     "profileDetails": {
       "fullName": "Aarav Menon"
     },
