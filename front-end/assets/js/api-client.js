@@ -1,12 +1,21 @@
 (function () {
   const API_BASE = 'http://localhost:3000/api';
 
+  function getCurrentToken() {
+    try {
+      const session = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
+      return session ? session.token : '';
+    } catch (e) {
+      return '';
+    }
+  }
+
   function getCurrentRole() {
     try {
       const session = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
-      return session ? session.role : 'superuser';
+      return session ? session.role : '';
     } catch (e) {
-      return 'superuser';
+      return '';
     }
   }
 
@@ -20,10 +29,12 @@
   }
 
   function getHeaders(isFormData) {
-    const headers = {
-      'x-user-role': getCurrentRole(),
-      'x-user-id': getCurrentUserId(),
-    };
+    const headers = {};
+    const token = getCurrentToken();
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
 
     if (!isFormData) {
       headers['Content-Type'] = 'application/json';
@@ -38,6 +49,7 @@
     const options = {
       method,
       headers: getHeaders(isFormData),
+      cache: 'no-store',
     };
 
     if (body && method !== 'GET') {
@@ -70,6 +82,9 @@
   const AuthAPI = {
     login: (email, password) =>
       apiRequest('POST', '/auth/login', { email, password }),
+
+    register: (payload) =>
+      apiRequest('POST', '/auth/register', payload),
   };
 
   const UsersAPI = {
@@ -200,8 +215,14 @@
     updateStatus: (id, status) =>
       apiRequest('PATCH', `/trips/${encodeURIComponent(id)}/status`, { status }),
 
-    reportIssue: (id, issue) =>
-      apiRequest('PATCH', `/trips/${encodeURIComponent(id)}/report-issue`, { issue }),
+    reportIssue: (id, issueType, description, status) =>
+      apiRequest('PATCH', `/trips/${encodeURIComponent(id)}/report-issue`, { issueType, description, status }),
+
+    addNote: (id, text) =>
+      apiRequest('PATCH', `/trips/${encodeURIComponent(id)}/notes`, { text }),
+
+    resolveDispute: (id, resolvedAmount, reason) =>
+      apiRequest('PATCH', `/trips/${encodeURIComponent(id)}/resolve-dispute`, { resolvedAmount, reason }),
   };
 
   const MaintenanceAPI = {
@@ -261,6 +282,12 @@
 
     markAllRead: () =>
       apiRequest('PATCH', '/notifications/mark-read'),
+
+    markOne: (id, read) =>
+      apiRequest('PATCH', `/notifications/${encodeURIComponent(id)}`, { read }),
+
+    delete: (id) =>
+      apiRequest('DELETE', `/notifications/${encodeURIComponent(id)}`),
   };
 
   const TransactionsAPI = {
@@ -318,22 +345,61 @@
 
     getRevenueSummary: () =>
       apiRequest('GET', '/transactions/revenue-summary'),
+
+    refund: (id, amount, reason) =>
+      apiRequest('POST', `/transactions/${encodeURIComponent(id)}/refund`, { amount, reason }),
   };
 
-  const SubscriptionsAPI = {
-    getPlans: () =>
-      apiRequest('GET', '/subscriptions/plans'),
+  const PayoutsAPI = {
+    getPlatformRateCard: () =>
+      apiRequest('GET', '/payouts/rate-card/platform'),
 
-    getCurrent: () =>
-      apiRequest('GET', '/subscriptions/current'),
+    setPlatformRateCard: (data) =>
+      apiRequest('PUT', '/payouts/rate-card/platform', data),
 
-    pay: (plan, paymentMode) =>
-      apiRequest('POST', '/subscriptions/pay', { plan, paymentMode }),
+    getMyRateCard: () =>
+      apiRequest('GET', '/payouts/rate-card/mine'),
+
+    setMyRateCard: (data) =>
+      apiRequest('PUT', '/payouts/rate-card/mine', data),
+
+    getMyPayouts: () =>
+      apiRequest('GET', '/payouts/driver/mine'),
+
+    getFleetManagerStatement: (month, fleetManagerId) => {
+      const params = new URLSearchParams();
+
+      if (month) params.set('month', month);
+      if (fleetManagerId) params.set('fleetManagerId', fleetManagerId);
+
+      const qs = params.toString();
+
+      return apiRequest('GET', `/payouts/fleet-manager/statement${qs ? '?' + qs : ''}`);
+    },
+
+    listSettlements: (fleetManagerId) => {
+      const params = new URLSearchParams();
+
+      if (fleetManagerId) params.set('fleetManagerId', fleetManagerId);
+
+      const qs = params.toString();
+
+      return apiRequest('GET', `/payouts/fleet-manager/settlements${qs ? '?' + qs : ''}`);
+    },
+
+    lockSettlement: (fleetManagerId, month) =>
+      apiRequest('POST', '/payouts/fleet-manager/settlement/lock', { fleetManagerId, month }),
   };
 
   const SettingsAPI = {
     getPlatform: () =>
       apiRequest('GET', '/settings/platform'),
+
+    getCommission: () =>
+      apiRequest('GET', '/settings/commission'),
+
+    updateCommission: (commissionRate) =>
+      apiRequest('PUT', '/settings/commission', { commissionRate }),
 
     updatePlatform: (data) =>
       apiRequest('PUT', '/settings/platform', data),
@@ -366,6 +432,9 @@
     getFleetManager: () =>
       apiRequest('GET', '/dashboard/fleet-manager'),
 
+    getFleetManagerAnalytics: () =>
+      apiRequest('GET', '/dashboard/fleet-manager/analytics'),
+
     getDriver: () =>
       apiRequest('GET', '/dashboard/driver'),
   };
@@ -387,7 +456,7 @@
     Maintenance: MaintenanceAPI,
     Notifications: NotificationsAPI,
     Transactions: TransactionsAPI,
-    Subscriptions: SubscriptionsAPI,
+    Payouts: PayoutsAPI,
     Settings: SettingsAPI,
     Dashboard: DashboardAPI,
   };

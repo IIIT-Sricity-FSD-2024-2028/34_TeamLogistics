@@ -13,7 +13,6 @@
   <link href="../assets/css/fleet-manager.css" rel="stylesheet" />
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/fleet-manager.js"></script>
-  <script src="../assets/js/workflow-demo.js" defer></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -64,7 +63,7 @@
               aria-hidden="true" viewBox="0 0 24 24">
               <path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path>
               <path d="M10 20a2 2 0 0 0 4 0"></path>
-            </svg></span><span>Notifications</span></a><a class="" href="subscription.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="2" width="20" x="2" y="5"></rect><path d="M2 10h20"></path></svg></span><span>Subscription</span></a><a class="" href="profile.html"><span class="ico"><svg
+            </svg></span><span>Notifications</span></a><a class="" href="profile.html"><span class="ico"><svg
               aria-hidden="true" viewBox="0 0 24 24">
               <circle cx="12" cy="8" r="4"></circle>
               <path d="M4 20a8 8 0 0 1 16 0"></path>
@@ -85,59 +84,10 @@
           <div class="usertext"><strong data-current-user-name></strong><span data-current-user-role></span></div>
         </div>
       </div>
-      <div class="content"><a class="muted" href="vehicles.html">← Back</a>
-        <section class="panel" style="margin-top:14px">
-          <div class="panel-head">
-            <div class="panel-title">Add New Vehicle</div>
-          </div>
-          <div class="panel-body">
-            <div class="form-grid">
-              <div class="field"><label>Plate Number</label><input id="av-plate" type="text" value="" />
-                <div class="field-error" id="av-plate-err"></div>
-              </div>
-              <div class="field"><label>Vehicle Type</label><select id="av-type">
-                  <option>Truck</option>
-                  <option>Van</option>
-                  <option>SUV</option>
-                </select></div>
-              <div class="field"><label>Model Name</label><input id="av-model" type="text" value="" /></div>
-              <div class="field"><label>Capacity</label><input id="av-capacity" type="text" value="" /></div>
-              <div class="field"><label>Vehicle Color</label><input id="av-color" type="text" value=""
-                  placeholder="e.g. White" /></div>
-              <div class="field"><label>Last Maintenance Date</label><input id="av-maint" type="date" value="" /></div>
-            </div>
-            <div class="footer-actions"><button class="btn btn-ghost" id="av-cancel">Cancel</button><button
-                class="btn btn-yellow" id="av-create">Create Vehicle</button></div>
-          </div>
-        </section>
+      <div class="content">
       </div>
     </main>
   </div>
-  <script>
-    (function () {
-      var SK = 'deliverysync-state-v1';
-      document.getElementById('av-cancel').onclick = function () { location.href = 'vehicles.html'; };
-      document.getElementById('av-create').onclick = function () {
-        var plate = document.getElementById('av-plate').value.trim();
-        var type = document.getElementById('av-type').value;
-        var model = document.getElementById('av-model').value.trim();
-        var capacity = document.getElementById('av-capacity').value.trim();
-        var color = document.getElementById('av-color').value.trim();
-        var maint = document.getElementById('av-maint').value;
-        document.getElementById('av-plate-err').textContent = '';
-        if (!plate || plate.length < 4) { document.getElementById('av-plate-err').textContent = 'Plate number must be at least 4 characters'; return; }
-        try {
-          var s = JSON.parse(localStorage.getItem(SK) || '{}');
-          s.vehicles = s.vehicles || [];
-          var id = 'VH-' + (1000 + s.vehicles.length + 1);
-          s.vehicles.push({ id: id, plate: plate, type: type, model: model, capacity: capacity, color: color, status: 'Active', maintenance: maint || '—', assignedDriver: '--' });
-          localStorage.setItem(SK, JSON.stringify(s));
-          window.dispatchEvent(new Event('deliverysync:state-updated'));
-        } catch (e) { }
-        location.href = 'vehicles.html';
-      };
-    })();
-  </script>
   <script src="../assets/js/fleet-backend-sync.js"></script>
 </body>
 

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -65,7 +65,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <h1>History</h1>
-          <p>Completed orders and issue reports from backend</p>
+          <p>Completed orders and issue reports</p>
         </div>
 
         <div class="topbar-right">
@@ -123,9 +123,13 @@
               <span id="completedCount" class="count-pill">0</span>
             </div>
 
+            <input id="orderHistorySearch" placeholder="Search by trip ID, customer, address..." style="width:100%;margin-bottom:14px;padding:10px 14px;border-radius:12px;border:1px solid #262626;background:#0b0b0b;color:#fff;font:inherit">
+
             <div id="orderHistoryList" class="timeline-list">
               <div class="empty-state">Loading order history...</div>
             </div>
+
+            <div id="orderHistoryMeta" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px"></div>
           </div>
 
           <div class="history-card">
@@ -357,6 +361,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "driver";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
       let sessionUser = null;
       try {
@@ -400,7 +406,7 @@
         }
 
         const res = await fetch("http://localhost:3000/api/trips", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!res.ok) {
@@ -416,7 +422,7 @@
         }
 
         const res = await fetch("http://localhost:3000/api/deliveries", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!res.ok) {
@@ -438,6 +444,9 @@
         );
       };
 
+      let orderHistoryPage = 1;
+      const orderHistoryPageSize = 8;
+
       const renderOrderHistory = (trips, deliveries) => {
         const list = document.getElementById("orderHistoryList");
 
@@ -453,12 +462,7 @@
 
         document.getElementById("completedCount").textContent = completedTrips.length;
 
-        if (!completedTrips.length) {
-          list.innerHTML = `<div class="empty-state">No completed orders found from backend.</div>`;
-          return;
-        }
-
-        list.innerHTML = completedTrips.map((trip) => {
+        const rows = completedTrips.map((trip) => {
           const delivery = getDeliveryForTrip(trip, deliveries);
 
           const requestId = trip.request || trip.deliveryId || trip.deliveryRequestId || "N/A";
@@ -480,19 +484,50 @@
           const status = trip.status || delivery?.status || "Completed";
           const time = trip.completedAt || trip.updatedAt || trip.issueReportedAt || trip.createdAt || "Recently";
 
-          return `
+          return { trip, requestId, customer, pickup, drop, status, time };
+        });
+
+        const q = (document.getElementById("orderHistorySearch").value || "").trim().toLowerCase();
+        const filtered = q
+          ? rows.filter((r) => JSON.stringify(r).toLowerCase().includes(q))
+          : rows;
+
+        const totalPages = Math.max(1, Math.ceil(filtered.length / orderHistoryPageSize));
+        if (orderHistoryPage > totalPages) orderHistoryPage = totalPages;
+        const pageRows = filtered.slice((orderHistoryPage - 1) * orderHistoryPageSize, orderHistoryPage * orderHistoryPageSize);
+
+        if (!pageRows.length) {
+          list.innerHTML = `<div class="empty-state">${q ? "No orders match your search." : "No completed orders found."}</div>`;
+          document.getElementById("orderHistoryMeta").innerHTML = "";
+          return;
+        }
+
+        list.innerHTML = pageRows.map((r) => `
             <div class="timeline-item">
               <div class="timeline-dot"></div>
-              <div class="timeline-title">Order ${status}</div>
+              <div class="timeline-title">Order ${r.status}</div>
               <div class="timeline-meta">
-                <strong>${trip.id}</strong> → ${requestId}<br>
-                ${customer}<br>
-                ${pickup} → ${drop}
+                <strong>${r.trip.id}</strong> → ${r.requestId}<br>
+                ${r.customer}<br>
+                ${r.pickup} → ${r.drop}
               </div>
-              <div class="timeline-time">${formatDateTime(time)}</div>
+              <div class="timeline-time">${formatDateTime(r.time)}</div>
             </div>
-          `;
-        }).join("");
+          `).join("");
+
+        document.getElementById("orderHistoryMeta").innerHTML = `
+          <span style="color:#9ca3af;font-size:12px">Showing ${pageRows.length} of ${filtered.length}</span>
+          <div style="display:flex;gap:8px">
+            <button id="orderHistoryPrev" ${orderHistoryPage <= 1 ? "disabled" : ""} style="padding:6px 12px;border-radius:8px;border:1px solid #262626;background:#111;color:#fff;cursor:pointer">Prev</button>
+            <span style="color:#9ca3af;font-size:12px;align-self:center">Page ${orderHistoryPage} of ${totalPages}</span>
+            <button id="orderHistoryNext" ${orderHistoryPage >= totalPages ? "disabled" : ""} style="padding:6px 12px;border-radius:8px;border:1px solid #262626;background:#111;color:#fff;cursor:pointer">Next</button>
+          </div>
+        `;
+
+        const prevBtn = document.getElementById("orderHistoryPrev");
+        const nextBtn = document.getElementById("orderHistoryNext");
+        if (prevBtn) prevBtn.onclick = () => { if (orderHistoryPage > 1) { orderHistoryPage--; renderOrderHistory(trips, deliveries); } };
+        if (nextBtn) nextBtn.onclick = () => { if (orderHistoryPage < totalPages) { orderHistoryPage++; renderOrderHistory(trips, deliveries); } };
       };
 
       const renderIssueReports = (trips, deliveries) => {
@@ -513,7 +548,7 @@
         });
 
         if (!issueTrips.length) {
-          list.innerHTML = `<div class="empty-state">No issue reports found from backend.</div>`;
+          list.innerHTML = `<div class="empty-state">No issue reports found.</div>`;
           return;
         }
 
@@ -564,6 +599,11 @@
 
           renderOrderHistory(trips, deliveries);
           renderIssueReports(trips, deliveries);
+
+          document.getElementById("orderHistorySearch").oninput = () => {
+            orderHistoryPage = 1;
+            renderOrderHistory(trips, deliveries);
+          };
 
           console.log("HISTORY TRIPS:", trips);
           console.log("HISTORY DELIVERIES:", deliveries);

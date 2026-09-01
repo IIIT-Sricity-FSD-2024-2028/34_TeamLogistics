@@ -31,6 +31,20 @@ export class SettingsController {
     return this.settingsService.getSecuritySettings();
   }
 
+  @Get('commission')
+  @Roles(Role.SUPERUSER)
+  @ApiOperation({ summary: 'Get the platform commission rate (percent)' })
+  getCommission() {
+    return { commissionRate: this.settingsService.getCommissionRate() };
+  }
+
+  @Put('commission')
+  @Roles(Role.SUPERUSER)
+  @ApiOperation({ summary: 'Set the platform commission rate (percent, 0-100)' })
+  updateCommission(@Body('commissionRate') commissionRate: number) {
+    return { commissionRate: this.settingsService.setCommissionRate(Number(commissionRate)) };
+  }
+
   @Put('security')
   @Roles(Role.SUPERUSER)
   @ApiOperation({ summary: 'Update security settings' })

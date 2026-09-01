@@ -636,12 +636,12 @@
         setText("paymentStatus", paymentStatus);
 
         if (invoiceExists) {
-          setText("paymentInfo", `Invoice status loaded from backend for ${invoiceNumber}`);
+          setText("paymentInfo", `Invoice status loaded for ${invoiceNumber}`);
           setText("paymentReference", invoiceNumber);
         } else {
           setText(
             "paymentInfo",
-            "Delivery exists in backend, but invoice record is not generated yet."
+            "This delivery exists, but its invoice has not been generated yet."
           );
           setText("paymentReference", linkedDeliveryId || "Not available");
         }
@@ -741,7 +741,7 @@
 
             if (canGenerate) {
               try {
-                console.info("Invoice not found. Generating invoice from backend...");
+                console.info("Invoice not found. Generating invoice...");
 
                 invoice = await DeliverySyncAPI.Transactions.generateInvoiceForDelivery(
                   cleanId(deliveryIdFromUrl)
@@ -800,7 +800,7 @@
           That was the reason wrong invoice like INV-001 appeared.
         */
         if (!invoice && !delivery) {
-          throw new Error("No matching invoice or delivery found from backend.");
+          throw new Error("No matching invoice or delivery found.");
         }
 
         renderInvoice({
@@ -831,7 +831,7 @@
         setText("taxAmount", "Not available");
         setText("totalAmount", "Not available");
         setText("paymentStatus", "Not available");
-        setText("paymentInfo", "Could not load backend data");
+        setText("paymentInfo", "Could not load payment information");
         setText("paymentReference", "Not available");
       }
 

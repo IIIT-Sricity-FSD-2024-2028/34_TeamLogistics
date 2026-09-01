@@ -1,6 +1,7 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { logAudit } from './file-logger';
+import { decodeBearerToken } from '../common/jwt.constants';
 
 @Injectable()
 export class AuditMiddleware implements NestMiddleware {
@@ -8,8 +9,7 @@ export class AuditMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction): void {
     const { method, originalUrl, body } = req;
-    const role = req.headers['x-user-role'] || '';
-    const userId = req.headers['x-user-id'] || '';
+    const { userId = '', role = '' } = decodeBearerToken(req.headers['authorization']);
 
     res.on('finish', () => {
       const entry = {

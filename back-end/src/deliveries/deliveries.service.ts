@@ -10,8 +10,35 @@ import { CreateDeliveryDto, PACKAGE_TYPES } from './dto/delivery.dto';
 export class DeliveriesService {
   constructor(private readonly store: DataStoreService) {}
 
-  findAll(search?: string, statusFilter?: string): DeliveryRequest[] {
+  findAll(
+    search?: string,
+    statusFilter?: string,
+    requester?: { userId: string; role: string },
+  ): DeliveryRequest[] {
     let items = [...this.store.deliveryRequests];
+
+    if (requester && (requester.role === 'business-client' || requester.role === 'driver')) {
+      const user: any = this.store.users.find((u) => u.id === requester.userId);
+      const ownNames = [
+        user?.name,
+        user?.username,
+        user?.companyName,
+        user?.company,
+        user?.profileDetails?.companyName,
+        user?.profileDetails?.fullName,
+      ]
+        .filter(Boolean)
+        .map((v: string) => String(v).toLowerCase().trim());
+
+      items = items.filter((r: any) => {
+        const field =
+          requester.role === 'driver'
+            ? String(r.driver || r.assignedDriver || '')
+            : String(r.customer || r.client || r.company || '');
+        const normalized = field.toLowerCase().trim();
+        return ownNames.some((name) => normalized === name || normalized.includes(name) || name.includes(normalized));
+      });
+    }
 
     if (statusFilter && statusFilter !== 'all') {
       items = items.filter((r) =>
@@ -61,6 +88,28 @@ export class DeliveriesService {
 
   private getDefaultDriverName(): string {
     return 'Raghav Reddy';
+  }
+
+  private findDeliveryNotificationRecipients(delivery: DeliveryRequest): { clientUserId?: string; driverUserId?: string } {
+    const customerName = String((delivery as any).customer || (delivery as any).client || '').toLowerCase().trim();
+
+    const clientUser: any = this.store.users.find((u: any) => {
+      if (u.role !== 'business-client') return false;
+      const names = [u.name, u.companyName, u.company, u.profileDetails?.companyName]
+        .filter(Boolean)
+        .map((v: string) => String(v).toLowerCase().trim());
+      return names.includes(customerName);
+    });
+
+    const driverName = String((delivery as any).driver || (delivery as any).assignedDriver || '').toLowerCase().trim();
+
+    const driverUser: any = driverName
+      ? this.store.users.find(
+          (u: any) => u.role === 'driver' && String(u.name || '').toLowerCase().trim() === driverName,
+        )
+      : null;
+
+    return { clientUserId: clientUser?.id, driverUserId: driverUser?.id };
   }
 
   private findDefaultDriver() {
@@ -365,6 +414,17 @@ export class DeliveriesService {
 
     const now = new Date().toISOString();
 
+    const assignedDriverUser: any = this.store.users.find(
+      (u: any) => u.role === 'driver' && String(u.name || '').toLowerCase() === defaultDriverName.toLowerCase(),
+    );
+    const owningClientUser: any = this.store.users.find((u: any) => {
+      if (u.role !== 'business-client') return false;
+      const names = [u.name, u.companyName, u.company, u.profileDetails?.companyName]
+        .filter(Boolean)
+        .map((v: string) => String(v).toLowerCase().trim());
+      return names.includes(String(normalized.customer || '').toLowerCase().trim());
+    });
+
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'New delivery created',
@@ -381,6 +441,7 @@ export class DeliveriesService {
       message: `Delivery ${id} is now available in your driver dashboard.`,
       time: 'Just now',
       to: 'driver',
+      toUserId: assignedDriverUser?.id,
       read: false,
       createdAt: now,
     });
@@ -401,6 +462,7 @@ export class DeliveriesService {
       message: `Your delivery ${id} has been created and assigned to a driver.`,
       time: 'Just now',
       to: 'business-client',
+      toUserId: owningClientUser?.id,
       read: false,
       createdAt: now,
     });
@@ -465,15 +527,30 @@ export class DeliveriesService {
       this.store.persistTrips();
     }
 
+    const { driverUserId: feedbackDriverId } = this.findDeliveryNotificationRecipients(this.store.deliveryRequests[index]);
+
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'Feedback submitted',
       message: `Feedback submitted for delivery ${id}. Rating: ${feedback.rating}/5.`,
       time: 'Just now',
-      to: 'all',
+      to: 'fleet-manager',
       read: false,
       createdAt: new Date().toISOString(),
     });
+
+    if (feedbackDriverId) {
+      this.store.notifications.push({
+        id: `N-${Date.now() + 1}`,
+        title: 'You received feedback',
+        message: `A customer left feedback for delivery ${id}. Rating: ${feedback.rating}/5.`,
+        time: 'Just now',
+        to: 'driver',
+        toUserId: feedbackDriverId,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     this.store.persistNotifications();
 
@@ -507,15 +584,31 @@ export class DeliveriesService {
       this.store.persistTrips();
     }
 
+    const { clientUserId: blockClientId, driverUserId: blockDriverId } = this.findDeliveryNotificationRecipients(this.store.deliveryRequests[idx]);
+
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'Delivery Request Blocked',
       message: `Delivery request ${id} was blocked. Reason: ${reason}`,
       time: 'Just now',
-      to: 'all',
+      to: 'business-client',
+      toUserId: blockClientId,
       read: false,
       createdAt: new Date().toISOString(),
     });
+
+    if (blockDriverId) {
+      this.store.notifications.push({
+        id: `N-${Date.now() + 1}`,
+        title: 'Trip Blocked',
+        message: `Trip for delivery ${id} was blocked. Reason: ${reason}`,
+        time: 'Just now',
+        to: 'driver',
+        toUserId: blockDriverId,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     this.store.persistNotifications();
 
@@ -555,15 +648,31 @@ export class DeliveriesService {
 
     this.store.persistTrips();
 
+    const { clientUserId: unblockClientId, driverUserId: unblockDriverId } = this.findDeliveryNotificationRecipients(this.store.deliveryRequests[idx]);
+
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'Delivery Request Unblocked',
       message: `Delivery request ${id} was unblocked. Reason: ${reason}`,
       time: 'Just now',
-      to: 'all',
+      to: 'business-client',
+      toUserId: unblockClientId,
       read: false,
       createdAt: new Date().toISOString(),
     });
+
+    if (unblockDriverId) {
+      this.store.notifications.push({
+        id: `N-${Date.now() + 1}`,
+        title: 'Trip Unblocked',
+        message: `Trip for delivery ${id} was unblocked and is queued again. Reason: ${reason}`,
+        time: 'Just now',
+        to: 'driver',
+        toUserId: unblockDriverId,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     this.store.persistNotifications();
 
@@ -575,6 +684,18 @@ export class DeliveriesService {
 
     if (idx < 0) {
       throw new NotFoundException(`Delivery request "${id}" not found`);
+    }
+
+    const paidInvoice = (this.store.invoices as any[]).find(
+      (inv) =>
+        (inv.deliveryId === id || inv.request === id) &&
+        String(inv.status || inv.paymentStatus || '').toLowerCase() === 'paid',
+    );
+
+    if (paidInvoice) {
+      throw new BadRequestException(
+        `Delivery "${id}" cannot be cancelled because invoice ${paidInvoice.id} has already been paid. Process a refund before cancelling.`,
+      );
     }
 
     this.store.deliveryRequests[idx].status = 'Cancelled';
@@ -593,6 +714,8 @@ export class DeliveriesService {
       this.store.persistTrips();
     }
 
+    const { clientUserId: cancelClientId, driverUserId: cancelDriverId } = this.findDeliveryNotificationRecipients(this.store.deliveryRequests[idx]);
+
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'Delivery Cancelled',
@@ -600,10 +723,24 @@ export class DeliveriesService {
         reason ? `Reason: ${reason}` : ''
       }`,
       time: 'Just now',
-      to: 'all',
+      to: 'business-client',
+      toUserId: cancelClientId,
       read: false,
       createdAt: new Date().toISOString(),
     });
+
+    if (cancelDriverId) {
+      this.store.notifications.push({
+        id: `N-${Date.now() + 1}`,
+        title: 'Trip Cancelled',
+        message: `Trip for delivery ${id} was cancelled. ${reason ? `Reason: ${reason}` : ''}`,
+        time: 'Just now',
+        to: 'driver',
+        toUserId: cancelDriverId,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     this.store.persistNotifications();
 

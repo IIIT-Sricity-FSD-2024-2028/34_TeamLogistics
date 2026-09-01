@@ -451,6 +451,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "business-client";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const params = new URLSearchParams(window.location.search);
       const deliveryId = params.get("id");
 
@@ -477,7 +479,7 @@
       const fetchDelivery = async (id) => {
         const response = await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(id)}`, {
           headers: {
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
         });
 
@@ -491,7 +493,7 @@
       const fetchTrips = async () => {
         const response = await fetch("http://localhost:3000/api/trips", {
           headers: {
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
         });
 
@@ -507,7 +509,7 @@
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
           body: JSON.stringify(payload),
         });

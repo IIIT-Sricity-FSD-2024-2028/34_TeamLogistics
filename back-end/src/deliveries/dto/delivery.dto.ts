@@ -87,6 +87,12 @@ export class CreateDeliveryDto {
   @Type(() => PackageDimensionsDto)
   packageDimensions!: PackageDimensionsDto;
 
+  @ApiProperty({ example: 2.5, description: 'Package weight in kilograms' })
+  @IsNumber()
+  @IsPositive()
+  @Max(1000)
+  weight!: number;
+
   @ApiPropertyOptional({ example: 'Express', enum: ['Standard', 'Express'] })
   @IsOptional()
   @IsString()

@@ -9,9 +9,10 @@ import {
   Param,
   Query,
   UseGuards,
-  Headers,
+  Req,
   ForbiddenException,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import { ApiTags, ApiOperation, ApiQuery, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto, UpdateStatusDto } from './dto/user.dto';
@@ -33,27 +34,19 @@ export class UsersController {
   @ApiQuery({ name: 'role', required: false, description: 'Filter by role' })
   @ApiQuery({ name: 'search', required: false, description: 'Search by name, email, or role' })
   @ApiResponse({ status: 200, description: 'List of users returned successfully' })
-  findAll(
-    @Query('role') role?: string,
-    @Query('search') search?: string,
-    @Headers('x-user-role') userRole?: string,
-    @Headers('x-user-id') userId?: string,
-  ) {
+  findAll(@Query('role') role?: string, @Query('search') search?: string, @Req() req?: Request) {
     const users = this.usersService.findAll(role, search);
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
 
-    if (userRole === Role.SUPERUSER || userRole === Role.FLEET_MANAGER) {
+    if (requester?.role === Role.SUPERUSER || requester?.role === Role.FLEET_MANAGER) {
       return users;
     }
 
-    if (userId) {
-      return users.filter((u: any) => u.id === userId);
+    if (requester?.userId) {
+      return users.filter((u: any) => u.id === requester.userId);
     }
 
-    if (userRole) {
-      return users.filter((u: any) => u.role === userRole);
-    }
-
-    return users;
+    return [];
   }
 
   @Get(':id')
@@ -62,16 +55,14 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID (e.g. SU-001)' })
   @ApiResponse({ status: 200, description: 'User found' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  findOne(
-    @Param('id') id: string,
-    @Headers('x-user-role') userRole?: string,
-    @Headers('x-user-id') userId?: string,
-  ) {
-    if (userRole === Role.SUPERUSER || userRole === Role.FLEET_MANAGER) {
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+
+    if (requester.role === Role.SUPERUSER || requester.role === Role.FLEET_MANAGER) {
       return this.usersService.findOne(id);
     }
 
-    if (userId && userId !== id) {
+    if (requester.userId !== id) {
       throw new ForbiddenException('You can only view your own profile');
     }
 
@@ -101,21 +92,19 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiResponse({ status: 200, description: 'User updated successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateUserDto,
-    @Headers('x-user-role') userRole?: string,
-    @Headers('x-user-id') userId?: string,
-  ) {
-    if (userRole === Role.SUPERUSER || userRole === Role.FLEET_MANAGER) {
+  update(@Param('id') id: string, @Body() dto: UpdateUserDto, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+
+    if (requester.role === Role.SUPERUSER || requester.role === Role.FLEET_MANAGER) {
       return this.usersService.update(id, dto);
     }
 
-    if (userId && userId !== id) {
+    if (requester.userId !== id) {
       throw new ForbiddenException('You can only update your own profile');
     }
 
-    return this.usersService.update(id, dto);
+    const { role, status, ...safeDto } = dto;
+    return this.usersService.update(id, safeDto);
   }
 
   @Patch(':id/status')
@@ -136,8 +125,10 @@ export class UsersController {
   @ApiParam({ name: 'id', description: 'User ID' })
   @ApiResponse({ status: 200, description: 'User deleted' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  remove(@Param('id') id: string, @Headers('x-user-id') userId?: string) {
-    if (userId === id) {
+  remove(@Param('id') id: string, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+
+    if (requester.userId === id) {
       throw new ForbiddenException('Cannot delete your own account');
     }
 

@@ -19,7 +19,6 @@
 
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/fleet-manager.js"></script>
-  <script src="../assets/js/workflow-demo.js" defer></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -136,16 +135,6 @@
             </svg>
           </span>
           <span>Notifications</span>
-        </a>
-
-        <a href="subscription.html">
-          <span class="ico">
-            <svg aria-hidden="true" viewBox="0 0 24 24">
-              <rect height="14" rx="2" width="20" x="2" y="5"></rect>
-              <path d="M2 10h20"></path>
-            </svg>
-          </span>
-          <span>Subscription</span>
         </a>
 
         <a href="profile.html">
@@ -361,6 +350,9 @@
 
       var ROLE = "fleet-manager";
 
+
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       var notifications = [];
       var currentFilter = "unread";
 
@@ -1007,7 +999,7 @@
                 {
                   method: "GET",
                   headers: {
-                    "x-user-role": ROLE
+                    "Authorization": "Bearer " + TOKEN
                   }
                 }
               );
@@ -1130,8 +1122,7 @@
                     "Content-Type":
                       "application/json",
 
-                    "x-user-role":
-                      ROLE
+                    "Authorization": "Bearer " + TOKEN
                   },
 
                   body: JSON.stringify({
@@ -1160,7 +1151,7 @@
           );
 
           /*
-           * Reload from backend so the UI reflects
+           * Reload so the UI reflects
            * the actual backend state.
            */
           await loadNotifications();

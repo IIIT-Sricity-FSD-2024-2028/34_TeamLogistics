@@ -7,7 +7,8 @@
     "assignedDriver": "--",
     "status": "Active",
     "location": "Hyderabad",
-    "availability": "Available"
+    "availability": "Available",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1008",
@@ -17,7 +18,8 @@
     "assignedDriver": "--",
     "status": "Active",
     "location": "Chennai",
-    "availability": "Available"
+    "availability": "Available",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1009",
@@ -27,7 +29,8 @@
     "assignedDriver": "--",
     "status": "Maintenance",
     "location": "Mumbai",
-    "availability": "Unavailable"
+    "availability": "Unavailable",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1010",
@@ -37,7 +40,8 @@
     "assignedDriver": "--",
     "status": "Active",
     "location": "Vijayawada",
-    "availability": "Available"
+    "availability": "Available",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1011",
@@ -46,7 +50,8 @@
     "capacity": "20 kg",
     "assignedDriver": "1121212121",
     "status": "Active",
-    "maintenance": ""
+    "maintenance": "",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1012",
@@ -55,7 +60,8 @@
     "capacity": "2 Tons",
     "assignedDriver": "--",
     "status": "Active",
-    "maintenance": "2026-05-01"
+    "maintenance": "2026-05-01",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1013",
@@ -64,7 +70,8 @@
     "capacity": "2 Tons",
     "assignedDriver": "--",
     "status": "Active",
-    "maintenance": "2026-05-04"
+    "maintenance": "2026-05-04",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1014",
@@ -73,7 +80,8 @@
     "capacity": "2 Tons",
     "assignedDriver": "--",
     "status": "Active",
-    "maintenance": "2026-05-01"
+    "maintenance": "2026-05-01",
+    "fleetManagerId": "FM-101"
   },
   {
     "id": "VH-1015",
@@ -82,6 +90,7 @@
     "capacity": "2 Tons",
     "assignedDriver": "--",
     "status": "Active",
-    "maintenance": "2026-05-02"
+    "maintenance": "2026-05-02",
+    "fleetManagerId": "FM-101"
   }
 ]

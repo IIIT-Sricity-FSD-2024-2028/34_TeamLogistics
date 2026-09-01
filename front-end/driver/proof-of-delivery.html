@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -65,7 +65,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <h1 id="page-title">Proof of Delivery</h1>
-          <p id="page-subtitle">Complete delivery using backend data</p>
+          <p id="page-subtitle">Upload proof and complete the delivery</p>
         </div>
 
         <div class="topbar-right">
@@ -371,6 +371,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "driver";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const params = new URLSearchParams(window.location.search);
       const tripId = params.get("id");
 
@@ -415,7 +417,7 @@
         const result = window.DeliverySyncAPI?.Trips?.getAll
           ? await DeliverySyncAPI.Trips.getAll()
           : await fetch("http://localhost:3000/api/trips", {
-              headers: { "x-user-role": ROLE },
+              headers: { "Authorization": "Bearer " + TOKEN },
             }).then((res) => {
               if (!res.ok) throw new Error(`Trips fetch failed with status ${res.status}`);
               return res.json();
@@ -429,7 +431,7 @@
           null;
 
         if (!trip) {
-          throw new Error(`Trip "${tripId}" not found from backend.`);
+          throw new Error(`Trip "${tripId}" not found.`);
         }
 
         return trip;
@@ -444,7 +446,7 @@
           }
 
           return await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(requestId)}`, {
-            headers: { "x-user-role": ROLE },
+            headers: { "Authorization": "Bearer " + TOKEN },
           }).then((res) => {
             if (!res.ok) throw new Error(`Delivery fetch failed with status ${res.status}`);
             return res.json();
@@ -460,7 +462,7 @@
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
           body: JSON.stringify({ status }),
         });

@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
 import { DataStoreService, User } from '../data-store/data-store.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
+
+function sanitize(user: User): User {
+  const { password, ...rest } = user as any;
+  return rest;
+}
 
 @Injectable()
 export class UsersService {
@@ -17,11 +23,11 @@ export class UsersService {
       const q = search.toLowerCase();
 
       users = users.filter((u: any) =>
-        JSON.stringify(u).toLowerCase().includes(q),
+        JSON.stringify(sanitize(u)).toLowerCase().includes(q),
       );
     }
 
-    return users;
+    return users.map(sanitize);
   }
 
   findOne(id: string): User {
@@ -31,7 +37,7 @@ export class UsersService {
       throw new NotFoundException(`User with ID "${id}" not found`);
     }
 
-    return user;
+    return sanitize(user);
   }
 
   create(dto: CreateUserDto): User {
@@ -63,7 +69,7 @@ export class UsersService {
       username,
       name: dto.name,
       email: dto.email,
-      password: dto.password,
+      password: bcrypt.hashSync(dto.password, 10),
       role: dto.role,
       status: dto.status || 'Active',
       phone: dto.phone || '',
@@ -94,7 +100,7 @@ export class UsersService {
       this.store.persistDrivers();
     }
 
-    return user;
+    return sanitize(user);
   }
 
   update(id: string, dto: UpdateUserDto): User {
@@ -121,7 +127,7 @@ export class UsersService {
 
       name: dto.name ?? user.name,
       email: dto.email ?? user.email,
-      password: dto.password ?? user.password,
+      password: dto.password ? bcrypt.hashSync(dto.password, 10) : user.password,
       role: dto.role ?? user.role,
       status: dto.status ?? user.status,
       phone: dto.phone ?? user.phone,
@@ -160,7 +166,7 @@ export class UsersService {
       }
     }
 
-    return updated;
+    return sanitize(updated);
   }
 
   updateStatus(id: string, status: string): User {
@@ -189,7 +195,7 @@ export class UsersService {
       }
     }
 
-    return this.store.users[index];
+    return sanitize(this.store.users[index]);
   }
 
   remove(id: string): { message: string } {

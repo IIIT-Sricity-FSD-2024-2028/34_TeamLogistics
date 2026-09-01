@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -65,7 +65,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <h1>Profile</h1>
-          <p>Backend synced driver information and account settings</p>
+          <p>Your driver information and account settings</p>
         </div>
 
         <div class="topbar-right">
@@ -419,6 +419,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "driver";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
       let sessionUser = null;
       try {
@@ -470,7 +472,7 @@
         }
 
         const response = await fetch("http://localhost:3000/api/drivers", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!response.ok) {
@@ -486,7 +488,7 @@
         }
 
         const response = await fetch("http://localhost:3000/api/trips", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!response.ok) {
@@ -502,7 +504,7 @@
         }
 
         const response = await fetch("http://localhost:3000/api/deliveries", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!response.ok) {
@@ -636,7 +638,7 @@
         const driverId = currentDriver?.id || currentDriver?.driverId;
 
         if (!driverId) {
-          throw new Error("Driver ID missing. Cannot update backend.");
+          throw new Error("Driver ID missing. Cannot update profile.");
         }
 
         const url = `http://localhost:3000/api/drivers/${encodeURIComponent(driverId)}`;
@@ -645,7 +647,7 @@
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
           body: JSON.stringify(payload),
         });
@@ -655,7 +657,7 @@
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              "x-user-role": ROLE,
+              "Authorization": "Bearer " + TOKEN,
             },
             body: JSON.stringify(payload),
           });

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "STL-001",
+    "fleetManagerId": "FM-101",
+    "month": "2026-07",
+    "startDate": "2026-07-01",
+    "endDate": "2026-07-31",
+    "status": "locked",
+    "lockedAt": "2026-08-31T08:57:25.226Z",
+    "lockedBy": "SU-001",
+    "snapshot": {
+      "grossRevenue": 5500,
+      "platformCommission": 550,
+      "driverEarnings": 72,
+      "fleetManagerGross": 4950,
+      "fleetExpenses": 0,
+      "fleetManagerNet": 4878,
+      "completedTrips": 1
+    }
+  },
+  {
+    "id": "STL-002",
+    "fleetManagerId": "FM-101",
+    "month": "2026-08",
+    "startDate": "2026-08-01",
+    "endDate": "2026-08-31",
+    "status": "open"
+  }
+]

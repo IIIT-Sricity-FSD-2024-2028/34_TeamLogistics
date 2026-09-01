@@ -2,85 +2,10 @@
 <html><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><title>Edit Vehicle | DeliverSync</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/brand-logo.css">
-<link href="../assets/css/fleet-manager.css" rel="stylesheet"/><script src="../assets/js/api-client.js"></script><script src="../assets/js/fleet-manager.js"></script><script src="../assets/js/workflow-demo.js" defer></script><style>.field-error{color:#ef4444;font-size:13px;line-height:1.3;margin-top:8px;min-height:17px}.field input.error,.field select.error{border-color:#ef4444 !important;box-shadow:0 0 0 1px rgba(239,68,68,.15)}</style><script src="../assets/js/brand-logo.js"></script>
+<link href="../assets/css/fleet-manager.css" rel="stylesheet"/><script src="../assets/js/api-client.js"></script><script src="../assets/js/fleet-manager.js"></script><style>.field-error{color:#ef4444;font-size:13px;line-height:1.3;margin-top:8px;min-height:17px}.field input.error,.field select.error{border-color:#ef4444 !important;box-shadow:0 0 0 1px rgba(239,68,68,.15)}</style><script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
-<body><div class="fleet-layout"><aside class="sidebar"><div class="brand"><div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Fleet Manager Portal"></div></div><nav class="nav"><a class="" href="dashboard.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="6" rx="1" width="6" x="4" y="4"></rect><rect height="6" rx="1" width="6" x="14" y="4"></rect><rect height="6" rx="1" width="6" x="4" y="14"></rect><rect height="6" rx="1" width="6" x="14" y="14"></rect></svg></span><span>Dashboard</span></a><a class="active" href="vehicles.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 14V9a2 2 0 0 1 2-2h8l3 3h3a2 2 0 0 1 2 2v2"></path><circle cx="7" cy="16.5" r="2"></circle><circle cx="17" cy="16.5" r="2"></circle></svg></span><span>Vehicles</span></a><a class="" href="drivers.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M4 19a5 5 0 0 1 10 0"></path><circle cx="17" cy="9" r="2"></circle><path d="M15 19a4 4 0 0 1 5-3.8"></path></svg></span><span>Drivers</span></a><a class="" href="compliance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path></svg></span><span>Compliance</span></a><a class="" href="trips.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12"></path><path d="M13 6l6 6-6 6"></path></svg></span><span>Trips</span></a><a class="" href="maintenance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 0-5.7-3"></path></svg></span><span>Maintenance</span></a><a class="" href="documents.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 3v5h5"></path></svg></span><span>Documents</span></a><a class="" href="analytics.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V9"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20V12"></path></svg></span><span>Analytics</span></a><a class="" href="notifications.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg></span><span>Notifications</span></a><a class="" href="subscription.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="14" rx="2" width="20" x="2" y="5"></rect><path d="M2 10h20"></path></svg></span><span>Subscription</span></a><a class="" href="profile.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20a8 8 0 0 1 16 0"></path></svg></span><span>Profile</span></a></nav><a class="logout" href="../login.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside>
-<main class="main"><div class="topbar"><div class="pagehead"><h1>Edit Vehicle</h1><p>Update asset details and availability</p></div><div class="toptools"><a aria-label="Notifications" class="iconbox iconlink notif-link" href="notifications.html"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span class="dot">3</span></a><div class="avatar" data-current-user-avatar></div><div class="usertext"><strong data-current-user-name></strong><span data-current-user-role></span></div></div></div><div class="content"><a class="muted" href="vehicles.html">← Back</a><section class="panel" style="margin-top:14px"><div class="panel-head"><div class="panel-title">Edit Vehicle</div></div><div class="panel-body"><div class="form-grid"><div class="field"><label>Plate Number</label><input id="edit-vehicle-plate" type="text" value="TN09AB2345"/><div class="field-error" id="edit-vehicle-plate-error"></div></div><div class="field"><label>Status</label><select id="edit-vehicle-status"><option>Active</option><option>Maintenance</option><option>Blocked</option><option>On Trip</option></select></div><div class="field"><label>Last Maintenance Date</label><input id="edit-vehicle-maintenance" type="date" value="2026-03-10"/></div><div class="field"><label>Availability</label><select id="edit-vehicle-availability"><option>Available</option><option>Unavailable</option></select></div></div><div class="footer-actions"><button class="btn btn-ghost">Cancel</button><button class="btn btn-yellow">Update Vehicle</button></div></div></section></div></main></div><script>
-(function(){
-  const params = new URLSearchParams(location.search);
-  const vehicleId = params.get('id');
-  const plateInput = document.getElementById('edit-vehicle-plate');
-  const statusInput = document.getElementById('edit-vehicle-status');
-  const maintenanceInput = document.getElementById('edit-vehicle-maintenance');
-  const availabilityInput = document.getElementById('edit-vehicle-availability');
-  const plateError = document.getElementById('edit-vehicle-plate-error');
-  const buttons = document.querySelectorAll('.footer-actions button');
-  const cancelBtn = buttons[0];
-  const saveBtn = buttons[1];
-
-  function readState(){
-    if(window.FleetManagerData && window.FleetManagerData.readCoreState){
-      return window.FleetManagerData.readCoreState() || {vehicles:[]};
-    }
-    return {vehicles:[]};
-  }
-  function writeState(state){
-    if(window.FleetManagerData && window.FleetManagerData.writeCoreState){
-      window.FleetManagerData.writeCoreState(state);
-    }
-  }
-  function clearPlateError(){
-    if(plateError) plateError.textContent='';
-    if(plateInput) plateInput.classList.remove('error');
-  }
-  function setPlateError(message){
-    if(plateError) plateError.textContent=message;
-    if(plateInput) plateInput.classList.add('error');
-  }
-
-  const state = readState();
-  state.vehicles = Array.isArray(state.vehicles) ? state.vehicles : [];
-  const fallbackVehicles = (window.FleetManagerData && Array.isArray(window.FleetManagerData.vehicles)) ? window.FleetManagerData.vehicles : [];
-  let current = state.vehicles.find(v => String(v.id) === String(vehicleId));
-  if(!current) current = fallbackVehicles.find(v => String(v.id) === String(vehicleId)) || fallbackVehicles[0] || {};
-
-  if(plateInput) plateInput.value = String(current.plate || '').replace(/[^A-Za-z0-9]/g,'').toUpperCase() || 'TN09AB2345';
-  if(statusInput) statusInput.value = current.status || 'Active';
-  if(maintenanceInput) maintenanceInput.value = current.maintenance || '2026-03-10';
-  if(availabilityInput) availabilityInput.value = current.availability || (String(current.status||'').toLowerCase()==='active' ? 'Available' : 'Unavailable');
-
-  if(cancelBtn) cancelBtn.addEventListener('click', function(e){ e.preventDefault(); location.href='vehicles.html'; });
-  if(plateInput) plateInput.addEventListener('input', clearPlateError);
-
-  if(saveBtn) saveBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    clearPlateError();
-    const plateValue = String(plateInput?.value || '').trim().toUpperCase();
-    if(!/^[A-Z]{2}\d{2}[A-Z]{2}\d{4}$/.test(plateValue)){
-      setPlateError('Enter a valid plate number like TN32AV1234.');
-      return;
-    }
-    const updated = {
-      ...current,
-      id: current.id || vehicleId,
-      plate: plateValue,
-      status: statusInput?.value || current.status || 'Active',
-      maintenance: maintenanceInput?.value || current.maintenance || '',
-      availability: availabilityInput?.value || current.availability || 'Available'
-    };
-
-    const index = state.vehicles.findIndex(v => String(v.id) === String(updated.id));
-    if(index >= 0) state.vehicles[index] = {...state.vehicles[index], ...updated};
-    else state.vehicles.push(updated);
-    writeState(state);
-
-    if(window.FleetManagerData && Array.isArray(window.FleetManagerData.vehicles)){
-      const staticIndex = window.FleetManagerData.vehicles.findIndex(v => String(v.id) === String(updated.id));
-      if(staticIndex >= 0) window.FleetManagerData.vehicles[staticIndex] = {...window.FleetManagerData.vehicles[staticIndex], ...updated};
-    }
-
-    location.href='vehicles.html';
-  });
-})();
-</script><script src="../assets/js/fleet-backend-sync.js"></script></body></html>
+<body><div class="fleet-layout"><aside class="sidebar"><div class="brand"><div class="ds-brand-logo" data-href="dashboard.html" data-size="sm" data-sub="Fleet Manager Portal"></div></div><nav class="nav"><a class="" href="dashboard.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><rect height="6" rx="1" width="6" x="4" y="4"></rect><rect height="6" rx="1" width="6" x="14" y="4"></rect><rect height="6" rx="1" width="6" x="4" y="14"></rect><rect height="6" rx="1" width="6" x="14" y="14"></rect></svg></span><span>Dashboard</span></a><a class="active" href="vehicles.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 14V9a2 2 0 0 1 2-2h8l3 3h3a2 2 0 0 1 2 2v2"></path><circle cx="7" cy="16.5" r="2"></circle><circle cx="17" cy="16.5" r="2"></circle></svg></span><span>Vehicles</span></a><a class="" href="drivers.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M4 19a5 5 0 0 1 10 0"></path><circle cx="17" cy="9" r="2"></circle><path d="M15 19a4 4 0 0 1 5-3.8"></path></svg></span><span>Drivers</span></a><a class="" href="compliance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"></path></svg></span><span>Compliance</span></a><a class="" href="trips.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h12"></path><path d="M13 6l6 6-6 6"></path></svg></span><span>Trips</span></a><a class="" href="maintenance.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 3 5.7l-7.4 7.4a2 2 0 1 1-2.8-2.8l7.4-7.4a4 4 0 0 0-5.7-3"></path></svg></span><span>Maintenance</span></a><a class="" href="documents.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3h6l5 5v13H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M14 3v5h5"></path></svg></span><span>Documents</span></a><a class="" href="analytics.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20V9"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20V12"></path></svg></span><span>Analytics</span></a><a class="" href="notifications.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg></span><span>Notifications</span></a><a class="" href="profile.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 20a8 8 0 0 1 16 0"></path></svg></span><span>Profile</span></a></nav><a class="logout" href="../login.html"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span><span>Logout</span></a></aside>
+<main class="main"><div class="topbar"><div class="pagehead"><h1>Edit Vehicle</h1><p>Update asset details and availability</p></div><div class="toptools"><a aria-label="Notifications" class="iconbox iconlink notif-link" href="notifications.html"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 17H5l1.3-1.3A2 2 0 0 0 7 14.3V10a5 5 0 1 1 10 0v4.3a2 2 0 0 0 .6 1.4L19 17h-4"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg><span class="dot">3</span></a><div class="avatar" data-current-user-avatar></div><div class="usertext"><strong data-current-user-name></strong><span data-current-user-role></span></div></div></div><div class="content">
+</div></main></div>
+<script src="../assets/js/fleet-backend-sync.js"></script></body></html>

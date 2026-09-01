@@ -118,28 +118,26 @@ window.FleetManagerData.getFleetManagerProfile = function(){
   const initials = (fullName || 'FM').trim().split(/\s+/).filter(Boolean).slice(0,2).map(part => part[0] || '').join('').toUpperCase() || 'FM';
   return { user, fullName, companyName, companyAddress, numberOfVehicles, phone, email, initials };
 };
+window.FleetManagerData.updateNotificationBadge = function(){
+  var api = window.DeliverySyncAPI;
+  if(!api || !api.Notifications || typeof api.Notifications.getAll !== 'function') return;
+
+  api.Notifications.getAll().then(function(list){
+    var count = (list || []).filter(function(n){ return !(n.read === true || String(n.status||'').toLowerCase()==='read'); }).length;
+    document.querySelectorAll('.toptools .dot, .toptools .badge-count, .notif-link .dot').forEach(function(el){
+      el.textContent = String(count);
+      el.style.display = count > 0 ? '' : 'none';
+    });
+  }).catch(function(){});
+};
+
 window.FleetManagerData.applyFleetManagerProfile = function(){
   var profile = window.FleetManagerData.getFleetManagerProfile();
   if(!profile) return;
   var fullName = profile.fullName, companyName = profile.companyName, companyAddress = profile.companyAddress;
   var numberOfVehicles = profile.numberOfVehicles, phone = profile.phone, email = profile.email, initials = profile.initials;
 
-
-  (function(){
-    var count = 0;
-    try {
-      var wfNotifs = JSON.parse(localStorage.getItem('dsWorkflowNotifications') || '[]') || [];
-      count += wfNotifs.filter(function(n){ return n.to === 'fleet-manager' || n.to === 'all'; }).length;
-    } catch(e){}
-    try {
-      var st = window.FleetManagerData.readCoreState() || {};
-      if(st.superuser && Array.isArray(st.superuser.notifications)) count = count || st.superuser.notifications.length;
-    } catch(e){}
-    document.querySelectorAll('.toptools .dot, .toptools .badge-count, .notif-link .dot').forEach(function(el){
-      el.textContent = count || '0';
-      el.style.display = count > 0 ? '' : 'none';
-    });
-  })();
+  window.FleetManagerData.updateNotificationBadge();
 
   document.querySelectorAll('#fm-profile-heading').forEach(function(el){ el.textContent = fullName; });
   document.querySelectorAll('#fm-profile-avatar').forEach(function(el){ el.textContent = initials; });

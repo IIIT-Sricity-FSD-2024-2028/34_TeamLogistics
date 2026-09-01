@@ -1,0 +1,74 @@
+[
+  {
+    "id": "PAYOUT-001",
+    "tripId": "TRP-2026-023",
+    "deliveryId": "DR-2026-023",
+    "driverName": "Raghav Reddy",
+    "fleetManagerId": "FM-101",
+    "baseFare": 50,
+    "distanceFare": 0,
+    "weightSurcharge": 50,
+    "totalAmount": 100,
+    "createdAt": "2026-08-31T06:16:50.232Z"
+  },
+  {
+    "id": "PAYOUT-002",
+    "tripId": "TRP-2026-024",
+    "deliveryId": "DR-2026-024",
+    "driverName": "Raghav Reddy",
+    "fleetManagerId": "FM-101",
+    "baseFare": 60,
+    "distanceFare": 0,
+    "weightSurcharge": 30,
+    "totalAmount": 90,
+    "createdAt": "2026-08-31T06:17:19.592Z"
+  },
+  {
+    "id": "PAYOUT-003",
+    "tripId": "TRP-2026-026",
+    "deliveryId": "DR-2026-026",
+    "driverName": "Raghav Reddy",
+    "fleetManagerId": "FM-101",
+    "baseFare": 60,
+    "distanceFare": 0,
+    "weightSurcharge": 12,
+    "totalAmount": 72,
+    "createdAt": "2026-08-31T08:55:28.331Z"
+  },
+  {
+    "id": "PAYOUT-004",
+    "tripId": "TRP-2026-027",
+    "deliveryId": "DR-2026-027",
+    "driverName": "Raghav Reddy",
+    "fleetManagerId": "FM-101",
+    "baseFare": 60,
+    "distanceFare": 0,
+    "weightSurcharge": 12,
+    "totalAmount": 72,
+    "createdAt": "2026-08-31T08:55:28.436Z"
+  },
+  {
+    "id": "PAYOUT-005",
+    "tripId": "TRP-2026-028",
+    "deliveryId": "DR-2026-028",
+    "driverName": "Raghav Reddy",
+    "fleetManagerId": "FM-101",
+    "baseFare": 60,
+    "distanceFare": 0,
+    "weightSurcharge": 12,
+    "totalAmount": 72,
+    "createdAt": "2026-08-31T08:55:28.551Z"
+  },
+  {
+    "id": "PAYOUT-006",
+    "tripId": "TRP-2026-029",
+    "deliveryId": "DR-2026-029",
+    "driverName": "Raghav Reddy",
+    "fleetManagerId": "FM-101",
+    "baseFare": 60,
+    "distanceFare": 0,
+    "weightSurcharge": 12,
+    "totalAmount": 72,
+    "createdAt": "2026-07-15T08:55:49.613Z"
+  }
+]

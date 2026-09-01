@@ -172,12 +172,13 @@
     ['System Configuration','system-configuration.html','gear'],
     ['Reports','reports.html','report'],
     ['Transactions','transactions.html','doc'],
+    ['Documents','documents.html','doc'],
     ['Notifications','notifications.html','bell'],
     ['Profile','profile.html','profile']
   ];
 
   function metric(label,val,delta){
-    return `<div class="content-card kpi"><div class="label">${label}</div><div class="value">${val}</div><div class="delta">↗ ${delta}</div></div>`;
+    return `<div class="content-card kpi"><div class="label">${label}</div><div class="value">${val}</div>${delta ? `<div class="delta">↗ ${delta}</div>` : ''}</div>`;
   }
 
   function barCard(title, values, labels, yTicks, cls=''){
@@ -216,7 +217,7 @@
             <div class="topbar-right">
   <button class="icon-btn" id="bellBtn">
     ${icon.bell}
-    <span class="badge-count">${s.superuser.notifications.length}</span>
+    <span class="badge-count" id="topbarNotifBadge" style="display:none">0</span>
   </button>
 
   <button class="avatar-mini" id="profileBtn" data-current-user-avatar></button>
@@ -229,7 +230,568 @@
     $('#bellBtn').onclick = ()=>{ location.href='notifications.html'; };
     $('#profileBtn').onclick = ()=>{ location.href='profile.html'; };
     if(window.DeliverSyncBrand) window.DeliverSyncBrand.init();
+
+    (async function loadNotifBadge(){
+      try {
+        const notifications = await DeliverySyncAPI.Notifications.getAll();
+        const unread = (notifications || []).filter(n => !n.read).length;
+        const badge = document.getElementById('topbarNotifBadge');
+
+        if (badge) {
+          badge.textContent = String(unread);
+          badge.style.display = unread > 0 ? '' : 'none';
+        }
+      } catch (error) {
+        console.error('Failed to load notification count from backend:', error);
+      }
+    })();
+
     return s;
+  }
+
+  function showModal(innerHtml){
+    let overlay = document.getElementById('suModalOverlay');
+
+    if(!overlay){
+      overlay = document.createElement('div');
+      overlay.id = 'suModalOverlay';
+      overlay.className = 'modal-overlay';
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function(e){
+        if(e.target === overlay) closeModal();
+      });
+    }
+
+    overlay.innerHTML = `<div style="max-height:90vh;overflow:auto;width:100%">${innerHtml}</div>`;
+    overlay.style.display = 'flex';
+
+    return overlay;
+  }
+
+  function closeModal(){
+    const overlay = document.getElementById('suModalOverlay');
+    if(overlay) overlay.style.display = 'none';
+  }
+
+  async function openRequestDetailModal(requestId){
+    showModal(`
+      <div class="content-card details-card modal-detail-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">Request Details</div>
+          <button class="close-icon" id="closeRequestDetailModal">×</button>
+        </div>
+        <div class="details-body modal-detail-body one-col" id="requestDetailModalBody">
+          <div style="text-align:center;color:#b9b9b9;padding:24px">Loading request...</div>
+        </div>
+        <div class="detail-footer"><button class="btn-yellow close-wide" id="closeRequestDetailModalBtn" type="button">Close</button></div>
+      </div>
+    `);
+
+    $('#closeRequestDetailModal').onclick = closeModal;
+    $('#closeRequestDetailModalBtn').onclick = closeModal;
+
+    try {
+      const raw = await DeliverySyncAPI.Deliveries.getOne(requestId);
+      const r = {
+        id: raw.id || requestId,
+        customer: raw.customer || '--',
+        contact: raw.contact || '--',
+        pickup: raw.pickup || '--',
+        dropoff: raw.dropoff || '--',
+        package: raw.package || '--',
+        type: raw.type || 'Standard',
+        requestTime: raw.requestTime || '--',
+        status: raw.status || 'Pending'
+      };
+
+      $('#requestDetailModalBody').innerHTML = `
+        <div class="detail-block full"><div class="detail-label">Request ID</div><div class="detail-main">${icon.doc}${r.id}</div></div>
+        <div class="detail-block full"><div class="detail-label">Client Company</div><div class="detail-main">${icon.user}${r.customer}</div><div class="detail-sub">${r.contact}</div></div>
+        <div class="detail-block full"><div class="detail-label">Pickup Address</div><div class="detail-main">${icon.map}${r.pickup}</div></div>
+        <div class="detail-block full"><div class="detail-label">Drop Address</div><div class="detail-main">${icon.map}${r.dropoff}</div></div>
+        <div class="detail-block full"><div class="detail-label">Package Details</div><div class="detail-main">${icon.package}${r.package}</div></div>
+        <div class="detail-block full"><div class="detail-label">Delivery Type</div><div class="detail-main"><span class="small-pill">${r.type}</span></div></div>
+        <div class="detail-block full"><div class="detail-label">Request Time</div><div class="detail-main">${icon.calendar}${r.requestTime}</div></div>
+        <div class="detail-block full"><div class="detail-label">Current Status</div><div class="detail-main">${icon.map}<span>${r.status}</span></div></div>
+      `;
+    } catch(error) {
+      console.error('Failed to load request from backend:', error);
+      $('#requestDetailModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:24px">Failed to load request details.</div>`;
+    }
+  }
+
+  async function openBlockOrderModal(requestId, onDone){
+    showModal(`
+      <div class="content-card details-card modal-detail-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">Block Order</div>
+          <button class="close-icon" id="closeBlockModal">×</button>
+        </div>
+        <div class="details-body modal-detail-body one-col" id="blockOrderModalBody">
+          <div style="text-align:center;color:#b9b9b9;padding:30px">Loading order details...</div>
+        </div>
+        <div class="detail-footer">
+          <button class="btn-dark close-wide" id="cancelBlockModal" type="button">Cancel</button>
+          <button class="btn-yellow close-wide" id="confirmBlockOrderModal" type="button">Block Order</button>
+        </div>
+      </div>
+    `);
+
+    $('#closeBlockModal').onclick = closeModal;
+    $('#cancelBlockModal').onclick = closeModal;
+
+    try {
+      const r = await DeliverySyncAPI.Deliveries.getOne(requestId);
+
+      $('#blockOrderModalBody').innerHTML = `
+        <div class="detail-block full"><div class="detail-label">Request ID</div><div class="detail-main">${icon.doc}${r.id || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Client Company</div><div class="detail-main">${icon.user}${r.customer || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Pickup Address</div><div class="detail-main">${icon.map}${r.pickup || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Drop Address</div><div class="detail-main">${icon.map}${r.dropoff || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Current Status</div><div class="detail-main"><span>${r.status || '-'}</span></div></div>
+        <div class="field">
+          <label>Reason for Blocking</label>
+          <textarea id="blockReasonModal" style="width:100%;min-height:140px;resize:vertical;display:block" placeholder="Enter reason for blocking this order"></textarea>
+          <div class="error" id="blockReasonModalError"></div>
+        </div>
+      `;
+
+      $('#confirmBlockOrderModal').onclick = async ()=>{
+        const reason = ($('#blockReasonModal').value || '').trim();
+
+        if(!reason){
+          $('#blockReasonModalError').textContent = 'Please enter reason for blocking';
+          return;
+        }
+
+        try {
+          await DeliverySyncAPI.Deliveries.block(r.id, reason);
+          showToast('Order blocked successfully');
+          closeModal();
+          if(onDone) onDone();
+        } catch(error) {
+          console.error('Failed to block order:', error);
+          $('#blockReasonModalError').textContent = 'Failed to block order';
+        }
+      };
+    } catch(error) {
+      console.error('Failed to load order:', error);
+      $('#blockOrderModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:30px">Failed to load order details.</div>`;
+    }
+  }
+
+  async function openUnblockOrderModal(requestId, onDone){
+    showModal(`
+      <div class="content-card details-card modal-detail-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">Unblock Order</div>
+          <button class="close-icon" id="closeUnblockModal">×</button>
+        </div>
+        <div class="details-body modal-detail-body one-col" id="unblockOrderModalBody">
+          <div style="text-align:center;color:#b9b9b9;padding:30px">Loading order details...</div>
+        </div>
+        <div class="detail-footer">
+          <button class="btn-dark close-wide" id="cancelUnblockModal" type="button">Cancel</button>
+          <button class="btn-yellow close-wide" id="confirmUnblockOrderModal" type="button">Unblock Order</button>
+        </div>
+      </div>
+    `);
+
+    $('#closeUnblockModal').onclick = closeModal;
+    $('#cancelUnblockModal').onclick = closeModal;
+
+    try {
+      const r = await DeliverySyncAPI.Deliveries.getOne(requestId);
+
+      $('#unblockOrderModalBody').innerHTML = `
+        <div class="detail-block full"><div class="detail-label">Request ID</div><div class="detail-main">${icon.doc}${r.id || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Client Company</div><div class="detail-main">${icon.user}${r.customer || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Pickup Address</div><div class="detail-main">${icon.map}${r.pickup || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Drop Address</div><div class="detail-main">${icon.map}${r.dropoff || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Current Status</div><div class="detail-main"><span>${r.status || '-'}</span></div></div>
+        <div class="field">
+          <label>Reason for Unblocking</label>
+          <textarea id="unblockReasonModal" style="width:100%;min-height:140px;resize:vertical;display:block" placeholder="Enter reason for unblocking this order"></textarea>
+          <div class="error" id="unblockReasonModalError"></div>
+        </div>
+      `;
+
+      $('#confirmUnblockOrderModal').onclick = async ()=>{
+        const reason = ($('#unblockReasonModal').value || '').trim();
+
+        if(!reason){
+          $('#unblockReasonModalError').textContent = 'Please enter reason for unblocking';
+          return;
+        }
+
+        try {
+          await DeliverySyncAPI.Deliveries.unblock(r.id, reason);
+          showToast('Order unblocked successfully');
+          closeModal();
+          if(onDone) onDone();
+        } catch(error) {
+          console.error('Failed to unblock order:', error);
+          $('#unblockReasonModalError').textContent = 'Failed to unblock order';
+        }
+      };
+    } catch(error) {
+      console.error('Failed to load order:', error);
+      $('#unblockOrderModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:30px">Failed to load order details.</div>`;
+    }
+  }
+
+  async function openTripDetailModal(tripId){
+    showModal(`
+      <div class="content-card details-card modal-detail-card trip-modal-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">Trip Details</div>
+          <button class="close-icon" id="closeTripModal">×</button>
+        </div>
+        <div class="details-body modal-detail-body" id="tripDetailModalBody">
+          <div style="text-align:center;color:#b9b9b9;padding:24px;grid-column:1/-1">Loading trip...</div>
+        </div>
+        <div class="detail-footer"><button class="btn-yellow close-wide" id="closeTripModalBtn" type="button">Close</button></div>
+      </div>
+    `);
+
+    $('#closeTripModal').onclick = closeModal;
+    $('#closeTripModalBtn').onclick = closeModal;
+
+    try {
+      const raw = await DeliverySyncAPI.Trips.getOne(tripId);
+      const r = {
+        id: raw.id || tripId,
+        assignment: raw.assignment || '--',
+        driver: raw.driver || '--',
+        phone: raw.phone || '--',
+        vehicle: raw.vehicle || '--',
+        vehicleType: raw.vehicleType || '--',
+        pickup: raw.pickup || '--',
+        destination: raw.destination || '--',
+        startTime: raw.startTime || '--',
+        distance: raw.distance || '--',
+        status: raw.status || '--'
+      };
+
+      $('#tripDetailModalBody').innerHTML = `
+        <div class="detail-block"><div class="detail-label">Trip ID</div><div class="detail-main">${icon.vehicle}${r.id}</div></div>
+        <div class="detail-block"><div class="detail-label">Assignment ID</div><div class="detail-main">${icon.doc}${r.assignment}</div></div>
+        <div class="detail-block full"><div class="detail-label">Driver Information</div><div class="value-box"><div class="detail-main">${icon.user}${r.driver}</div><div class="detail-sub">${r.phone}</div></div></div>
+        <div class="detail-block full"><div class="detail-label">Vehicle Details</div><div class="value-box"><div class="detail-main">${icon.vehicle}${r.vehicle}</div><div class="detail-sub">${r.vehicleType}</div></div></div>
+        <div class="detail-block full"><div class="detail-label">Pickup Location</div><div class="detail-main">${icon.map}${r.pickup}</div></div>
+        <div class="detail-block full"><div class="detail-label">Destination</div><div class="detail-main">${icon.map}${r.destination}</div></div>
+        <div class="detail-block"><div class="detail-label">Start Time</div><div class="detail-main">${icon.calendar}${r.startTime}</div></div>
+        <div class="detail-block"><div class="detail-label">Distance</div><div class="detail-main"><span class="small-pill">${r.distance}</span></div></div>
+        <div class="detail-block full"><div class="detail-label">Trip Status</div><div class="detail-main">${icon.vehicle}${r.status}</div></div>
+      `;
+    } catch(error) {
+      console.error('Failed to load trip from backend:', error);
+      $('#tripDetailModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:24px;grid-column:1/-1">Failed to load trip details.</div>`;
+    }
+  }
+
+  function openReassignDriverModal(tripId, onDone){
+    showModal(`
+      <div class="content-card form-card" style="max-width:460px;margin:0 auto">
+        <div class="details-top">
+          <div class="details-title">Reassign Driver</div>
+          <button class="close-icon" id="closeReassignModal">×</button>
+        </div>
+        <div style="padding:20px">
+          <div class="field">
+            <label>Select Driver</label>
+            <select id="reassignModalDriver"><option value="">Loading drivers...</option></select>
+            <div class="error" id="reassignModalError"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-dark" id="cancelReassignModal" type="button">Cancel</button>
+            <button class="btn-yellow" id="saveReassignModal" type="button">Save</button>
+          </div>
+        </div>
+      </div>
+    `);
+
+    $('#closeReassignModal').onclick = closeModal;
+    $('#cancelReassignModal').onclick = closeModal;
+
+    (async ()=>{
+      const sel = $('#reassignModalDriver');
+
+      try {
+        const drivers = await DeliverySyncAPI.Drivers.getAll();
+
+        const availableDrivers = drivers.filter(d => {
+          const status = String(d.status || '').toLowerCase();
+          return status.includes('available') || status.includes('active') || !status;
+        });
+
+        sel.innerHTML = `
+          <option value="">Choose driver</option>
+          ${availableDrivers.map(d => `<option value="${d.name || d.driver || d.id}">${d.name || d.driver || d.id}</option>`).join('')}
+        `;
+      } catch(error) {
+        console.error('Failed to load drivers from backend:', error);
+        sel.innerHTML = `<option value="">Failed to load drivers</option>`;
+      }
+    })();
+
+    $('#saveReassignModal').onclick = async ()=>{
+      const sel = $('#reassignModalDriver');
+      const name = (sel?.value || '').trim();
+      const err = $('#reassignModalError');
+      if(err) err.textContent = '';
+
+      if(!name){
+        if(err) err.textContent = 'Please select a driver';
+        return;
+      }
+
+      try {
+        await DeliverySyncAPI.Trips.reassign(tripId, name);
+        showToast('Driver reassigned successfully');
+        closeModal();
+        if(onDone) onDone();
+      } catch(error) {
+        console.error('Failed to reassign driver:', error);
+        if(err) err.textContent = 'Failed to reassign driver';
+      }
+    };
+  }
+
+  function openAddVehicleModal(onDone){
+    const today = new Date().toISOString().split('T')[0];
+
+    showModal(`
+      <div class="content-card form-card standalone-modal" style="max-width:760px;margin:0 auto">
+        <div class="details-top">
+          <div class="details-title">Add Vehicle</div>
+          <button class="close-icon" id="closeAddVehicleModal">×</button>
+        </div>
+        <div style="padding:20px">
+          <div class="grid-2" style="gap:18px">
+            <div class="field"><label>Plate Number</label><input id="plateNumberModal" placeholder="e.g. TN09AB1234"><div class="error" id="err-plateNumberModal"></div></div>
+            <div class="field"><label>Type</label>
+              <select id="vehicleTypeModal">
+                <option value="">Select type</option>
+                <option>Mini Truck</option><option>Van</option><option>Truck</option><option>Bike</option><option>SUV</option><option>Cargo Van</option>
+              </select>
+              <div class="error" id="err-vehicleTypeModal"></div>
+            </div>
+          </div>
+          <div class="grid-2" style="gap:18px">
+            <div class="field"><label>Capacity</label><input id="capacityModal" placeholder="e.g. 2 Tons"></div>
+            <div class="field"><label>Status</label>
+              <select id="vehicleStatusModal"><option>Active</option><option>On Trip</option><option>Maintenance</option><option>Blocked</option></select>
+            </div>
+          </div>
+          <div class="field"><label>Last Maintenance</label><input id="lastMaintenanceModal" type="date" max="${today}"><div class="error" id="err-lastMaintenanceModal"></div></div>
+          <div class="form-actions">
+            <button class="btn-dark" id="cancelAddVehicleModal" type="button">Cancel</button>
+            <button class="btn-yellow" id="saveVehicleModalBtn" type="button">Add Vehicle</button>
+          </div>
+        </div>
+      </div>
+    `);
+
+    $('#closeAddVehicleModal').onclick = closeModal;
+    $('#cancelAddVehicleModal').onclick = closeModal;
+
+    $('#saveVehicleModalBtn').onclick = async function(){
+      const plate = $('#plateNumberModal').value.trim();
+      const type = $('#vehicleTypeModal').value.trim();
+      const capacity = $('#capacityModal').value.trim();
+      const status = $('#vehicleStatusModal').value;
+      const lastMaintenance = $('#lastMaintenanceModal').value.trim();
+
+      $('#err-plateNumberModal').textContent = '';
+      $('#err-vehicleTypeModal').textContent = '';
+      $('#err-lastMaintenanceModal').textContent = '';
+
+      let ok = true;
+      if(!plate){ $('#err-plateNumberModal').textContent = 'Plate number is required'; ok = false; }
+      if(!type){ $('#err-vehicleTypeModal').textContent = 'Vehicle type is required'; ok = false; }
+      if(lastMaintenance && lastMaintenance > today){ $('#err-lastMaintenanceModal').textContent = 'Future maintenance date is not allowed'; ok = false; }
+      if(!ok) return;
+
+      try {
+        await DeliverySyncAPI.Vehicles.create({ plate, type, capacity, status, assignedDriver: '', maintenance: lastMaintenance });
+        showToast('Vehicle added successfully');
+        closeModal();
+        if(onDone) onDone();
+      } catch(error) {
+        console.error('Failed to add vehicle:', error);
+        alert('Failed to add vehicle');
+      }
+    };
+  }
+
+  async function openVehicleDetailsModal(vehicleId){
+    showModal(`
+      <div class="content-card details-card modal-detail-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">Vehicle Details</div>
+          <button class="close-icon" id="closeVehicleDetailsModal">×</button>
+        </div>
+        <div class="details-body modal-detail-body one-col" id="vehicleDetailsModalBody">
+          <div style="text-align:center;color:#b9b9b9;padding:30px">Loading vehicle details...</div>
+        </div>
+        <div class="detail-footer"><button class="btn-yellow close-wide" id="closeVehicleDetailsModalBtn" type="button">Close</button></div>
+      </div>
+    `);
+
+    $('#closeVehicleDetailsModal').onclick = closeModal;
+    $('#closeVehicleDetailsModalBtn').onclick = closeModal;
+
+    try {
+      const v = await DeliverySyncAPI.Vehicles.getOne(vehicleId);
+      const statusValue = String((v || {}).status || '').toLowerCase();
+      const availability = (v || {}).availability || (statusValue.includes('active') ? 'Available' : 'Unavailable');
+
+      $('#vehicleDetailsModalBody').innerHTML = `
+        <div class="detail-block full"><div class="detail-label">Vehicle ID</div><div class="detail-main">${v.id || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Plate Number</div><div class="detail-main">${v.plate || v.plateNumber || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Type</div><div class="detail-main">${v.type || '-'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Status</div><div class="detail-main"><span class="status-pill ${statusClass(v.status)}">${v.status || '-'}</span></div></div>
+        <div class="detail-block full"><div class="detail-label">Last Maintenance</div><div class="detail-main">${v.maintenance || v.lastMaintenance || '—'}</div></div>
+        <div class="detail-block full"><div class="detail-label">Availability</div><div class="detail-main"><span class="status-pill ${availability === 'Available' ? 'active' : 'blocked'}">${availability}</span></div></div>
+      `;
+    } catch(error) {
+      console.error('Failed to load vehicle details:', error);
+      $('#vehicleDetailsModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:30px">Failed to load vehicle details.</div>`;
+    }
+  }
+
+  async function openEditVehicleModal(vehicleId, onDone){
+    const today = new Date().toISOString().split('T')[0];
+
+    showModal(`
+      <div class="content-card form-card standalone-modal" style="max-width:760px;margin:0 auto">
+        <div class="details-top">
+          <div class="details-title">Edit Vehicle</div>
+          <button class="close-icon" id="closeEditVehicleModal">×</button>
+        </div>
+        <div id="editVehicleModalBody" style="padding:20px">
+          <div style="text-align:center;color:#b9b9b9;padding:30px">Loading vehicle...</div>
+        </div>
+      </div>
+    `);
+
+    $('#closeEditVehicleModal').onclick = closeModal;
+
+    try {
+      const v = await DeliverySyncAPI.Vehicles.getOne(vehicleId);
+
+      $('#editVehicleModalBody').innerHTML = `
+        <div class="grid-2" style="gap:18px">
+          <div class="field"><label>Vehicle ID</label><input id="vehicleIdModal" value="${v.id || ''}" disabled></div>
+          <div class="field"><label>Plate Number</label><input id="plateNumberEditModal" value="${v.plate || v.plateNumber || ''}"><div class="error" id="err-plateNumberEditModal"></div></div>
+        </div>
+        <div class="grid-2" style="gap:18px">
+          <div class="field"><label>Type</label><input id="vehicleTypeEditModal" value="${v.type || ''}"><div class="error" id="err-vehicleTypeEditModal"></div></div>
+          <div class="field"><label>Status</label>
+            <select id="vehicleStatusEditModal">
+              <option ${v.status === 'Active' ? 'selected' : ''}>Active</option>
+              <option ${v.status === 'On Trip' ? 'selected' : ''}>On Trip</option>
+              <option ${v.status === 'Maintenance' ? 'selected' : ''}>Maintenance</option>
+              <option ${v.status === 'Blocked' ? 'selected' : ''}>Blocked</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Last Maintenance</label><input id="lastMaintenanceEditModal" type="date" value="${v.maintenance || v.lastMaintenance || ''}" max="${today}"><div class="error" id="err-lastMaintenanceEditModal"></div></div>
+        <div class="form-actions">
+          <button class="btn-dark" id="cancelEditVehicleModal" type="button">Cancel</button>
+          <button class="btn-yellow" id="saveEditVehicleModalBtn" type="button">Save Changes</button>
+        </div>
+      `;
+
+      $('#cancelEditVehicleModal').onclick = closeModal;
+
+      $('#saveEditVehicleModalBtn').onclick = async function(){
+        const plate = $('#plateNumberEditModal').value.trim();
+        const type = $('#vehicleTypeEditModal').value.trim();
+        const status = $('#vehicleStatusEditModal').value;
+        const lastMaintenance = $('#lastMaintenanceEditModal').value.trim();
+
+        $('#err-plateNumberEditModal').textContent = '';
+        $('#err-vehicleTypeEditModal').textContent = '';
+        $('#err-lastMaintenanceEditModal').textContent = '';
+
+        let ok = true;
+        if(!plate){ $('#err-plateNumberEditModal').textContent = 'Plate number is required'; ok = false; }
+        if(!type){ $('#err-vehicleTypeEditModal').textContent = 'Vehicle type is required'; ok = false; }
+        if(!lastMaintenance){ $('#err-lastMaintenanceEditModal').textContent = 'Last maintenance date is required'; ok = false; }
+        if(lastMaintenance && lastMaintenance > today){ $('#err-lastMaintenanceEditModal').textContent = 'Future date is not allowed'; ok = false; }
+        if(!ok) return;
+
+        try {
+          await DeliverySyncAPI.Vehicles.update(v.id, {
+            plate, type, status,
+            capacity: v.capacity || '',
+            assignedDriver: v.assignedDriver || '',
+            maintenance: lastMaintenance
+          });
+          showToast('Vehicle updated successfully');
+          closeModal();
+          if(onDone) onDone();
+        } catch(error) {
+          console.error('Failed to update vehicle:', error);
+          alert('Failed to update vehicle');
+        }
+      };
+    } catch(error) {
+      console.error('Failed to load vehicle:', error);
+      $('#editVehicleModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:30px">Failed to load vehicle.</div>`;
+    }
+  }
+
+  async function openUserViewModal(userId){
+    showModal(`
+      <div class="content-card details-card user-modal-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">User Details</div>
+          <button class="close-icon" id="closeUserViewModal">×</button>
+        </div>
+        <div id="userViewModalBody" class="user-modal-body">
+          <div style="text-align:center;color:#b9b9b9;padding:40px">Loading user details...</div>
+        </div>
+        <div class="detail-footer user-modal-footer">
+          <button class="btn-dark modal-close-btn" id="closeUserViewModalBtn" type="button">Close</button>
+        </div>
+      </div>
+    `);
+
+    $('#closeUserViewModal').onclick = closeModal;
+    $('#closeUserViewModalBtn').onclick = closeModal;
+
+    try {
+      const u = await DeliverySyncAPI.Users.getOne(userId);
+
+      const name = u.name || u.fullName || '-';
+      const initials = name.split(/\s+/).map(p => p[0]).join('').slice(0, 2).toUpperCase() || 'U';
+      const roleLabel = roleValueToLabel(u.role);
+
+      $('#userViewModalBody').innerHTML = `
+        <div class="user-summary">
+          <div class="user-avatar-box">${initials}</div>
+          <div class="user-summary-copy">
+            <div class="user-summary-name">${name}</div>
+            <div class="user-status-line"><span class="status-dot"></span><span>${u.status || 'Active'}</span></div>
+          </div>
+        </div>
+        <div class="user-info-grid">
+          <div class="user-info-row"><div class="detail-label">User ID</div><div class="user-info-value">${u.id || '-'}</div></div>
+          <div class="user-info-row"><div class="detail-label">Email Address</div><div class="user-info-value">${u.email || '-'}</div></div>
+          <div class="user-info-row"><div class="detail-label">Phone Number</div><div class="user-info-value">${u.phone || '-'}</div></div>
+          <div class="user-info-row"><div class="detail-label">Role</div><div class="user-info-value">${roleLabel}</div></div>
+          <div class="user-info-row"><div class="detail-label">Status</div><div class="user-info-value">${u.status || 'Active'}</div></div>
+          <div class="user-info-row"><div class="detail-label">Last Login</div><div class="user-info-value">${u.lastLogin || '--'}</div></div>
+        </div>
+      `;
+    } catch(error) {
+      console.error('Failed to load user from backend:', error);
+      $('#userViewModalBody').innerHTML = `<div style="text-align:center;color:#ff6b6b;padding:40px">Failed to load user.</div>`;
+    }
   }
 
   function niceYTicks(values){
@@ -271,7 +833,7 @@
       console.error('Failed to load superuser dashboard from backend:', error);
       $('#pageRoot').innerHTML = `
         <div class="content-card" style="padding:24px;text-align:center;color:#ff6b6b">
-          Unable to load dashboard data from backend.
+          Unable to load dashboard data.
         </div>
       `;
     }
@@ -309,12 +871,12 @@
       <table>
         <thead>
           <tr>
-            <th>User ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Last Login</th>
+            <th class="sortable-th" data-sort="id" style="cursor:pointer">User ID <span class="sort-arrow" data-arrow="id"></span></th>
+            <th class="sortable-th" data-sort="name" style="cursor:pointer">Name <span class="sort-arrow" data-arrow="name"></span></th>
+            <th class="sortable-th" data-sort="email" style="cursor:pointer">Email <span class="sort-arrow" data-arrow="email"></span></th>
+            <th class="sortable-th" data-sort="role" style="cursor:pointer">Role <span class="sort-arrow" data-arrow="role"></span></th>
+            <th class="sortable-th" data-sort="status" style="cursor:pointer">Status <span class="sort-arrow" data-arrow="status"></span></th>
+            <th class="sortable-th" data-sort="lastLogin" style="cursor:pointer">Last Login <span class="sort-arrow" data-arrow="lastLogin"></span></th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -336,14 +898,37 @@
     return roleValueToLabel(role);
   };
 
+  let sortField = 'id';
+  let sortDir = 'asc';
+  let currentPage = 1;
+  const pageSize = 10;
+
   const render = async function(){
     try {
       const q = ($('#userSearch').value || '').trim();
       const selectedRole = ($('#roleFilter').value || '').trim();
 
-      const users = await DeliverySyncAPI.Users.getAll(selectedRole, q);
+      let users = await DeliverySyncAPI.Users.getAll(selectedRole, q);
+      users = (users || []).slice();
 
-      $('#usersBody').innerHTML = (users || []).map(function(u){
+      users.sort(function(a, b){
+        const av = String((sortField === 'name' ? (a.name || a.fullName) : a[sortField]) || '').toLowerCase();
+        const bv = String((sortField === 'name' ? (b.name || b.fullName) : b[sortField]) || '').toLowerCase();
+        if(av < bv) return sortDir === 'asc' ? -1 : 1;
+        if(av > bv) return sortDir === 'asc' ? 1 : -1;
+        return 0;
+      });
+
+      document.querySelectorAll('.sort-arrow').forEach(function(el){
+        el.textContent = el.dataset.arrow === sortField ? (sortDir === 'asc' ? '▲' : '▼') : '';
+      });
+
+      const totalUsers = users.length;
+      const totalPages = Math.max(1, Math.ceil(totalUsers / pageSize));
+      if(currentPage > totalPages) currentPage = totalPages;
+      const pageUsers = users.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+      $('#usersBody').innerHTML = pageUsers.map(function(u){
         const userRole = roleText(u.role);
         const status = u.status || 'Active';
 
@@ -365,7 +950,7 @@
                   <button class="action-trigger dots-trigger" aria-label="More actions" data-id="${u.id}">⋯</button>
 
                   <div class="action-menu" id="menu-${u.id}">
-                    <a class="action-item" href="view-user.html?id=${u.id}">View User</a>
+                    <button class="action-item" type="button" data-view-user="${u.id}">View User</button>
                     <a class="action-item" href="edit-user.html?id=${u.id}">Edit User</a>
 
                     <button class="action-item" data-disable="${u.id}" data-status="${status}">
@@ -391,9 +976,33 @@
 
       $('#usersMeta').innerHTML = `
         <div class="subdued">
-          Showing <strong>${(users || []).length}</strong> users
+          Showing <strong>${pageUsers.length}</strong> of <strong>${totalUsers}</strong> users
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn-yellow" id="usersPrevPage" ${currentPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;${currentPage <= 1 ? 'opacity:.5;cursor:not-allowed' : ''}">Prev</button>
+          <span class="subdued">Page ${currentPage} of ${totalPages}</span>
+          <button class="btn-yellow" id="usersNextPage" ${currentPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;${currentPage >= totalPages ? 'opacity:.5;cursor:not-allowed' : ''}">Next</button>
         </div>
       `;
+
+      const prevBtn = document.getElementById('usersPrevPage');
+      const nextBtn = document.getElementById('usersNextPage');
+      if(prevBtn) prevBtn.onclick = function(){ if(currentPage > 1){ currentPage--; render(); } };
+      if(nextBtn) nextBtn.onclick = function(){ if(currentPage < totalPages){ currentPage++; render(); } };
+
+      document.querySelectorAll('.sortable-th').forEach(function(th){
+        th.onclick = function(){
+          const field = th.dataset.sort;
+          if(sortField === field){
+            sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+          } else {
+            sortField = field;
+            sortDir = 'asc';
+          }
+          currentPage = 1;
+          render();
+        };
+      });
 
       document.querySelectorAll('.action-trigger').forEach(function(btn){
         btn.onclick = function(e){
@@ -407,6 +1016,10 @@
           const menu = document.getElementById('menu-' + btn.dataset.id);
           if(menu) menu.classList.toggle('show');
         };
+      });
+
+      document.querySelectorAll('[data-view-user]').forEach(function(btn){
+        btn.onclick = ()=> openUserViewModal(btn.dataset.viewUser);
       });
 
       document.querySelectorAll('[data-disable]').forEach(function(btn){
@@ -431,7 +1044,7 @@
             await render();
           } catch(error) {
             console.error('Failed to update user status:', error);
-            alert('Failed to update user status from backend');
+            alert('Failed to update user status');
           }
         };
       });
@@ -458,7 +1071,7 @@
             await render();
           } catch(error) {
             console.error('Failed to delete user:', error);
-            alert('Failed to delete user from backend');
+            alert('Failed to delete user');
           }
         };
       });
@@ -475,15 +1088,15 @@
       $('#usersBody').innerHTML = `
         <tr>
           <td colspan="7" style="text-align:center;padding:24px;color:#ff6b6b">
-            Failed to load users from backend.
+            Failed to load users.
           </td>
         </tr>
       `;
     }
   };
 
-  $('#userSearch').oninput = render;
-  $('#roleFilter').onchange = render;
+  $('#userSearch').oninput = function(){ currentPage = 1; render(); };
+  $('#roleFilter').onchange = function(){ currentPage = 1; render(); };
 
   await render();
 }
@@ -502,7 +1115,7 @@ async function renderUserForm(editMode){
       $('#pageRoot').innerHTML = `
         <div class="content-card form-card">
           <h2>User Not Found</h2>
-          <p style="color:#ff6b6b">Failed to load user from backend.</p>
+          <p style="color:#ff6b6b">Failed to load user.</p>
           <a class="btn-yellow" href="manage-users.html">Back to Users</a>
         </div>
       `;
@@ -844,19 +1457,19 @@ async function renderUserForm(editMode){
       location.href = 'manage-users.html';
     } catch(error) {
       console.error('Failed to save user from backend:', error);
-      alert('Failed to save user from backend');
+      alert('Failed to save user');
     }
   };
 }
 
  async function renderUserView(){
-  const session = sessionGuard();
-  if(!session) return;
+  const s = pageLayout('User Details', 'Manage Users');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const userId = params().get('id');
 
-  document.body.className = 'standalone-detail-page';
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card details-card user-modal-card standalone-modal">
         <div class="details-top">
@@ -933,7 +1546,7 @@ async function renderUserForm(editMode){
 
     document.getElementById('userViewBody').innerHTML = `
       <div style="text-align:center;color:#ff6b6b;padding:40px">
-        Failed to load user from backend.
+        Failed to load user.
       </div>
     `;
   }
@@ -945,7 +1558,7 @@ async function renderReports(){
 
   $('#pageRoot').innerHTML = `
     <div id="reportsLoading" class="content-card" style="text-align:center;color:#b9b9b9;padding:30px">
-      Loading reports from backend...
+      Loading reports...
     </div>
   `;
 
@@ -979,6 +1592,16 @@ async function renderReports(){
       return String(v.status || '').toLowerCase() === 'maintenance';
     }).length;
 
+    const activeUsersCount = (users || []).filter(function(u){
+      return String(u.status || '').toLowerCase() === 'active';
+    }).length;
+
+    const activeUserRate = totalUsers ? Math.round((activeUsersCount / totalUsers) * 100) : 0;
+
+    const overdueMaintenance = (maintenance || []).filter(function(m){
+      return String(m.status || '').toLowerCase() === 'overdue';
+    }).length;
+
     const pendingDeliveries = (deliveries || []).filter(function(d){
       const st = String(d.status || '').toLowerCase();
       return st.includes('pending') || st.includes('review');
@@ -998,12 +1621,12 @@ async function renderReports(){
 
     $('#pageRoot').innerHTML = `
       <div class="kpi-grid">
-        ${metric('Total Users', totalUsers.toLocaleString('en-IN'), 'Backend')}
-        ${metric('Total Deliveries', totalDeliveries.toLocaleString('en-IN'), 'Backend')}
+        ${metric('Total Users', totalUsers.toLocaleString('en-IN'))}
+        ${metric('Total Deliveries', totalDeliveries.toLocaleString('en-IN'))}
         ${metric('Completed Deliveries', completedDeliveries.toLocaleString('en-IN'), `${completionRate}%`)}
-        ${metric('Total Vehicles', totalVehicles.toLocaleString('en-IN'), 'Backend')}
+        ${metric('Total Vehicles', totalVehicles.toLocaleString('en-IN'))}
         ${metric('Active Vehicles', activeVehicles.toLocaleString('en-IN'), `${vehicleUtilization}%`)}
-        ${metric('Maintenance Records', totalMaintenance.toLocaleString('en-IN'), 'Backend')}
+        ${metric('Maintenance Records', totalMaintenance.toLocaleString('en-IN'))}
       </div>
 
       <div class="grid-2">
@@ -1053,8 +1676,8 @@ async function renderReports(){
             <tr>
               <td>Users</td>
               <td>${totalUsers}</td>
-              <td>${(users || []).filter(u => String(u.status || '').toLowerCase() === 'active').length} active</td>
-              <td>User data loaded from backend</td>
+              <td>${activeUsersCount} active</td>
+              <td>${activeUserRate}% of users are active</td>
             </tr>
 
             <tr>
@@ -1075,7 +1698,7 @@ async function renderReports(){
               <td>Maintenance</td>
               <td>${totalMaintenance}</td>
               <td>${maintenanceVehicles} vehicles under maintenance</td>
-              <td>Maintenance records loaded from backend</td>
+              <td>${overdueMaintenance} overdue</td>
             </tr>
           </tbody>
         </table>
@@ -1087,7 +1710,7 @@ async function renderReports(){
 
     $('#pageRoot').innerHTML = `
       <div class="content-card" style="text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load reports from backend.
+        Failed to load reports.
       </div>
     `;
   }
@@ -1186,7 +1809,7 @@ async function renderReports(){
         showToast('Permissions updated successfully');
       } catch(error) {
         console.error('Failed to update permissions:', error);
-        alert('Failed to update permissions from backend');
+        alert('Failed to update permissions');
       }
     };
 
@@ -1195,7 +1818,7 @@ async function renderReports(){
 
     document.getElementById('permissionsCard').innerHTML = `
       <div style="text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load permissions from backend.
+        Failed to load permissions.
       </div>
     `;
   }
@@ -1224,6 +1847,18 @@ async function renderReports(){
           <div class="switch-row"><div class="switch-copy"><strong>Two-Factor Authentication</strong><span>Require 2FA for all admin users</span></div><button class="toggle ${sec.twoFactor?'on':''}" id="twoFactor"></button></div>
           <div style="margin-top:22px"><button class="btn-yellow" id="saveSecurity">Save Security Settings</button></div>
         </div>
+      </div>
+      <div class="content-card settings-section">
+        <div class="settings-head"><div class="settings-icon">${icon.gear}</div><div><strong>Platform Commission</strong><span>The percentage the platform takes from every completed delivery payment</span></div></div>
+        <div class="settings-body" id="commissionBody">
+          <div style="color:#b9b9b9;padding:8px 0">Loading commission rate...</div>
+        </div>
+      </div>
+      <div class="content-card settings-section">
+        <div class="settings-head"><div class="settings-icon">${icon.gear}</div><div><strong>Driver Rate Card (Platform Minimum)</strong><span>The floor every fleet manager's driver rate card must meet or exceed</span></div></div>
+        <div class="settings-body" id="rateCardBody">
+          <div style="color:#b9b9b9;padding:8px 0">Loading rate card...</div>
+        </div>
       </div>`;
     $('#twoFactor').onclick=()=>$('#twoFactor').classList.toggle('on');
     $('#logoInput').onchange=e=>{
@@ -1232,6 +1867,81 @@ async function renderReports(){
     };
     $('#savePlatform').onclick=()=>{ const st = DS.readState(); st.superuser.platform = {name:$('#platformName').value.trim(),timezone:$('#timezone').value.trim(),language:$('#language').value.trim(),logo:st.superuser.platform.logo||''}; DS.saveState(st); if (DS.applyPlatformBranding) DS.applyPlatformBranding(document); showToast('Platform settings saved'); };
     $('#saveSecurity').onclick=()=>{ const st = DS.readState(); st.superuser.security = {passwordLength:+$('#minPass').value||8,failedAttempts:+$('#failAttempts').value||5,sessionTimeout:+$('#sessionTimeout').value||30,twoFactor:$('#twoFactor').classList.contains('on')}; DS.saveState(st); showToast('Security settings saved'); };
+
+    (async function loadCommission(){
+      try {
+        const { commissionRate } = await DeliverySyncAPI.Settings.getCommission();
+
+        $('#commissionBody').innerHTML = `
+          <div class="field"><label>Current Rate: ${commissionRate}%</label><input id="commissionRateInput" type="number" min="0" max="100" step="0.1" value="${commissionRate}"></div>
+          <div class="form-note">New payments use this rate immediately. Past transactions keep the rate that was active when they were paid.</div>
+          <button class="btn-yellow" id="saveCommission" style="margin-top:12px">Save</button>
+        `;
+
+        $('#saveCommission').onclick = async () => {
+          const rate = Number($('#commissionRateInput').value);
+
+          if (Number.isNaN(rate) || rate < 0 || rate > 100) {
+            alert('Commission rate must be a number between 0 and 100.');
+            return;
+          }
+
+          try {
+            await DeliverySyncAPI.Settings.updateCommission(rate);
+            showToast('Commission rate saved');
+            loadCommission();
+          } catch (error) {
+            console.error('Failed to save commission rate:', error);
+            alert(error.message || 'Failed to save commission rate.');
+          }
+        };
+      } catch (error) {
+        console.error('Failed to load commission rate from backend:', error);
+
+        $('#commissionBody').innerHTML = `
+          <div style="color:#ff6b6b;padding:8px 0">Failed to load commission rate.</div>
+        `;
+      }
+    })();
+
+    (async function loadRateCard(){
+      try {
+        const card = await DeliverySyncAPI.Payouts.getPlatformRateCard();
+
+        $('#rateCardBody').innerHTML = `
+          <div class="field"><label>Base Fare (₹ per trip)</label><input id="rcBaseFare" type="number" min="0" step="0.01" value="${card.baseFare}"></div>
+          <div class="field"><label>Rate per Km (₹)</label><input id="rcPerKm" type="number" min="0" step="0.01" value="${card.perKm}"></div>
+          <div class="field"><label>Rate per Kg (₹)</label><input id="rcPerKg" type="number" min="0" step="0.01" value="${card.perKg}"></div>
+          <div class="form-note">Fleet managers may set their own driver rate card, but never below these values.</div>
+          <button class="btn-yellow" id="saveRateCard" style="margin-top:12px">Save Rate Card</button>
+        `;
+
+        $('#saveRateCard').onclick = async () => {
+          const baseFare = Number($('#rcBaseFare').value);
+          const perKm = Number($('#rcPerKm').value);
+          const perKg = Number($('#rcPerKg').value);
+
+          if (!(baseFare > 0) || !(perKm > 0) || !(perKg > 0)) {
+            alert('All rate card values must be positive numbers.');
+            return;
+          }
+
+          try {
+            await DeliverySyncAPI.Payouts.setPlatformRateCard({ baseFare, perKm, perKg });
+            showToast('Platform rate card saved');
+          } catch (error) {
+            console.error('Failed to save rate card:', error);
+            alert(error.message || 'Failed to save rate card.');
+          }
+        };
+      } catch (error) {
+        console.error('Failed to load rate card from backend:', error);
+
+        $('#rateCardBody').innerHTML = `
+          <div style="color:#ff6b6b;padding:8px 0">Failed to load rate card.</div>
+        `;
+      }
+    })();
   }
 
 async function renderDeliveryRequests(){
@@ -1282,9 +1992,9 @@ async function renderDeliveryRequests(){
       $('#rqBody').innerHTML = filtered.map(r=>{
         const isBlocked = String(r.status || '').toLowerCase() === 'blocked';
 
-        const actionLink = isBlocked
-          ? `<a class="action-item" href="unblock-order.html?id=${r.id}">Unblock Order</a>`
-          : `<a class="action-item danger-link" href="block-order.html?id=${r.id}">Block Order</a>`;
+        const actionButton = isBlocked
+          ? `<button class="action-item" type="button" data-unblock-id="${r.id}">Unblock Order</button>`
+          : `<button class="action-item danger-link" type="button" data-block-id="${r.id}">Block Order</button>`;
 
         return `
           <tr>
@@ -1302,8 +2012,8 @@ async function renderDeliveryRequests(){
               <div class="action-menu-wrap">
                 <button class="action-trigger dots-trigger" aria-label="Actions">⋯</button>
                 <div class="action-menu">
-                  <a class="action-item" href="delivery-request-details.html?id=${r.id}">View</a>
-                  ${actionLink}
+                  <button class="action-item" type="button" data-view-id="${r.id}">View</button>
+                  ${actionButton}
                 </div>
               </div>
             </td>
@@ -1331,6 +2041,18 @@ async function renderDeliveryRequests(){
         m.onclick = (e)=>e.stopPropagation();
       });
 
+      document.querySelectorAll('[data-view-id]').forEach(btn=>{
+        btn.onclick = ()=> openRequestDetailModal(btn.dataset.viewId);
+      });
+
+      document.querySelectorAll('[data-block-id]').forEach(btn=>{
+        btn.onclick = ()=> openBlockOrderModal(btn.dataset.blockId, render);
+      });
+
+      document.querySelectorAll('[data-unblock-id]').forEach(btn=>{
+        btn.onclick = ()=> openUnblockOrderModal(btn.dataset.unblockId, render);
+      });
+
       document.addEventListener('click', ()=>{
         document.querySelectorAll('.action-menu').forEach(m=>m.classList.remove('show'));
       });
@@ -1341,7 +2063,7 @@ async function renderDeliveryRequests(){
       $('#rqBody').innerHTML = `
         <tr>
           <td colspan="7" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load deliveries from backend.
+            Failed to load deliveries.
           </td>
         </tr>
       `;
@@ -1354,13 +2076,13 @@ async function renderDeliveryRequests(){
 
 
 async function renderBlockOrder(){
-  const session = sessionGuard(); 
-  if(!session) return;
+  const s = pageLayout('Block Order', 'Delivery Requests');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const requestId = params().get('id');
 
-  document.body.className = 'standalone-detail-page';
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card details-card modal-detail-card standalone-modal">
         <div class="details-top">
@@ -1431,7 +2153,7 @@ async function renderBlockOrder(){
         location.href = 'delivery-requests.html';
       } catch(error) {
         console.error('Failed to block order:', error);
-        document.getElementById('blockReasonError').textContent = 'Failed to block order from backend';
+        document.getElementById('blockReasonError').textContent = 'Failed to block order';
       }
     };
 
@@ -1440,7 +2162,7 @@ async function renderBlockOrder(){
 
     document.getElementById('blockOrderBody').innerHTML = `
       <div style="text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load order details from backend.
+        Failed to load order details.
       </div>
     `;
   }
@@ -1448,13 +2170,13 @@ async function renderBlockOrder(){
 
 
 async function renderUnblockOrder(){
-  const session = sessionGuard(); 
-  if(!session) return;
+  const s = pageLayout('Unblock Order', 'Delivery Requests');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const requestId = params().get('id');
 
-  document.body.className = 'standalone-detail-page';
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card details-card modal-detail-card standalone-modal">
         <div class="details-top">
@@ -1525,7 +2247,7 @@ async function renderUnblockOrder(){
         location.href = 'delivery-requests.html';
       } catch(error) {
         console.error('Failed to unblock order:', error);
-        document.getElementById('unblockReasonError').textContent = 'Failed to unblock order from backend';
+        document.getElementById('unblockReasonError').textContent = 'Failed to unblock order';
       }
     };
 
@@ -1534,21 +2256,22 @@ async function renderUnblockOrder(){
 
     document.getElementById('unblockOrderBody').innerHTML = `
       <div style="text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load order details from backend.
+        Failed to load order details.
       </div>
     `;
   }
 }
   async function renderRequestDetail(){
-    const session = sessionGuard(); if(!session) return;
+    const s = pageLayout('Request Details', 'Delivery Requests');
+    if(!s) return;
+    document.body.classList.add('standalone-detail-page');
     const requestId = params().get('id');
-    document.body.className = 'standalone-detail-page';
-    document.body.innerHTML = `
+    $('#pageRoot').innerHTML = `
       <div class="standalone-detail-wrap">
         <div class="content-card details-card modal-detail-card standalone-modal">
           <div class="details-top"><div class="details-title">Request Details</div><button class="close-icon" onclick="location.href='delivery-requests.html'">×</button></div>
           <div class="details-body modal-detail-body one-col" id="requestDetailBody">
-            <div style="text-align:center;color:#b9b9b9;padding:24px">Loading request from backend...</div>
+            <div style="text-align:center;color:#b9b9b9;padding:24px">Loading request...</div>
           </div>
           <div class="detail-footer"><a class="btn-yellow close-wide" href="delivery-requests.html">Close</a></div>
         </div>
@@ -1581,7 +2304,7 @@ async function renderUnblockOrder(){
     } catch(error) {
       console.error('Failed to load request from backend:', error);
       document.getElementById('requestDetailBody').innerHTML = `
-        <div style="text-align:center;color:#ff6b6b;padding:24px">Failed to load request details from backend.</div>
+        <div style="text-align:center;color:#ff6b6b;padding:24px">Failed to load request details.</div>
       `;
     }
   }
@@ -1648,8 +2371,8 @@ async function renderUnblockOrder(){
             <div class="action-menu-wrap">
               <button class="action-trigger dots-trigger" aria-label="Actions">⋯</button>
               <div class="action-menu">
-                <a class="action-item" href="trip-details.html?id=${t.id}">View Trip</a>
-                <a class="action-item" href="trip-details.html?id=${t.id}">Reassign Driver</a>
+                <button class="action-item" type="button" data-view-trip="${t.id}">View Trip</button>
+                <button class="action-item" type="button" data-reassign-trip="${t.id}">Reassign Driver</button>
               </div>
             </div>
           </td>
@@ -1661,6 +2384,14 @@ async function renderUnblockOrder(){
           </td>
         </tr>
       `;
+
+      document.querySelectorAll('[data-view-trip]').forEach(btn=>{
+        btn.onclick = ()=> openTripDetailModal(btn.dataset.viewTrip);
+      });
+
+      document.querySelectorAll('[data-reassign-trip]').forEach(btn=>{
+        btn.onclick = ()=> openReassignDriverModal(btn.dataset.reassignTrip, render);
+      });
 
       document.querySelectorAll('.action-menu-wrap').forEach(w=>{
         const b = w.querySelector('.action-trigger');
@@ -1686,7 +2417,7 @@ async function renderUnblockOrder(){
       $('#tripBody').innerHTML = `
         <tr>
           <td colspan="7" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load trips from backend.
+            Failed to load trips.
           </td>
         </tr>
       `;
@@ -1788,8 +2519,8 @@ async function renderVehicles(){
               <div class="action-menu-wrap">
                 <button class="action-trigger dots-trigger" aria-label="Actions">⋯</button>
                 <div class="action-menu">
-                  <a class="action-item" href="vehicle-details.html?id=${v.id}">View Vehicle</a>
-                  <a class="action-item" href="edit-vehicle.html?id=${v.id}">Edit Vehicle</a>
+                  <button class="action-item" type="button" data-view-vehicle="${v.id}">View Vehicle</button>
+                  <button class="action-item" type="button" data-edit-vehicle="${v.id}">Edit Vehicle</button>
                   <button class="action-item danger-link delete-vehicle-btn" data-id="${v.id}">
     Delete Vehicle
   </button>
@@ -1824,6 +2555,14 @@ async function renderVehicles(){
           e.stopPropagation();
         };
       });
+      document.querySelectorAll('[data-view-vehicle]').forEach(function(btn){
+        btn.onclick = ()=> openVehicleDetailsModal(btn.dataset.viewVehicle);
+      });
+
+      document.querySelectorAll('[data-edit-vehicle]').forEach(function(btn){
+        btn.onclick = ()=> openEditVehicleModal(btn.dataset.editVehicle, render);
+      });
+
       document.querySelectorAll('.delete-vehicle-btn').forEach(function(btn){
   btn.onclick = async function(e){
     e.preventDefault();
@@ -1845,7 +2584,7 @@ async function renderVehicles(){
       await render();
     } catch(error) {
       console.error('Failed to delete vehicle:', error);
-      alert('Failed to delete vehicle from backend');
+      alert('Failed to delete vehicle');
     }
   };
 });
@@ -1854,7 +2593,7 @@ async function renderVehicles(){
       $('#vehicleBody').innerHTML = `
         <tr>
           <td colspan="7" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load vehicles from backend.
+            Failed to load vehicles.
           </td>
         </tr>
       `;
@@ -1877,7 +2616,7 @@ async function renderVehicles(){
   const addBtn = $('#addVehicleBtn');
   if(addBtn){
     addBtn.onclick = function(){
-      location.href = 'add-vehicle.html';
+      openAddVehicleModal(render);
     };
   }
 
@@ -1891,13 +2630,13 @@ async function renderVehicles(){
 }
 
 async function renderAddVehicle(){
-  const session = sessionGuard();
-  if(!session) return;
+  const s = pageLayout('Add Vehicle', 'Vehicles');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const today = new Date().toISOString().split('T')[0];
 
-  document.body.className = 'standalone-detail-page';
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card form-card standalone-modal" style="max-width:760px;margin:0 auto">
         <div class="details-top">
@@ -2004,19 +2743,19 @@ async function renderAddVehicle(){
       location.href = 'vehicles.html';
     } catch(error) {
       console.error('Failed to add vehicle:', error);
-      alert('Failed to add vehicle from backend');
+      alert('Failed to add vehicle');
     }
   };
 }
 
 async function renderVehicleDetails(){
-  const session = sessionGuard();
-  if(!session) return;
+  const s = pageLayout('Vehicle Details', 'Vehicles');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const vehicleId = params().get('id');
 
-  document.body.className = 'standalone-detail-page';
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card details-card modal-detail-card standalone-modal">
         <div class="details-top">
@@ -2083,21 +2822,21 @@ async function renderVehicleDetails(){
     console.error('Failed to load vehicle details:', error);
     document.getElementById('vehicleDetailsBody').innerHTML = `
       <div style="text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load vehicle details from backend.
+        Failed to load vehicle details.
       </div>
     `;
   }
 }
 
 async function renderEditVehicle(){
-  const session = sessionGuard();
-  if(!session) return;
+  const s = pageLayout('Edit Vehicle', 'Vehicles');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const vehicleId = params().get('id');
   const today = new Date().toISOString().split('T')[0];
 
-  document.body.className = 'standalone-detail-page';
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card form-card standalone-modal" style="max-width:760px;margin:0 auto">
         <div class="details-top">
@@ -2209,14 +2948,14 @@ async function renderEditVehicle(){
         location.href = 'vehicles.html';
       } catch(error) {
         console.error('Failed to update vehicle:', error);
-        alert('Failed to update vehicle from backend');
+        alert('Failed to update vehicle');
       }
     };
   } catch(error) {
     console.error('Failed to load vehicle:', error);
     document.getElementById('editVehicleBody').innerHTML = `
       <div style="text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load vehicle from backend.
+        Failed to load vehicle.
       </div>
     `;
   }
@@ -2350,7 +3089,7 @@ async function renderMaintenance(){
             await render();
           } catch(error) {
             console.error('Failed to delete maintenance record:', error);
-            alert('Failed to delete maintenance record from backend');
+            alert('Failed to delete maintenance record');
           }
         };
       });
@@ -2367,7 +3106,7 @@ async function renderMaintenance(){
       $('#maintBody').innerHTML = `
         <tr>
           <td colspan="9" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load maintenance records from backend.
+            Failed to load maintenance records.
           </td>
         </tr>
       `;
@@ -2656,19 +3395,18 @@ async function renderScheduleMaintenance(){
       location.href = 'maintenance.html';
     } catch(error) {
       console.error('Failed to save maintenance from backend:', error);
-      alert('Failed to save maintenance from backend');
+      alert('Failed to save maintenance');
     }
   };
 }
 async function renderTripDetail(){
-  const session = sessionGuard();
-  if(!session) return;
+  const s = pageLayout('Trip Details', 'Trips Monitoring');
+  if(!s) return;
+  document.body.classList.add('standalone-detail-page');
 
   const tripId = params().get('id');
 
-  document.body.className = 'standalone-detail-page';
-
-  document.body.innerHTML = `
+  $('#pageRoot').innerHTML = `
     <div class="standalone-detail-wrap">
       <div class="content-card details-card modal-detail-card trip-modal-card standalone-modal">
         <div class="details-top">
@@ -2685,7 +3423,7 @@ async function renderTripDetail(){
         </div>
 
         <div class="details-body modal-detail-body" id="tripDetailBody">
-          <div style="text-align:center;color:#b9b9b9;padding:24px;grid-column:1/-1">Loading trip from backend...</div>
+          <div style="text-align:center;color:#b9b9b9;padding:24px;grid-column:1/-1">Loading trip...</div>
         </div>
 
         <div class="detail-footer">
@@ -2785,7 +3523,7 @@ async function renderTripDetail(){
   } catch(error) {
     console.error('Failed to load trip from backend:', error);
     document.getElementById('tripDetailBody').innerHTML = `
-      <div style="text-align:center;color:#ff6b6b;padding:24px;grid-column:1/-1">Failed to load trip details from backend.</div>
+      <div style="text-align:center;color:#ff6b6b;padding:24px;grid-column:1/-1">Failed to load trip details.</div>
     `;
   }
 
@@ -2840,7 +3578,7 @@ async function renderTripDetail(){
         sel.innerHTML = `<option value="">Failed to load drivers</option>`;
 
         if(err){
-          err.textContent = 'Failed to load drivers from backend';
+          err.textContent = 'Failed to load drivers';
         }
       }
     };
@@ -2875,7 +3613,7 @@ async function renderTripDetail(){
       console.error('Failed to reassign driver:', error);
 
       if(err){
-        err.textContent = 'Failed to reassign driver from backend';
+        err.textContent = 'Failed to reassign driver';
       }
     }
   });
@@ -2891,7 +3629,7 @@ async function renderTransactions(){
         <div>
           <h3>Platform Revenue</h3>
           <div class="subdued" style="margin-top:6px">
-            Subscription revenue and delivery commission, calculated from successful backend transactions.
+            Delivery commission, calculated from successful backend transactions.
           </div>
         </div>
       </div>
@@ -2908,59 +3646,112 @@ async function renderTransactions(){
         <div>
           <h3>Billing & Payments</h3>
           <div class="subdued" style="margin-top:6px">
-            Invoices and submitted payment transactions loaded from backend.
+            Invoices and submitted payment transactions loaded.
           </div>
         </div>
       </div>
 
       <div style="margin-top:18px">
-        <h3 style="font-size:16px;margin-bottom:12px">Unpaid invoices</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+          <h3 style="font-size:16px;margin:0">Invoices</h3>
+          <input class="mini-input" id="invoiceSearch" placeholder="Search by invoice ID, client, status...">
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Invoice</th>
-              <th>Client</th>
-              <th>Amount</th>
-              <th>Due Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Client</th>
+                <th>Amount</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
 
-          <tbody id="invoiceBody">
-            <tr>
-              <td colspan="5" style="text-align:center;color:#b9b9b9;padding:18px">
-                Loading invoices...
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody id="invoiceBody">
+              <tr>
+                <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
+                  Loading invoices...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="invoiceMeta" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap"></div>
       </div>
 
       <div style="margin-top:24px">
-        <h3 style="font-size:16px;margin-bottom:12px">Submitted transactions</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+          <h3 style="font-size:16px;margin:0">Submitted transactions</h3>
+          <input class="mini-input" id="txnSearch" placeholder="Search by transaction ID, client, invoice, mode, status...">
+        </div>
 
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Date</th>
+                <th>Mode</th>
+                <th>Transaction ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="paymentBody">
+              <tr>
+                <td colspan="7" style="text-align:center;color:#b9b9b9;padding:18px">
+                  Loading transactions...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="txnMeta" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap"></div>
+      </div>
+    </div>
+
+    <div class="content-card table-card" style="margin-top:18px">
+      <div class="table-head">
+        <div>
+          <h3>Fleet Manager Settlements</h3>
+          <div class="subdued" style="margin-top:6px">
+            Monthly settlement periods. Locking a period freezes its statement so later refunds cannot silently change it.
+          </div>
+        </div>
+        <input class="mini-input" id="settlementSearch" placeholder="Search by fleet manager or month...">
+      </div>
+
+      <div style="overflow-x:auto">
         <table>
           <thead>
             <tr>
-              <th>Invoice</th>
-              <th>Date</th>
-              <th>Mode</th>
-              <th>Transaction ID</th>
-              <th>Amount</th>
+              <th>Fleet Manager</th>
+              <th>Month</th>
+              <th>Net Amount</th>
               <th>Status</th>
+              <th>Locked Date</th>
+              <th>Action</th>
             </tr>
           </thead>
 
-          <tbody id="paymentBody">
+          <tbody id="settlementsBody">
             <tr>
               <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
-                Loading transactions...
+                Loading settlements...
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <div id="settlementMeta" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap"></div>
     </div>
   `;
 
@@ -2988,27 +3779,70 @@ async function renderTransactions(){
     return value;
   }
 
+  function openInvoiceDetailModal(invoiceId){
+    const inv = allInvoicesCache.find(function(i){
+      return String(i.id || i.invoiceId) === String(invoiceId);
+    }) || {};
+
+    const baseCost = Number(inv.baseCost || 0);
+    const tax = Number(inv.tax || inv.taxAmount || 0);
+    const total = Number(inv.total || inv.totalAmount || inv.amount || 0);
+
+    showModal(`
+      <div class="content-card details-card modal-detail-card standalone-modal">
+        <div class="details-top">
+          <div class="details-title">Invoice ${inv.id || inv.invoiceId || invoiceId}</div>
+          <button class="close-icon" id="closeInvoiceModal">×</button>
+        </div>
+        <div class="details-body modal-detail-body one-col">
+          <div class="detail-block full"><div class="detail-label">Client</div><div class="detail-main">${icon.user}${inv.client || '-'}</div></div>
+          <div class="detail-block full"><div class="detail-label">Address</div><div class="detail-main">${icon.map}${inv.address || '-'}</div></div>
+          <div class="detail-block full"><div class="detail-label">Route</div><div class="detail-main">${icon.map}${inv.pickup || '-'} &rarr; ${inv.dropoff || '-'}</div></div>
+          <div class="detail-block full"><div class="detail-label">Driver</div><div class="detail-main">${icon.user}${inv.driver || 'Not assigned'}</div></div>
+          <div class="detail-block full"><div class="detail-label">Invoice Date</div><div class="detail-main">${icon.calendar}${inv.invoiceDate || inv.date || '-'}</div></div>
+          <div class="detail-block full"><div class="detail-label">Due Date</div><div class="detail-main">${icon.calendar}${inv.dueDate || '-'}</div></div>
+          <div class="detail-block full">
+            <div class="detail-label">Amount Breakdown</div>
+            <div class="detail-main" style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+              <span>Base Cost: ${money(baseCost)}</span>
+              <span>Tax: ${money(tax)}</span>
+              <span style="font-weight:900">Total: ${money(total)}</span>
+            </div>
+          </div>
+          <div class="detail-block full"><div class="detail-label">Status</div><div class="detail-main"><span class="status-pill ${statusClass(inv.status)}">${inv.status || 'Unpaid'}</span></div></div>
+        </div>
+        <div class="detail-footer"><button class="btn-yellow close-wide" id="closeInvoiceModalBtn" type="button">Close</button></div>
+      </div>
+    `);
+
+    $('#closeInvoiceModal').onclick = closeModal;
+    $('#closeInvoiceModalBtn').onclick = closeModal;
+  }
+
   async function renderRevenueSummary(){
     try {
       const revenue = await DeliverySyncAPI.Transactions.getRevenueSummary();
 
       $('#revenueSummaryBody').innerHTML = [
-        metric('Subscription Revenue', money(revenue.subscriptionRevenue), 'Live'),
         metric('Delivery Commission', money(revenue.deliveryCommission), 'Live'),
-        metric('Total Platform Revenue', money(revenue.totalRevenue), 'Live'),
-        metric('Active Fleet Managers', String(revenue.activeFleetManagers), 'Live'),
-        metric('Active Subscriptions', String(revenue.activeSubscriptions), 'Live')
+        metric('Total Platform Revenue', money(revenue.totalRevenue), 'Live')
       ].join('');
     } catch(error) {
       console.error('Failed to load revenue summary from backend:', error);
 
       $('#revenueSummaryBody').innerHTML = `
         <div style="grid-column:1/-1;text-align:center;color:#ff6b6b;padding:18px">
-          Failed to load revenue summary from backend.
+          Failed to load revenue summary.
         </div>
       `;
     }
   }
+
+  let txnPage = 1;
+  const txnPageSize = 10;
+  let invoicePage = 1;
+  const invoicePageSize = 10;
+  let allInvoicesCache = [];
 
   async function render(){
     try {
@@ -3017,14 +3851,24 @@ async function renderTransactions(){
         DeliverySyncAPI.Transactions.getInvoices()
       ]);
 
-      const invoiceRows = (invoices || []).filter(function(inv){
-        return String(inv.status || '').toLowerCase() !== 'paid';
+      allInvoicesCache = invoices || [];
+
+      const invQ = ($('#invoiceSearch').value || '').trim().toLowerCase();
+      const filteredInvoices = allInvoicesCache.filter(function(inv){
+        if (!invQ) return true;
+        return JSON.stringify(inv).toLowerCase().includes(invQ);
       });
 
-      $('#invoiceBody').innerHTML = invoiceRows.map(function(inv){
+      const totalInvoices = filteredInvoices.length;
+      const totalInvoicePages = Math.max(1, Math.ceil(totalInvoices / invoicePageSize));
+      if (invoicePage > totalInvoicePages) invoicePage = totalInvoicePages;
+      const pageInvoices = filteredInvoices.slice((invoicePage - 1) * invoicePageSize, invoicePage * invoicePageSize);
+
+      $('#invoiceBody').innerHTML = pageInvoices.map(function(inv){
+        const invId = inv.id || inv.invoiceId || '-';
         return `
           <tr>
-            <td>${inv.id || inv.invoiceId || '-'}</td>
+            <td>${invId}</td>
             <td>${inv.client || inv.customer || inv.businessClient || '-'}</td>
             <td>${money(inv.amount)}</td>
             <td>${inv.dueDate || dateText(inv.createdAt) || '-'}</td>
@@ -3033,38 +3877,148 @@ async function renderTransactions(){
                 ${inv.status || 'Unpaid'}
               </span>
             </td>
+            <td><button class="view-invoice-btn" data-id="${invId}" type="button" style="background:transparent;border:1px solid #f7d10a;color:#f7d10a;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer">View</button></td>
           </tr>
         `;
       }).join('') || `
         <tr>
-          <td colspan="5" style="text-align:center;color:#b9b9b9;padding:18px">
-            No unpaid invoices.
+          <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
+            ${invQ ? 'No invoices match your search.' : 'No invoices found.'}
           </td>
         </tr>
       `;
 
-      $('#paymentBody').innerHTML = (transactions || []).map(function(t){
+      $('#invoiceMeta').innerHTML = `
+        <div class="subdued">Showing <strong>${pageInvoices.length}</strong> of <strong>${totalInvoices}</strong> invoices</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn-yellow" id="invoicePrevPage" ${invoicePage <= 1 ? 'disabled' : ''} style="padding:6px 14px;${invoicePage <= 1 ? 'opacity:.5;cursor:not-allowed' : ''}">Prev</button>
+          <span class="subdued">Page ${invoicePage} of ${totalInvoicePages}</span>
+          <button class="btn-yellow" id="invoiceNextPage" ${invoicePage >= totalInvoicePages ? 'disabled' : ''} style="padding:6px 14px;${invoicePage >= totalInvoicePages ? 'opacity:.5;cursor:not-allowed' : ''}">Next</button>
+        </div>
+      `;
+
+      const invPrevBtn = $('#invoicePrevPage');
+      const invNextBtn = $('#invoiceNextPage');
+      if (invPrevBtn) invPrevBtn.onclick = function(){ if (invoicePage > 1) { invoicePage--; render(); } };
+      if (invNextBtn) invNextBtn.onclick = function(){ if (invoicePage < totalInvoicePages) { invoicePage++; render(); } };
+
+      document.querySelectorAll('.view-invoice-btn').forEach(function(btn){
+        btn.onclick = ()=> openInvoiceDetailModal(btn.dataset.id);
+      });
+
+      const q = ($('#txnSearch').value || '').trim().toLowerCase();
+      const allTxns = (transactions || []).filter(function(t){
+        if (!q) return true;
+        return JSON.stringify(t).toLowerCase().includes(q);
+      });
+
+      const totalTxns = allTxns.length;
+      const totalTxnPages = Math.max(1, Math.ceil(totalTxns / txnPageSize));
+      if (txnPage > totalTxnPages) txnPage = totalTxnPages;
+      const pageTxns = allTxns.slice((txnPage - 1) * txnPageSize, txnPage * txnPageSize);
+
+      $('#paymentBody').innerHTML = pageTxns.map(function(t){
+        const isSuccess = ['completed', 'approved', 'paid'].includes(String(t.status || '').toLowerCase());
+        const refundedAmount = Number(t.refundedAmount || 0);
+        const remaining = Number((Number(t.amount || 0) - refundedAmount).toFixed(2));
+        const canRefund = t.transactionType === 'delivery-payment' && isSuccess && remaining > 0.01;
+
+        let statusLabel = t.status || 'Completed';
+        if (t.refunded) statusLabel = 'Refunded';
+        else if (refundedAmount > 0) statusLabel = 'Partially Refunded';
+
         return `
           <tr>
             <td>${t.invoice || t.invoiceId || '-'}</td>
             <td>${t.date || dateText(t.createdAt)}</td>
             <td>${t.mode || t.paymentMode || 'Payment'}</td>
             <td>${t.transactionId || t.id || '-'}</td>
-            <td>${money(t.amount)}</td>
+            <td>
+              ${money(t.amount)}
+              ${refundedAmount > 0 ? `<div class="subdued" style="font-size:12px">Refunded ${money(refundedAmount)} &middot; Remaining ${money(remaining)}</div>` : ''}
+            </td>
             <td>
               <span class="status-pill ${statusClass(t.status)}">
-                ${t.status || 'Completed'}
+                ${statusLabel}
               </span>
+            </td>
+            <td style="display:flex;gap:8px;flex-wrap:wrap">
+              ${t.invoiceId || t.invoice ? `<button class="view-invoice-from-txn-btn" data-id="${t.invoiceId || t.invoice}" type="button" style="background:transparent;border:1px solid #f7d10a;color:#f7d10a;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer">Invoice</button>` : ''}
+              ${canRefund
+                ? `<button class="refund-btn" data-id="${t.id}" data-remaining="${remaining}" type="button" style="background:transparent;border:1px solid #ef4444;color:#ff6b6b;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer">Refund</button>`
+                : ''}
             </td>
           </tr>
         `;
       }).join('') || `
         <tr>
-          <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
-            No transactions submitted yet.
+          <td colspan="7" style="text-align:center;color:#b9b9b9;padding:18px">
+            ${q ? 'No transactions match your search.' : 'No transactions submitted yet.'}
           </td>
         </tr>
       `;
+
+      $('#txnMeta').innerHTML = `
+        <div class="subdued">Showing <strong>${pageTxns.length}</strong> of <strong>${totalTxns}</strong> transactions</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn-yellow" id="txnPrevPage" ${txnPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;${txnPage <= 1 ? 'opacity:.5;cursor:not-allowed' : ''}">Prev</button>
+          <span class="subdued">Page ${txnPage} of ${totalTxnPages}</span>
+          <button class="btn-yellow" id="txnNextPage" ${txnPage >= totalTxnPages ? 'disabled' : ''} style="padding:6px 14px;${txnPage >= totalTxnPages ? 'opacity:.5;cursor:not-allowed' : ''}">Next</button>
+        </div>
+      `;
+
+      const txnPrevBtn = $('#txnPrevPage');
+      const txnNextBtn = $('#txnNextPage');
+      if (txnPrevBtn) txnPrevBtn.onclick = function(){ if (txnPage > 1) { txnPage--; render(); } };
+      if (txnNextBtn) txnNextBtn.onclick = function(){ if (txnPage < totalTxnPages) { txnPage++; render(); } };
+
+      document.querySelectorAll('.view-invoice-from-txn-btn').forEach(function(btn){
+        btn.onclick = ()=> openInvoiceDetailModal(btn.dataset.id);
+      });
+
+      document.querySelectorAll('.refund-btn').forEach(function(btn){
+        btn.addEventListener('click', async function(){
+          const id = btn.dataset.id;
+          const remaining = Number(btn.dataset.remaining);
+
+          const input = prompt(
+            `Remaining refundable: ₹${remaining.toLocaleString('en-IN')}.\n\nEnter amount to refund (leave blank for a FULL refund of the remaining balance):`
+          );
+
+          if (input === null) return;
+
+          let amount;
+
+          if (input.trim() === '') {
+            amount = undefined;
+          } else {
+            amount = Number(input);
+
+            if (Number.isNaN(amount) || amount <= 0) {
+              alert('Refund amount must be a number greater than zero.');
+              return;
+            }
+
+            if (amount > remaining) {
+              alert(`Refund amount cannot exceed the remaining refundable amount (₹${remaining.toLocaleString('en-IN')}).`);
+              return;
+            }
+          }
+
+          const reason = prompt('Reason for refund (shown to the business client):') || '';
+
+          if(!confirm(`Refund ${amount ? '₹' + amount.toLocaleString('en-IN') : 'the full remaining amount'} for transaction ${id}? This reverses the platform commission proportionally; the driver keeps their payout.`)) return;
+
+          try {
+            await DeliverySyncAPI.Transactions.refund(id, amount, reason);
+            showToast('Refund processed');
+            await Promise.all([render(), renderRevenueSummary()]);
+          } catch(error) {
+            console.error('Failed to refund transaction:', error);
+            alert(error.message || 'Failed to refund transaction.');
+          }
+        });
+      });
 
     } catch(error) {
       console.error('Failed to load transactions from backend:', error);
@@ -3072,78 +4026,381 @@ async function renderTransactions(){
       $('#invoiceBody').innerHTML = `
         <tr>
           <td colspan="5" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load invoices from backend.
+            Failed to load invoices.
           </td>
         </tr>
       `;
 
       $('#paymentBody').innerHTML = `
         <tr>
-          <td colspan="6" style="text-align:center;color:#ff6b6b;padding:18px">
-            Failed to load transactions from backend.
+          <td colspan="7" style="text-align:center;color:#ff6b6b;padding:18px">
+            Failed to load transactions.
           </td>
         </tr>
       `;
     }
   }
 
-  await Promise.all([render(), renderRevenueSummary()]);
+  let settlementPage = 1;
+  const settlementPageSize = 10;
+
+  async function renderSettlements(){
+    try {
+      const allSettlements = await DeliverySyncAPI.Payouts.listSettlements();
+
+      const setQ = ($('#settlementSearch').value || '').trim().toLowerCase();
+      const filtered = (allSettlements || []).filter(function(s){
+        if (!setQ) return true;
+        return JSON.stringify(s).toLowerCase().includes(setQ);
+      });
+
+      const totalSettlements = filtered.length;
+      const totalSettlementPages = Math.max(1, Math.ceil(totalSettlements / settlementPageSize));
+      if (settlementPage > totalSettlementPages) settlementPage = totalSettlementPages;
+      const pageSettlements = filtered.slice((settlementPage - 1) * settlementPageSize, settlementPage * settlementPageSize);
+
+      $('#settlementsBody').innerHTML = pageSettlements.map(function(s){
+        return `
+          <tr>
+            <td>${s.fleetManagerName || s.fleetManagerId}</td>
+            <td>${s.month}</td>
+            <td>${money(s.netIncome)}</td>
+            <td>
+              <span class="status-pill ${s.status === 'locked' ? 'blocked' : 'active'}">
+                ${s.status === 'locked' ? 'Locked' : 'Open'}
+              </span>
+            </td>
+            <td>${s.lockedAt ? dateText(s.lockedAt) : '-'}</td>
+            <td>
+              ${s.status === 'open'
+                ? `<button class="lock-settlement-btn" data-fm="${s.fleetManagerId}" data-month="${s.month}" type="button" style="background:transparent;border:1px solid #f7d10a;color:#f7d10a;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer">Lock</button>`
+                : '--'}
+            </td>
+          </tr>
+        `;
+      }).join('') || `
+        <tr>
+          <td colspan="6" style="text-align:center;color:#b9b9b9;padding:18px">
+            ${setQ ? 'No settlements match your search.' : "No settlement periods yet. A period is created the first time a fleet manager's statement is viewed."}
+          </td>
+        </tr>
+      `;
+
+      $('#settlementMeta').innerHTML = `
+        <div class="subdued">Showing <strong>${pageSettlements.length}</strong> of <strong>${totalSettlements}</strong> settlements</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn-yellow" id="settlementPrevPage" ${settlementPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;${settlementPage <= 1 ? 'opacity:.5;cursor:not-allowed' : ''}">Prev</button>
+          <span class="subdued">Page ${settlementPage} of ${totalSettlementPages}</span>
+          <button class="btn-yellow" id="settlementNextPage" ${settlementPage >= totalSettlementPages ? 'disabled' : ''} style="padding:6px 14px;${settlementPage >= totalSettlementPages ? 'opacity:.5;cursor:not-allowed' : ''}">Next</button>
+        </div>
+      `;
+
+      const setPrevBtn = $('#settlementPrevPage');
+      const setNextBtn = $('#settlementNextPage');
+      if (setPrevBtn) setPrevBtn.onclick = function(){ if (settlementPage > 1) { settlementPage--; renderSettlements(); } };
+      if (setNextBtn) setNextBtn.onclick = function(){ if (settlementPage < totalSettlementPages) { settlementPage++; renderSettlements(); } };
+
+      document.querySelectorAll('.lock-settlement-btn').forEach(function(btn){
+        btn.addEventListener('click', async function(){
+          const fleetManagerId = btn.dataset.fm;
+          const month = btn.dataset.month;
+
+          if(!confirm(`Lock the ${month} settlement for this fleet manager? Its statement will be frozen; later refunds will show up as adjustments in the current open period instead.`)) return;
+
+          try {
+            await DeliverySyncAPI.Payouts.lockSettlement(fleetManagerId, month);
+            showToast('Settlement locked');
+            renderSettlements();
+          } catch(error) {
+            console.error('Failed to lock settlement:', error);
+            alert(error.message || 'Failed to lock settlement.');
+          }
+        });
+      });
+    } catch(error) {
+      console.error('Failed to load settlements from backend:', error);
+
+      $('#settlementsBody').innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center;color:#ff6b6b;padding:18px">
+            Failed to load settlements.
+          </td>
+        </tr>
+      `;
+    }
+  }
+
+  $('#txnSearch').oninput = function(){ txnPage = 1; render(); };
+  $('#invoiceSearch').oninput = function(){ invoicePage = 1; render(); };
+  $('#settlementSearch').oninput = function(){ settlementPage = 1; renderSettlements(); };
+
+  await Promise.all([render(), renderRevenueSummary(), renderSettlements()]);
+}
+
+async function renderSuperuserDocuments(){
+  const s = pageLayout('Documents', 'Documents');
+  if(!s) return;
+
+  $('#pageRoot').innerHTML = `
+    <div class="content-card table-card">
+      <div class="table-head" style="align-items:flex-start;gap:16px;flex-wrap:wrap">
+        <div>
+          <h3>Document Management</h3>
+          <div class="subdued" style="margin-top:6px">
+            Vehicle, driver, and business client documents across the platform.
+          </div>
+        </div>
+
+        <input class="mini-input" id="docSearch" placeholder="Search by ID, owner, or type">
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Document ID</th>
+            <th>Owner Type</th>
+            <th>Owner</th>
+            <th>Document Type</th>
+            <th>Expiry Date</th>
+            <th>Status</th>
+            <th>File</th>
+          </tr>
+        </thead>
+
+        <tbody id="docsBody">
+          <tr>
+            <td colspan="7" style="text-align:center;color:#b9b9b9;padding:24px">
+              Loading documents...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  const render = async function(){
+    try {
+      const q = ($('#docSearch').value || '').trim();
+      const docs = await DeliverySyncAPI.Documents.getAll(q);
+
+      $('#docsBody').innerHTML = (docs || []).map(function(d){
+        const owner = d.vehicle || d.driver || d.delivery || '-';
+
+        return `
+          <tr>
+            <td>${d.id || '-'}</td>
+            <td>${d.ownerType || '-'}</td>
+            <td>${owner}</td>
+            <td>${d.documentType || '-'}</td>
+            <td>${d.expiryDate || '-'}</td>
+            <td><span class="status-pill ${statusClass(d.status)}">${d.status || '-'}</span></td>
+            <td>${d.fileUrl ? `<a href="http://localhost:3000${d.fileUrl}" target="_blank" rel="noopener">View</a>` : '-'}</td>
+          </tr>
+        `;
+      }).join('') || `
+        <tr>
+          <td colspan="7" style="text-align:center;padding:24px;color:#9ca3af">
+            No documents found.
+          </td>
+        </tr>
+      `;
+    } catch(error) {
+      console.error('Failed to load documents from backend:', error);
+      $('#docsBody').innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center;padding:24px;color:#ff6b6b">
+            Failed to load documents.
+          </td>
+        </tr>
+      `;
+    }
+  };
+
+  $('#docSearch').oninput = render;
+  await render();
 }
 
 async function renderNotifications(){
   const s = pageLayout('Notifications','Notifications');
   if(!s) return;
 
+  let notifications = [];
+  let currentFilter = 'all';
+
   $('#pageRoot').innerHTML = `
-    <div class="content-card profile-card" style="max-width:760px">
-      <div id="notificationsBody" style="color:#b9b9b9;padding:18px">
-        Loading notifications...
+    <div class="notifications-page">
+      <div class="notifications-header">
+        <div>
+          <h1>Notifications</h1>
+          <p>System-wide alerts and platform notifications</p>
+        </div>
+        <div class="new-count"><span id="newCount">0</span><small>Unread</small></div>
       </div>
 
-      <div style="text-align:right;margin-top:18px">
-        <button class="btn-yellow" id="markRead">Mark all as read</button>
+      <div class="notification-toolbar">
+        <div class="filter-tabs">
+          <button type="button" class="filter-tab active" data-filter="all"><span>All</span><b id="allCount">0</b></button>
+          <button type="button" class="filter-tab" data-filter="unread"><span>Unread</span><b id="unreadCount">0</b></button>
+          <button type="button" class="filter-tab" data-filter="read"><span>Read</span><b id="readCount">0</b></button>
+          <button type="button" class="filter-tab" data-filter="critical"><span>Critical</span><b id="criticalCount" class="critical-count">0</b></button>
+          <button type="button" class="filter-tab" data-filter="high"><span>High</span><b id="highCount" class="high-count">0</b></button>
+        </div>
+
+        <div class="toolbar-actions">
+          <button type="button" class="su-action-btn" id="refreshNotifBtn">↻<span>Refresh</span></button>
+          <button type="button" class="su-primary-btn" id="markAllReadBtn">Mark All as Read</button>
+        </div>
+      </div>
+
+      <div class="notification-list" id="notificationList">
+        <div class="notification-loading">Loading notifications...</div>
       </div>
     </div>
   `;
 
+  function priorityOf(n){
+    const explicit = String(n.priority || n.severity || n.level || '').toLowerCase();
+    if(['critical','urgent','danger'].includes(explicit)) return 'critical';
+    if(['high','important'].includes(explicit)) return 'high';
+
+    const text = String(`${n.title || ''} ${n.message || ''}`).toLowerCase();
+    if(['blocked','suspended','violation','critical','failed'].some(k => text.includes(k))) return 'critical';
+    if(['warning','expire','expired','maintenance','overdue'].some(k => text.includes(k))) return 'high';
+    return 'normal';
+  }
+
+  function formatTime(value){
+    if(!value) return 'Recently';
+    const d = new Date(value);
+    if(Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function render(){
+    const unread = notifications.filter(n => !n.read);
+    const read = notifications.filter(n => n.read);
+    const critical = notifications.filter(n => priorityOf(n) === 'critical');
+    const high = notifications.filter(n => priorityOf(n) === 'high');
+
+    $('#allCount').textContent = notifications.length;
+    $('#unreadCount').textContent = unread.length;
+    $('#readCount').textContent = read.length;
+    $('#criticalCount').textContent = critical.length;
+    $('#highCount').textContent = high.length;
+    $('#newCount').textContent = unread.length;
+
+    let filtered = [...notifications];
+    if(currentFilter === 'unread') filtered = filtered.filter(n => !n.read);
+    if(currentFilter === 'read') filtered = filtered.filter(n => n.read);
+    if(currentFilter === 'critical') filtered = filtered.filter(n => priorityOf(n) === 'critical');
+    if(currentFilter === 'high') filtered = filtered.filter(n => priorityOf(n) === 'high');
+
+    const list = $('#notificationList');
+
+    if(!filtered.length){
+      list.innerHTML = `<div class="notification-empty"><strong>No notifications found</strong>There are no notifications in this category.</div>`;
+      return;
+    }
+
+    list.innerHTML = filtered.map(function(n){
+      const id = n.id || '';
+      const title = n.title || 'Notification';
+      const message = n.message || n.description || 'No additional details available.';
+      const read = Boolean(n.read);
+      const priority = priorityOf(n);
+      const time = n.time || n.createdAt || n.updatedAt || 'Recently';
+
+      return `
+        <article class="notification-card ${read ? '' : 'unread'}" data-id="${id}">
+          <div class="notification-icon">${icon.bell}</div>
+          <div class="notification-main">
+            <div class="notification-title-row">
+              <h3>${title}${read ? '' : '<span class="unread-dot" title="Unread"></span>'}</h3>
+              <span class="priority ${priority}">${priority === 'critical' ? 'Critical' : priority === 'high' ? 'High' : 'Normal'}</span>
+            </div>
+            <p class="notification-message">${message}</p>
+          </div>
+          <div class="notification-side">
+            <div class="notification-time">${formatTime(time)}</div>
+            <div class="notification-actions">
+              <button type="button" class="notif-action notif-read-btn" data-read-id="${id}" data-read-state="${read}">${read ? 'Mark unread' : 'Mark read'}</button>
+              <button type="button" class="notif-action notif-delete-btn" data-delete-id="${id}" aria-label="Delete notification" title="Delete notification">×</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
   async function loadNotifications(){
     try {
-      const notifications = await DeliverySyncAPI.Notifications.getAll();
-
-      $('#notificationsBody').innerHTML = (notifications || []).map(function(n){
-        return `
-          <div class="notify-item">
-            <strong>${n.title || 'Notification'}</strong>
-            <span>${n.desc || n.message || '-'}</span>
-            <span>${n.time || n.createdAt || '--'}</span>
-          </div>
-        `;
-      }).join('') || `
-        <div style="text-align:center;color:#b9b9b9;padding:24px">
-          No notifications found.
-        </div>
-      `;
+      $('#notificationList').innerHTML = `<div class="notification-loading">Loading notifications...</div>`;
+      notifications = await DeliverySyncAPI.Notifications.getAll();
+      render();
     } catch(error) {
       console.error('Failed to load notifications from backend:', error);
-
-      $('#notificationsBody').innerHTML = `
-        <div style="text-align:center;color:#ff6b6b;padding:24px">
-          Failed to load notifications from backend.
-        </div>
-      `;
+      $('#notificationList').innerHTML = `<div class="notification-error">Unable to load notifications.</div>`;
     }
   }
 
-  $('#markRead').onclick = async function(){
+  $('#refreshNotifBtn').onclick = loadNotifications;
+
+  $('#markAllReadBtn').onclick = async function(){
+    const btn = $('#markAllReadBtn');
     try {
+      btn.disabled = true;
+      btn.textContent = 'Marking as read...';
       await DeliverySyncAPI.Notifications.markAllRead();
-      showToast('All notifications marked as read.');
       await loadNotifications();
     } catch(error) {
-      console.error('Failed to mark notifications as read:', error);
-      alert('Failed to mark notifications as read from backend');
+      console.error('Failed to mark all as read:', error);
+      alert('Unable to mark all notifications as read.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Mark All as Read';
     }
   };
+
+  document.querySelectorAll('.filter-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.dataset.filter || 'all';
+      render();
+    });
+  });
+
+  $('#notificationList').addEventListener('click', async function(event){
+    const readBtn = event.target.closest('[data-read-id]');
+    const deleteBtn = event.target.closest('[data-delete-id]');
+
+    if(readBtn){
+      const id = readBtn.dataset.readId;
+      const currentlyRead = readBtn.dataset.readState === 'true';
+
+      try {
+        await DeliverySyncAPI.Notifications.markOne(id, !currentlyRead);
+        await loadNotifications();
+      } catch(error) {
+        console.error('Failed to update notification:', error);
+        alert('Failed to update notification.');
+      }
+      return;
+    }
+
+    if(deleteBtn){
+      const id = deleteBtn.dataset.deleteId;
+      if(!confirm('Delete this notification?')) return;
+
+      try {
+        await DeliverySyncAPI.Notifications.delete(id);
+        await loadNotifications();
+      } catch(error) {
+        console.error('Failed to delete notification:', error);
+        alert('Failed to delete notification.');
+      }
+    }
+  });
 
   await loadNotifications();
 }
@@ -3158,7 +4415,7 @@ async function renderProfile(){
   $('#pageRoot').innerHTML = `
     <div class="content-card profile-card" style="max-width:760px">
       <div style="text-align:center;color:#b9b9b9;padding:30px">
-        Loading profile from backend...
+        Loading profile...
       </div>
     </div>
   `;
@@ -3221,7 +4478,7 @@ async function renderProfile(){
             </div>
             <div class="profile-item">
               <div class="detail-label">Password Changed</div>
-              <div class="detail-main">Backend managed</div>
+              <div class="detail-main">Managed in account settings</div>
             </div>
           </div>
 
@@ -3253,6 +4510,7 @@ async function renderProfile(){
             </div>
 
             <div class="form-actions">
+              <button class="btn-dark" id="cancelProfileBtn" type="button">Cancel</button>
               <button class="btn-yellow" id="saveProfileBtn">Save Profile</button>
             </div>
           </div>
@@ -3262,6 +4520,13 @@ async function renderProfile(){
 
     $('#editProfileBtn').onclick = function(){
       document.getElementById('profileNameInput').focus();
+    };
+
+    $('#cancelProfileBtn').onclick = function(){
+      $('#profileNameInput').value = profileName;
+      $('#profilePhoneInput').value = profilePhone === '--' ? '' : profilePhone;
+      $('#err-profileNameInput').textContent = '';
+      $('#err-profilePhoneInput').textContent = '';
     };
 
     $('#saveProfileBtn').onclick = async function(){
@@ -3299,7 +4564,7 @@ async function renderProfile(){
         await renderProfile();
       } catch(error) {
         console.error('Failed to update profile from backend:', error);
-        alert('Failed to update profile from backend');
+        alert('Failed to update profile');
       }
     };
 
@@ -3308,7 +4573,7 @@ async function renderProfile(){
 
     $('#pageRoot').innerHTML = `
       <div class="content-card profile-card" style="max-width:760px;text-align:center;color:#ff6b6b;padding:30px">
-        Failed to load profile from backend.
+        Failed to load profile.
       </div>
     `;
   }
@@ -3339,6 +4604,7 @@ async function renderProfile(){
       'maintenance':renderMaintenance,
       'schedule-maintenance':renderScheduleMaintenance,
       'transactions':renderTransactions,
+      'documents':renderSuperuserDocuments,
       'notifications':renderNotifications,
       'profile':renderProfile
     };

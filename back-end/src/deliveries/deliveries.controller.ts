@@ -6,8 +6,10 @@ import {
   Body,
   Param,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiTags,
   ApiOperation,
@@ -42,8 +44,10 @@ export class DeliveriesController {
   findAll(
     @Query('search') search?: string,
     @Query('status') status?: string,
+    @Req() req?: Request,
   ) {
-    return this.deliveriesService.findAll(search, status);
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.deliveriesService.findAll(search, status, requester);
   }
 
   @Get(':id')

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -42,7 +42,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <h1 id="pageTitle">Task Details</h1>
-          <p id="pageSubtitle">Loading backend task details...</p>
+          <p id="pageSubtitle">Loading task details...</p>
         </div>
 
         <div class="topbar-right">
@@ -671,6 +671,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "driver";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
       let sessionUser = null;
       try {
@@ -721,7 +723,7 @@
         const result = window.DeliverySyncAPI?.Trips?.getAll
           ? await DeliverySyncAPI.Trips.getAll()
           : await fetch("http://localhost:3000/api/trips", {
-              headers: { "x-user-role": ROLE },
+              headers: { "Authorization": "Bearer " + TOKEN },
             }).then((res) => {
               if (!res.ok) throw new Error(`Trips fetch failed with status ${res.status}`);
               return res.json();
@@ -735,7 +737,7 @@
           null;
 
         if (!trip) {
-          throw new Error(`Trip "${tripId}" not found from backend.`);
+          throw new Error(`Trip "${tripId}" not found.`);
         }
 
         return trip;
@@ -750,7 +752,7 @@
           }
 
           return await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(requestId)}`, {
-            headers: { "x-user-role": ROLE },
+            headers: { "Authorization": "Bearer " + TOKEN },
           }).then((res) => {
             if (!res.ok) throw new Error(`Delivery fetch failed with status ${res.status}`);
             return res.json();
@@ -766,7 +768,7 @@
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
           body: JSON.stringify({ status }),
         });
@@ -849,7 +851,7 @@
           "Not available";
 
         setText("pageTitle", `Delivery #${requestId}`);
-        setText("pageSubtitle", `Backend task details for ${currentTrip.id}`);
+        setText("pageSubtitle", `Task details for ${currentTrip.id}`);
 
         setText("deliveryTitle", `Delivery #${requestId}`);
         setText("deliveryRoute", `${pickup} → ${drop}`);
@@ -893,8 +895,7 @@
 
       const renderNotes = () => {
         const notesList = document.getElementById("notesList");
-        const key = `driver_notes_${tripId}`;
-        const notes = JSON.parse(localStorage.getItem(key) || "[]");
+        const notes = (currentTrip && currentTrip.driverNotes) || [];
 
         if (!notes.length) {
           notesList.innerHTML = `<div class="empty-state">No notes added yet.</div>`;
@@ -905,7 +906,7 @@
           <div class="saved-note">
             <strong>Note ${index + 1}</strong>
             <p>${note.text}</p>
-            <p style="margin-top:8px;color:#9ca3af;font-size:12px">${note.time}</p>
+            <p style="margin-top:8px;color:#9ca3af;font-size:12px">${new Date(note.time).toLocaleString("en-IN")}</p>
           </div>
         `).join("");
       };
@@ -932,6 +933,26 @@
 
           renderPage();
           renderNotes();
+
+          const acceptBtnEl = document.getElementById("acceptBtn");
+          if (acceptBtnEl && !acceptBtnEl.disabled) {
+            try {
+              const allTrips = window.DeliverySyncAPI?.Trips?.getAll ? await DeliverySyncAPI.Trips.getAll() : [];
+              const list = Array.isArray(allTrips) ? allTrips : (allTrips?.data || allTrips?.items || []);
+              const hasOtherActive = list.some((t) =>
+                String(t.id) !== String(currentTrip.id) &&
+                normalize(t.driver || t.assignedDriver) === normalize(DRIVER_NAME) &&
+                ["accepted", "picked up", "in transit"].includes(normalize(t.status))
+              );
+
+              if (hasOtherActive) {
+                acceptBtnEl.disabled = true;
+                acceptBtnEl.title = "Complete your current delivery before accepting a new one";
+              }
+            } catch (e) {
+              console.error("Failed to check for other active deliveries:", e);
+            }
+          }
 
           console.log("TASK DETAILS TRIP:", currentTrip);
           console.log("TASK DETAILS DELIVERY:", currentDelivery);
@@ -966,12 +987,12 @@
 
           await updateTripStatus("Accepted");
 
-          window.location.href = `delivery-accepted.html?id=${encodeURIComponent(tripId)}`;
+          window.location.href = `map.html?id=${encodeURIComponent(tripId)}`;
         } catch (error) {
           console.error("Accept failed:", error);
           btn.disabled = false;
           btn.textContent = "Accept Order";
-          setVerification(`Accept failed: ${error.message}`, true);
+          alert(error.message || "Failed to accept this delivery.");
         }
       });
 
@@ -991,27 +1012,33 @@
           console.error("Reject failed:", error);
           btn.disabled = false;
           btn.textContent = "Reject";
-          setVerification(`Reject failed: ${error.message}`, true);
+          alert(error.message || "Failed to reject this delivery.");
         }
       });
 
-      document.getElementById("saveNoteBtn").addEventListener("click", () => {
+      document.getElementById("saveNoteBtn").addEventListener("click", async () => {
         const input = document.getElementById("noteInput");
         const value = input.value.trim();
 
         if (!value) return;
 
-        const key = `driver_notes_${tripId}`;
-        const notes = JSON.parse(localStorage.getItem(key) || "[]");
+        const btn = document.getElementById("saveNoteBtn");
 
-        notes.unshift({
-          text: value,
-          time: new Date().toLocaleString("en-IN"),
-        });
+        try {
+          btn.disabled = true;
+          btn.textContent = "Saving...";
 
-        localStorage.setItem(key, JSON.stringify(notes));
-        input.value = "";
-        renderNotes();
+          currentTrip = await DeliverySyncAPI.Trips.addNote(tripId, value);
+
+          input.value = "";
+          renderNotes();
+        } catch (error) {
+          console.error("Failed to save note:", error);
+          alert("Failed to save note: " + (error.message || "unknown error"));
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Save Note";
+        }
       });
 
       document.getElementById("clearNoteBtn").addEventListener("click", () => {
@@ -1020,6 +1047,14 @@
 
       document.getElementById("driverLogout").addEventListener("click", () => {
         window.location.href = "../login.html";
+      });
+
+      document.getElementById("backBtn").addEventListener("click", (event) => {
+        const ref = document.referrer;
+        if (ref && ref.includes("/driver/") && !ref.includes("task-details.html")) {
+          event.preventDefault();
+          window.history.back();
+        }
       });
 
       await loadPage();

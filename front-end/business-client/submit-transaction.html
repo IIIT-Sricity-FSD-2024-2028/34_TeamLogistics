@@ -273,7 +273,7 @@
 
             <div id="unpaidInvoicesBox">
               <div style="background:#050505;border-radius:12px;padding:16px;color:#cbd5e1">
-                Loading unpaid invoices from backend...
+                Loading unpaid invoices...
               </div>
             </div>
 
@@ -482,7 +482,7 @@
           if (box) {
             box.innerHTML = `
               <div style="background:#331717;border:1px solid #ef4444;border-radius:12px;padding:16px;color:#fecaca">
-                Could not load unpaid invoices from backend.
+                Could not load unpaid invoices.
               </div>
             `;
           }
@@ -577,11 +577,12 @@
             if (DeliverySyncAPI.Transactions.create) {
               createdTransaction = await DeliverySyncAPI.Transactions.create(payload);
             } else {
+              const submitSession = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {};
               createdTransaction = await fetch("http://localhost:3000/api/transactions", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  "x-user-role": "business-client",
+                  "Authorization": "Bearer " + (submitSession.token || ""),
                 },
                 body: JSON.stringify(payload),
               }).then((res) => {

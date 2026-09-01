@@ -6,8 +6,14 @@ import { CreateDriverDto, UpdateDriverDto } from './dto/driver.dto';
 export class DriversService {
   constructor(private readonly store: DataStoreService) {}
 
-  findAll(search?: string): Driver[] {
+  findAll(search?: string, requester?: { userId: string; role: string }): Driver[] {
     let drivers = [...this.store.drivers];
+
+    if (requester && requester.role === 'fleet-manager') {
+      drivers = drivers.filter(
+        (d) => !d.fleetManagerId || d.fleetManagerId === requester.userId,
+      );
+    }
 
     if (search) {
       const q = search.toLowerCase();
@@ -19,17 +25,26 @@ export class DriversService {
     return drivers;
   }
 
-  findOne(id: string): Driver {
+  findOne(id: string, requester?: { userId: string; role: string }): Driver {
     const driver = this.store.drivers.find((d) => d.id === id);
 
     if (!driver) {
       throw new NotFoundException(`Driver "${id}" not found`);
     }
 
+    if (
+      requester &&
+      requester.role === 'fleet-manager' &&
+      driver.fleetManagerId &&
+      driver.fleetManagerId !== requester.userId
+    ) {
+      throw new NotFoundException(`Driver "${id}" not found`);
+    }
+
     return driver;
   }
 
-  create(dto: CreateDriverDto): Driver {
+  create(dto: CreateDriverDto, requester?: { userId: string; role: string }): Driver {
     const driver: Driver = {
       id: `DRV-${String(this.store.drivers.length + 1).padStart(3, '0')}`,
       name: dto.name,
@@ -44,6 +59,7 @@ export class DriversService {
       licenseNumber: dto.licenseNumber || (dto as any).license || '',
       vehicle: dto.vehicle || '',
       vehicleType: dto.vehicleType || '',
+      fleetManagerId: requester?.role === 'fleet-manager' ? requester.userId : undefined,
     } as Driver;
 
     this.store.drivers.push(driver);
@@ -52,7 +68,7 @@ export class DriversService {
     return driver;
   }
 
-  update(id: string, dto: UpdateDriverDto): Driver {
+  update(id: string, dto: UpdateDriverDto, requester?: { userId: string; role: string }): Driver {
   const index = this.store.drivers.findIndex((d) => d.id === id);
 
   if (index < 0) {
@@ -60,6 +76,15 @@ export class DriversService {
   }
 
   const existing = this.store.drivers[index];
+
+  if (
+    requester &&
+    requester.role === 'fleet-manager' &&
+    existing.fleetManagerId &&
+    existing.fleetManagerId !== requester.userId
+  ) {
+    throw new NotFoundException(`Driver "${id}" not found`);
+  }
 
   const updatedDriver: Driver = {
     ...existing,
@@ -141,10 +166,19 @@ export class DriversService {
   return updatedDriver;
 }
 
-  remove(id: string): { message: string } {
+  remove(id: string, requester?: { userId: string; role: string }): { message: string } {
     const index = this.store.drivers.findIndex((d) => d.id === id);
 
     if (index < 0) {
+      throw new NotFoundException(`Driver "${id}" not found`);
+    }
+
+    if (
+      requester &&
+      requester.role === 'fleet-manager' &&
+      this.store.drivers[index].fleetManagerId &&
+      this.store.drivers[index].fleetManagerId !== requester.userId
+    ) {
       throw new NotFoundException(`Driver "${id}" not found`);
     }
 

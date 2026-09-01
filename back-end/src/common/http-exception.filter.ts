@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { logError } from '../middleware';
+import { decodeBearerToken } from './jwt.constants';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -40,6 +41,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         : 'Error';
 
     const timestamp = new Date().toISOString();
+    const authedUser = (request as any).user as { userId?: string; role?: string } | undefined;
+    const { userId, role } = authedUser ?? decodeBearerToken(request.headers['authorization']);
 
     const logEntry = {
       timestamp,
@@ -49,8 +52,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error: errorName,
       message,
       ip: request.ip || request.headers['x-forwarded-for']?.toString() || 'unknown',
-      role: request.headers['x-user-role'],
-      userId: request.headers['x-user-id'],
+      role,
+      userId,
       stack: exception instanceof Error ? exception.stack : undefined,
     };
 

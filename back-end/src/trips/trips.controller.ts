@@ -5,9 +5,11 @@ import {
   Body,
   Param,
   Query,
+  Req,
   UseGuards,
   BadRequestException,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiTags,
   ApiOperation,
@@ -29,8 +31,9 @@ export class TripsController {
   @Roles(Role.SUPERUSER, Role.FLEET_MANAGER, Role.DRIVER, Role.BUSINESS_CLIENT)
   @ApiOperation({ summary: 'List all trips' })
   @ApiQuery({ name: 'search', required: false })
-  findAll(@Query('search') search?: string) {
-    return this.tripsService.findAll(search);
+  findAll(@Query('search') search?: string, @Req() req?: Request) {
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.tripsService.findAll(search, requester);
   }
 
   @Get(':id')
@@ -100,15 +103,14 @@ export class TripsController {
   updateStatus(
     @Param('id') id: string,
     @Body() body?: { status?: string },
+    @Req() req?: Request,
   ) {
-    console.log('PATCH STATUS ID:', id);
-    console.log('PATCH STATUS BODY:', body);
-
     if (!body || !body.status) {
       throw new BadRequestException('status is required');
     }
 
-    return this.tripsService.updateStatus(id, body.status);
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.tripsService.updateStatus(id, body.status, requester);
   }
 
   @Patch(':id/report-issue')
@@ -147,14 +149,64 @@ export class TripsController {
       description?: string;
       status?: string;
     },
+    @Req() req?: Request,
   ) {
-    console.log('PATCH REPORT ISSUE ID:', id);
-    console.log('PATCH REPORT ISSUE BODY:', body);
-
     if (!body || !body.issueType || !body.description) {
       throw new BadRequestException('issueType and description are required');
     }
 
-    return this.tripsService.reportIssue(id, body);
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.tripsService.reportIssue(id, body, requester);
+  }
+
+  @Patch(':id/notes')
+  @Roles(Role.SUPERUSER, Role.FLEET_MANAGER, Role.DRIVER)
+  @ApiOperation({ summary: 'Add a driver note to a trip' })
+  @ApiParam({ name: 'id' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: { text: { type: 'string', example: 'Customer asked to leave at gate.' } },
+      required: ['text'],
+    },
+  })
+  addNote(@Param('id') id: string, @Body() body?: { text?: string }, @Req() req?: Request) {
+    if (!body || !body.text || !body.text.trim()) {
+      throw new BadRequestException('text is required');
+    }
+
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.tripsService.addNote(id, body.text.trim(), requester);
+  }
+
+  @Patch(':id/resolve-dispute')
+  @Roles(Role.SUPERUSER, Role.FLEET_MANAGER)
+  @ApiOperation({
+    summary: 'Resolve a reported issue with a billable amount',
+    description:
+      'Sets the amount the business client should actually be charged for a disputed/damaged delivery. Commission and driver payout use this amount instead of the original invoice total.',
+  })
+  @ApiParam({ name: 'id' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        resolvedAmount: { type: 'number', example: 2500 },
+        reason: { type: 'string', example: 'Partial delivery — 2 of 5 items damaged.' },
+      },
+      required: ['resolvedAmount'],
+    },
+  })
+  resolveDispute(
+    @Param('id') id: string,
+    @Body() body?: { resolvedAmount?: number; reason?: string },
+    @Req() req?: Request,
+  ) {
+    if (!body || body.resolvedAmount === undefined || body.resolvedAmount === null) {
+      throw new BadRequestException('resolvedAmount is required');
+    }
+
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.tripsService.resolveDispute(id, Number(body.resolvedAmount), body.reason || '', requester);
   }
 }

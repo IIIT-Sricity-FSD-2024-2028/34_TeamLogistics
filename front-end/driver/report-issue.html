@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -173,7 +173,7 @@
           <div class="issue-card">
             <h2>Open Reports</h2>
             <div id="reportsList">
-              <div class="empty-state">Loading reports from backend...</div>
+              <div class="empty-state">Loading reports...</div>
             </div>
           </div>
         </div>
@@ -403,6 +403,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "driver";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const params = new URLSearchParams(window.location.search);
       const tripId = params.get("id");
 
@@ -437,7 +439,7 @@
       const fetchTrip = async (id) => {
         const response = await fetch(`http://localhost:3000/api/trips/${encodeURIComponent(id)}`, {
           headers: {
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
         });
 
@@ -451,7 +453,7 @@
       const fetchDelivery = async (id) => {
         const response = await fetch(`http://localhost:3000/api/deliveries/${encodeURIComponent(id)}`, {
           headers: {
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
         });
 
@@ -465,7 +467,7 @@
       const fetchTrips = async () => {
         const response = await fetch("http://localhost:3000/api/trips", {
           headers: {
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
         });
 
@@ -481,7 +483,7 @@
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "x-user-role": ROLE,
+            "Authorization": "Bearer " + TOKEN,
           },
           body: JSON.stringify(payload),
         });
@@ -502,7 +504,7 @@
         });
 
         if (!reports.length) {
-          reportsList.innerHTML = `<div class="empty-state">No issue reports found from backend.</div>`;
+          reportsList.innerHTML = `<div class="empty-state">No issue reports found.</div>`;
           return;
         }
 
@@ -521,7 +523,7 @@
 
       const loadPage = async () => {
         if (!tripId) {
-          setVerification("Missing trip id in URL. Example: report-issue.html?id=TRP-2026-003", true);
+          setMessage("Missing trip id in URL. Example: report-issue.html?id=TRP-2026-003", "error");
           return;
         }
 
@@ -572,6 +574,7 @@
 
         const issueType = document.getElementById("issueTypeInput").value;
         const description = document.getElementById("descriptionInput").value.trim();
+        const photoFile = document.getElementById("photoInput").files[0];
 
         if (!issueType || !description) {
           setMessage("Issue type and description are required.", "error");
@@ -593,19 +596,23 @@
 
           const updatedTrip = await reportIssue(trip.id, payload);
 
+          if (photoFile) {
+            submitBtn.textContent = "Uploading photo...";
+
+            const deliveryId = trip.request || trip.deliveryId || trip.deliveryRequestId || trip.id;
+            const photoFormData = new FormData();
+            photoFormData.append("ownerType", "delivery");
+            photoFormData.append("delivery", deliveryId);
+            photoFormData.append("documentType", "Issue Evidence");
+            photoFormData.append("status", "Valid");
+            photoFormData.append("file", photoFile);
+
+            await DeliverySyncAPI.Documents.create(photoFormData);
+          }
+
           console.log("REPORT ISSUE RESPONSE:", updatedTrip);
 
-          console.table({
-            issueReportedInBackend: true,
-            tripId: updatedTrip.id || trip.id,
-            deliveryRequest: updatedTrip.request || trip.request,
-            status: updatedTrip.status,
-            issueType,
-            source: "PATCH /api/trips/:id/report-issue",
-          });
-
-          setMessage("Issue reported successfully. Backend synced.", "success");
-          
+          setMessage("Issue reported successfully.", "success");
 
           setTimeout(() => {
             window.location.href = `history.html`;
@@ -613,7 +620,6 @@
         } catch (error) {
           console.error("Issue report failed:", error);
           setMessage(`Issue report failed: ${error.message}`, "error");
-          setVerification(`Issue report failed: ${error.message}`, true);
           submitBtn.disabled = false;
           submitBtn.textContent = "Submit Report";
         }

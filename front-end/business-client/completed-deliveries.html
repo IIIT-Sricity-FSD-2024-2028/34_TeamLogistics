@@ -15,7 +15,6 @@
   <script src="../assets/js/data.js"></script>
   <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/business-client.js" defer></script>
-  <script src="../assets/js/workflow-demo.js" defer></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -175,7 +174,10 @@
         </div>
 
         <div class="table-card">
-          <div class="table-head">Recent Completions</div>
+          <div class="table-head" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <span>Recent Completions</span>
+            <input id="completedSearch" placeholder="Search by ID, driver, route, status..." style="padding:8px 12px;border-radius:10px;border:1px solid #262626;background:#0b0b0b;color:#fff;font:inherit;min-width:240px">
+          </div>
 
           <table class="table">
             <thead>
@@ -193,11 +195,13 @@
             <tbody id="completedDeliveriesBody">
               <tr>
                 <td colspan="7" style="text-align:center;color:#8f8f8f;padding:24px">
-                  Loading completed deliveries from backend...
+                  Loading completed deliveries...
                 </td>
               </tr>
             </tbody>
           </table>
+
+          <div id="completedMeta" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding:0 16px 16px"></div>
         </div>
       </section>
     </main>
@@ -334,24 +338,36 @@
             return db - da;
           });
 
-        const tbody = document.getElementById("completedDeliveriesBody");
-
         setText("completedSubtitle", `${completedDeliveries.length} most recent deliveries`);
         setText("completedWeekCount", completedDeliveries.length);
         setText("completedMonthCount", completedDeliveries.length);
 
-        if (!tbody) return;
+        let completedPage = 1;
+        const completedPageSize = 8;
 
-        if (completedDeliveries.length === 0) {
+        const renderCompletedTable = () => {
+          const tbody = document.getElementById("completedDeliveriesBody");
+          if (!tbody) return;
+
+          const q = (document.getElementById("completedSearch").value || "").trim().toLowerCase();
+          const filtered = q
+            ? completedDeliveries.filter((d) => JSON.stringify(d).toLowerCase().includes(q))
+            : completedDeliveries;
+
+          const totalPages = Math.max(1, Math.ceil(filtered.length / completedPageSize));
+          if (completedPage > totalPages) completedPage = totalPages;
+          const pageDeliveries = filtered.slice((completedPage - 1) * completedPageSize, completedPage * completedPageSize);
+
+        if (pageDeliveries.length === 0) {
           tbody.innerHTML = `
             <tr>
               <td colspan="7" style="text-align:center;color:#8f8f8f;padding:24px">
-                No completed deliveries found from backend.
+                ${q ? "No deliveries match your search." : "No completed deliveries found."}
               </td>
             </tr>
           `;
         } else {
-          tbody.innerHTML = completedDeliveries
+          tbody.innerHTML = pageDeliveries
             .map((delivery) => {
               const trip = getLinkedTrip(delivery, trips);
               const invoice = getLinkedInvoice(delivery, invoices);
@@ -408,6 +424,24 @@
             .join("");
         }
 
+          document.getElementById("completedMeta").innerHTML = `
+            <span style="color:#8f8f8f;font-size:12px">Showing ${pageDeliveries.length} of ${filtered.length}</span>
+            <div style="display:flex;gap:8px">
+              <button id="completedPrev" ${completedPage <= 1 ? "disabled" : ""} style="padding:6px 12px;border-radius:8px;border:1px solid #262626;background:#111;color:#fff;cursor:pointer">Prev</button>
+              <span style="color:#8f8f8f;font-size:12px;align-self:center">Page ${completedPage} of ${totalPages}</span>
+              <button id="completedNext" ${completedPage >= totalPages ? "disabled" : ""} style="padding:6px 12px;border-radius:8px;border:1px solid #262626;background:#111;color:#fff;cursor:pointer">Next</button>
+            </div>
+          `;
+
+          const prevBtn = document.getElementById("completedPrev");
+          const nextBtn = document.getElementById("completedNext");
+          if (prevBtn) prevBtn.onclick = () => { if (completedPage > 1) { completedPage--; renderCompletedTable(); } };
+          if (nextBtn) nextBtn.onclick = () => { if (completedPage < totalPages) { completedPage++; renderCompletedTable(); } };
+        };
+
+        renderCompletedTable();
+        document.getElementById("completedSearch").oninput = () => { completedPage = 1; renderCompletedTable(); };
+
         const tripMatches = completedDeliveries.filter((d) => getLinkedTrip(d, trips)).length;
         const invoiceMatches = completedDeliveries.filter((d) => getLinkedInvoice(d, invoices)).length;
 
@@ -432,7 +466,7 @@
           tbody.innerHTML = `
             <tr>
               <td colspan="7" style="text-align:center;color:#ff8d8d;padding:24px">
-                Could not load completed deliveries from backend.
+                Could not load completed deliveries.
               </td>
             </tr>
           `;

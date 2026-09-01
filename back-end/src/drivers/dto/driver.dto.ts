@@ -37,13 +37,23 @@ export class CreateDriverDto {
   @IsString()
   vehicleType?: string;
 
+  @ApiPropertyOptional({ example: 'Chennai North' })
+  @IsOptional()
+  @IsString()
+  zone?: string;
+
+  @ApiPropertyOptional({ example: 'TN03201800034521' })
+  @IsOptional()
+  @IsString()
+  license?: string;
+
   @ApiPropertyOptional({
     example: 'Available',
-    enum: ['Available', 'Active', 'Busy', 'Offline', 'Inactive'],
+    enum: ['Available', 'Active', 'On Duty', 'Busy', 'Offline', 'Inactive', 'Suspended', 'Rejected', 'Document Review'],
   })
   @IsOptional()
   @IsString()
-  @IsIn(['Available', 'Active', 'Busy', 'Offline', 'Inactive'])
+  @IsIn(['Available', 'Active', 'On Duty', 'Busy', 'Offline', 'Inactive', 'Suspended', 'Rejected', 'Document Review'])
   status?: string;
 }
 
@@ -79,12 +89,22 @@ export class UpdateDriverDto {
   @IsString()
   vehicleType?: string;
 
+  @ApiPropertyOptional({ example: 'Chennai North' })
+  @IsOptional()
+  @IsString()
+  zone?: string;
+
+  @ApiPropertyOptional({ example: 'TN03201800034521' })
+  @IsOptional()
+  @IsString()
+  license?: string;
+
   @ApiPropertyOptional({
     example: 'Available',
-    enum: ['Available', 'Active', 'Busy', 'Offline', 'Inactive'],
+    enum: ['Available', 'Active', 'On Duty', 'Busy', 'Offline', 'Inactive', 'Suspended', 'Rejected', 'Document Review'],
   })
   @IsOptional()
   @IsString()
-  @IsIn(['Available', 'Active', 'Busy', 'Offline', 'Inactive'])
+  @IsIn(['Available', 'Active', 'On Duty', 'Busy', 'Offline', 'Inactive', 'Suspended', 'Rejected', 'Document Review'])
   status?: string;
 }

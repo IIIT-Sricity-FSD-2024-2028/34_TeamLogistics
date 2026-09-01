@@ -164,42 +164,119 @@ function actionMenu(items){
   `;
 }
 
+  function tripDateKey(t){
+    const m = String(t.startTime||'').match(/^(\d{4}-\d{2}-\d{2})/);
+    if(m) return m[1];
+    const d = new Date(t.startTime);
+    return isNaN(d.getTime()) ? null : d.toISOString().slice(0,10);
+  }
+
+  function maintDateKey(m){
+    if(/^\d{4}-\d{2}-\d{2}$/.test(m.date||'')) return m.date;
+    const d = new Date(m.date);
+    return isNaN(d.getTime()) ? null : d.toISOString().slice(0,10);
+  }
+
+  function maintCost(m){
+    const n = Number(String(m.cost||'').replace(/[^\d.]/g,''));
+    return isNaN(n) ? 0 : n;
+  }
+
+  function tripsPerDayBars(trips){
+    const counts = {};
+    trips.forEach(t=>{ const d = tripDateKey(t); if(d) counts[d] = (counts[d]||0)+1; });
+    const days = Object.keys(counts).sort().slice(-7);
+    if(!days.length) return `<div style="height:10px"><span>No trip data yet</span></div>`;
+    const max = Math.max(1, ...days.map(d=>counts[d]));
+    return days.map(d=>{
+      const h = Math.round((counts[d]/max)*130)+10;
+      const label = new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'short'});
+      return `<div style="height:${h}px" title="${esc(d)}: ${counts[d]} trip(s)"><span>${esc(label)}</span></div>`;
+    }).join('');
+  }
+
+  function maintenanceCostLine(maintenance){
+    const byMonth = {};
+    maintenance.forEach(m=>{ const d = maintDateKey(m); if(!d) return; const month = d.slice(0,7); byMonth[month] = (byMonth[month]||0) + maintCost(m); });
+    const months = Object.keys(byMonth).sort().slice(-6);
+    if(!months.length) return `<div style="padding:60px 16px;text-align:center;color:#888">No maintenance cost data yet</div>`;
+    const max = Math.max(1, ...months.map(m=>byMonth[m]));
+    const stepX = months.length > 1 ? 500/(months.length-1) : 0;
+    const points = months.map((m,i)=>({ x: Math.round(i*stepX), y: Math.round(180 - (byMonth[m]/max)*160), m }));
+    const polyline = points.map(p=>`${p.x},${p.y}`).join(' ');
+    const circles = points.map(p=>`<circle cx="${p.x}" cy="${p.y}" fill="#fff" r="5"><title>${esc(p.m)}: ₹${byMonth[p.m].toLocaleString('en-IN')}</title></circle>`).join('');
+    return `<svg preserveaspectratio="none" viewBox="0 0 500 190"><polyline fill="none" points="${polyline}" stroke="#f4cf12" stroke-width="4"></polyline>${circles}</svg>`;
+  }
+
+  function driverPerformanceRows(drivers){
+    const rated = drivers.filter(d=>d.rating && !isNaN(Number(d.rating))).sort((a,b)=>Number(b.rating)-Number(a.rating)).slice(0,5);
+    if(!rated.length) return `<div style="padding:12px 0;text-align:center;color:#888">No driver ratings yet</div>`;
+    return rated.map(d=>{
+      const pct = Math.max(0, Math.min(100, Math.round((Number(d.rating)/5)*100)));
+      const label = String(d.name||'').trim().split(/\s+/)[0] || d.name || '--';
+      return `<div class="progress-row"><div>${esc(label)}</div><div class="track"><span style="width:${pct}%"></span></div><strong>${pct}%</strong></div>`;
+    }).join('');
+  }
+
+  function quickAlerts(vehicles, drivers, maintenance){
+    const alerts = [];
+    maintenance.filter(m=>/scheduled|in progress/i.test(m.status||'')).slice(0,2).forEach(m=>{
+      alerts.push({ title: `Maintenance ${esc(m.status||'Due')}`, sub: m.vehicle||'--', when: m.date||'' });
+    });
+    vehicles.filter(v=>String(v.status).toLowerCase().includes('maint')).slice(0,2).forEach(v=>{
+      alerts.push({ title: 'Vehicle In Maintenance', sub: v.plate||v.id||'--', when: '' });
+    });
+    drivers.filter(d=>/suspend/i.test(d.status||'')).slice(0,2).forEach(d=>{
+      alerts.push({ title: 'Driver Suspended', sub: d.name||'--', when: '' });
+    });
+    if(!alerts.length) return { html: `<div style="padding:12px 0;text-align:center;color:#888">No active alerts</div>`, count: 0 };
+    const rows = alerts.slice(0,4);
+    return { html: rows.map(a=>`<div class="alert"><div><strong>${a.title}</strong><div class="muted">${esc(a.sub)}</div></div><div class="muted">${esc(a.when)}</div></div>`).join(''), count: rows.length };
+  }
+
   async function renderDashboard(){
     const root = content(); if(!root || !D) return;
-    root.innerHTML = `<div class="panel"><div class="panel-body" style="color:#b9b9b9;padding:28px;text-align:center">Loading dashboard from backend...</div></div>`;
+    root.innerHTML = `<div class="panel"><div class="panel-body" style="color:#b9b9b9;padding:28px;text-align:center">Loading dashboard...</div></div>`;
     try{
       const [vehicles, drivers, trips, maintenance] = await Promise.all([
         D.Vehicles.getAll(), D.Drivers.getAll(), D.Trips.getAll(), D.Maintenance.getAll('')
       ]);
-      const activeVehicles = vehicles.filter(v=>String(v.status).toLowerCase()==='active').length;
-      const onTripVehicles = vehicles.filter(v=>String(v.status).toLowerCase().includes('trip')).length;
-      const maintVehicles = vehicles.filter(v=>String(v.status).toLowerCase().includes('maint')).length;
-      const activeDrivers = drivers.filter(d=>/active|available|on duty/i.test(d.status||'')).length;
       const inProgress = trips.filter(t=>/transit|queued|active|progress/i.test(t.status||'')).length;
       const completed = trips.filter(t=>/complete|delivered/i.test(t.status||'')).length;
       const pendingMaint = maintenance.filter(m=>!/complete/i.test(m.status||'')).length;
+      const availableDrivers = drivers.filter(d=>!/suspend|reject/i.test(d.status||''));
+      const alerts = quickAlerts(vehicles, drivers, maintenance);
+
       root.innerHTML = `
-        <section class="stats">
-          <div class="stat"><h3>Total Vehicles</h3><div class="v yellow">${vehicles.length}</div><div class="s">Backend data</div></div>
-          <div class="stat"><h3>Active Vehicles</h3><div class="v yellow">${activeVehicles}</div><div class="s">${onTripVehicles} on trip, ${maintVehicles} maintenance</div></div>
-          <div class="stat"><h3>Total Drivers</h3><div class="v yellow">${drivers.length}</div><div class="s">${activeDrivers} active/available</div></div>
-          <div class="stat"><h3>Trips</h3><div class="v yellow">${trips.length}</div><div class="s">${inProgress} active, ${completed} completed</div></div>
+        <section class="hero"><div><h2>Welcome Back, Fleet Manager</h2><p>Your logistics command center</p></div><div style="display:flex;gap:10px"><a class="btn btn-ghost" href="compliance.html">Compliance</a><a class="btn btn-yellow" href="analytics.html">View Analytics</a></div></section>
+        <section class="stats" style="grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch">
+          <div class="stat"><h3>Total Vehicles</h3><div class="v yellow">${vehicles.length}</div><div class="s">Registered fleet vehicles</div></div>
+          <div class="stat"><h3>Number of Maintenances</h3><div class="v yellow">${maintenance.length}</div><div class="s">${pendingMaint} pending</div></div>
+          <div class="stat"><h3>Number of Trips</h3><div class="v yellow">${trips.length}</div><div class="s">${inProgress} active</div></div>
+          <div class="stat"><h3>Completed Trips</h3><div class="v yellow">${completed}</div><div class="s">Closed successfully</div></div>
         </section>
-        <section class="panel" style="margin-top:18px">
+        <section class="grid2">
+          <div class="panel"><div class="panel-head"><div class="panel-title">Trips per Day</div><span class="pill pill-yellow">Recent</span></div><div class="bars">${tripsPerDayBars(trips)}</div></div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Maintenance Cost Trend</div><span class="pill pill-yellow">Monthly</span></div><div class="linechart">${maintenanceCostLine(maintenance)}</div></div>
+        </section>
+        <section class="grid2">
+          <div class="panel"><div class="panel-head"><div class="panel-title">Driver Performance</div></div><div class="panel-body"><div class="progress-list">${driverPerformanceRows(drivers)}</div></div></div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Quick Alerts</div><span class="pill pill-red">${alerts.count} Active</span></div><div class="panel-body"><div class="alert-list">${alerts.html}</div></div></div>
+        </section>
+        <section class="panel">
           <div class="panel-head"><div class="panel-title">Live Trip Overview</div></div>
-          <table class="table"><thead><tr><th>Trip ID</th><th>Driver</th><th>Vehicle</th><th>Route</th><th>Status</th><th>Action</th></tr></thead><tbody>
-          ${trips.slice(0,6).map(t=>`<tr><td class="em">${esc(t.id)}</td><td>${esc(t.driver)}</td><td>${esc(t.vehicle)}</td><td>${esc(t.pickup||'--')} → ${esc(t.destination||'--')}</td><td><span class="pill ${pill(t.status)}">${esc(t.status||'--')}</span></td><td><button class="btn btn-small btn-ghost fm-reassign" data-id="${esc(t.id)}">Reassign</button></td></tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:#888;padding:18px">No trips found</td></tr>`}
+          <table class="table"><thead><tr><th>Trip ID</th><th>Driver</th><th>Vehicle</th><th>Route</th><th>Status</th><th>Reassign Driver</th></tr></thead><tbody>
+          ${trips.slice(0,6).map(t=>`<tr><td class="em">${esc(t.id)}</td><td>${esc(t.driver)}</td><td>${esc(t.vehicle)}</td><td>${esc(t.pickup||'--')} → ${esc(t.destination||'--')}</td><td><span class="pill ${pill(t.status)}">${esc(t.status||'--')}</span></td><td><select class="fm-reassign-select" data-id="${esc(t.id)}" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid #2a2a2a;background:#1b1b1b;color:#fff;outline:none"><option value="">Select driver</option>${availableDrivers.map(d=>{const name=d.name||d.driver||'';return `<option value="${esc(name)}" ${name===t.driver?'selected':''}>${esc(name)}</option>`;}).join('')}</select></td></tr>`).join('') || `<tr><td colspan="6" style="text-align:center;color:#888;padding:18px">No trips found</td></tr>`}
           </tbody></table>
-        </section>
-        <section class="stats" style="margin-top:18px;grid-template-columns:repeat(2,minmax(0,1fr))">
-          <div class="stat"><h3>Pending Maintenance</h3><div class="v yellow">${pendingMaint}</div><div class="s">From backend maintenance records</div></div>
-          <div class="stat"><h3>Fleet Health</h3><div class="v yellow">${vehicles.length ? Math.round((activeVehicles/vehicles.length)*100) : 0}%</div><div class="s">Active vehicle ratio</div></div>
         </section>`;
-      bindTripReassign();
+      bindTripReassign(renderDashboard);
+      if(window.FleetManagerData && window.FleetManagerData.applyFleetManagerProfile){
+        window.FleetManagerData.applyFleetManagerProfile();
+      }
     }catch(e){ console.error(e); errorBox('Failed to load Fleet Manager dashboard from backend.'); }
   }
 
-async function bindTripReassign(){
+async function bindTripReassign(redraw){
   $$('.fm-reassign-select').forEach(select => {
     select.onchange = async function(){
       const tripId = select.dataset.id;
@@ -211,11 +288,11 @@ async function bindTripReassign(){
         await D.Trips.reassign(tripId, driverName);
 
         toast('Trip reassigned successfully');
-        await renderTrips();
+        if(typeof redraw === 'function') await redraw();
 
       }catch(e){
         console.error('Failed to reassign trip from backend:', e);
-        alert('Failed to reassign trip from backend. Check Network response.');
+        alert('Failed to reassign trip. Check Network response.');
       }
     };
   });
@@ -240,10 +317,13 @@ async function bindTripReassign(){
     await draw();
   }
 
-  function vehicleFormHTML(title, button, v={}){
+  function vehicleFormHTML(title, button, v={}, isEdit=false){
     const maint = (v.maintenance || v.lastMaintenance || '').match(/^\d{4}-\d{2}-\d{2}$/) ? (v.maintenance || v.lastMaintenance) : '';
-    return `<a class="muted" href="vehicles.html">← Back</a><section class="panel" style="margin-top:14px"><div class="panel-head"><div class="panel-title">${title}</div></div><div class="panel-body"><div class="form-grid">
-      <div class="field"><label>Plate Number</label><input id="fmv-plate" value="${esc(v.plate||'')}"><div class="field-error" id="err-plate"></div></div>
+    const plateField = isEdit
+      ? `<select id="fmv-plate-select"><option value="${esc(v.plate||'')}" selected>${esc(v.plate||'(no plate on file)')}</option><option value="__custom__">+ Enter a different plate number</option></select><input id="fmv-plate" type="text" value="${esc(v.plate||'')}" style="display:none;margin-top:8px" placeholder="e.g. KA 01 MG 2323">`
+      : `<input id="fmv-plate" value="${esc(v.plate||'')}" placeholder="e.g. KA 01 MG 2323">`;
+    return `<section class="panel" style="margin-top:14px"><div class="panel-head"><div class="panel-title">${title}</div></div><div class="panel-body"><div class="form-grid">
+      <div class="field"><label>Plate Number</label>${plateField}<div class="field-error" id="err-plate"></div></div>
       <div class="field"><label>Vehicle Type</label><select id="fmv-type">${['Mini Truck','Van','Truck','Bike','SUV','Cargo Van'].map(t=>`<option ${v.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
       <div class="field"><label>Capacity</label><input id="fmv-capacity" value="${esc(v.capacity||'')}"></div>
       <div class="field"><label>Status</label><select id="fmv-status">${['Active','On Trip','Maintenance','Blocked'].map(s=>`<option ${v.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
@@ -283,7 +363,23 @@ async function bindTripReassign(){
     const v = await D.Vehicles.getOne(id);
     const drivers = await D.Drivers.getAll();
 
-    root.innerHTML = vehicleFormHTML('Edit Vehicle','Update Vehicle',v);
+    root.innerHTML = vehicleFormHTML('Edit Vehicle','Update Vehicle',v,true);
+
+    const plateSelect = $('#fmv-plate-select');
+    const plateInput = $('#fmv-plate');
+
+    if(plateSelect && plateInput){
+      plateSelect.onchange = () => {
+        if(plateSelect.value === '__custom__'){
+          plateInput.style.display = 'block';
+          plateInput.value = '';
+          plateInput.focus();
+        } else {
+          plateInput.style.display = 'none';
+          plateInput.value = plateSelect.value;
+        }
+      };
+    }
 
     const driverSelect = $('#fmv-driver');
 
@@ -360,7 +456,7 @@ async function bindTripReassign(){
 
   } catch(e){ 
     console.error(e); 
-    errorBox('Failed to load vehicle from backend.'); 
+    errorBox('Failed to load vehicle.'); 
   }
 }
 
@@ -374,6 +470,7 @@ async function bindTripReassign(){
         <span>⌕</span>
         <input id="driverSearch" placeholder="Search drivers..."/>
       </label>
+      <a class="btn btn-yellow" href="add-driver.html">＋ Add Driver</a>
     </div>
 
     <section class="panel">
@@ -400,14 +497,6 @@ async function bindTripReassign(){
       </table>
     </section>
   `;
-
-  const addDriverBtn = document.getElementById('addDriverBtn');
-
-  if(addDriverBtn){
-    addDriverBtn.onclick = function(){
-      window.location.href = 'add-driver-step1.html';
-    };
-  }
 
   async function draw(){
     try{
@@ -444,31 +533,42 @@ async function bindTripReassign(){
         </tr>
       `;
 
-      $$('.fm-del-driver').forEach(btn => btn.onclick = async () => { 
-        if(!confirm(`Delete driver ${btn.dataset.id}?`)) return; 
+      $$('.fm-del-driver').forEach(btn => btn.onclick = async () => {
+        if(!confirm(`Delete driver ${btn.dataset.id}?`)) return;
 
-        await D.Drivers.delete(btn.dataset.id); 
-        toast('Driver deleted'); 
-        draw(); 
+        try{
+          await D.Drivers.delete(btn.dataset.id);
+          toast('Driver deleted');
+          draw();
+        }catch(e){
+          console.error('Failed to delete driver:', e);
+          alert('Failed to delete driver: ' + (e.message || 'unknown error'));
+        }
       });
 
-      $$('.fm-driver-status').forEach(btn => btn.onclick = async () => { 
-        const cur = btn.dataset.status || ''; 
-        const next = /suspend/i.test(cur) ? 'Available' : 'Suspended'; 
-        const d = await D.Drivers.getOne(btn.dataset.id); 
+      $$('.fm-driver-status').forEach(btn => btn.onclick = async () => {
+        const cur = btn.dataset.status || '';
+        const next = /suspend/i.test(cur) ? 'Available' : 'Suspended';
 
-        await D.Drivers.update(btn.dataset.id, {
-          name: d.name,
-          phone: d.phone || '',
-          zone: d.zone || '',
-          vehicle: d.vehicle || '',
-          status: next,
-          license: d.license || '',
-          email: d.email || ''
-        }); 
+        try{
+          const d = await D.Drivers.getOne(btn.dataset.id);
 
-        toast('Driver status updated'); 
-        draw(); 
+          await D.Drivers.update(btn.dataset.id, {
+            name: d.name,
+            phone: d.phone || '',
+            zone: d.zone || '',
+            vehicle: d.vehicle || '',
+            status: next,
+            license: d.license || '',
+            email: d.email || ''
+          });
+
+          toast('Driver status updated');
+          draw();
+        }catch(e){
+          console.error('Failed to update driver status:', e);
+          alert('Failed to update driver status: ' + (e.message || 'unknown error'));
+        }
       });
 
     } catch(e){ 
@@ -477,7 +577,7 @@ async function bindTripReassign(){
       $('#driver-body').innerHTML = `
         <tr>
           <td colspan="7" style="text-align:center;color:#ff8d8d;padding:18px">
-            Failed to load drivers from backend.
+            Failed to load drivers.
           </td>
         </tr>
       `; 
@@ -489,105 +589,65 @@ async function bindTripReassign(){
 }
 
   function driverFormHTML(title, button, d={}){
-    return `<a class="muted" href="drivers.html">← Back</a><section class="panel" style="margin-top:14px"><div class="panel-head"><div class="panel-title">${title}</div></div><div class="panel-body"><div class="form-grid">
+    return `<section class="panel" style="margin-top:14px"><div class="panel-head"><div class="panel-title">${title}</div></div><div class="panel-body"><div class="form-grid">
       <div class="field"><label>Full Name</label><input id="fmd-name" value="${esc(d.name||'')}"><div class="field-error" id="err-d-name"></div></div>
       <div class="field"><label>Phone</label><input id="fmd-phone" value="${esc(d.phone||'')}"><div class="field-error" id="err-d-phone"></div></div>
       <div class="field"><label>Email</label><input id="fmd-email" value="${esc(d.email||'')}"><div class="field-error" id="err-d-email"></div></div>
-      <div class="field"><label>License Number</label><input id="fmd-license" value="${esc(d.license||'')}"></div>
-      <div class="field"><label>Zone</label><input id="fmd-zone" value="${esc(d.zone||'')}"></div>
-      <div class="field"><label>Vehicle</label><input id="fmd-vehicle" value="${esc(d.vehicle||'')}"></div>
+      <div class="field"><label>License Number</label><input id="fmd-license" value="${esc(d.license||'')}"><div class="field-error" id="err-d-license"></div></div>
+      <div class="field"><label>Zone</label><input id="fmd-zone" value="${esc(d.zone||'')}"><div class="field-error" id="err-d-zone"></div></div>
+      <div class="field"><label>Vehicle</label><input id="fmd-vehicle" value="${esc(d.vehicle||'')}"><div class="field-error" id="err-d-vehicle"></div></div>
       <div class="field"><label>Status</label><select id="fmd-status">${['Available','On Duty','Suspended','Rejected'].map(s=>`<option ${d.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
       </div><div class="footer-actions"><a class="btn btn-ghost" href="drivers.html">Cancel</a><button class="btn btn-yellow" id="saveDriver">${button}</button></div></div></section>`;
   }
 
-  function getDriverPayload(){ return { name: $('#fmd-name').value.trim(), phone: $('#fmd-phone').value.trim(), email: $('#fmd-email').value.trim(), license: $('#fmd-license').value.trim(), zone: $('#fmd-zone').value.trim(), vehicle: $('#fmd-vehicle').value.trim(), status: $('#fmd-status').value }; }
+  function getDriverPayload(){
+    return {
+      name: $('#fmd-name').value.trim(),
+      phone: $('#fmd-phone').value.trim(),
+      email: $('#fmd-email').value.trim(),
+      license: $('#fmd-license').value.trim().toUpperCase(),
+      zone: $('#fmd-zone').value.trim(),
+      vehicle: $('#fmd-vehicle').value.trim().toUpperCase(),
+      status: $('#fmd-status').value
+    };
+  }
+
   function validDriver(payload){
-    ['err-d-name','err-d-phone','err-d-email'].forEach(id=>{ const el=$('#'+id); if(el) el.textContent=''; });
-    let ok=true; if(!/^[A-Za-z][A-Za-z\s]{2,79}$/.test(payload.name)){ $('#err-d-name').textContent='Enter a valid name'; ok=false; }
-    if(!/^\+?\d[\d\s-]{8,16}$/.test(payload.phone)){ $('#err-d-phone').textContent='Enter a valid phone number'; ok=false; }
-    if(payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)){ $('#err-d-email').textContent='Enter a valid email'; ok=false; }
+    ['err-d-name','err-d-phone','err-d-email','err-d-license','err-d-zone','err-d-vehicle'].forEach(id=>{ const el=$('#'+id); if(el) el.textContent=''; });
+    let ok = true;
+    if(!/^[A-Za-z][A-Za-z\s]{1,79}$/.test(payload.name)){ $('#err-d-name').textContent='Enter a valid name'; ok=false; }
+    if(payload.phone.replace(/\D/g,'').length < 7 || payload.phone.replace(/\D/g,'').length > 13){ $('#err-d-phone').textContent='Enter a valid phone number (7-13 digits)'; ok=false; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)){ $('#err-d-email').textContent='Enter a valid email'; ok=false; }
+    if(payload.license && !/^[A-Z0-9\s-]{5,20}$/.test(payload.license)){ $('#err-d-license').textContent='License should be 5-20 letters/digits'; ok=false; }
+    if(!/^[A-Za-z0-9 ]{2,60}$/.test(payload.zone)){ $('#err-d-zone').textContent='Zone is required'; ok=false; }
+    if(payload.vehicle && !/^[A-Z0-9 -]{4,15}$/.test(payload.vehicle)){ $('#err-d-vehicle').textContent='Enter a valid vehicle plate'; ok=false; }
     return ok;
   }
 
  async function renderAddDriver(){
-  const root = content(); 
+  const root = content();
   if(!root) return;
 
   root.innerHTML = driverFormHTML('Add Driver','Create Driver');
 
-  ['phone','email','license','zone','vehicle'].forEach(function(field){
-    const input = document.getElementById('fmd-' + field);
-
-    if(input && !document.getElementById('err-' + field)){
-      input.insertAdjacentHTML('afterend', `<div class="error" id="err-${field}"></div>`);
-    }
-  });
-
   $('#saveDriver').onclick = async () => {
-    ['phone','email','license','zone','vehicle'].forEach(function(field){
-      const err = document.getElementById('err-' + field);
-      if(err) err.textContent = '';
-    });
-
     const payload = getDriverPayload();
+    if(!validDriver(payload)) return;
 
-    payload.phone = String(payload.phone || '').trim();
-    payload.email = String(payload.email || '').trim();
-    payload.license = String(payload.license || '').trim().toUpperCase();
-    payload.zone = String(payload.zone || '').trim();
-    payload.vehicle = String(payload.vehicle || '').trim().toUpperCase();
-
-    let ok = true;
-
-    const phoneRegex = /^[6-9]\d{9}$/;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
-    const licenseRegex = /^[A-Z]{2}[ -]?[0-9]{2}[ -]?[0-9]{4}[ -]?[0-9]{7}$/;
-    const vehiclePlateRegex = /^[A-Z]{2}[ -]?[0-9]{1,2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$/;
-    const zoneRegex = /^[A-Za-z0-9 ]{2,60}$/;
-
-    if(!phoneRegex.test(payload.phone)){
-      $('#err-phone').textContent = 'Phone must start with 6, 7, 8, or 9 and contain exactly 10 digits';
-      ok = false;
+    try{
+      await D.Drivers.create({ name: payload.name, email: payload.email, phone: payload.phone, licenseNumber: payload.license, vehicle: payload.vehicle, status: payload.status });
+      toast('Driver created');
+      location.href = 'drivers.html';
+    } catch(e){
+      console.error(e);
+      alert('Failed to create driver');
     }
-
-    if(!emailRegex.test(payload.email)){
-      $('#err-email').textContent = 'Enter a valid email address';
-      ok = false;
-    }
-
-    if(!licenseRegex.test(payload.license)){
-      $('#err-license').textContent = 'License must be like TN03 2018 0003452';
-      ok = false;
-    }
-
-    if(!zoneRegex.test(payload.zone)){
-      $('#err-zone').textContent = 'Zone is required and can contain letters, numbers, and spaces only';
-      ok = false;
-    }
-
-    if(!vehiclePlateRegex.test(payload.vehicle)){
-      $('#err-vehicle').textContent = 'Vehicle must be like KA 01 MG 2323, DL 2C AA 1111, or TN09AB1234';
-      ok = false;
-    }
-
-    if(!ok) return;
-
-    if(typeof validDriver === 'function' && !validDriver(payload)) return;
-
-    try{ 
-      await D.Drivers.create(payload); 
-      toast('Driver created'); 
-      location.href = 'drivers.html'; 
-    } catch(e){ 
-      console.error(e); 
-      alert('Failed to create driver from backend'); 
-    } 
   };
 }
 
  async function renderEditDriver(){
-  const root = content(); 
-  if(!root) return; 
+  const root = content();
+  if(!root) return;
 
   const id = qs().get('id');
 
@@ -599,78 +659,28 @@ async function bindTripReassign(){
     </div>
   `;
 
-  try{ 
-    const d = await D.Drivers.getOne(id); 
+  try{
+    const d = await D.Drivers.getOne(id);
 
     root.innerHTML = driverFormHTML('Edit Driver','Save Changes',d);
 
-    ['phone','email','license','zone','vehicle'].forEach(function(field){
-      const input = document.getElementById('fmd-' + field);
-
-      if(input && !document.getElementById('err-' + field)){
-        input.insertAdjacentHTML('afterend', `<div class="error" id="err-${field}"></div>`);
-      }
-    });
-
     $('#saveDriver').onclick = async () => {
-      ['phone','email','license','zone','vehicle'].forEach(function(field){
-        const err = document.getElementById('err-' + field);
-        if(err) err.textContent = '';
-      });
-
       const payload = getDriverPayload();
+      if(!validDriver(payload)) return;
 
-      payload.phone = String(payload.phone || '').trim();
-      payload.email = String(payload.email || '').trim();
-      payload.license = String(payload.license || '').trim().toUpperCase();
-      payload.zone = String(payload.zone || '').trim();
-      payload.vehicle = String(payload.vehicle || '').trim().toUpperCase();
-
-      let ok = true;
-
-      const phoneRegex = /^[6-9]\d{9}$/;
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
-      const licenseRegex = /^[A-Z]{2}[ -]?[0-9]{2}[ -]?[0-9]{4}[ -]?[0-9]{7}$/;
-      const vehiclePlateRegex = /^[A-Z]{2}[ -]?[0-9]{1,2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$/;
-      const zoneRegex = /^[A-Za-z0-9 ]{2,60}$/;
-
-      if(!phoneRegex.test(payload.phone)){
-        $('#err-phone').textContent = 'Phone must start with 6, 7, 8, or 9 and contain exactly 10 digits';
-        ok = false;
+      try{
+        await D.Drivers.update(id, { name: payload.name, email: payload.email, phone: payload.phone, licenseNumber: payload.license, vehicle: payload.vehicle, status: payload.status });
+        toast('Driver updated');
+        location.href = 'drivers.html';
+      } catch(e){
+        console.error(e);
+        alert('Failed to update driver');
       }
+    };
 
-      if(!emailRegex.test(payload.email)){
-        $('#err-email').textContent = 'Enter a valid email address';
-        ok = false;
-      }
-
-      if(!licenseRegex.test(payload.license)){
-        $('#err-license').textContent = 'License must be like TN03 2018 0003452';
-        ok = false;
-      }
-
-      if(!zoneRegex.test(payload.zone)){
-        $('#err-zone').textContent = 'Zone is required and can contain letters, numbers, and spaces only';
-        ok = false;
-      }
-
-      if(!vehiclePlateRegex.test(payload.vehicle)){
-        $('#err-vehicle').textContent = 'Vehicle must be like KA 01 MG 2323, DL 2C AA 1111, or TN09AB1234';
-        ok = false;
-      }
-
-      if(!ok) return;
-
-      if(typeof validDriver === 'function' && !validDriver(payload)) return;
-
-      await D.Drivers.update(id, payload); 
-      toast('Driver updated'); 
-      location.href = 'drivers.html'; 
-    }; 
-
-  } catch(e){ 
-    console.error(e); 
-    errorBox('Failed to load driver from backend.'); 
+  } catch(e){
+    console.error(e);
+    errorBox('Failed to load driver.');
   }
 }
   async function renderDriverProfile(){
@@ -679,7 +689,7 @@ async function bindTripReassign(){
     try{
       const d = await D.Drivers.getOne(id);
       const initials = (d.name||'DR').split(/\s+/).slice(0,2).map(p=>p[0]).join('').toUpperCase();
-      root.innerHTML = `<a class="muted" href="drivers.html">← Back to Drivers</a><section class="hero" style="margin-top:14px"><div style="display:flex;align-items:center;gap:16px"><div style="width:74px;height:74px;border-radius:24px;background:var(--yellow);display:grid;place-items:center;color:#111;font-size:34px;font-weight:800">${esc(initials)}</div><div><h2 style="margin:0 0 6px">${esc(d.name)} <span class="pill ${pill(d.status)}">${esc(d.status||'--')}</span></h2><p>${esc(d.id)} · ${esc(d.phone||'--')} · ${esc(d.email||'--')}</p><div class="rating">★★★★★ <span style="color:#ddd;font-size:16px">${esc(d.rating||'--')}</span></div></div></div><div style="display:flex;gap:12px"><a class="btn btn-yellow" href="edit-driver.html?id=${encodeURIComponent(d.id)}">Edit Driver</a></div></section><section class="panel" style="margin-top:16px"><div class="panel-head"><div class="panel-title">Driver Information</div></div><div class="panel-body"><div class="cards2"><div class="mini"><strong>Driver ID</strong><span>${esc(d.id)}</span></div><div class="mini"><strong>Full Name</strong><span>${esc(d.name)}</span></div><div class="mini"><strong>Phone</strong><span>${esc(d.phone||'--')}</span></div><div class="mini"><strong>Email</strong><span>${esc(d.email||'--')}</span></div><div class="mini"><strong>License</strong><span>${esc(d.license||'--')}</span></div><div class="mini"><strong>Assigned Vehicle</strong><span>${esc(d.vehicle||'--')}</span></div><div class="mini"><strong>Zone</strong><span>${esc(d.zone||'--')}</span></div><div class="mini"><strong>Last Trip</strong><span>${esc(d.trip||'--')}</span></div></div></div></section>`;
+      root.innerHTML = `<section class="hero" style="margin-top:14px"><div style="display:flex;align-items:center;gap:16px"><div style="width:74px;height:74px;border-radius:24px;background:var(--yellow);display:grid;place-items:center;color:#111;font-size:34px;font-weight:800">${esc(initials)}</div><div><h2 style="margin:0 0 6px">${esc(d.name)} <span class="pill ${pill(d.status)}">${esc(d.status||'--')}</span></h2><p>${esc(d.id)} · ${esc(d.phone||'--')} · ${esc(d.email||'--')}</p><div class="rating">★★★★★ <span style="color:#ddd;font-size:16px">${esc(d.rating||'--')}</span></div></div></div><div style="display:flex;gap:12px"><a class="btn btn-yellow" href="edit-driver.html?id=${encodeURIComponent(d.id)}">Edit Driver</a></div></section><section class="panel" style="margin-top:16px"><div class="panel-head"><div class="panel-title">Driver Information</div></div><div class="panel-body"><div class="cards2"><div class="mini"><strong>Driver ID</strong><span>${esc(d.id)}</span></div><div class="mini"><strong>Full Name</strong><span>${esc(d.name)}</span></div><div class="mini"><strong>Phone</strong><span>${esc(d.phone||'--')}</span></div><div class="mini"><strong>Email</strong><span>${esc(d.email||'--')}</span></div><div class="mini"><strong>License</strong><span>${esc(d.license||'--')}</span></div><div class="mini"><strong>Assigned Vehicle</strong><span>${esc(d.vehicle||'--')}</span></div><div class="mini"><strong>Zone</strong><span>${esc(d.zone||'--')}</span></div><div class="mini"><strong>Last Trip</strong><span>${esc(d.trip||'--')}</span></div></div></div></section>`;
     }catch(e){ console.error(e); errorBox('Failed to load driver from backend.'); }
   }
 
@@ -696,7 +706,7 @@ async function bindTripReassign(){
     const root=content(); if(!root) return; const id=qs().get('id');
     let existing=null, vehicles=[]; try{ [vehicles] = await Promise.all([D.Vehicles.getAll()]); if(id) existing=await D.Maintenance.getOne(id); }catch(e){ console.warn(e); }
     const issueTypes=['Engine Oil Change','Brake Pad Replacement','Tire Rotation & Balance','Air Filter Replacement','Transmission Service']; const mechanics=['Ravi Auto Service','SpeedFix Workshop','AutoCare Pro'];
-    root.innerHTML = `<div style="margin-bottom:18px"><a class="btn btn-ghost" href="maintenance.html">← Back</a></div><div class="split"><div class="stack"><div class="info-card"><h3>Vehicle & Issue Details</h3><div class="field"><label>Vehicle *</label><select id="mVehicle"><option value="">Select vehicle</option>${vehicles.map(v=>{const plate=v.plate||v.id;return `<option value="${esc(plate)}" ${(existing&&(existing.vehicle===plate||existing.vehicleId===plate))?'selected':''}>${esc(plate)}${v.type?' - '+esc(v.type):''}</option>`}).join('')}</select><div class="field-error" id="err-mVehicle"></div></div><div class="field"><label>Issue Type *</label><select id="mIssue"><option value="">Select issue</option>${issueTypes.map(x=>`<option ${existing&&existing.issue===x?'selected':''}>${x}</option>`).join('')}</select><div class="field-error" id="err-mIssue"></div></div><div class="field"><label>Priority *</label><select id="mPriority">${['Low','Medium','High','Critical'].map(x=>`<option ${existing&&existing.priority===x?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="info-card"><h3>Additional Notes</h3><div class="field"><textarea id="mNotes" placeholder="Enter any special instructions or notes for the mechanic...">${esc(existing&&existing.notes||'')}</textarea></div></div></div><div class="stack"><div class="info-card"><h3>Scheduling & Assignment</h3><div class="field"><label>Scheduled Date *</label><input id="mDate" type="date" value="${esc(existing&&/^\d{4}-/.test(existing.date||'')?existing.date:'')}"><div class="field-error" id="err-mDate"></div></div><div class="field"><label>Assigned Mechanic *</label><select id="mMechanic"><option value="">Select mechanic</option>${mechanics.map(x=>`<option ${existing&&existing.mechanic===x?'selected':''}>${x}</option>`).join('')}</select><div class="field-error" id="err-mMechanic"></div></div><div class="field"><label>Estimated Cost (₹)</label><input id="mCost" placeholder="e.g. 1200" value="${esc(existing&&existing.cost?String(existing.cost).replace(/[₹,]/g,''):'')}"><div class="field-error" id="err-mCost"></div></div></div><div class="info-card"><h3>Summary Preview</h3><div class="summary-list" id="summaryBox"></div></div></div></div><div class="foot-actions"><div></div><div class="right-actions"><a class="btn btn-ghost" href="maintenance.html">✕ Cancel</a><button class="btn btn-yellow" id="saveMaint">${existing?'Update':'Schedule'} Maintenance</button></div></div>`;
+    root.innerHTML = `<div class="split"><div class="stack"><div class="info-card"><h3>Vehicle & Issue Details</h3><div class="field"><label>Vehicle *</label><select id="mVehicle"><option value="">Select vehicle</option>${vehicles.map(v=>{const plate=v.plate||v.id;return `<option value="${esc(plate)}" ${(existing&&(existing.vehicle===plate||existing.vehicleId===plate))?'selected':''}>${esc(plate)}${v.type?' - '+esc(v.type):''}</option>`}).join('')}</select><div class="field-error" id="err-mVehicle"></div></div><div class="field"><label>Issue Type *</label><select id="mIssue"><option value="">Select issue</option>${issueTypes.map(x=>`<option ${existing&&existing.issue===x?'selected':''}>${x}</option>`).join('')}</select><div class="field-error" id="err-mIssue"></div></div><div class="field"><label>Priority *</label><select id="mPriority">${['Low','Medium','High','Critical'].map(x=>`<option ${existing&&existing.priority===x?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="info-card"><h3>Additional Notes</h3><div class="field"><textarea id="mNotes" placeholder="Enter any special instructions or notes for the mechanic...">${esc(existing&&existing.notes||'')}</textarea></div></div></div><div class="stack"><div class="info-card"><h3>Scheduling & Assignment</h3><div class="field"><label>Scheduled Date *</label><input id="mDate" type="date" value="${esc(existing&&/^\d{4}-/.test(existing.date||'')?existing.date:'')}"><div class="field-error" id="err-mDate"></div></div><div class="field"><label>Assigned Mechanic *</label><select id="mMechanic"><option value="">Select mechanic</option>${mechanics.map(x=>`<option ${existing&&existing.mechanic===x?'selected':''}>${x}</option>`).join('')}</select><div class="field-error" id="err-mMechanic"></div></div><div class="field"><label>Estimated Cost (₹)</label><input id="mCost" placeholder="e.g. 1200" value="${esc(existing&&existing.cost?String(existing.cost).replace(/[₹,]/g,''):'')}"><div class="field-error" id="err-mCost"></div></div></div><div class="info-card"><h3>Summary Preview</h3><div class="summary-list" id="summaryBox"></div></div></div></div><div class="foot-actions"><div></div><div class="right-actions"><a class="btn btn-ghost" href="maintenance.html">✕ Cancel</a><button class="btn btn-yellow" id="saveMaint">${existing?'Update':'Schedule'} Maintenance</button></div></div>`;
     function updateSummary(){ const rows=[['Vehicle',$('#mVehicle').value||'—'],['Issue',$('#mIssue').value||'—'],['Priority',$('#mPriority').value||'—'],['Date',$('#mDate').value||'—'],['Mechanic',$('#mMechanic').value||'—'],['Est. Cost',$('#mCost').value?`₹${$('#mCost').value}`:'—']]; $('#summaryBox').innerHTML=rows.map(r=>`<div class="summary-row"><span>${r[0]}</span><span>${esc(r[1])}</span></div>`).join(''); }
     $$('#mVehicle,#mIssue,#mPriority,#mDate,#mMechanic,#mCost').forEach(el=>{el.oninput=updateSummary; el.onchange=updateSummary;}); updateSummary();
     $('#saveMaint').onclick=async()=>{ ['mVehicle','mIssue','mDate','mMechanic','mCost'].forEach(x=>{const e=$('#err-'+x); if(e)e.textContent='';}); const vehicle=$('#mVehicle').value.trim(), issue=$('#mIssue').value.trim(), priority=$('#mPriority').value, date=$('#mDate').value.trim(), mechanic=$('#mMechanic').value.trim(), cost=$('#mCost').value.trim(), notes=$('#mNotes').value.trim(); let ok=true; if(!vehicle){$('#err-mVehicle').textContent='Select a vehicle';ok=false;} if(!issue){$('#err-mIssue').textContent='Select issue type';ok=false;} if(!date){$('#err-mDate').textContent='Date is required';ok=false;} if(!mechanic){$('#err-mMechanic').textContent='Select mechanic';ok=false;} if(cost&&!/^\d{1,7}(\.\d{1,2})?$/.test(cost)){ $('#err-mCost').textContent='Enter valid cost in rupees'; ok=false; } if(!ok) return; const payload={vehicle,issue,priority,date,mechanic,cost:cost?`₹${cost}`:'--',notes}; try{ if(existing) await D.Maintenance.update(id,payload); else await D.Maintenance.create(payload); toast('Maintenance saved'); location.href='maintenance.html'; }catch(e){ console.error(e); alert('Failed to save maintenance from backend'); } };
@@ -708,7 +718,7 @@ async function renderCompliance(){
   root.innerHTML = `
     <div class="panel">
       <div class="panel-body" style="text-align:center;color:#888;padding:24px">
-        Loading compliance data from backend...
+        Loading compliance data...
       </div>
     </div>
   `;
@@ -964,7 +974,7 @@ async function renderCompliance(){
 
           }catch(error){
             console.error(error);
-            alert('Failed to update driver status from backend');
+            alert('Failed to update driver status');
           }
         };
       });
@@ -979,7 +989,7 @@ async function renderCompliance(){
     root.innerHTML = `
       <div class="panel">
         <div class="panel-body" style="text-align:center;color:#ff8d8d;padding:24px">
-          Failed to load compliance data from backend.
+          Failed to load compliance data.
         </div>
       </div>
     `;
@@ -1056,6 +1066,10 @@ async function renderTrips(){
 
           <td>
             ${actionMenu([
+              `<a href="live-tracking.html?id=${encodeURIComponent(t.id)}">View</a>`,
+              ...(String(t.status || '').toLowerCase() === 'issue reported'
+                ? [`<a href="#" class="fm-resolve-dispute" data-id="${esc(t.id)}">Resolve Dispute</a>`]
+                : []),
               `
               <label style="display:block;padding:8px 10px;color:#aaa;font-size:13px">
                 Reassign Driver
@@ -1096,24 +1110,51 @@ async function renderTrips(){
             No trips found
           </td>
         </tr>
-      `; 
+      `;
 
-      bindTripReassign(); 
+      bindTripReassign(draw);
 
-    }catch(e){ 
-      console.error(e); 
+      document.querySelectorAll('.fm-resolve-dispute').forEach(function(link){
+        link.onclick = async function(e){
+          e.preventDefault();
+
+          const id = link.dataset.id;
+          const amountText = prompt('Resolved billable amount for this delivery (₹):');
+          if(amountText === null) return;
+
+          const resolvedAmount = Number(amountText);
+          if(Number.isNaN(resolvedAmount) || resolvedAmount < 0){
+            alert('Please enter a valid non-negative amount.');
+            return;
+          }
+
+          const reason = prompt('Reason for the resolution (shown to the business client):') || '';
+
+          try{
+            await D.Trips.resolveDispute(id, resolvedAmount, reason);
+            toast('Dispute resolved');
+            draw();
+          }catch(error){
+            console.error('Failed to resolve dispute:', error);
+            alert(error.message || 'Failed to resolve dispute.');
+          }
+        };
+      });
+
+    }catch(e){
+      console.error(e);
 
       $('#tripBody').innerHTML = `
         <tr>
           <td colspan="8" style="text-align:center;color:#ff8d8d;padding:18px">
-            Failed to load trips from backend.
+            Failed to load trips.
           </td>
         </tr>
-      `; 
+      `;
     }
   }
 
-  $('#tripSearch').oninput = draw; 
+  $('#tripSearch').oninput = draw;
   await draw();
 }
 async function renderNotifications(){
@@ -1123,7 +1164,7 @@ async function renderNotifications(){
   root.innerHTML = `
     <div class="panel">
       <div class="panel-body" style="text-align:center;color:#888;padding:24px">
-        Loading notifications from backend...
+        Loading notifications...
       </div>
     </div>
   `;
@@ -1305,6 +1346,9 @@ async function renderNotifications(){
           await D.Notifications.markAllRead();
           toast('All notifications marked as read');
           await renderNotifications();
+          if(window.FleetManagerData && window.FleetManagerData.updateNotificationBadge){
+            window.FleetManagerData.updateNotificationBadge();
+          }
         }catch(error){
           console.error(error);
           alert('Failed to mark notifications as read');
@@ -1318,7 +1362,7 @@ async function renderNotifications(){
     root.innerHTML = `
       <div class="panel">
         <div class="panel-body" style="padding:24px;color:#ff8d8d;text-align:center">
-          Failed to load notifications from backend.
+          Failed to load notifications.
         </div>
       </div>
     `;
@@ -1327,10 +1371,10 @@ async function renderNotifications(){
   
   async function renderProfile(){
     const root=content(); if(!root) return; const userId=D.getCurrentUserId();
-    root.innerHTML = `<div class="info-card" style="padding:28px;text-align:center;color:#888">Loading profile from backend...</div>`;
-    try{ const user=await D.Users.getOne(userId); const details=user.profileDetails||{}; const name=user.name||'Fleet Manager'; const initials=name.trim().split(/\s+/).slice(0,2).map(p=>p[0]).join('').toUpperCase()||'FM'; root.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn btn-yellow" id="editProfile">Edit</button></div><div class="info-card" style="max-width:1100px;margin:0 auto;padding:26px"><div style="display:flex;align-items:center;gap:18px;margin-bottom:22px"><div style="width:88px;height:88px;border-radius:24px;background:var(--yellow);color:#111;display:grid;place-items:center;font-weight:900;font-size:34px">${esc(initials)}</div><div><div style="font-size:34px;font-weight:800;color:#fff">${esc(name)}</div><div class="muted" style="font-size:20px">Fleet Manager Account</div></div></div><div class="profile-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px"><div class="field"><label>Full Name</label><input id="pName" value="${esc(name)}" readonly><div class="field-error" id="err-pName"></div></div><div class="field"><label>Email Address</label><input id="pEmail" value="${esc(user.email||'')}" readonly></div><div class="field"><label>Phone Number</label><input id="pPhone" value="${esc(user.phone||'')}" readonly><div class="field-error" id="err-pPhone"></div></div><div class="field"><label>Company Name</label><input id="pCompany" value="${esc(details.companyName||'')}" readonly></div><div class="field"><label>Company Address</label><input id="pAddress" value="${esc(details.companyAddress||'')}" readonly></div><div class="field"><label>Number of Vehicles</label><input id="pVehicles" value="${esc(details.numberOfVehicles||'')}" readonly></div></div><div class="footer-actions"><a class="btn btn-ghost" href="dashboard.html">Cancel</a><button class="btn btn-yellow" id="saveProfile" style="display:none">Save Profile</button></div></div>`; setTopbarFromUser(user);
-      $('#editProfile').onclick=()=>{ ['pName','pPhone','pCompany','pAddress','pVehicles'].forEach(id=>$('#'+id).removeAttribute('readonly')); $('#saveProfile').style.display=''; $('#pName').focus(); };
-      $('#saveProfile').onclick=async()=>{ $('#err-pName').textContent=''; $('#err-pPhone').textContent=''; const payload={ name:$('#pName').value.trim(), email:user.email, role:user.role, status:user.status||'Active', phone:$('#pPhone').value.trim(), profileDetails:{...(user.profileDetails||{}), companyName:$('#pCompany').value.trim(), companyAddress:$('#pAddress').value.trim(), numberOfVehicles:$('#pVehicles').value.trim()} }; if(!/^[A-Za-z][A-Za-z\s]{2,59}$/.test(payload.name)){ $('#err-pName').textContent='Name must be 3-60 letters'; return; } if(payload.phone && !/^\+?[0-9\s-]{10,17}$/.test(payload.phone)){ $('#err-pPhone').textContent='Enter a valid phone number'; return; } await D.Users.update(user.id,payload); toast('Profile updated'); renderProfile(); };
+    root.innerHTML = `<div class="info-card" style="padding:28px;text-align:center;color:#888">Loading profile...</div>`;
+    try{ const user=await D.Users.getOne(userId); const details=user.profileDetails||{}; const name=user.name||'Fleet Manager'; const initials=name.trim().split(/\s+/).slice(0,2).map(p=>p[0]).join('').toUpperCase()||'FM'; root.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn btn-yellow" id="editProfile">Edit</button></div><div class="info-card" style="max-width:1100px;margin:0 auto;padding:26px"><div style="display:flex;align-items:center;gap:18px;margin-bottom:22px"><div style="width:88px;height:88px;border-radius:24px;background:var(--yellow);color:#111;display:grid;place-items:center;font-weight:900;font-size:34px">${esc(initials)}</div><div><div style="font-size:34px;font-weight:800;color:#fff">${esc(name)}</div><div class="muted" style="font-size:20px">Fleet Manager Account</div></div></div><div class="profile-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px"><div class="field"><label>Full Name</label><input id="pName" value="${esc(name)}" readonly><div class="field-error" id="err-pName"></div></div><div class="field"><label>Email Address</label><input id="pEmail" value="${esc(user.email||'')}" readonly><div class="field-error" id="err-pEmail"></div></div><div class="field"><label>Phone Number</label><input id="pPhone" value="${esc(user.phone||'')}" readonly><div class="field-error" id="err-pPhone"></div></div><div class="field"><label>Company Name</label><input id="pCompany" value="${esc(details.companyName||'')}" readonly></div><div class="field"><label>Company Address</label><input id="pAddress" value="${esc(details.companyAddress||'')}" readonly></div><div class="field"><label>Number of Vehicles</label><input id="pVehicles" value="${esc(details.numberOfVehicles||'')}" readonly></div></div><div class="footer-actions"><a class="btn btn-ghost" href="dashboard.html">Cancel</a><button class="btn btn-yellow" id="saveProfile" style="display:none">Save Profile</button></div></div>`; setTopbarFromUser(user);
+      $('#editProfile').onclick=()=>{ ['pName','pEmail','pPhone','pCompany','pAddress','pVehicles'].forEach(id=>$('#'+id).removeAttribute('readonly')); $('#saveProfile').style.display=''; $('#pName').focus(); };
+      $('#saveProfile').onclick=async()=>{ $('#err-pName').textContent=''; $('#err-pEmail').textContent=''; $('#err-pPhone').textContent=''; const payload={ name:$('#pName').value.trim(), email:$('#pEmail').value.trim(), role:user.role, status:user.status||'Active', phone:$('#pPhone').value.trim(), profileDetails:{...(user.profileDetails||{}), companyName:$('#pCompany').value.trim(), companyAddress:$('#pAddress').value.trim(), numberOfVehicles:$('#pVehicles').value.trim()} }; if(!/^[A-Za-z][A-Za-z\s]{2,59}$/.test(payload.name)){ $('#err-pName').textContent='Name must be 3-60 letters'; return; } if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)){ $('#err-pEmail').textContent='Enter a valid email address'; return; } if(payload.phone && !/^\+?[0-9\s-]{10,17}$/.test(payload.phone)){ $('#err-pPhone').textContent='Enter a valid phone number'; return; } try{ await D.Users.update(user.id,payload); toast('Profile updated'); renderProfile(); }catch(e){ console.error(e); $('#err-pEmail').textContent = e.message || 'Failed to update profile'; } };
     }catch(e){ console.error(e); errorBox('Failed to load profile from backend.'); }
   }
 async function renderDocuments(){
@@ -1468,7 +1512,7 @@ async function renderDocuments(){
             await renderDocuments();
           }catch(error){
             console.error(error);
-            alert('Failed to delete document from backend');
+            alert('Failed to delete document');
           }
         };
       });
@@ -1482,16 +1526,128 @@ async function renderDocuments(){
     root.innerHTML = `
       <div class="panel">
         <div class="panel-body" style="padding:24px;color:#ff8d8d;text-align:center">
-          Failed to load documents from backend.
+          Failed to load documents.
         </div>
       </div>
     `;
   }
 }
+  function statusBreakdownRows(items){
+    const counts = {};
+    items.forEach(i=>{ const k = String(i.status||'--').trim() || '--'; counts[k] = (counts[k]||0)+1; });
+    const total = items.length || 1;
+    const entries = Object.entries(counts).sort((x,y)=>y[1]-x[1]);
+    if(!entries.length) return `<div style="padding:12px 0;text-align:center;color:#888">No data</div>`;
+    return entries.map(([label,count])=>{
+      const pct = Math.round((count/total)*100);
+      return `<div class="progress-row"><div>${esc(label)}</div><div class="track"><span style="width:${pct}%"></span></div><strong>${count} (${pct}%)</strong></div>`;
+    }).join('');
+  }
+
   async function renderAnalytics(){
     const root=content(); if(!root) return;
     root.innerHTML = `<div class="panel"><div class="panel-body" style="text-align:center;color:#888;padding:24px">Loading analytics...</div></div>`;
-    try{ const [vehicles,drivers,trips,maintenance]=await Promise.all([D.Vehicles.getAll(),D.Drivers.getAll(),D.Trips.getAll(),D.Maintenance.getAll('')]); const active=vehicles.filter(v=>/active/i.test(v.status||'')).length; const completed=trips.filter(t=>/complete|deliver/i.test(t.status||'')).length; const cost=maintenance.reduce((sum,m)=>sum+(Number(String(m.cost||'').replace(/[₹,]/g,''))||0),0); root.innerHTML=`<section class="stats"><div class="stat"><h3>Fleet Score</h3><div class="v">${vehicles.length?Math.round(active/vehicles.length*100):0}%</div><div class="s">Active vehicle ratio</div></div><div class="stat"><h3>Completed Trips</h3><div class="v">${completed}</div><div class="s">From backend trips</div></div><div class="stat"><h3>Maintenance Cost</h3><div class="v">₹${cost.toLocaleString('en-IN')}</div><div class="s">Backend records</div></div><div class="stat"><h3>Drivers</h3><div class="v">${drivers.length}</div><div class="s">Backend drivers</div></div></section><section class="panel" style="margin-top:18px"><div class="panel-head"><div class="panel-title">Performance Breakdown</div></div><div class="panel-body"><div class="progress-list"><div class="progress-row"><div>Vehicle Active Ratio</div><div class="track"><span style="width:${vehicles.length?Math.round(active/vehicles.length*100):0}%"></span></div><strong>${vehicles.length?Math.round(active/vehicles.length*100):0}%</strong></div><div class="progress-row"><div>Trip Completion</div><div class="track"><span style="width:${trips.length?Math.round(completed/trips.length*100):0}%"></span></div><strong>${trips.length?Math.round(completed/trips.length*100):0}%</strong></div></div></div></section>`; }catch(e){ console.error(e); errorBox('Failed to load analytics from backend.'); }
+    try{
+      const a = await D.Dashboard.getFleetManagerAnalytics();
+      const [vehicles, drivers, trips, maintenance, statement, rateCard, settlements] = await Promise.all([
+        D.Vehicles.getAll(), D.Drivers.getAll(), D.Trips.getAll(), D.Maintenance.getAll(''),
+        D.Payouts.getFleetManagerStatement().catch(() => null),
+        D.Payouts.getMyRateCard().catch(() => null),
+        D.Payouts.listSettlements().catch(() => [])
+      ]);
+
+      root.innerHTML = `
+        <section class="stats" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+          <div class="stat"><h3>Fleet Score</h3><div class="v yellow">${a.fleetScorePercent}%</div><div class="s">Active vehicle ratio</div></div>
+          <div class="stat"><h3>Completed Trips</h3><div class="v yellow">${a.completedTrips}</div><div class="s">of ${trips.length} total trips</div></div>
+          <div class="stat"><h3>Maintenance Cost</h3><div class="v yellow">₹${a.maintenanceCost.toLocaleString('en-IN')}</div><div class="s">${maintenance.length} records</div></div>
+          <div class="stat"><h3>Drivers</h3><div class="v yellow">${a.driverCount}</div><div class="s">${drivers.filter(d=>!/suspend|reject/i.test(d.status||'')).length} available</div></div>
+        </section>
+        <section class="grid2">
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">Monthly Revenue Statement</div>
+              <span class="pill ${statement && statement.status === 'locked' ? '' : 'pill-yellow'}">${statement ? statement.month : '--'}${statement ? (statement.status === 'locked' ? ' · Locked' : ' · Open') : ''}</span>
+            </div>
+            <div class="panel-body">
+              ${statement ? `
+                <div class="progress-list">
+                  <div class="progress-row"><div>Completed Trips</div><strong>${statement.completedTrips}</strong></div>
+                  <div class="progress-row"><div>Trip Revenue (your share)</div><strong>₹${statement.tripRevenue.toLocaleString('en-IN')}</strong></div>
+                  <div class="progress-row"><div>Driver Payouts</div><strong>-₹${statement.driverPayoutsTotal.toLocaleString('en-IN')}</strong></div>
+                  <div class="progress-row"><div>Maintenance Costs</div><strong>-₹${statement.maintenanceCosts.toLocaleString('en-IN')}</strong></div>
+                  ${statement.adjustmentsTotal ? `<div class="progress-row"><div>Adjustments (late refunds from prior locked months)</div><strong>${statement.adjustmentsTotal < 0 ? '-' : ''}₹${Math.abs(statement.adjustmentsTotal).toLocaleString('en-IN')}</strong></div>` : ''}
+                  <div class="progress-row" style="border-top:1px solid #333;padding-top:10px;margin-top:6px"><div><strong>Net Income</strong></div><strong class="yellow">₹${statement.netIncome.toLocaleString('en-IN')}</strong></div>
+                </div>
+                ${(settlements || []).length ? `
+                  <div style="margin-top:18px;border-top:1px solid #262626;padding-top:14px">
+                    <div style="font-size:13px;color:#9ca3af;margin-bottom:8px">Previous Months</div>
+                    <div class="progress-list">
+                      ${settlements.map(s => `
+                        <div class="progress-row"><div>${s.month} ${s.status === 'locked' ? '(Locked)' : '(Open)'}</div><strong>₹${s.netIncome.toLocaleString('en-IN')}</strong></div>
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+              ` : `<div style="color:#ff8d8d;padding:12px 0">Failed to load revenue statement.</div>`}
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">My Driver Rate Card</div>${rateCard && rateCard.isCustom ? '<span class="pill pill-yellow">Custom</span>' : '<span class="pill">Platform Default</span>'}</div>
+            <div class="panel-body" id="fmRateCardBody">
+              ${rateCard ? `
+                <div class="field"><label>Base Fare (₹ per trip)</label><input id="fmRcBaseFare" type="number" min="${rateCard.platformFloor.baseFare}" step="0.01" value="${rateCard.effective.baseFare}"></div>
+                <div class="field"><label>Rate per Km (₹)</label><input id="fmRcPerKm" type="number" min="${rateCard.platformFloor.perKm}" step="0.01" value="${rateCard.effective.perKm}"></div>
+                <div class="field"><label>Rate per Kg (₹)</label><input id="fmRcPerKg" type="number" min="${rateCard.platformFloor.perKg}" step="0.01" value="${rateCard.effective.perKg}"></div>
+                <div class="form-note">Platform minimum: ₹${rateCard.platformFloor.baseFare} base, ₹${rateCard.platformFloor.perKm}/km, ₹${rateCard.platformFloor.perKg}/kg. You cannot go below these.</div>
+                <button class="btn-yellow" id="fmSaveRateCard" style="margin-top:12px">Save Rate Card</button>
+              ` : `<div style="color:#ff8d8d;padding:12px 0">Failed to load rate card.</div>`}
+            </div>
+          </div>
+        </section>
+        <section class="grid2">
+          <div class="panel"><div class="panel-head"><div class="panel-title">Trips per Day</div><span class="pill pill-yellow">Recent</span></div><div class="bars">${tripsPerDayBars(trips)}</div></div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Maintenance Cost Trend</div><span class="pill pill-yellow">Monthly</span></div><div class="linechart">${maintenanceCostLine(maintenance)}</div></div>
+        </section>
+        <section class="grid2">
+          <div class="panel"><div class="panel-head"><div class="panel-title">Fleet Performance</div></div><div class="panel-body"><div class="progress-list">
+            <div class="progress-row"><div>Vehicle Active Ratio</div><div class="track"><span style="width:${a.vehicleActiveRatioPercent}%"></span></div><strong>${a.vehicleActiveRatioPercent}%</strong></div>
+            <div class="progress-row"><div>Trip Completion</div><div class="track"><span style="width:${a.tripCompletionRatioPercent}%"></span></div><strong>${a.tripCompletionRatioPercent}%</strong></div>
+          </div></div></div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Driver Performance</div></div><div class="panel-body"><div class="progress-list">${driverPerformanceRows(drivers)}</div></div></div>
+        </section>
+        <section class="grid2">
+          <div class="panel"><div class="panel-head"><div class="panel-title">Vehicle Status Breakdown</div></div><div class="panel-body"><div class="progress-list">${statusBreakdownRows(vehicles)}</div></div></div>
+          <div class="panel"><div class="panel-head"><div class="panel-title">Trip Status Breakdown</div></div><div class="panel-body"><div class="progress-list">${statusBreakdownRows(trips)}</div></div></div>
+        </section>
+      `;
+
+      const saveRcBtn = document.getElementById('fmSaveRateCard');
+
+      if (saveRcBtn && rateCard) {
+        saveRcBtn.onclick = async () => {
+          const baseFare = Number(document.getElementById('fmRcBaseFare').value);
+          const perKm = Number(document.getElementById('fmRcPerKm').value);
+          const perKg = Number(document.getElementById('fmRcPerKg').value);
+
+          try {
+            await D.Payouts.setMyRateCard({ baseFare, perKm, perKg });
+            toast('Rate card saved');
+            renderAnalytics();
+          } catch (error) {
+            console.error('Failed to save rate card:', error);
+            alert(error.message || 'Failed to save rate card.');
+          }
+        };
+      }
+    }catch(e){
+      console.error(e);
+      if(String(e.message||'').toLowerCase().includes('reports access')){
+        root.innerHTML = `<div class="panel"><div class="panel-body" style="text-align:center;color:#b5b5b5;padding:60px 24px"><strong>Access Restricted</strong><br>You do not have permission to view this page. Contact your Super User administrator.</div></div>`;
+      } else {
+        errorBox('Failed to load analytics.');
+      }
+    }
   }
 
   async function init(){
@@ -1511,7 +1667,9 @@ async function renderDocuments(){
       'trips.html': renderTrips,
       'documents.html': renderDocuments,
       'notifications.html': renderNotifications,
-      'profile.html': renderProfile
+      'profile.html': renderProfile,
+      'analytics.html': renderAnalytics,
+      'add-driver.html': renderAddDriver
     };
     if(routes[page]) routes[page]();
   }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { DataStoreService, PlatformSettings, SecuritySettings, PermissionEntry } from '../data-store/data-store.service';
 import { UpdatePlatformSettingsDto, UpdateSecuritySettingsDto } from './dto/settings.dto';
 
@@ -43,5 +43,27 @@ export class SettingsService {
 
   getAllPermissions(): Record<string, PermissionEntry[]> {
     return { ...this.store.permissions };
+  }
+
+  isPermissionEnabled(role: string, label: string): boolean {
+    const perms = this.store.permissions[role];
+    if (!perms) return true;
+    const entry = perms.find((p) => p[0] === label);
+    return entry ? entry[2] !== false : true;
+  }
+
+  getCommissionRate(): number {
+    return this.store.commissionRate;
+  }
+
+  setCommissionRate(rate: number): number {
+    if (typeof rate !== 'number' || Number.isNaN(rate) || rate < 0 || rate > 100) {
+      throw new BadRequestException('commissionRate must be a number between 0 and 100');
+    }
+
+    this.store.commissionRate = rate;
+    this.store.persistSettings();
+
+    return this.store.commissionRate;
   }
 }

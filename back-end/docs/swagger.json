@@ -4,32 +4,7 @@
     "/api/auth/login": {
       "post": {
         "operationId": "AuthController_login",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -46,6 +21,31 @@
           }
         },
         "summary": "Authenticate a user against the backend user records",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Self-register a new fleet manager, business client, or driver account (requires superuser approval before login)",
         "tags": [
           "Auth"
         ]
@@ -73,22 +73,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -104,32 +88,7 @@
       "post": {
         "description": "Only superuser can create users.",
         "operationId": "UsersController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -169,22 +128,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -209,22 +152,6 @@
             "required": true,
             "in": "path",
             "description": "User ID",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -264,29 +191,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
           }
         ],
         "responses": {
@@ -313,30 +217,6 @@
             "required": true,
             "in": "path",
             "description": "User ID",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -383,30 +263,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -421,32 +277,7 @@
       },
       "post": {
         "operationId": "VehiclesController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -480,30 +311,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -524,30 +331,6 @@
             "required": true,
             "in": "path",
             "description": "Vehicle ID",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -584,30 +367,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -634,30 +393,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -673,32 +408,7 @@
       "post": {
         "description": "Only superuser and fleet manager can create drivers.",
         "operationId": "DriversController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -733,30 +443,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -778,30 +464,6 @@
             "required": true,
             "in": "path",
             "description": "Driver ID",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -839,30 +501,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -896,30 +534,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -935,32 +549,7 @@
       "post": {
         "description": "Business client creates a delivery request. New flow: backend automatically creates a linked trip and directly assigns it to the default driver.",
         "operationId": "DeliveriesController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -995,30 +584,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1042,30 +607,6 @@
             "required": true,
             "in": "path",
             "description": "Delivery ID",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1105,30 +646,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
@@ -1165,30 +682,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
@@ -1222,30 +715,6 @@
             "required": true,
             "in": "path",
             "description": "Delivery ID, e.g. DR-2026-001",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1308,30 +777,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1346,32 +791,7 @@
       },
       "post": {
         "operationId": "DocumentsController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -1409,30 +829,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1452,30 +848,6 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1511,30 +883,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1556,30 +904,6 @@
             "name": "search",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1607,30 +931,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1652,30 +952,6 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1720,30 +996,6 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1803,30 +1055,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
@@ -1868,6 +1096,256 @@
         ]
       }
     },
+    "/api/trips/{id}/notes": {
+      "patch": {
+        "operationId": "TripsController_addNote",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "example": "Customer asked to leave at gate."
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Add a driver note to a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/resolve-dispute": {
+      "patch": {
+        "description": "Sets the amount the business client should actually be charged for a disputed/damaged delivery. Commission and driver payout use this amount instead of the original invoice total.",
+        "operationId": "TripsController_resolveDispute",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "resolvedAmount": {
+                    "type": "number",
+                    "example": 2500
+                  },
+                  "reason": {
+                    "type": "string",
+                    "example": "Partial delivery — 2 of 5 items damaged."
+                  }
+                },
+                "required": [
+                  "resolvedAmount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Resolve a reported issue with a billable amount",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/payouts/rate-card/platform": {
+      "get": {
+        "operationId": "PayoutsController_getPlatformRateCard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the platform-wide minimum driver rate card",
+        "tags": [
+          "Payouts"
+        ]
+      },
+      "put": {
+        "operationId": "PayoutsController_setPlatformRateCard",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetRateCardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set the platform-wide minimum driver rate card",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/rate-card/mine": {
+      "get": {
+        "operationId": "PayoutsController_getMyRateCard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get my effective driver rate card (custom or platform default)",
+        "tags": [
+          "Payouts"
+        ]
+      },
+      "put": {
+        "operationId": "PayoutsController_setMyRateCard",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetRateCardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set my custom driver rate card (must be at or above the platform minimum)",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/driver/mine": {
+      "get": {
+        "operationId": "PayoutsController_getMyPayouts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get my persisted per-trip payout records",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/fleet-manager/statement": {
+      "get": {
+        "operationId": "PayoutsController_getFleetManagerStatement",
+        "parameters": [
+          {
+            "name": "fleetManagerId",
+            "required": false,
+            "in": "query",
+            "description": "Superuser only; defaults to self for fleet managers",
+            "schema": {}
+          },
+          {
+            "name": "month",
+            "required": false,
+            "in": "query",
+            "description": "YYYY-MM, defaults to current month",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Monthly net income statement for a fleet manager",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/fleet-manager/settlements": {
+      "get": {
+        "operationId": "PayoutsController_listSettlements",
+        "parameters": [
+          {
+            "name": "fleetManagerId",
+            "required": false,
+            "in": "query",
+            "description": "Superuser only; omit to list all fleet managers",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List settlement periods (own for fleet manager, all or filtered for superuser)",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/fleet-manager/settlement/lock": {
+      "post": {
+        "operationId": "PayoutsController_lockSettlement",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Lock a fleet manager settlement period, freezing its statement as a snapshot",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
     "/api/maintenance": {
       "get": {
         "operationId": "MaintenanceController_findAll",
@@ -1876,30 +1354,6 @@
             "name": "search",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -1917,32 +1371,7 @@
       },
       "post": {
         "operationId": "MaintenanceController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -1975,30 +1404,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2018,30 +1423,6 @@
             "name": "id",
             "required": true,
             "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -2077,30 +1458,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2116,65 +1473,22 @@
     },
     "/api/notifications": {
       "get": {
-        "description": "Returns notifications filtered by the x-user-role header.",
+        "description": "Returns notifications scoped to the verified requester.",
         "operationId": "NotificationsController_findAll",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
           }
         },
-        "summary": "Get notifications for current role",
+        "summary": "Get notifications for the current user",
         "tags": [
           "Notifications"
         ]
       },
       "post": {
         "operationId": "NotificationsController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2199,20 +1513,26 @@
     "/api/notifications/mark-read": {
       "patch": {
         "operationId": "NotificationsController_markRead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Mark all notifications as read for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/{id}": {
+      "patch": {
+        "operationId": "NotificationsController_markOne",
         "parameters": [
           {
-            "name": "x-user-role",
+            "name": "id",
             "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
+            "in": "path",
             "schema": {
               "type": "string"
             }
@@ -2223,7 +1543,30 @@
             "description": ""
           }
         },
-        "summary": "Mark all notifications as read for current role",
+        "summary": "Mark a single notification as read or unread",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "delete": {
+        "description": "Deletes a notification belonging to the verified requester.",
+        "operationId": "NotificationsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a notification",
         "tags": [
           "Notifications"
         ]
@@ -2237,30 +1580,6 @@
             "name": "search",
             "required": false,
             "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -2278,32 +1597,7 @@
       },
       "post": {
         "operationId": "TransactionsController_create",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2336,30 +1630,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2384,30 +1654,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2422,32 +1668,7 @@
       },
       "post": {
         "operationId": "TransactionsController_createInvoice",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2480,30 +1701,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2520,38 +1717,13 @@
     "/api/transactions/revenue-summary": {
       "get": {
         "operationId": "TransactionsController_getRevenueSummary",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
           }
         },
-        "summary": "Platform revenue summary: subscription revenue, delivery commission, totals",
+        "summary": "Platform revenue summary: delivery commission and total revenue",
         "tags": [
           "Transactions"
         ]
@@ -2560,31 +1732,7 @@
     "/api/transactions/pay-delivery": {
       "post": {
         "operationId": "TransactionsController_payDelivery",
-        "parameters": [
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2600,7 +1748,32 @@
             "description": ""
           }
         },
-        "summary": "Business Client pays a delivery invoice; backend calculates the 10% platform commission",
+        "summary": "Business Client pays a delivery invoice; backend calculates the platform commission at the current configured rate",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/{id}/refund": {
+      "post": {
+        "description": "Reverses platform commission proportionally to the refund amount. Omit amount for a full refund of the remaining balance. Multiple partial refunds are allowed up to the original amount. Driver keeps their payout.",
+        "operationId": "TransactionsController_refundDelivery",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Full or partial refund of a completed delivery payment",
         "tags": [
           "Transactions"
         ]
@@ -2617,30 +1790,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -2654,163 +1803,10 @@
         ]
       }
     },
-    "/api/subscriptions/plans": {
-      "get": {
-        "operationId": "SubscriptionsController_getPlans",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "List the available subscription plans (server-side pricing)",
-        "tags": [
-          "Subscriptions"
-        ]
-      }
-    },
-    "/api/subscriptions/current": {
-      "get": {
-        "operationId": "SubscriptionsController_getCurrent",
-        "parameters": [
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Get the current Fleet Manager's subscription and available plans",
-        "tags": [
-          "Subscriptions"
-        ]
-      }
-    },
-    "/api/subscriptions/pay": {
-      "post": {
-        "operationId": "SubscriptionsController_pay",
-        "parameters": [
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PaySubscriptionDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "summary": "Simulate a subscription payment and activate/renew the plan",
-        "tags": [
-          "Subscriptions"
-        ]
-      }
-    },
     "/api/settings/platform": {
       "get": {
         "operationId": "SettingsController_getPlatform",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -2823,32 +1819,7 @@
       },
       "put": {
         "operationId": "SettingsController_updatePlatform",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2873,32 +1844,7 @@
     "/api/settings/security": {
       "get": {
         "operationId": "SettingsController_getSecurity",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -2911,32 +1857,7 @@
       },
       "put": {
         "operationId": "SettingsController_updateSecurity",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
@@ -2958,35 +1879,38 @@
         ]
       }
     },
+    "/api/settings/commission": {
+      "get": {
+        "operationId": "SettingsController_getCommission",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the platform commission rate (percent)",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updateCommission",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set the platform commission rate (percent, 0-100)",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
     "/api/settings/permissions": {
       "get": {
         "operationId": "SettingsController_getAllPermissions",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -3010,30 +1934,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -3053,30 +1953,6 @@
             "name": "role",
             "required": true,
             "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
             "schema": {
               "type": "string"
             }
@@ -3106,32 +1982,7 @@
     "/api/dashboard/superuser": {
       "get": {
         "operationId": "DashboardController_getSuperuserDashboard",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -3146,31 +1997,7 @@
     "/api/dashboard/business-client": {
       "get": {
         "operationId": "DashboardController_getBusinessClientDashboard",
-        "parameters": [
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -3185,32 +2012,7 @@
     "/api/dashboard/fleet-manager": {
       "get": {
         "operationId": "DashboardController_getFleetManagerDashboard",
-        "parameters": [
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          },
-          {
-            "name": "x-user-id",
-            "in": "header",
-            "required": false,
-            "description": "ID of the requesting user (e.g. SU-001). Used for self-service endpoints.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -3222,34 +2024,26 @@
         ]
       }
     },
+    "/api/dashboard/fleet-manager/analytics": {
+      "get": {
+        "description": "Gated by the \"Reports Access\" permission configured for the fleet-manager role.",
+        "operationId": "DashboardController_getFleetManagerAnalytics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the current fleet manager's analytics",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
     "/api/dashboard/driver": {
       "get": {
         "operationId": "DashboardController_getDriverDashboard",
-        "parameters": [
-          {
-            "name": "x-user-id",
-            "required": true,
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "x-user-role",
-            "in": "header",
-            "required": true,
-            "description": "Role of the requesting user (superuser | fleet-manager | business-client | driver)",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "superuser",
-                "fleet-manager",
-                "business-client",
-                "driver"
-              ]
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -3264,17 +2058,65 @@
   },
   "info": {
     "title": "DeliverSync API",
-    "description": "REST API for the DeliverSync delivery management platform. Role-based access is controlled via the `x-user-role` request header. Supported roles: superuser, fleet-manager, business-client, driver.",
+    "description": "REST API for the DeliverSync delivery management platform. Authentication is via a signed JWT returned from POST /api/auth/login, sent as `Authorization: Bearer <token>` on every subsequent request. Supported roles: superuser, fleet-manager, business-client, driver.",
     "version": "1.0",
     "contact": {}
   },
   "tags": [],
   "servers": [],
   "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
     "schemas": {
       "LoginDto": {
         "type": "object",
         "properties": {}
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "email": {
+            "type": "string",
+            "example": "driver@deliverysync.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123",
+            "description": "Min 8 chars, 1 uppercase, 1 special char"
+          },
+          "role": {
+            "type": "string",
+            "example": "driver",
+            "enum": [
+              "fleet-manager",
+              "business-client",
+              "driver"
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "profileDetails": {
+            "type": "object",
+            "description": "Role-specific profile details"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ]
       },
       "CreateUserDto": {
         "type": "object",
@@ -3537,15 +2379,27 @@
             "type": "string",
             "example": "Tempo"
           },
+          "zone": {
+            "type": "string",
+            "example": "Chennai North"
+          },
+          "license": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
           "status": {
             "type": "string",
             "example": "Available",
             "enum": [
               "Available",
               "Active",
+              "On Duty",
               "Busy",
               "Offline",
-              "Inactive"
+              "Inactive",
+              "Suspended",
+              "Rejected",
+              "Document Review"
             ]
           }
         },
@@ -3581,15 +2435,27 @@
             "type": "string",
             "example": "Tempo"
           },
+          "zone": {
+            "type": "string",
+            "example": "Chennai North"
+          },
+          "license": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
           "status": {
             "type": "string",
             "example": "Available",
             "enum": [
               "Available",
               "Active",
+              "On Duty",
               "Busy",
               "Offline",
-              "Inactive"
+              "Inactive",
+              "Suspended",
+              "Rejected",
+              "Document Review"
             ]
           }
         }
@@ -3666,6 +2532,11 @@
           "packageDimensions": {
             "$ref": "#/components/schemas/PackageDimensionsDto"
           },
+          "weight": {
+            "type": "number",
+            "example": 2.5,
+            "description": "Package weight in kilograms"
+          },
           "type": {
             "type": "string",
             "example": "Express",
@@ -3697,7 +2568,8 @@
           "pickup",
           "dropoff",
           "packageType",
-          "packageDimensions"
+          "packageDimensions",
+          "weight"
         ]
       },
       "BlockDeliveryDto": {
@@ -3827,6 +2699,28 @@
           }
         }
       },
+      "SetRateCardDto": {
+        "type": "object",
+        "properties": {
+          "baseFare": {
+            "type": "number",
+            "example": 50
+          },
+          "perKm": {
+            "type": "number",
+            "example": 8
+          },
+          "perKg": {
+            "type": "number",
+            "example": 5
+          }
+        },
+        "required": [
+          "baseFare",
+          "perKm",
+          "perKg"
+        ]
+      },
       "CreateMaintenanceDto": {
         "type": "object",
         "properties": {
@@ -3934,10 +2828,6 @@
         "properties": {}
       },
       "PayDeliveryDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "PaySubscriptionDto": {
         "type": "object",
         "properties": {}
       },

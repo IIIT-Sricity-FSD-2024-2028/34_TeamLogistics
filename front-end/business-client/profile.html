@@ -184,7 +184,7 @@
 
             <div>
               <div id="profileTitle" style="font-size:20px;font-weight:800">Business Account</div>
-              <div id="profileSub" style="color:#9ca3af;margin-top:6px">Loaded from backend</div>
+              <div id="profileSub" style="color:#9ca3af;margin-top:6px">Loaded</div>
             </div>
           </div>
 
@@ -267,6 +267,8 @@
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "business-client";
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const DEFAULT_EMAIL = "client@deliverysync.com";
 
       let currentUser = null;
@@ -384,7 +386,7 @@
           currentUser = await getById(session.userId);
 
           if (!currentUser || String(currentUser.id) !== String(session.userId)) {
-            throw new Error("Backend did not return the logged-in business client's profile.");
+            throw new Error("Could not load the logged-in business client's profile.");
           }
 
           fillForm(currentUser);
@@ -404,10 +406,10 @@
 
           const errorBox = document.getElementById("profileError");
           if (errorBox) {
-            errorBox.textContent = `Unable to load your profile from the backend: ${error.message}`;
+            errorBox.textContent = `Unable to load your profile: ${error.message}`;
             errorBox.style.display = "block";
           } else {
-            alert(`Unable to load your profile from the backend: ${error.message}`);
+            alert(`Unable to load your profile: ${error.message}`);
           }
         }
       };
@@ -444,7 +446,7 @@ const payload = {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
-                "x-user-role": ROLE,
+                "Authorization": "Bearer " + TOKEN,
               },
               body: JSON.stringify(payload),
             }).then((res) => {
@@ -452,7 +454,7 @@ const payload = {
               return res.json();
             });
           } else {
-            throw new Error("User ID missing. Cannot update backend profile.");
+            throw new Error("User ID missing. Cannot update profile.");
           }
 
           currentUser = response || payload;
@@ -468,7 +470,7 @@ const payload = {
             email: fields.emailAddress.value,
           });
 
-          showStatus("Profile updated successfully in backend.", "success");
+          showStatus("Profile updated successfully.", "success");
 
          
         } catch (error) {

@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css">
   <link rel="stylesheet" href="../assets/css/driver-desktop.css">
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -631,6 +631,9 @@
 
         const ROLE = "driver";
 
+
+
+        const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
         let notifications = [];
         let currentFilter = "all";
 
@@ -705,7 +708,7 @@
                 "http://localhost:3000/api/notifications",
                 {
                   headers:{
-                    "x-user-role":ROLE
+                    "Authorization": "Bearer " + TOKEN
                   }
                 }
               );
@@ -735,8 +738,7 @@
                     "Content-Type":
                       "application/json",
 
-                    "x-user-role":
-                      ROLE
+                    "Authorization": "Bearer " + TOKEN
                   }
                 }
               );
@@ -1006,7 +1008,7 @@
                 {
                   method:"DELETE",
                   headers:{
-                    "x-user-role":ROLE
+                    "Authorization": "Bearer " + TOKEN
                   }
                 }
               );
@@ -1074,7 +1076,7 @@
                 )
                 .innerHTML = `
                   <div class="empty-state">
-                    Could not load notifications from backend.
+                    Could not load notifications.
                   </div>
                 `;
 

@@ -23,7 +23,12 @@
       s.includes('picked') ||
       s.includes('preparing') ||
       s.includes('assigned') ||
-      s.includes('pending')
+      s.includes('pending') ||
+      s.includes('queued') ||
+      s.includes('approved') ||
+      s.includes('accepted') ||
+      s.includes('issue') ||
+      s.includes('blocked')
     );
   }
 
@@ -226,6 +231,7 @@
     const pkgLengthInput = document.getElementById('pkgLength');
     const pkgWidthInput = document.getElementById('pkgWidth');
     const pkgHeightInput = document.getElementById('pkgHeight');
+    const pkgWeightInput = document.getElementById('pkgWeight');
 
     const fileInput = document.getElementById('delivery-list-upload');
     const fileName = document.getElementById('delivery-list-file-name');
@@ -270,6 +276,7 @@
       const pkgLength = pkgLengthInput ? parseFloat(pkgLengthInput.value) : NaN;
       const pkgWidth = pkgWidthInput ? parseFloat(pkgWidthInput.value) : NaN;
       const pkgHeight = pkgHeightInput ? parseFloat(pkgHeightInput.value) : NaN;
+      const pkgWeight = pkgWeightInput ? parseFloat(pkgWeightInput.value) : NaN;
 
       const deliveryType = typeInput ? typeInput.value : 'standard';
 
@@ -311,6 +318,11 @@
         valid = false;
       }
 
+      if (isNaN(pkgWeight) || pkgWeight <= 0 || pkgWeight > 1000) {
+        setError(pkgWeightInput, 'Weight must be between 0.1 and 1000 kg');
+        valid = false;
+      }
+
       if (file) {
         var ext = file.name.split('.').pop().toLowerCase();
 
@@ -327,8 +339,22 @@
         return;
       }
 
+      let customerName = 'Business Client';
+      try {
+        const session = JSON.parse(localStorage.getItem('deliverysync-session-v1') || 'null');
+        const getById = D.Users && (D.Users.getById || D.Users.getOne);
+        if (session && session.userId && getById) {
+          const user = await getById(session.userId);
+          customerName =
+            (user && (user.companyName || user.company || (user.profileDetails && user.profileDetails.companyName) || user.name)) ||
+            customerName;
+        }
+      } catch (err) {
+        console.error('Failed to resolve current business client for delivery creation:', err);
+      }
+
       var payload = {
-        customer: 'Acme Logistics Inc.',
+        customer: customerName,
         pickup: pickup,
         dropoff: destination,
         packageType: packageType,
@@ -338,6 +364,7 @@
           height: pkgHeight,
           unit: 'cm'
         },
+        weight: pkgWeight,
         type: deliveryType === 'express' ? 'Express' : 'Standard',
         priority: deliveryType === 'express' ? 'High' : 'Medium',
         items: 1,
@@ -355,321 +382,9 @@
 
       } catch (error) {
         console.error('Failed to create delivery:', error);
-        toast('Failed to create delivery from backend');
+        toast('Failed to create delivery');
       }
     });
-  }
-
-  async function renderActiveDeliveriesPage() {
-    const root = document.querySelector('.bc-content');
-    if (!root) return;
-
-    if (!D || !D.Deliveries || !D.Deliveries.getAll) {
-      root.innerHTML = `
-        <div class="card" style="padding:24px;color:#ff8d8d">
-          Deliveries API is not available.
-        </div>
-      `;
-      return;
-    }
-
-    root.innerHTML = `
-      <div class="card" style="padding:24px;color:#8f8f8f;text-align:center">
-        Loading active deliveries from backend...
-      </div>
-    `;
-
-    function getEta(delivery) {
-      return delivery.eta || delivery.expectedTime || delivery.preferredTime || '--';
-    }
-
-    function deliveryCard(d) {
-      const id = d.id || d.deliveryId || '--';
-      const pickup = d.pickup || d.pickupAddress || d.source || '--';
-      const destination = d.dropoff || d.destination || d.drop || d.dropAddress || '--';
-      const driver = d.driver || d.assignedDriver || '--';
-      const eta = getEta(d);
-      const status = d.status || 'Pending';             
-
-      return `
-        <div class="active-delivery-card" data-id="${esc(id)}">
-          <div class="delivery-id-block">
-            <h2>#${esc(id)}</h2>
-            <span class="pill bright">${esc(status).toUpperCase()}</span>
-          </div>
-
-          <div class="delivery-location">
-            <div class="label">FROM</div>
-            <div class="value">${esc(pickup)}</div>
-          </div>
-
-          <div class="delivery-location">
-            <div class="label">TO</div>
-            <div class="value">${esc(destination)}</div>
-          </div>
-
-          <div class="delivery-driver">
-            <div class="label">DRIVER</div>
-            <div class="value">${esc(driver)}</div>
-            <div class="muted">${esc(d.driverDistance || '--')}</div>
-          </div>
-
-          <div class="delivery-eta">
-            <div class="label">ETA</div>
-            <div class="eta-big">${esc(eta)}</div>
-            <div class="muted">${String(eta).includes(':') ? '' : 'mins'}</div>
-          </div>
-
-          <div class="delivery-actions">
-            <a class="btn yellow" href="live-tracking.html?id=${encodeURIComponent(id)}">
-              Track Live
-            </a>
-
-            <button class="btn danger-outline bc-cancel-delivery" data-id="${esc(id)}" type="button">
-              × Cancel Order
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    try {
-      const [deliveries, clientNames] = await Promise.all([
-        D.Deliveries.getAll(),
-        getCurrentClientNames()
-      ]);
-
-      const activeDeliveries = (deliveries || []).filter(function (d) {
-        return isActiveStatus(d.status) && belongsToCurrentClient(d, clientNames);
-      });
-
-      root.innerHTML = `
-        <style>
-          .active-page-head {
-            display:flex;
-            align-items:flex-end;
-            justify-content:space-between;
-            gap:18px;
-            margin-bottom:20px;
-          }
-
-          .active-title h1 {
-            margin:0;
-            font-size:44px;
-            color:#fff;
-            font-weight:900;
-            letter-spacing:-1px;
-          }
-
-          .active-title p {
-            margin:8px 0 0;
-            color:#a7a7a7;
-            font-size:17px;
-          }
-
-          .active-search {
-            width:320px;
-            max-width:100%;
-            display:flex;
-            align-items:center;
-            gap:10px;
-            background:#111827;
-            border:1px solid #263041;
-            border-radius:18px;
-            padding:14px 18px;
-          }
-
-          .active-search input {
-            width:100%;
-            border:0;
-            outline:0;
-            background:transparent;
-            color:#fff;
-            font:inherit;
-          }
-
-          .active-delivery-list {
-            display:flex;
-            flex-direction:column;
-            gap:18px;
-          }
-
-          .active-delivery-card {
-            display:grid;
-            grid-template-columns:1.1fr 1fr 1fr 1fr .7fr 1.25fr;
-            gap:22px;
-            align-items:center;
-            padding:26px 28px;
-            border-radius:22px;
-            border:1px solid #252525;
-            background:linear-gradient(135deg,#191919,#121212);
-            box-shadow:0 14px 30px rgba(0,0,0,.24);
-          }
-
-          .delivery-id-block h2 {
-            margin:0 0 12px;
-            color:#fff;
-            font-size:28px;
-            font-weight:900;
-          }
-
-          .label {
-            color:#9ca3af;
-            font-size:12px;
-            font-weight:800;
-            letter-spacing:.08em;
-            margin-bottom:8px;
-          }
-
-          .value {
-            color:#fff;
-            font-size:18px;
-            font-weight:700;
-            line-height:1.35;
-          }
-
-          .eta-big {
-            color:#fff;
-            font-size:52px;
-            font-weight:900;
-            line-height:.9;
-          }
-
-          .delivery-actions {
-            display:flex;
-            gap:14px;
-            justify-content:flex-end;
-            align-items:center;
-            flex-wrap:wrap;
-          }
-
-          .danger-outline {
-            background:transparent;
-            border:1px solid #ef4444;
-            color:#ff6464;
-          }
-
-          .danger-outline:hover {
-            background:rgba(239,68,68,.12);
-          }
-
-          @media(max-width:1100px) {
-            .active-delivery-card {
-              grid-template-columns:1fr 1fr;
-            }
-
-            .delivery-actions {
-              justify-content:flex-start;
-            }
-          }
-
-          @media(max-width:700px) {
-            .active-page-head {
-              flex-direction:column;
-              align-items:flex-start;
-            }
-
-            .active-delivery-card {
-              grid-template-columns:1fr;
-            }
-          }
-        </style>
-
-        <div class="active-page-head">
-          <div class="active-title">
-            <h1>Active Deliveries</h1>
-            <p>${activeDeliveries.length} deliveries in progress</p>
-          </div>
-
-          <label class="active-search">
-            <span>⌕</span>
-            <input id="activeDeliverySearch" placeholder="Search Delivery ID" />
-          </label>
-        </div>
-
-        <div class="active-delivery-list" id="activeDeliveryList">
-          ${
-            activeDeliveries.map(deliveryCard).join('') || `
-              <div class="card" style="padding:24px;color:#8f8f8f;text-align:center">
-                No active deliveries found.
-              </div>
-            `
-          }
-        </div>
-      `;
-
-      const searchInput = document.getElementById('activeDeliverySearch');
-      const list = document.getElementById('activeDeliveryList');
-
-      function bindCancelButtons() {
-        document.querySelectorAll('.bc-cancel-delivery').forEach(function (btn) {
-          btn.onclick = async function () {
-            const id = btn.dataset.id;
-
-            if (!id) return;
-            if (!confirm(`Cancel delivery ${id}?`)) return;
-
-            try {
-              if (!D.Deliveries.update || !D.Deliveries.getOne) {
-                alert('Cancel/update API is not available.');
-                return;
-              }
-
-              const existing = await D.Deliveries.getOne(id);
-
-              await D.Deliveries.update(id, {
-                ...existing,
-                status: 'Cancelled'
-              });
-
-              toast('Delivery cancelled');
-              await renderActiveDeliveriesPage();
-            } catch (error) {
-              console.error('Failed to cancel delivery:', error);
-              alert('Failed to cancel delivery from backend.');
-            }
-          };
-        });
-      }
-
-      if (searchInput && list) {
-        searchInput.addEventListener('input', function () {
-          const q = searchInput.value.trim().toLowerCase();
-
-          const filtered = activeDeliveries.filter(function (d) {
-            return [
-              d.id,
-              d.deliveryId,
-              d.pickup,
-              d.destination,
-              d.driver,
-              d.assignedDriver,
-              d.status
-            ].join(' ').toLowerCase().includes(q);
-          });
-
-          list.innerHTML =
-            filtered.map(deliveryCard).join('') || `
-              <div class="card" style="padding:24px;color:#8f8f8f;text-align:center">
-                No matching active deliveries found.
-              </div>
-            `;
-
-          bindCancelButtons();
-        });
-      }
-
-      bindCancelButtons();
-
-    } catch (error) {
-      console.error('Failed to load active deliveries:', error);
-
-      root.innerHTML = `
-        <div class="card" style="padding:24px;color:#ff8d8d;text-align:center">
-          Failed to load active deliveries from backend.
-        </div>
-      `;
-    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -681,10 +396,6 @@
 
     if (page === 'create-delivery.html') {
       bindCreateDeliveryPage();
-    }
-
-    if (page === 'active-deliveries.html') {
-      renderActiveDeliveriesPage();
     }
   });
 })();

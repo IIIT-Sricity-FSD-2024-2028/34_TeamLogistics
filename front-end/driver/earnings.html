@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="../assets/css/brand-logo.css" />
   <link rel="stylesheet" href="../assets/css/driver-desktop.css" />
 
-  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/api-client.js"></script><script src="../assets/js/driver-common.js"></script>
   <script src="../assets/js/brand-logo.js"></script>
   <script src="../assets/js/current-user.js" defer></script>
 </head>
@@ -65,7 +65,7 @@
       <header class="topbar">
         <div class="topbar-left">
           <h1>Earnings</h1>
-          <p>Backend synced income summary and completed delivery revenue</p>
+          <p>Income summary and completed delivery revenue</p>
         </div>
 
         <div class="topbar-right">
@@ -153,7 +153,7 @@
 
               <tbody id="earningsTableBody">
                 <tr>
-                  <td colspan="6" class="empty-row">Loading completed orders from backend...</td>
+                  <td colspan="6" class="empty-row">Loading completed orders...</td>
                 </tr>
               </tbody>
             </table>
@@ -318,6 +318,8 @@
     document.addEventListener("DOMContentLoaded", async () => {
       const ROLE = "driver";
 
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       const session = JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null");
       let sessionUser = null;
       try {
@@ -331,8 +333,8 @@
 
       let trips = [];
       let deliveries = [];
+      let payouts = [];
 
-      
 
       const getArray = (result) => {
         if (Array.isArray(result)) return result;
@@ -368,7 +370,7 @@
         }
 
         const res = await fetch("http://localhost:3000/api/trips", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!res.ok) {
@@ -384,7 +386,7 @@
         }
 
         const res = await fetch("http://localhost:3000/api/deliveries", {
-          headers: { "x-user-role": ROLE },
+          headers: { "Authorization": "Bearer " + TOKEN },
         });
 
         if (!res.ok) {
@@ -393,6 +395,16 @@
 
         return getArray(await res.json());
       };
+
+      const fetchPayouts = async () => {
+        if (window.DeliverySyncAPI?.Payouts?.getMyPayouts) {
+          return getArray(await DeliverySyncAPI.Payouts.getMyPayouts());
+        }
+
+        return [];
+      };
+
+      const getPayoutForTrip = (trip) => payouts.find((p) => String(p.tripId) === String(trip.id)) || null;
 
       const getDeliveryForTrip = (trip) => {
         const requestId =
@@ -417,29 +429,12 @@
         );
       };
 
-      const calculateAmount = (trip, delivery) => {
-        if (trip.amount) return Number(trip.amount);
-        if (delivery?.amount) return Number(delivery.amount);
-        if (delivery?.price) return Number(delivery.price);
-        if (delivery?.fare) return Number(delivery.fare);
-        if (delivery?.revenue) return Number(delivery.revenue);
-
-        const distanceText = String(trip.distance || delivery?.distance || "0");
-        const distance = Number(distanceText.replace(/[^\d.]/g, "")) || 0;
-
-        // fallback: ₹18 per km + ₹250 base pay
-        if (distance > 0) {
-          return Math.round(250 + distance * 18);
-        }
-
-        return 0;
-      };
-
       const renderEarnings = () => {
         const completedTrips = trips.filter(isCompletedForDriver);
 
         const rows = completedTrips.map((trip) => {
           const delivery = getDeliveryForTrip(trip);
+          const payout = getPayoutForTrip(trip);
 
           const requestId =
             trip.request ||
@@ -462,11 +457,12 @@
             "Distance not available";
 
           const status = trip.status || delivery?.status || "Completed";
-          const amount = calculateAmount(trip, delivery);
+          const amount = payout ? Number(payout.totalAmount) : 0;
 
           return {
             trip,
             delivery,
+            payout,
             requestId,
             customer,
             distance,
@@ -475,13 +471,26 @@
           };
         });
 
-        const total = rows.reduce((sum, row) => sum + row.amount, 0);
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const startOfWeek = new Date(startOfToday);
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-        // In this demo, today/week/month are derived from currently completed backend orders.
-        // If you later add completedAt dates, this can be split by real date ranges.
-        document.getElementById("todayEarnings").textContent = formatMoney(total);
-        document.getElementById("weekEarnings").textContent = formatMoney(total);
-        document.getElementById("monthEarnings").textContent = formatMoney(total);
+        const completionDate = (row) => {
+          const raw = row.payout?.createdAt || row.trip.completedAt || row.trip.updatedAt || row.trip.createdAt;
+          const d = raw ? new Date(raw) : null;
+          return d && !Number.isNaN(d.getTime()) ? d : null;
+        };
+
+        const sumSince = (since) => rows.reduce((sum, row) => {
+          const d = completionDate(row);
+          return d && d >= since ? sum + row.amount : sum;
+        }, 0);
+
+        document.getElementById("todayEarnings").textContent = formatMoney(sumSince(startOfToday));
+        document.getElementById("weekEarnings").textContent = formatMoney(sumSince(startOfWeek));
+        document.getElementById("monthEarnings").textContent = formatMoney(sumSince(startOfMonth));
 
         document.getElementById("completedCount").textContent =
           `${rows.length} ${rows.length === 1 ? "Order" : "Orders"}`;
@@ -492,7 +501,7 @@
           tbody.innerHTML = `
             <tr>
               <td colspan="6" class="empty-row">
-                No completed delivery revenue found from backend.
+                No completed delivery revenue found.
               </td>
             </tr>
           `;
@@ -517,35 +526,9 @@
         try {
           trips = await fetchTrips();
           deliveries = await fetchDeliveries();
+          payouts = await fetchPayouts();
 
           renderEarnings();
-
-          const completedTrips = trips.filter(isCompletedForDriver);
-          const completedRows = completedTrips.map((trip) => {
-            const delivery = getDeliveryForTrip(trip);
-            return {
-              tripId: trip.id,
-              request: trip.request,
-              customer: delivery?.customer || trip.customer || "N/A",
-              status: trip.status,
-              amount: calculateAmount(trip, delivery),
-            };
-          });
-
-          console.log("EARNINGS TRIPS:", trips);
-          console.log("EARNINGS DELIVERIES:", deliveries);
-          console.log("EARNINGS COMPLETED ROWS:", completedRows);
-
-          console.table({
-            earningsPageLoaded: true,
-            tripsLoadedFromBackend: trips.length,
-            deliveriesLoadedFromBackend: deliveries.length,
-            completedOrdersForDriver: completedRows.length,
-            totalRevenue: completedRows.reduce((sum, row) => sum + row.amount, 0),
-            source: "GET /api/trips + GET /api/deliveries",
-          });
-
-          
         } catch (error) {
           console.error("Earnings backend sync failed:", error);
           console.error(`History backend sync failed: ${error.message}`);

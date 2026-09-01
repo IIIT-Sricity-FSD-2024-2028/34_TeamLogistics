@@ -7,8 +7,10 @@ import {
   Body,
   Param,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiTags,
   ApiOperation,
@@ -37,8 +39,9 @@ export class DriversController {
     required: false,
     description: 'Search driver by name, email, phone, vehicle, or license number',
   })
-  findAll(@Query('search') search?: string) {
-    return this.driversService.findAll(search);
+  findAll(@Query('search') search?: string, @Req() req?: Request) {
+    const requester = (req as any)?.user as { userId: string; role: string } | undefined;
+    return this.driversService.findAll(search, requester);
   }
 
   @Get(':id')
@@ -49,8 +52,9 @@ export class DriversController {
       'Returns one driver profile. Driver role is allowed for driver portal profile view.',
   })
   @ApiParam({ name: 'id', description: 'Driver ID' })
-  findOne(@Param('id') id: string) {
-    return this.driversService.findOne(id);
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+    return this.driversService.findOne(id, requester);
   }
 
   @Post()
@@ -59,8 +63,9 @@ export class DriversController {
     summary: 'Add a new driver',
     description: 'Only superuser and fleet manager can create drivers.',
   })
-  create(@Body() dto: CreateDriverDto) {
-    return this.driversService.create(dto);
+  create(@Body() dto: CreateDriverDto, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+    return this.driversService.create(dto, requester);
   }
 
   @Put(':id')
@@ -71,8 +76,9 @@ export class DriversController {
       'Superuser and fleet manager can update driver data. Driver role is allowed so driver portal profile page can save its own profile.',
   })
   @ApiParam({ name: 'id', description: 'Driver ID' })
-  update(@Param('id') id: string, @Body() dto: UpdateDriverDto) {
-    return this.driversService.update(id, dto);
+  update(@Param('id') id: string, @Body() dto: UpdateDriverDto, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+    return this.driversService.update(id, dto, requester);
   }
 
   @Delete(':id')
@@ -82,7 +88,8 @@ export class DriversController {
     description: 'Only superuser and fleet manager can delete drivers.',
   })
   @ApiParam({ name: 'id', description: 'Driver ID' })
-  remove(@Param('id') id: string) {
-    return this.driversService.remove(id);
+  remove(@Param('id') id: string, @Req() req: Request) {
+    const requester = (req as any).user as { userId: string; role: string };
+    return this.driversService.remove(id, requester);
   }
 }

@@ -294,6 +294,9 @@
 
       const ROLE = "business-client";
 
+
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       let allNotifications = [];
       let currentFilter = "all";
 
@@ -594,7 +597,7 @@
                 "http://localhost:3000/api/notifications",
                 {
                   headers: {
-                    "x-user-role": ROLE
+                    "Authorization": "Bearer " + TOKEN
                   }
                 }
               ).then((res) => {
@@ -659,7 +662,7 @@
 
           list.innerHTML = `
             <div class="notifications-error">
-              Could not load notifications from backend.
+              Could not load notifications.
             </div>
           `;
 
@@ -727,8 +730,7 @@
                       "Content-Type":
                         "application/json",
 
-                      "x-user-role":
-                        ROLE
+                      "Authorization": "Bearer " + TOKEN
                     },
 
                     body: JSON.stringify({

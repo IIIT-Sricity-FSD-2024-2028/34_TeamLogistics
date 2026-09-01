@@ -1,6 +1,8 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { JwtModule } from '@nestjs/jwt';
+import { JWT_SECRET, JWT_EXPIRES_IN } from './common/jwt.constants';
 import { DataStoreModule } from './data-store/data-store.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -13,10 +15,9 @@ import { MaintenanceModule } from './maintenance/maintenance.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { TransactionsController } from './transactions/transactions.controller';
-import { SubscriptionsModule } from './subscriptions/subscriptions.module';
-import { SubscriptionsController } from './subscriptions/subscriptions.controller';
 import { SettingsModule } from './settings/settings.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { PayoutsModule } from './payouts/payouts.module';
 import { RolesGuard } from './common';
 import { LoggingMiddleware, AuditMiddleware } from './middleware';
 
@@ -28,6 +29,11 @@ import { LoggingMiddleware, AuditMiddleware } from './middleware';
         limit: 100,
       },
     ]),
+    JwtModule.register({
+      global: true,
+      secret: JWT_SECRET,
+      signOptions: { expiresIn: JWT_EXPIRES_IN },
+    }),
     DataStoreModule,
     AuthModule,
     UsersModule,
@@ -39,9 +45,9 @@ import { LoggingMiddleware, AuditMiddleware } from './middleware';
     MaintenanceModule,
     NotificationsModule,
     TransactionsModule,
-    SubscriptionsModule,
     SettingsModule,
     DashboardModule,
+    PayoutsModule,
   ],
   providers: [
     {
@@ -57,6 +63,6 @@ import { LoggingMiddleware, AuditMiddleware } from './middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(LoggingMiddleware).forRoutes('*');
-    consumer.apply(AuditMiddleware).forRoutes(TransactionsController, SubscriptionsController);
+    consumer.apply(AuditMiddleware).forRoutes(TransactionsController);
   }
 }

@@ -231,7 +231,7 @@
 
               <tbody id="invoiceTableBody">
                 <tr>
-                  <td colspan="7" class="empty-row">Loading invoices from backend...</td>
+                  <td colspan="7" class="empty-row">Loading invoices...</td>
                 </tr>
               </tbody>
             </table>
@@ -710,7 +710,7 @@
         if (!filteredInvoices.length) {
           tableBody.innerHTML = `
             <tr>
-              <td colspan="7" class="empty-row">No invoices found from backend.</td>
+              <td colspan="7" class="empty-row">No invoices found.</td>
             </tr>
           `;
           return;
@@ -859,7 +859,7 @@
 
           tableBody.innerHTML = `
             <tr>
-              <td colspan="7" class="empty-row">Could not load invoices from backend.</td>
+              <td colspan="7" class="empty-row">Could not load invoices.</td>
             </tr>
           `;
 

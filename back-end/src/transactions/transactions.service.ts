@@ -14,13 +14,18 @@ import {
   CreateInvoiceDto,
   PayDeliveryDto,
 } from './dto/transaction.dto';
+import { SettingsService } from '../settings/settings.service';
+import { PayoutsService } from '../payouts/payouts.service';
 
 const SUCCESS_STATUSES = ['completed', 'approved', 'paid'];
-const PLATFORM_COMMISSION_RATE = 0.1;
 
 @Injectable()
 export class TransactionsService {
-  constructor(private readonly store: DataStoreService) {}
+  constructor(
+    private readonly store: DataStoreService,
+    private readonly settingsService: SettingsService,
+    private readonly payoutsService: PayoutsService,
+  ) {}
 
   findAllTransactions(search?: string): Transaction[] {
     let items = [...this.store.transactions];
@@ -57,7 +62,7 @@ export class TransactionsService {
     const txn: Transaction = {
       id: `TXN-${Date.now()}`,
       type: dto.type || 'Payment',
-      client: dto.client || 'Acme Logistics Inc.',
+      client: dto.client,
       amount: Number(dto.amount || 0),
       status: dto.status || 'Pending',
       date: (dto as any).date || now.toISOString().split('T')[0],
@@ -289,12 +294,21 @@ export class TransactionsService {
     this.store.invoices.push(invoice as Invoice);
     this.store.persistInvoices();
 
+    const owningClientUser: any = this.store.users.find((u: any) => {
+      if (u.role !== 'business-client') return false;
+      const names = [u.name, u.companyName, u.company, u.profileDetails?.companyName]
+        .filter(Boolean)
+        .map((v: string) => String(v).toLowerCase().trim());
+      return names.includes(String((invoice as any).client || '').toLowerCase().trim());
+    });
+
     this.store.notifications.push({
       id: `N-${Date.now()}`,
       title: 'Invoice generated',
       message: `Invoice ${invoice.id} has been generated for delivery ${cleanDeliveryId}.`,
       time: 'Just now',
       to: 'business-client',
+      toUserId: owningClientUser?.id,
       read: false,
       createdAt: new Date().toISOString(),
     } as any);
@@ -372,6 +386,19 @@ export class TransactionsService {
           invoice.status = 'Paid';
           invoice.paymentStatus = 'Paid';
           invoice.paidAt = new Date().toISOString();
+
+          if (!transaction.transactionType) {
+            const grossAmount = Number(invoice.total ?? invoice.totalAmount ?? invoice.amount ?? transaction.amount ?? 0);
+            const commissionRatePercent = this.settingsService.getCommissionRate();
+            const platformCommission = Number((grossAmount * (commissionRatePercent / 100)).toFixed(2));
+            const fleetManagerAmount = Number((grossAmount - platformCommission).toFixed(2));
+
+            transaction.transactionType = 'delivery-payment';
+            transaction.grossAmount = grossAmount;
+            transaction.platformCommission = platformCommission;
+            transaction.fleetManagerAmount = fleetManagerAmount;
+            transaction.commissionRatePercent = commissionRatePercent;
+          }
         } else if (cleanStatus === 'Rejected' || cleanStatus === 'Failed') {
           invoice.status = 'Rejected';
           invoice.paymentStatus = 'Rejected';
@@ -442,9 +469,20 @@ export class TransactionsService {
       throw new BadRequestException('This invoice has already been paid');
     }
 
-    const grossAmount = Number(invoice.total ?? invoice.totalAmount ?? invoice.amount ?? 0);
+    const deliveryIdForLookup = invoice.deliveryId || dto.deliveryId || cleanIdentifier;
 
-    if (!grossAmount || grossAmount <= 0) {
+    const linkedTrip: any = this.store.trips.find(
+      (t: any) => String(t.request || '') === String(deliveryIdForLookup || ''),
+    );
+
+    const disputeResolvedAmount = linkedTrip?.disputeResolution?.resolvedAmount;
+
+    const grossAmount =
+      disputeResolvedAmount !== undefined && disputeResolvedAmount !== null
+        ? Number(disputeResolvedAmount)
+        : Number(invoice.total ?? invoice.totalAmount ?? invoice.amount ?? 0);
+
+    if (grossAmount < 0 || (grossAmount === 0 && disputeResolvedAmount === undefined)) {
       throw new BadRequestException('Invoice does not have a valid payable amount');
     }
 
@@ -477,7 +515,8 @@ export class TransactionsService {
       return failedTxn;
     }
 
-    const platformCommission = Number((grossAmount * PLATFORM_COMMISSION_RATE).toFixed(2));
+    const commissionRatePercent = this.settingsService.getCommissionRate();
+    const platformCommission = Number((grossAmount * (commissionRatePercent / 100)).toFixed(2));
     const fleetManagerAmount = Number((grossAmount - platformCommission).toFixed(2));
 
     const transaction: Transaction = {
@@ -496,6 +535,9 @@ export class TransactionsService {
       grossAmount,
       platformCommission,
       fleetManagerAmount,
+      commissionRatePercent,
+      refundedAmount: 0,
+      resolvedAmount: disputeResolvedAmount !== undefined ? Number(disputeResolvedAmount) : undefined,
       userId,
     };
 
@@ -513,6 +555,7 @@ export class TransactionsService {
       message: `Payment of ₹${grossAmount.toLocaleString('en-IN')} received for invoice ${invoice.id}.`,
       time: 'Just now',
       to: 'business-client',
+      toUserId: userId,
       read: false,
       createdAt: now.toISOString(),
     } as any);
@@ -521,29 +564,156 @@ export class TransactionsService {
     return transaction;
   }
 
+  refundDelivery(
+    transactionId: string,
+    amount: number | undefined,
+    reason: string,
+    requester?: { userId: string; role: string },
+  ): Transaction {
+    if (!transactionId) {
+      throw new BadRequestException('Transaction ID is required');
+    }
+
+    const original: any = this.store.transactions.find((t: any) => t.id === transactionId);
+
+    if (!original) {
+      throw new NotFoundException(`Transaction "${transactionId}" not found`);
+    }
+
+    if (original.transactionType !== 'delivery-payment') {
+      throw new BadRequestException('Only a delivery-payment transaction can be refunded');
+    }
+
+    if (!SUCCESS_STATUSES.includes(String(original.status || '').toLowerCase())) {
+      throw new BadRequestException('Only a completed payment can be refunded');
+    }
+
+    const originalAmount = Number(original.amount || 0);
+    const alreadyRefunded = Number(original.refundedAmount || 0);
+    const remaining = Number((originalAmount - alreadyRefunded).toFixed(2));
+
+    if (remaining <= 0) {
+      throw new BadRequestException('This transaction has already been fully refunded');
+    }
+
+    const refundAmount = amount === undefined || amount === null ? remaining : Number(amount);
+
+    if (typeof refundAmount !== 'number' || Number.isNaN(refundAmount) || refundAmount <= 0) {
+      throw new BadRequestException('Refund amount must be a number greater than zero');
+    }
+
+    if (refundAmount > remaining + 0.01) {
+      throw new BadRequestException(
+        `Refund amount (₹${refundAmount.toFixed(2)}) exceeds the remaining refundable amount (₹${remaining.toFixed(2)})`,
+      );
+    }
+
+    const grossAmount = Number(original.grossAmount || originalAmount || 0);
+    const commissionRatio =
+      grossAmount > 0
+        ? Number(original.platformCommission || 0) / grossAmount
+        : this.settingsService.getCommissionRate() / 100;
+
+    const commissionReversal = Number((refundAmount * commissionRatio).toFixed(2));
+    const fleetReversal = Number((refundAmount - commissionReversal).toFixed(2));
+
+    const now = new Date();
+
+    const refundTxn: Transaction = {
+      id: `TXN-${Date.now()}`,
+      type: 'Refund',
+      client: original.client,
+      amount: -refundAmount,
+      status: 'Completed',
+      date: now.toISOString().split('T')[0],
+      createdAt: now.toISOString(),
+      invoiceId: original.invoiceId,
+      deliveryId: original.deliveryId,
+      paymentMode: original.paymentMode,
+      reference: `REFUND-${original.id}-${Date.now()}`,
+      transactionType: 'refund',
+      refundAmount,
+      grossAmount: -refundAmount,
+      platformCommission: -commissionReversal,
+      fleetManagerAmount: -fleetReversal,
+      relatedTransactionId: original.id,
+      userId: original.userId,
+    };
+
+    original.refundedAmount = Number((alreadyRefunded + refundAmount).toFixed(2));
+    original.refunded = original.refundedAmount >= originalAmount - 0.01;
+    original.refundReason = reason || original.refundReason || '';
+    original.refundedAt = now.toISOString();
+
+    this.store.transactions.push(refundTxn);
+    this.store.persistTransactions();
+
+    const invoiceId = original.invoiceId;
+
+    if (invoiceId) {
+      const invoice: any = this.store.invoices.find((inv: any) => inv.id === invoiceId);
+
+      if (invoice) {
+        invoice.status = original.refunded ? 'Refunded' : 'Partially Refunded';
+        invoice.paymentStatus = invoice.status;
+        invoice.refundedAt = now.toISOString();
+        this.store.persistInvoices();
+      }
+    }
+
+    const linkedTrip: any = original.deliveryId
+      ? this.store.trips.find((t: any) => String(t.request || '') === String(original.deliveryId))
+      : null;
+
+    const driverRecord: any = linkedTrip
+      ? this.store.drivers.find(
+          (d: any) => String(d.name || '').toLowerCase().trim() === String(linkedTrip.driver || '').toLowerCase().trim(),
+        )
+      : null;
+
+    const fleetManagerId = driverRecord?.fleetManagerId;
+
+    if (fleetManagerId) {
+      const originalMonth = String(original.createdAt || '').slice(0, 7);
+      this.payoutsService.applyRefundAdjustment(fleetManagerId, originalMonth, fleetReversal, refundTxn.id, reason || '');
+    }
+
+    const remainingAfter = Number((originalAmount - original.refundedAmount).toFixed(2));
+
+    this.store.notifications.push({
+      id: `N-${Date.now()}`,
+      title: original.refunded ? 'Payment refunded' : 'Partial refund issued',
+      message: original.refunded
+        ? `Payment for invoice ${invoiceId || original.deliveryId} was fully refunded. Reason: ${reason || 'Not specified'}.`
+        : `₹${refundAmount.toLocaleString('en-IN')} refunded for invoice ${invoiceId || original.deliveryId} (₹${remainingAfter.toLocaleString('en-IN')} remains paid). Reason: ${reason || 'Not specified'}.`,
+      time: 'Just now',
+      to: 'business-client',
+      toUserId: original.userId,
+      read: false,
+      createdAt: now.toISOString(),
+    } as any);
+    this.store.persistNotifications();
+
+    return refundTxn;
+  }
+
   getRevenueSummary() {
     const isSuccess = (t: Transaction) =>
       SUCCESS_STATUSES.includes(String(t.status || '').toLowerCase());
 
-    const subscriptionRevenue = this.store.transactions
-      .filter((t) => t.transactionType === 'subscription' && isSuccess(t))
-      .reduce((sum, t) => sum + Number(t.amount || 0), 0);
-
     const deliveryCommission = this.store.transactions
-      .filter((t) => t.transactionType === 'delivery-payment' && isSuccess(t))
+      .filter(
+        (t) =>
+          (t.transactionType === 'delivery-payment' || t.transactionType === 'refund') &&
+          isSuccess(t),
+      )
       .reduce((sum, t) => sum + Number(t.platformCommission || 0), 0);
 
-    const totalRevenue = subscriptionRevenue + deliveryCommission;
-
-    const activeSubscriptions = this.store.subscriptions.filter((s) => s.status === 'active');
-    const activeFleetManagers = new Set(activeSubscriptions.map((s) => s.userId)).size;
+    const totalRevenue = deliveryCommission;
 
     return {
-      subscriptionRevenue: Number(subscriptionRevenue.toFixed(2)),
       deliveryCommission: Number(deliveryCommission.toFixed(2)),
       totalRevenue: Number(totalRevenue.toFixed(2)),
-      activeFleetManagers,
-      activeSubscriptions: activeSubscriptions.length,
     };
   }
 }

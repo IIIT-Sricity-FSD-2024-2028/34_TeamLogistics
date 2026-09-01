@@ -188,7 +188,6 @@
               <h1 class="page-title small">Create <span class="accent">Delivery</span></h1>
               <p class="page-subtitle">Submit a new delivery request</p>
             </div>
-            <a href="dashboard.html" class="inline-back">Back</a>
           </div>
 
           <form id="bc-create-form">
@@ -272,6 +271,12 @@
                   <span class="dim-unit">cm</span>
                 </div>
               </div>
+            </div>
+
+            <div class="field-label" style="margin-top:18px">Package Weight <span style="color:#ff5b5b">*</span></div>
+            <div class="dim-input-wrap" style="max-width:220px">
+              <input class="input" id="pkgWeight" type="number" min="0.1" max="1000" step="any" placeholder="0" required />
+              <span class="dim-unit">kg</span>
             </div>
 
             <style>

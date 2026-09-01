@@ -90,7 +90,7 @@ body.bc-body{min-height:100vh;background:var(--bg)}
 .eta-big{font-size:56px;font-weight:800;line-height:.9}.eta-unit{color:#a5a5a5;font-size:16px}
 .metric-card.yellow-card{background:var(--yellow);color:#111;border:none}
 .metric-card.yellow-card .stat-label,.metric-card.yellow-card .stat-foot{color:#3a3200}
-.form-section{max-width:760px}
+.form-section{max-width:760px;margin:0 auto}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field-label{font-size:14px;font-weight:700;color:#9ca3af;letter-spacing:.06em;text-transform:uppercase;margin:22px 0 10px}
 .option-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}

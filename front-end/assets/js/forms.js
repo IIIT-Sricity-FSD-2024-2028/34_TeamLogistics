@@ -120,40 +120,42 @@
       const values = Object.fromEntries(formData.entries());
       const state = readState();
 
-      const exists = state.users.some((item) => item.email.toLowerCase() === String(values.email || '').toLowerCase());
-      if (exists) {
-        setError($('#email', form), 'An account with this email already exists');
-        return;
-      }
-
       if (!config.validate(values, form)) return;
       const payload = config.transform(values, state, form);
 
-      try {
-        if (window.DeliverySyncAPI && window.DeliverySyncAPI.Users) {
-          const apiPayload = {
-            name: payload.user.name,
-            email: payload.user.email,
-            password: payload.user.password,
-            role: payload.user.role,
-            status: payload.user.status || (config.role === 'driver' ? 'Pending Approval' : 'Active'),
-            phone: payload.user.phone || '',
-            profileDetails: payload.user.profileDetails || {}
-          };
-          await window.DeliverySyncAPI.Users.create(apiPayload);
-        }
-      } catch (apiErr) {
-        console.log('Backend API registration (may be offline):', apiErr.message);
-      }
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.textContent : '';
 
-      state.users.push(payload.user);
-      state[payload.collection].push(payload.record);
-      (payload.extra || []).forEach((item) => state[item.collection].push(item.record));
-      saveState(state);
-      showToast(config.role === 'driver' ? 'Driver registration submitted for super user approval.' : 'Account created successfully. You can sign in now.');
-      form.reset();
-      [['licenseDocName','No file chosen'],['bankBookName','No file chosen']].forEach(([id,label])=>{ const el=document.getElementById(id); if(el) el.textContent=label; });
-      setTimeout(() => { window.location.href = 'login.html'; }, 700);
+      try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting...';
+        }
+
+        const apiPayload = {
+          name: payload.user.name,
+          email: payload.user.email,
+          password: payload.user.password,
+          role: payload.user.role,
+          phone: payload.user.phone || '',
+          profileDetails: payload.user.profileDetails || {}
+        };
+
+        await window.DeliverySyncAPI.Auth.register(apiPayload);
+
+        showToast(config.role === 'driver' ? 'Driver registration submitted for super user approval.' : 'Account created successfully. Awaiting super user approval.');
+        form.reset();
+        [['licenseDocName','No file chosen'],['bankBookName','No file chosen']].forEach(([id,label])=>{ const el=document.getElementById(id); if(el) el.textContent=label; });
+        setTimeout(() => { window.location.href = 'login.html'; }, 700);
+      } catch (apiErr) {
+        console.error('Registration failed:', apiErr);
+        setError($('#email', form), apiErr.message || 'Registration failed. Please try again.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
+        }
+      }
     });
   }
 

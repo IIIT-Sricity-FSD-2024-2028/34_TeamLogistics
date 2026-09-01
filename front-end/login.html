@@ -239,6 +239,7 @@
             const user = await window.DeliverySyncAPI.Auth.login(identifier, password);
 
             const session = {
+              token: user.token,
               userId: user.userId,
               name: user.name,
               email: user.email,

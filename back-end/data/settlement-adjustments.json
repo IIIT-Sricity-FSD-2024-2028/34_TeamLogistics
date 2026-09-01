@@ -1,0 +1,12 @@
+[
+  {
+    "id": "ADJ-001",
+    "settlementPeriodId": "STL-002",
+    "fleetManagerId": "FM-101",
+    "sourceTransactionId": "TXN-1788166645275",
+    "type": "refund",
+    "amount": -450,
+    "createdAt": "2026-08-31T08:57:25.278Z",
+    "reason": "Late damage claim found in August"
+  }
+]

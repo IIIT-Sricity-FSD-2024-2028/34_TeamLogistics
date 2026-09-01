@@ -46,6 +46,7 @@ export interface Vehicle {
   maintenance?: string;
   location?: string;
   availability?: string;
+  fleetManagerId?: string;
 }
 
 export interface Driver {
@@ -60,6 +61,7 @@ export interface Driver {
   trip?: string;
   email?: string;
   userEmail?: string;
+  fleetManagerId?: string;
 }
 
 export interface DeliveryRequest {
@@ -100,6 +102,14 @@ export interface Trip {
   distance: string;
   status: string;
   request?: string;
+  driverNotes?: { text: string; time: string }[];
+  statusBeforeIssue?: string;
+  disputeResolution?: {
+    resolvedAmount: number;
+    resolvedBy: string;
+    resolvedAt: string;
+    reason: string;
+  };
 }
 
 export interface MaintenanceSchedule {
@@ -112,6 +122,7 @@ export interface MaintenanceSchedule {
   mechanic: string;
   cost: string;
   notes?: string;
+  fleetManagerId?: string;
 }
 
 export interface Notification {
@@ -120,6 +131,7 @@ export interface Notification {
   message: string;
   time: string;
   to: string;
+  toUserId?: string;
   read: boolean;
   createdAt: string;
 }
@@ -146,6 +158,73 @@ export interface Transaction {
   grossAmount?: number;
   platformCommission?: number;
   fleetManagerAmount?: number;
+  resolvedAmount?: number;
+  commissionRatePercent?: number;
+
+  refunded?: boolean;
+  refundedAt?: string;
+  refundReason?: string;
+  relatedTransactionId?: string;
+
+  refundedAmount?: number;
+  refundAmount?: number;
+}
+
+export interface SettlementSnapshot {
+  grossRevenue: number;
+  platformCommission: number;
+  driverEarnings: number;
+  fleetManagerGross: number;
+  fleetExpenses: number;
+  fleetManagerNet: number;
+  completedTrips: number;
+}
+
+export interface SettlementPeriod {
+  id: string;
+  fleetManagerId: string;
+  month: string;
+  startDate: string;
+  endDate: string;
+  status: 'open' | 'locked';
+  lockedAt?: string;
+  lockedBy?: string;
+  snapshot?: SettlementSnapshot;
+}
+
+export interface SettlementAdjustment {
+  id: string;
+  settlementPeriodId: string;
+  fleetManagerId: string;
+  sourceTransactionId: string;
+  type: 'refund' | 'dispute-adjustment';
+  amount: number;
+  createdAt: string;
+  reason?: string;
+}
+
+export interface RateCard {
+  id: string;
+  ownerId: string;
+  baseFare: number;
+  perKm: number;
+  perKg: number;
+  updatedAt: string;
+}
+
+export interface DriverPayout {
+  id: string;
+  tripId: string;
+  deliveryId?: string;
+  driverName: string;
+  fleetManagerId?: string;
+  baseFare: number;
+  distanceFare: number;
+  weightSurcharge: number;
+  totalAmount: number;
+  createdAt: string;
+  reversed?: boolean;
+  reversalReason?: string;
 }
 
 export interface Invoice {
@@ -155,23 +234,6 @@ export interface Invoice {
   status: string;
   dueDate: string;
   createdAt: string;
-}
-
-export interface Subscription {
-  id: string;
-  userId: string;
-  role: string;
-  plan: string;
-  amount: number;
-  vehicleLimit: number;
-  billingCycle: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  paymentStatus: string;
-  transactionId?: string;
-  createdAt: string;
-  updatedAt?: string;
 }
 
 export interface PlatformSettings {
@@ -227,14 +289,20 @@ export class DataStoreService {
   invoices: Invoice[] = [];
   documents: Document[] = [];
   settings: Setting[] = [];
-  subscriptions: Subscription[] = [];
+  rateCards: RateCard[] = [];
+  driverPayouts: DriverPayout[] = [];
+  settlementPeriods: SettlementPeriod[] = [];
+  settlementAdjustments: SettlementAdjustment[] = [];
 
   platformSettings: PlatformSettings = { name: '', timezone: '', language: '', logo: '' };
   securitySettings: SecuritySettings = { passwordLength: 8, failedAttempts: 5, sessionTimeout: 30, twoFactor: true };
   permissions: Permissions = {};
+  commissionRate = 10;
 
   constructor() {
-    this.dataDir = path.resolve(__dirname, '..', '..', 'data');
+    this.dataDir = process.env.DATA_DIR
+      ? path.resolve(process.env.DATA_DIR)
+      : path.resolve(__dirname, '..', '..', 'data');
     this.logger.log(`📂 JSON data directory: ${this.dataDir}`);
     this.loadAllFromFiles();
   }
@@ -283,13 +351,26 @@ export class DataStoreService {
     this.transactions = this.readJsonFile<Transaction[]>('transactions.json', []);
     this.invoices = this.readJsonFile<Invoice[]>('invoices.json', []);
     this.documents = this.readJsonFile<Document[]>('documents.json', []);
-    this.subscriptions = this.readJsonFile<Subscription[]>('subscriptions.json', []);
+    this.rateCards = this.readJsonFile<RateCard[]>('rate-cards.json', [
+      {
+        id: 'PLATFORM',
+        ownerId: 'PLATFORM',
+        baseFare: 50,
+        perKm: 8,
+        perKg: 5,
+        updatedAt: new Date().toISOString(),
+      },
+    ]);
+    this.driverPayouts = this.readJsonFile<DriverPayout[]>('driver-payouts.json', []);
+    this.settlementPeriods = this.readJsonFile<SettlementPeriod[]>('settlements.json', []);
+    this.settlementAdjustments = this.readJsonFile<SettlementAdjustment[]>('settlement-adjustments.json', []);
 
     const settingsData = this.readJsonFile<any>('settings.json', {});
     this.platformSettings = settingsData.platform || { name: 'DeliverSync', timezone: 'Asia/Kolkata', language: 'English', logo: '' };
     this.securitySettings = settingsData.security || { passwordLength: 8, failedAttempts: 5, sessionTimeout: 30, twoFactor: true };
     this.permissions = settingsData.permissions || {};
     this.settings = settingsData.configEntries || [];
+    this.commissionRate = typeof settingsData.commissionRate === 'number' ? settingsData.commissionRate : 10;
 
     this.logger.log(
       `✅ Data loaded — ${this.users.length} users, ${this.vehicles.length} vehicles, ` +
@@ -339,8 +420,20 @@ export class DataStoreService {
     this.writeJsonFile('documents.json', this.documents);
   }
 
-  persistSubscriptions(): void {
-    this.writeJsonFile('subscriptions.json', this.subscriptions);
+  persistRateCards(): void {
+    this.writeJsonFile('rate-cards.json', this.rateCards);
+  }
+
+  persistDriverPayouts(): void {
+    this.writeJsonFile('driver-payouts.json', this.driverPayouts);
+  }
+
+  persistSettlementPeriods(): void {
+    this.writeJsonFile('settlements.json', this.settlementPeriods);
+  }
+
+  persistSettlementAdjustments(): void {
+    this.writeJsonFile('settlement-adjustments.json', this.settlementAdjustments);
   }
 
   persistSettings(): void {
@@ -349,6 +442,7 @@ export class DataStoreService {
       security: this.securitySettings,
       permissions: this.permissions,
       configEntries: this.settings,
+      commissionRate: this.commissionRate,
     });
   }
 

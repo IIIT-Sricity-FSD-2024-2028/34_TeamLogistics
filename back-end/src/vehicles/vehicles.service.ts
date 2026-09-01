@@ -6,8 +6,18 @@ import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicle.dto';
 export class VehiclesService {
   constructor(private readonly store: DataStoreService) {}
 
-  findAll(search?: string, statusFilter?: string): Vehicle[] {
+  findAll(
+    search?: string,
+    statusFilter?: string,
+    requester?: { userId: string; role: string },
+  ): Vehicle[] {
     let vehicles = [...this.store.vehicles];
+
+    if (requester && requester.role === 'fleet-manager') {
+      vehicles = vehicles.filter(
+        (v) => !v.fleetManagerId || v.fleetManagerId === requester.userId,
+      );
+    }
 
     if (statusFilter && statusFilter !== 'all') {
       vehicles = vehicles.filter((v) => v.status.toLowerCase() === statusFilter.toLowerCase());
@@ -24,10 +34,19 @@ export class VehiclesService {
     }));
   }
 
-  findOne(id: string): Vehicle {
+  findOne(id: string, requester?: { userId: string; role: string }): Vehicle {
     const vehicle = this.store.vehicles.find((v) => v.id === id);
 
     if (!vehicle) {
+      throw new NotFoundException(`Vehicle "${id}" not found`);
+    }
+
+    if (
+      requester &&
+      requester.role === 'fleet-manager' &&
+      vehicle.fleetManagerId &&
+      vehicle.fleetManagerId !== requester.userId
+    ) {
       throw new NotFoundException(`Vehicle "${id}" not found`);
     }
 
@@ -37,7 +56,7 @@ export class VehiclesService {
     };
   }
 
-  create(dto: CreateVehicleDto): Vehicle {
+  create(dto: CreateVehicleDto, requester?: { userId: string; role: string }): Vehicle {
     const id = this.store.generateId('VH', this.store.vehicles);
 
     const vehicle: Vehicle = {
@@ -48,6 +67,7 @@ export class VehiclesService {
       assignedDriver: dto.assignedDriver || '--',
       status: dto.status || 'Active',
       maintenance: dto.maintenance || dto.lastMaintenance || '',
+      fleetManagerId: requester?.role === 'fleet-manager' ? requester.userId : undefined,
     };
 
     this.store.vehicles.push(vehicle);
@@ -56,10 +76,19 @@ export class VehiclesService {
     return vehicle;
   }
 
-  update(id: string, dto: UpdateVehicleDto): Vehicle {
+  update(id: string, dto: UpdateVehicleDto, requester?: { userId: string; role: string }): Vehicle {
     const idx = this.store.vehicles.findIndex((v) => v.id === id);
 
     if (idx < 0) {
+      throw new NotFoundException(`Vehicle "${id}" not found`);
+    }
+
+    if (
+      requester &&
+      requester.role === 'fleet-manager' &&
+      this.store.vehicles[idx].fleetManagerId &&
+      this.store.vehicles[idx].fleetManagerId !== requester.userId
+    ) {
       throw new NotFoundException(`Vehicle "${id}" not found`);
     }
 
@@ -80,10 +109,19 @@ export class VehiclesService {
     return this.store.vehicles[idx];
   }
 
-  remove(id: string): { message: string } {
+  remove(id: string, requester?: { userId: string; role: string }): { message: string } {
     const idx = this.store.vehicles.findIndex((v) => v.id === id);
 
     if (idx < 0) {
+      throw new NotFoundException(`Vehicle "${id}" not found`);
+    }
+
+    if (
+      requester &&
+      requester.role === 'fleet-manager' &&
+      this.store.vehicles[idx].fleetManagerId &&
+      this.store.vehicles[idx].fleetManagerId !== requester.userId
+    ) {
       throw new NotFoundException(`Vehicle "${id}" not found`);
     }
 

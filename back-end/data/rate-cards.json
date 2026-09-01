@@ -1,0 +1,18 @@
+[
+  {
+    "id": "PLATFORM",
+    "ownerId": "PLATFORM",
+    "baseFare": 50,
+    "perKm": 8,
+    "perKg": 5,
+    "updatedAt": "2026-08-31T06:13:55.130Z"
+  },
+  {
+    "id": "FM-101",
+    "ownerId": "FM-101",
+    "baseFare": 60,
+    "perKm": 10,
+    "perKg": 6,
+    "updatedAt": "2026-08-31T06:17:19.548Z"
+  }
+]

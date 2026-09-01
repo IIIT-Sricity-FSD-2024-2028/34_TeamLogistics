@@ -117,8 +117,31 @@
     }
   }
 
-  window.DeliverySyncCurrentUser = { load, getInitials, SESSION_KEY };
+  async function updateNotificationBadge() {
+    const badgeEls = document.querySelectorAll('.bc-bell .badge');
+    if (!badgeEls.length) return;
+
+    const api = window.DeliverySyncAPI;
+    if (!api || !api.Notifications || typeof api.Notifications.getAll !== 'function') return;
+
+    try {
+      const list = await api.Notifications.getAll();
+      const count = (list || []).filter(
+        (n) => !(n.read === true || String(n.status || '').toLowerCase() === 'read')
+      ).length;
+
+      badgeEls.forEach((el) => {
+        el.textContent = String(count);
+        el.style.display = count > 0 ? '' : 'none';
+      });
+    } catch (error) {
+      console.error('Unable to load notification count:', error);
+    }
+  }
+
+  window.DeliverySyncCurrentUser = { load, getInitials, SESSION_KEY, updateNotificationBadge };
   load();
+  updateNotificationBadge();
 
   let reloadTimer = null;
   const scheduleLoad = () => {

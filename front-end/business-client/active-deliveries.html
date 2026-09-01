@@ -211,7 +211,7 @@
         </h1>
 
         <p class="page-subtitle" id="activeSubtitle">
-          Loading active deliveries from backend...
+          Loading active deliveries...
         </p>
 
         <div class="bc-active-search">
@@ -304,6 +304,9 @@
 
       const ROLE = "business-client";
 
+
+
+      const TOKEN = (JSON.parse(localStorage.getItem("deliverysync-session-v1") || "null") || {}).token || "";
       let allDeliveries = [];
       let activeDeliveries = [];
       let filteredDeliveries = [];
@@ -453,7 +456,7 @@
           "http://localhost:3000/api/deliveries",
           {
             headers: {
-              "x-user-role": ROLE
+              "Authorization": "Bearer " + TOKEN
             }
           }
         );
@@ -571,7 +574,7 @@
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
-              "x-user-role": ROLE
+              "Authorization": "Bearer " + TOKEN
             },
             body: JSON.stringify({
               reason
@@ -603,7 +606,7 @@
                 text-align:center;
               "
             >
-              No active deliveries found from backend.
+              No active deliveries found.
             </div>
           `;
 
@@ -933,7 +936,7 @@
                 text-align:center;
               "
             >
-              Could not load active deliveries from backend.
+              Could not load active deliveries.
             </div>
           `;
 

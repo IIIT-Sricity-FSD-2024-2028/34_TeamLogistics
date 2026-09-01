@@ -158,6 +158,41 @@ export class DashboardService {
     };
   }
 
+  getFleetManagerAnalytics(requester?: { userId: string; role: string }) {
+    const scoped = requester && requester.role === 'fleet-manager';
+
+    const vehicles = scoped
+      ? this.store.vehicles.filter((v) => !v.fleetManagerId || v.fleetManagerId === requester!.userId)
+      : this.store.vehicles;
+    const drivers = scoped
+      ? this.store.drivers.filter((d) => !d.fleetManagerId || d.fleetManagerId === requester!.userId)
+      : this.store.drivers;
+    const maintenance = scoped
+      ? this.store.maintenanceSchedules.filter((m) => !m.fleetManagerId || m.fleetManagerId === requester!.userId)
+      : this.store.maintenanceSchedules;
+
+    const vehiclePlates = new Set(vehicles.map((v) => v.plate));
+    const trips = scoped
+      ? this.store.trips.filter((t) => vehiclePlates.has((t as any).vehicle))
+      : this.store.trips;
+
+    const active = vehicles.filter((v) => /active/i.test(v.status || '')).length;
+    const completed = trips.filter((t) => /complete|deliver/i.test(t.status || '')).length;
+    const cost = maintenance.reduce(
+      (sum, m) => sum + (Number(String(m.cost || '').replace(/[₹,]/g, '')) || 0),
+      0,
+    );
+
+    return {
+      fleetScorePercent: vehicles.length ? Math.round((active / vehicles.length) * 100) : 0,
+      completedTrips: completed,
+      maintenanceCost: cost,
+      driverCount: drivers.length,
+      vehicleActiveRatioPercent: vehicles.length ? Math.round((active / vehicles.length) * 100) : 0,
+      tripCompletionRatioPercent: trips.length ? Math.round((completed / trips.length) * 100) : 0,
+    };
+  }
+
   getDriverDashboard(userId?: string) {
     let trips = this.store.trips;
 

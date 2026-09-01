@@ -14,6 +14,18 @@ import * as path from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new ForbiddenException(`Origin ${origin} is not allowed by CORS`), false);
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Accept,Authorization',
+  });
+
   app.use(
     helmet({
       crossOriginResourcePolicy: false,
@@ -37,18 +49,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  app.enableCors({
-    origin: (origin, callback) => {
-      if (!origin || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
-        callback(null, true);
-        return;
-      }
-      callback(new ForbiddenException(`Origin ${origin} is not allowed by CORS`), false);
-    },
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Content-Type,Accept,x-user-role,x-user-id',
-  });
 
   app.setGlobalPrefix('api');
 
@@ -74,24 +74,12 @@ async function bootstrap() {
     .setTitle('DeliverSync API')
     .setDescription(
       'REST API for the DeliverSync delivery management platform. ' +
-      'Role-based access is controlled via the `x-user-role` request header. ' +
+      'Authentication is via a signed JWT returned from POST /api/auth/login, sent as ' +
+      '`Authorization: Bearer <token>` on every subsequent request. ' +
       'Supported roles: superuser, fleet-manager, business-client, driver.',
     )
     .setVersion('1.0')
-    .addGlobalParameters({
-      name: 'x-user-role',
-      in: 'header',
-      required: true,
-      description: 'Role of the requesting user (superuser | fleet-manager | business-client | driver)',
-      schema: { type: 'string', enum: ['superuser', 'fleet-manager', 'business-client', 'driver'] },
-    })
-    .addGlobalParameters({
-      name: 'x-user-id',
-      in: 'header',
-      required: false,
-      description: 'ID of the requesting user (e.g. SU-001). Used for self-service endpoints.',
-      schema: { type: 'string' },
-    })
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -113,3 +101,7 @@ async function bootstrap() {
   console.log(`📚 Swagger docs at http://localhost:3000/api/docs`);
 }
 bootstrap();
+
+
+
+
