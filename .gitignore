@@ -30,3 +30,7 @@ backend/uploads/
 # React generated files
 front-end-react/node_modules/
 front-end-react/dist/
+
+# Frontend generated files
+front-end/node_modules/
+front-end/dist/
