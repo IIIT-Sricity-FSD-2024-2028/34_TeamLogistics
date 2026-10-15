@@ -20,3 +20,17 @@ yarn-error.log*
 Thumbs.db
 desktop.ini
 *.bundle
+
+# Local backend runtime files
+backend/node_modules/
+backend/dist/
+backend/logs/
+backend/uploads/
+
+# React generated files
+front-end-react/node_modules/
+front-end-react/dist/
+
+# Frontend generated files
+front-end/node_modules/
+front-end/dist/
