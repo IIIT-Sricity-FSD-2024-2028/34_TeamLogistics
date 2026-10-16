@@ -1,0 +1,20 @@
+[
+  {
+    "id": "MC-001",
+    "name": "AutoCare Pro",
+    "active": true,
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "MC-002",
+    "name": "SpeedFix Workshop",
+    "active": true,
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "MC-003",
+    "name": "Ravi Auto Service",
+    "active": true,
+    "fleetManagerId": "FM-101"
+  }
+]

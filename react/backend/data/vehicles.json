@@ -1,0 +1,112 @@
+[
+  {
+    "id": "VH-1007",
+    "plate": "TS-09-QA-2345",
+    "type": "Mini Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "location": "Hyderabad",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1008",
+    "plate": "KA-09-LM-4567",
+    "type": "Tempo",
+    "capacity": "4 Tons",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "location": "Chennai",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1009",
+    "plate": "MH-12-EF-4321",
+    "type": "Truck",
+    "capacity": "8 Tons",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "location": "Mumbai",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1010",
+    "plate": "AP-07-RS-6543",
+    "type": "Van",
+    "capacity": "1 Ton",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "location": "Vijayawada",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1011",
+    "plate": "TS08XY1256",
+    "type": "Mini Truck",
+    "capacity": "20 kg",
+    "assignedDriver": "1121212121",
+    "status": "Active",
+    "maintenance": "",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1012",
+    "plate": "TN09AB1000",
+    "type": "Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "maintenance": "2026-05-01",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1013",
+    "plate": "TN09AB1056",
+    "type": "Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Maintenance",
+    "maintenance": "2026-05-04",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1014",
+    "plate": "TN09AB9654",
+    "type": "Van",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-05-01",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1015",
+    "plate": "TN09AB0000",
+    "type": "SUV",
+    "capacity": "2 Tons",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-05-02",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1016",
+    "plate": "AP32AB2005",
+    "type": "Mini Truck",
+    "capacity": "100kg",
+    "assignedDriver": "--",
+    "status": "Active",
+    "maintenance": "2026-10-12",
+    "fleetManagerId": "FM-101"
+  },
+  {
+    "id": "VH-1018",
+    "plate": "AP32AB2158",
+    "type": "Truck",
+    "capacity": "2 Tons",
+    "assignedDriver": "Rahul Singh",
+    "status": "Active",
+    "maintenance": "2026-10-13",
+    "fleetManagerId": "FM-101"
+  }
+]

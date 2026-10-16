@@ -1,0 +1,455 @@
+[
+  {
+    "id": "SU-001",
+    "username": "superuser",
+    "name": "John D",
+    "email": "superuser@deliverysync.com",
+    "role": "superuser",
+    "status": "Active",
+    "phone": "9876543210",
+    "lastLogin": "2026-10-16T01:49:06.368Z",
+    "profileDetails": {
+      "fullName": "Aarav Menon"
+    },
+    "password": "$2b$10$wSAGqm7ZjjHYPfHgl5WdyuNoAkdBojnmLQdAWWafhSvsStRVXomzy",
+    "notifications": [
+      "string"
+    ],
+    "companyName": "Acme Logistics Inc.",
+    "company": "Acme Logistics Inc.",
+    "address": "123 Business Avenue",
+    "failedLoginAttempts": 0
+  },
+  {
+    "id": "FM-101",
+    "username": "fleetmanager",
+    "name": "riya sharma",
+    "email": "fleet@deliverysync.com",
+    "role": "fleet-manager",
+    "status": "Active",
+    "phone": "9066446455",
+    "lastLogin": "2026-10-16T08:04:34.105Z",
+    "profileDetails": {
+      "companyName": "DeliverSync Logistics Pvt Ltd",
+      "companyAddress": "OMR, Chennai",
+      "numberOfVehicles": "24",
+      "fleetSettings": {
+        "autoAssign": true,
+        "gpsTracking": true,
+        "fuelMonitoring": true,
+        "autoComplete": false
+      }
+    },
+    "password": "$2b$10$ASw4.u0s/5vuB6mLNOOLreIk..CRj4EgKD/rsiivFj/9cAaSiSdd6",
+    "companyName": "",
+    "company": "",
+    "address": "",
+    "failedLoginAttempts": 0
+  },
+  {
+    "id": "BC-201",
+    "username": "businessclient",
+    "name": "Acme Logistic",
+    "email": "client@deliverysync.com",
+    "role": "business-client",
+    "status": "Active",
+    "phone": "9988776655232",
+    "lastLogin": "2026-10-16T01:47:46.873Z",
+    "profileDetails": {
+      "companyName": "Acme Logistics",
+      "fullName": "Acme Logistics",
+      "businessAddress": "OMR, Chennai",
+      "companyContactNumber": "9988776655"
+    },
+    "password": "$2b$10$kqgn2RYEqYXkL6QraPJlDesnfrNhqSGVeQPZkUuol.ybh2FXsqmVG",
+    "companyName": "Acm",
+    "company": "Acm",
+    "address": "tada",
+    "failedLoginAttempts": 0,
+    "reviewedAt": "2026-10-12T14:57:20.849Z",
+    "approvedAt": "2026-10-12T14:57:20.849Z"
+  },
+  {
+    "id": "BC-202",
+    "username": "urbancart",
+    "name": "UrbanKart Retail",
+    "email": "urbancart@deliverysync.com",
+    "password": "$2b$10$HMndE9LfCLxrl3C6dD15G.4lkS9btT/TwRovnmN/BLCyvvKO99UDW",
+    "role": "business-client",
+    "status": "Active",
+    "phone": "+91 9123456780",
+    "lastLogin": "2026-08-31T10:59:42.445Z",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "companyName": "UrbanKart Retail",
+      "fullName": "UrbanKart Retail",
+      "businessAddress": "Koramangala, Bengaluru",
+      "companyContactNumber": "9123456780"
+    }
+  },
+  {
+    "id": "BC-203",
+    "username": "cascade",
+    "name": "Cascade Distribution",
+    "email": "cascade@deliverysync.com",
+    "password": "$2b$10$RmdYgHOemsPTM10usVIS5exrzWmXmEysURjrBAmj5ywHq.OBMX3Nq",
+    "role": "business-client",
+    "status": "Pending Approval",
+    "phone": "+91 9340011223",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "companyName": "Cascade Distribution",
+      "fullName": "Cascade Distribution",
+      "businessAddress": "Gachibowli, Hyderabad",
+      "companyContactNumber": "9340011223"
+    }
+  },
+  {
+    "id": "DR-301",
+    "username": "driver",
+    "name": "Raghav Reddy",
+    "email": "driver@deliverysync.com",
+    "password": "$2b$10$7FnnfW/YQ84FSw5PE0WEAeLBVrRZ4Np9HMQPT/lWMnq7iMjg2mfba",
+    "role": "driver",
+    "status": "Active",
+    "phone": "9511429638",
+    "lastLogin": "2026-10-16T08:04:57.580Z",
+    "notifications": [
+      "Email",
+      "SMS"
+    ],
+    "profileDetails": {
+      "licenseNumber": "TN03201800034521",
+      "driverId": "DRV-1032",
+      "vehicle": "TN09AB1234",
+      "phone": "9511429638",
+      "license": "TN03201800034521",
+      "vehicleType": "",
+      "status": "Available"
+    },
+    "fullName": "Raghav Reddy",
+    "licenseNumber": "TN03201800034521",
+    "license": "TN03201800034521",
+    "vehicle": "TN09AB1234",
+    "vehicleType": "",
+    "companyName": "",
+    "company": "",
+    "address": "",
+    "failedLoginAttempts": 0,
+    "reviewedAt": "2026-10-13T20:23:47.217Z",
+    "approvedAt": "2026-10-13T20:23:47.217Z",
+    "licenseExpiry": "2026-11-07"
+  },
+  {
+    "id": "DR-302",
+    "username": "kiranteja",
+    "name": "Kiran Teja",
+    "email": "kiran@deliverysync.com",
+    "password": "$2b$10$NcWwWFGiuU2bR4hOyy9.HeXEoUaN7XuleKTIA4yiVAlAOtW9T8VVW",
+    "role": "driver",
+    "status": "Available",
+    "phone": "+91 9555500011",
+    "lastLogin": "2026-08-31T10:59:42.127Z",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "licenseNumber": "AP07202100012478",
+      "driverId": "DRV-1041",
+      "vehicle": "KA03PQ9876",
+      "phone": "+91 9555500011",
+      "license": "AP07202100012478",
+      "vehicleType": "",
+      "status": "Available"
+    },
+    "fullName": "Kiran Teja",
+    "licenseNumber": "AP07202100012478",
+    "license": "AP07202100012478",
+    "vehicle": "KA03PQ9876",
+    "vehicleType": "",
+    "licenseExpiry": "2026-10-31"
+  },
+  {
+    "id": "DR-303",
+    "username": "manojkumar",
+    "name": "Manoj Kumar",
+    "email": "manoj@deliverysync.com",
+    "password": "$2b$10$Dm.e4IzVgtLkqgGGgaXDL.wKM/UbZwUnMVws3.UULwelj.dqV.1YO",
+    "role": "driver",
+    "status": "Available",
+    "phone": "+91 9666677788",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "licenseNumber": "TS12202000098765",
+      "driverId": "DRV-1055",
+      "vehicle": "TS08XY2045",
+      "phone": "+91 9666677788",
+      "license": "TS12202000098765",
+      "vehicleType": "",
+      "status": "Available"
+    },
+    "fullName": "Manoj Kumar",
+    "licenseNumber": "TS12202000098765",
+    "license": "TS12202000098765",
+    "vehicle": "TS08XY2045",
+    "vehicleType": "",
+    "licenseExpiry": "2026-10-24"
+  },
+  {
+    "id": "DR-304",
+    "username": "sureshbabu",
+    "name": "Suresh Babu",
+    "email": "suresh@deliverysync.com",
+    "password": "$2b$10$WdnqUCpNOVgZGZSfr/Ya8.o5Xor.wpLjrg.sWiPfAgfU0rwSIAWga",
+    "role": "driver",
+    "status": "Available",
+    "phone": "+91 6543210987",
+    "lastLogin": "2026-04-28 07:00 AM",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "licenseNumber": "DL08201900091256",
+      "driverId": "DRV-1062",
+      "vehicle": "--",
+      "phone": "+91 6543210987",
+      "license": "DL08201900091256",
+      "vehicleType": "",
+      "status": "Available"
+    },
+    "fullName": "Suresh Babu",
+    "licenseNumber": "DL08201900091256",
+    "license": "DL08201900091256",
+    "vehicle": "--",
+    "vehicleType": ""
+  },
+  {
+    "id": "DR-305",
+    "username": "rahulsingh",
+    "name": "Rahul Singh",
+    "email": "rahul@deliverysync.com",
+    "password": "$2b$10$3fZhJgMD1pje3bMnvivKWetG8ixwglmCw99l2/cX8KX440QDySdcK",
+    "role": "driver",
+    "status": "Active",
+    "phone": "+91 9876543210",
+    "lastLogin": "2026-05-03 05:45 AM",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "licenseNumber": "DL01202000045678",
+      "driverId": "DRV-1070",
+      "vehicle": "DL-01-AB-1234"
+    }
+  },
+  {
+    "id": "FM-306",
+    "username": "priyagupta",
+    "name": "Priya Gupta",
+    "email": "priya@deliverysync.com",
+    "password": "$2b$10$Ot0ar8XdtKpmuAdpSeI4vuG1jQDhlZS3GqpB.DGLFzBFmZcEWYRA.",
+    "role": "fleet-manager",
+    "status": "Active",
+    "phone": "9999888877",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {}
+  },
+  {
+    "id": "FM-307",
+    "username": "johndoe",
+    "name": "John Doe",
+    "email": "john@deliverysync.com",
+    "password": "$2b$10$q9Wz4.GQxkgSYTiWa2juIe5e17YQRyf4inMcDr6zmLsI5IZB7bg/u",
+    "role": "fleet-manager",
+    "status": "Active",
+    "phone": "9876543210",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {}
+  },
+  {
+    "id": "BC-308",
+    "username": "bhailogistics",
+    "name": "bhai logistics",
+    "email": "srujan@gmail.com",
+    "password": "$2b$10$tnBhYyaPRtYCciGHR95byOGlt6KTA7Tlv5MOVHV7xSKgrWIUOEwPe",
+    "role": "business-client",
+    "status": "Active",
+    "phone": "7894561233",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "companyName": "bhai logistics",
+      "fullName": "srujan k",
+      "businessAddress": "tada ap sricity",
+      "companyContactNumber": "8553200879"
+    }
+  },
+  {
+    "id": "FM-309",
+    "username": "tarun",
+    "name": "tarun",
+    "email": "jgjgy@gmail.com",
+    "password": "$2b$10$ZIXIEJlVHyq59GWL3lLTDeSWAtqSI/MN1CDMtZkMA5DTssbUjIOwu",
+    "role": "fleet-manager",
+    "status": "Active",
+    "phone": "9876543210",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {}
+  },
+  {
+    "id": "FM-310",
+    "username": "srujan",
+    "name": "srujan",
+    "email": "srujan2@gmail.com",
+    "password": "$2b$10$dGUqMg9eHUQpVnwOYcgiQ.C1fcR4cUf/eqQhaf8sWul25f/CaeuYe",
+    "role": "fleet-manager",
+    "status": "Active",
+    "phone": "9988776655",
+    "lastLogin": "2026-08-28T13:20:48.518Z",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "companyName": "UrbanCart Retail",
+      "companyAddress": "tada sricity",
+      "numberOfVehicles": "24"
+    },
+    "companyName": "",
+    "company": "",
+    "address": ""
+  },
+  {
+    "id": "FM-311",
+    "username": "johndoe",
+    "name": "John Doe",
+    "email": "ice@deliverysync.com",
+    "password": "$2b$10$bjjWiJf3PM5.CebCDtvkQOSnW8JPamXC61jFqTK0ybKpB.NHRo6wG",
+    "role": "fleet-manager",
+    "status": "Active",
+    "phone": "9876543210",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {},
+    "companyName": "Acme Logistics Inc.",
+    "company": "Acme Logistics Inc.",
+    "address": "123 Business Avenue"
+  },
+  {
+    "id": "BC-312",
+    "username": "ice",
+    "name": "ice",
+    "email": "srujan.k24@iiits.in",
+    "password": "$2b$10$qvvbePQ9/rL08oY4riqgF.lGzyuNH4Dx5ON6vzgFS2tYPssiGl7I6",
+    "role": "business-client",
+    "status": "Pending Approval",
+    "phone": "9090909090",
+    "lastLogin": "Never",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "companyName": "ice",
+      "fullName": "ice",
+      "businessAddress": "warangal",
+      "companyContactNumber": "9090909090"
+    },
+    "createdAt": "2026-10-12T14:55:52.204Z",
+    "termsAcceptedAt": "2026-10-12T14:55:52.011Z",
+    "termsVersion": "2026-10-12",
+    "companyName": "",
+    "company": "",
+    "address": ""
+  },
+  {
+    "id": "BC-313",
+    "username": "hlo",
+    "name": "hlo",
+    "email": "bhai@gmail.com",
+    "password": "$2b$10$eML03FeDoPHGF4usX/j7zeKPku1RVVMNMliOx2DIQMqKb.gmAJJuS",
+    "role": "business-client",
+    "status": "Active",
+    "phone": "9090909090",
+    "lastLogin": "2026-10-13T18:47:39.011Z",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "companyName": "hlo",
+      "fullName": "bhAAi",
+      "businessAddress": "warangal",
+      "companyContactNumber": "9063731903"
+    },
+    "createdAt": "2026-10-13T18:41:13.415Z",
+    "termsAcceptedAt": "2026-10-13T18:41:13.225Z",
+    "termsVersion": "2026-10-12",
+    "companyName": "",
+    "company": "",
+    "address": "",
+    "reviewedAt": "2026-10-13T18:41:48.075Z",
+    "approvedAt": "2026-10-13T18:41:48.075Z",
+    "failedLoginAttempts": 0
+  },
+  {
+    "id": "DR-314",
+    "username": "harsha",
+    "name": "harsha",
+    "email": "harsha@gmail.com",
+    "password": "$2b$10$mJNjIr4g3RpLbIFrAAdxq.oiqiMe/ta3O.gNaSHnVmdKo7ZuLMIrG",
+    "role": "driver",
+    "status": "Available",
+    "phone": "9612364564",
+    "lastLogin": "2026-10-13T21:40:29.668Z",
+    "notifications": [
+      "Email"
+    ],
+    "profileDetails": {
+      "licenseNumber": "AA-12-1234-1234567",
+      "licenseDocument": "Figure_1.png",
+      "accountHolderName": "koduru harsha",
+      "accountNumber": "123456789123",
+      "ifscCode": "SBIN0123456",
+      "bankName": "SBI",
+      "bankBook": "#0d0208 (1).png",
+      "phone": "9612364564",
+      "license": "AA-12-1234-1234567",
+      "licenseExpiry": "2026-10-24",
+      "vehicle": "TN09AB0000",
+      "vehicleType": "",
+      "status": "Available"
+    },
+    "createdAt": "2026-10-13T21:39:38.479Z",
+    "termsAcceptedAt": "2026-10-13T21:39:38.329Z",
+    "termsVersion": "2026-10-12",
+    "companyName": "",
+    "company": "",
+    "address": "",
+    "failedLoginAttempts": 0,
+    "fullName": "harsha",
+    "licenseNumber": "AA-12-1234-1234567",
+    "license": "AA-12-1234-1234567",
+    "licenseExpiry": "2026-10-24",
+    "vehicle": "TN09AB0000",
+    "vehicleType": ""
+  }
+]
