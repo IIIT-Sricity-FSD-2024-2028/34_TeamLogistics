@@ -1,0 +1,3313 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/changes": {
+      "get": {
+        "operationId": "ChangesController_stream",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Changes"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Authenticate a user against the backend user records",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Self-register a new fleet manager, business client, or driver account (requires superuser approval before login)",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "description": "Returns users. Superuser/fleet manager can view all. Other roles use this for profile loading in frontend.",
+        "operationId": "UsersController_findAll",
+        "parameters": [
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "description": "Filter by role",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by name, email, or role",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users returned successfully"
+          }
+        },
+        "summary": "List users",
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "description": "Only superuser can create users.",
+        "operationId": "UsersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "Email already exists"
+          }
+        },
+        "summary": "Create a new user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/approvals/pending": {
+      "get": {
+        "operationId": "UsersController_findPendingApprovals",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Pending registrations returned successfully"
+          }
+        },
+        "summary": "List website registrations awaiting superuser approval",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID (e.g. SU-001)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Get user by ID",
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "description": "Superuser/fleet manager can update users. Other roles can update their own profile.",
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Update a user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "summary": "Delete a user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/status": {
+      "patch": {
+        "description": "Approve, reject, or suspend a user.",
+        "operationId": "UsersController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated"
+          }
+        },
+        "summary": "Update user status",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/approval": {
+      "patch": {
+        "operationId": "UsersController_reviewRegistration",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Pending user ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewRegistrationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registration decision recorded"
+          }
+        },
+        "summary": "Approve or reject a pending website registration",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/notifications": {
+      "get": {
+        "description": "Returns notifications scoped to the verified requester.",
+        "operationId": "NotificationsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get notifications for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "post": {
+        "operationId": "NotificationsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a notification",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/mark-read": {
+      "patch": {
+        "operationId": "NotificationsController_markRead",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Mark all notifications as read for the current user",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/notifications/{id}": {
+      "patch": {
+        "operationId": "NotificationsController_markOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Mark a single notification as read or unread",
+        "tags": [
+          "Notifications"
+        ]
+      },
+      "delete": {
+        "description": "Deletes a notification belonging to the verified requester.",
+        "operationId": "NotificationsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a notification",
+        "tags": [
+          "Notifications"
+        ]
+      }
+    },
+    "/api/settings/platform": {
+      "get": {
+        "operationId": "SettingsController_getPlatform",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get platform settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updatePlatform",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlatformSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update platform settings",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/security": {
+      "get": {
+        "operationId": "SettingsController_getSecurity",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get security settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updateSecurity",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSecuritySettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update security settings",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/commission": {
+      "get": {
+        "operationId": "SettingsController_getCommission",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the platform commission rate (percent)",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updateCommission",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set the platform commission rate (percent, 0-100)",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/economics": {
+      "get": {
+        "operationId": "SettingsController_getEconomics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get commission and protected fleet-margin settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updateEconomics",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEconomicsSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update commission and minimum fleet margin atomically",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/permissions": {
+      "get": {
+        "operationId": "SettingsController_getAllPermissions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get all role permissions",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/settings/permissions/{role}": {
+      "get": {
+        "operationId": "SettingsController_getPermissions",
+        "parameters": [
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "description": "Role key (fleet-manager, business-client, driver)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get permissions for a specific role",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "SettingsController_updatePermissions",
+        "parameters": [
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePermissionsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update permissions for a specific role",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/vehicles": {
+      "get": {
+        "operationId": "VehiclesController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by status (active, maintenance, on trip)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of vehicles"
+          }
+        },
+        "summary": "List all vehicles",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "post": {
+        "operationId": "VehiclesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Vehicle created"
+          }
+        },
+        "summary": "Add a new vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/vehicles/{id}": {
+      "get": {
+        "operationId": "VehiclesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Vehicle ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get vehicle by ID",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "put": {
+        "operationId": "VehiclesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Vehicle ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVehicleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      },
+      "delete": {
+        "operationId": "VehiclesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Vehicle ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a vehicle",
+        "tags": [
+          "Vehicles"
+        ]
+      }
+    },
+    "/api/drivers": {
+      "get": {
+        "description": "Returns drivers list. Driver role is allowed so driver portal profile page can load its own driver data.",
+        "operationId": "DriversController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search driver by name, email, phone, vehicle, or license number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all drivers",
+        "tags": [
+          "Drivers"
+        ]
+      },
+      "post": {
+        "description": "Only superuser and fleet manager can create drivers.",
+        "operationId": "DriversController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDriverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Add a new driver",
+        "tags": [
+          "Drivers"
+        ]
+      }
+    },
+    "/api/drivers/{id}": {
+      "get": {
+        "description": "Returns one driver profile. Driver role is allowed for driver portal profile view.",
+        "operationId": "DriversController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get driver by ID",
+        "tags": [
+          "Drivers"
+        ]
+      },
+      "put": {
+        "description": "Superuser and fleet manager can update driver data. Driver role is allowed so driver portal profile page can save its own profile.",
+        "operationId": "DriversController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDriverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update driver info",
+        "tags": [
+          "Drivers"
+        ]
+      },
+      "delete": {
+        "description": "Only superuser and fleet manager can delete drivers.",
+        "operationId": "DriversController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a driver",
+        "tags": [
+          "Drivers"
+        ]
+      }
+    },
+    "/api/drivers/{id}/compliance-notification": {
+      "post": {
+        "operationId": "DriversController_notifyCompliance",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Driver ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotifyDriverComplianceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Notify a driver about a compliance problem",
+        "tags": [
+          "Drivers"
+        ]
+      }
+    },
+    "/api/mechanics": {
+      "get": {
+        "operationId": "MechanicsController_findAll",
+        "parameters": [
+          {
+            "name": "active",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List mechanics available to the current user",
+        "tags": [
+          "Mechanics"
+        ]
+      },
+      "post": {
+        "operationId": "MechanicsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMechanicDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a mechanic",
+        "tags": [
+          "Mechanics"
+        ]
+      }
+    },
+    "/api/mechanics/{id}": {
+      "get": {
+        "operationId": "MechanicsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get a mechanic by ID",
+        "tags": [
+          "Mechanics"
+        ]
+      },
+      "put": {
+        "operationId": "MechanicsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMechanicDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a mechanic",
+        "tags": [
+          "Mechanics"
+        ]
+      }
+    },
+    "/api/mechanics/{id}/deactivate": {
+      "patch": {
+        "operationId": "MechanicsController_deactivate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Deactivate a mechanic without removing historical references",
+        "tags": [
+          "Mechanics"
+        ]
+      }
+    },
+    "/api/deliveries": {
+      "get": {
+        "description": "Returns delivery requests. Used by business client, driver, fleet manager, and superuser portals.",
+        "operationId": "DeliveriesController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all delivery requests",
+        "tags": [
+          "Deliveries"
+        ]
+      },
+      "post": {
+        "description": "Business client creates a requested delivery and linked unassigned trip. A fleet manager must explicitly assign a driver.",
+        "operationId": "DeliveriesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a new delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}": {
+      "get": {
+        "description": "Returns one persisted delivery request by ID for status tracking, feedback, driver details, and completed delivery pages.",
+        "operationId": "DeliveriesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID, e.g. DR-2026-001",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get delivery request by ID",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/block": {
+      "patch": {
+        "description": "Superuser blocks a delivery request and syncs the linked trip status.",
+        "operationId": "DeliveriesController_block",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Block a delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/unblock": {
+      "patch": {
+        "description": "Superuser unblocks a delivery request and makes the linked trip visible again in the driver portal.",
+        "operationId": "DeliveriesController_unblock",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UnblockDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Unblock a delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/cancel": {
+      "patch": {
+        "description": "Business client or superuser cancels a delivery request and syncs the linked trip.",
+        "operationId": "DeliveriesController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelDeliveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Cancel a delivery request",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/deliveries/{id}/feedback": {
+      "patch": {
+        "description": "Stores feedback in deliveries.json, syncs feedback into the linked trip in trips.json, and creates a notification.",
+        "operationId": "DeliveriesController_submitFeedback",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Delivery ID, e.g. DR-2026-001",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "example": 4
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "Delivery was smooth and driver was polite."
+                  },
+                  "deliveryQuality": {
+                    "type": "string",
+                    "example": "Excellent"
+                  },
+                  "driverBehavior": {
+                    "type": "string",
+                    "example": "Good"
+                  },
+                  "overallExperience": {
+                    "type": "string",
+                    "example": "Very satisfied"
+                  }
+                },
+                "required": [
+                  "rating",
+                  "deliveryQuality",
+                  "driverBehavior",
+                  "overallExperience"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Submit feedback for completed delivery",
+        "tags": [
+          "Deliveries"
+        ]
+      }
+    },
+    "/api/documents": {
+      "get": {
+        "operationId": "DocumentsController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all documents",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "post": {
+        "operationId": "DocumentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDocumentDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDocumentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create a document with a required PDF, CSV, PNG, or JPG file up to 5MB",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/documents/{id}/file": {
+      "get": {
+        "operationId": "DocumentsController_getFile",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Fetch the uploaded file for a document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/documents/{id}": {
+      "get": {
+        "operationId": "DocumentsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get document by ID",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "put": {
+        "operationId": "DocumentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDocumentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a document",
+        "tags": [
+          "Documents"
+        ]
+      },
+      "delete": {
+        "operationId": "DocumentsController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a document",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/api/trips/{id}/location": {
+      "patch": {
+        "operationId": "TripsController_updateLocation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripLocationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips": {
+      "get": {
+        "operationId": "TripsController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all trips",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}": {
+      "get": {
+        "operationId": "TripsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get trip by ID",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/reassign": {
+      "patch": {
+        "operationId": "TripsController_reassign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "driver": {
+                    "type": "string",
+                    "example": "Raghav Reddy"
+                  }
+                },
+                "required": [
+                  "driver"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Reassign driver for a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/status": {
+      "patch": {
+        "description": "Updates trip status and syncs the linked delivery request status so other actor portals show the same state.",
+        "operationId": "TripsController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "example": "Accepted",
+                    "enum": [
+                      "Accepted",
+                      "Rejected",
+                      "Picked Up",
+                      "In Transit",
+                      "Completed"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update trip status",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/report-issue": {
+      "patch": {
+        "description": "Reports an issue for a trip, updates the linked delivery request, and creates notifications for other portals.",
+        "operationId": "TripsController_reportIssue",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "issueType": {
+                    "type": "string",
+                    "example": "Vehicle problem"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Vehicle broke down near pickup location."
+                  },
+                  "status": {
+                    "type": "string",
+                    "example": "Issue Reported"
+                  }
+                },
+                "required": [
+                  "issueType",
+                  "description"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Report an issue for a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/notes": {
+      "patch": {
+        "operationId": "TripsController_addNote",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "example": "Customer asked to leave at gate."
+                  }
+                },
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Add a driver note to a trip",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/trips/{id}/resolve-dispute": {
+      "patch": {
+        "description": "Sets the amount the business client should actually be charged for a disputed/damaged delivery. Commission and driver payout use this amount instead of the original invoice total.",
+        "operationId": "TripsController_resolveDispute",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "resolvedAmount": {
+                    "type": "number",
+                    "example": 2500
+                  },
+                  "reason": {
+                    "type": "string",
+                    "example": "Partial delivery — 2 of 5 items damaged."
+                  }
+                },
+                "required": [
+                  "resolvedAmount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Resolve a reported issue with a billable amount",
+        "tags": [
+          "Trips"
+        ]
+      }
+    },
+    "/api/payouts/rate-card/platform": {
+      "get": {
+        "operationId": "PayoutsController_getPlatformRateCard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the platform-wide minimum driver rate card",
+        "tags": [
+          "Payouts"
+        ]
+      },
+      "put": {
+        "operationId": "PayoutsController_setPlatformRateCard",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetRateCardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set the platform-wide minimum driver rate card",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/rate-card/mine": {
+      "get": {
+        "operationId": "PayoutsController_getMyRateCard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get my effective driver rate card (custom or platform default)",
+        "tags": [
+          "Payouts"
+        ]
+      },
+      "put": {
+        "operationId": "PayoutsController_setMyRateCard",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetRateCardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set my custom driver rate card (must be at or above the platform minimum)",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/driver/mine": {
+      "get": {
+        "operationId": "PayoutsController_getMyPayouts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get my persisted per-trip payout records",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/driver": {
+      "get": {
+        "operationId": "PayoutsController_listDriverPayouts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List persisted driver payouts for payment processing",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/driver/{id}/paid": {
+      "patch": {
+        "operationId": "PayoutsController_markPayoutPaid",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Mark an approved driver payout as paid",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/payouts/fleet-manager/statement": {
+      "get": {
+        "operationId": "PayoutsController_getFleetManagerStatement",
+        "parameters": [
+          {
+            "name": "fleetManagerId",
+            "required": false,
+            "in": "query",
+            "description": "Superuser only; defaults to self for fleet managers",
+            "schema": {}
+          },
+          {
+            "name": "month",
+            "required": false,
+            "in": "query",
+            "description": "YYYY-MM, defaults to current month",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Monthly net income statement for a fleet manager",
+        "tags": [
+          "Payouts"
+        ]
+      }
+    },
+    "/api/maintenance": {
+      "get": {
+        "operationId": "MaintenanceController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all maintenance schedules",
+        "tags": [
+          "Maintenance"
+        ]
+      },
+      "post": {
+        "operationId": "MaintenanceController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMaintenanceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Schedule a maintenance",
+        "tags": [
+          "Maintenance"
+        ]
+      }
+    },
+    "/api/maintenance/{id}": {
+      "get": {
+        "operationId": "MaintenanceController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get maintenance schedule by ID",
+        "tags": [
+          "Maintenance"
+        ]
+      },
+      "put": {
+        "operationId": "MaintenanceController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMaintenanceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update a maintenance schedule",
+        "tags": [
+          "Maintenance"
+        ]
+      },
+      "delete": {
+        "operationId": "MaintenanceController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete a maintenance schedule",
+        "tags": [
+          "Maintenance"
+        ]
+      }
+    },
+    "/api/transactions": {
+      "get": {
+        "operationId": "TransactionsController_findAll",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List all transactions and invoices",
+        "tags": [
+          "Transactions"
+        ]
+      },
+      "post": {
+        "operationId": "TransactionsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create transaction",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/payments": {
+      "get": {
+        "operationId": "TransactionsController_findTransactions",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List transactions only",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/invoices": {
+      "get": {
+        "operationId": "TransactionsController_findInvoices",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List invoices only",
+        "tags": [
+          "Transactions"
+        ]
+      },
+      "post": {
+        "operationId": "TransactionsController_createInvoice",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create an invoice",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/invoices/generate/{deliveryId}": {
+      "post": {
+        "operationId": "TransactionsController_generateInvoiceForDelivery",
+        "parameters": [
+          {
+            "name": "deliveryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Generate an invoice from a completed delivery and the configured rate card",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/revenue-summary": {
+      "get": {
+        "operationId": "TransactionsController_getRevenueSummary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Platform revenue summary: delivery commission and total revenue",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/payments/{transactionId}/status": {
+      "patch": {
+        "operationId": "TransactionsController_updateTransactionStatus",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Approve, reject, or update submitted payment transaction status",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/dashboard/superuser": {
+      "get": {
+        "operationId": "DashboardController_getSuperuserDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get superuser dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/business-client": {
+      "get": {
+        "operationId": "DashboardController_getBusinessClientDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the current business client's dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/fleet-manager": {
+      "get": {
+        "operationId": "DashboardController_getFleetManagerDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get fleet manager dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/fleet-manager/analytics": {
+      "get": {
+        "description": "Gated by the \"Reports Access\" permission configured for the fleet-manager role.",
+        "operationId": "DashboardController_getFleetManagerAnalytics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the current fleet manager's analytics",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/dashboard/driver": {
+      "get": {
+        "operationId": "DashboardController_getDriverDashboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get the current driver's dashboard stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "DeliverSync API",
+    "description": "REST API for the DeliverSync delivery management platform. Authentication is via a signed JWT returned from POST /api/auth/login, sent as `Authorization: Bearer <token>` on every subsequent request. Supported roles: superuser, fleet-manager, business-client, driver.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "email": {
+            "type": "string",
+            "example": "driver@deliverysync.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123",
+            "description": "Min 8 chars, 1 uppercase, 1 special char"
+          },
+          "role": {
+            "type": "string",
+            "example": "driver",
+            "enum": [
+              "fleet-manager",
+              "business-client",
+              "driver"
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "profileDetails": {
+            "type": "object",
+            "description": "Role-specific profile details"
+          },
+          "termsAccepted": {
+            "type": "boolean",
+            "example": true,
+            "description": "Required for business-client and driver self-registration"
+          },
+          "termsVersion": {
+            "type": "string",
+            "example": "2026-10-12"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe",
+            "description": "Full name of the user"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@deliverysync.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123",
+            "description": "Min 8 chars, 1 uppercase, 1 special char"
+          },
+          "role": {
+            "type": "string",
+            "example": "fleet-manager",
+            "enum": [
+              "fleet-manager",
+              "business-client",
+              "driver",
+              "superuser"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Active",
+              "Pending",
+              "Suspended"
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "companyName": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "company": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Business Avenue"
+          },
+          "profileDetails": {
+            "type": "object",
+            "description": "Role-specific profile details"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "role"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@deliverysync.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123"
+          },
+          "role": {
+            "type": "string",
+            "example": "fleet-manager"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active"
+          },
+          "phone": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "companyName": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "company": {
+            "type": "string",
+            "example": "Acme Logistics Inc."
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Business Avenue"
+          },
+          "profileDetails": {
+            "type": "object"
+          },
+          "notifications": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UpdateStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Active",
+              "Suspended",
+              "Rejected",
+              "Pending Approval"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "ReviewRegistrationDto": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "example": "approve",
+            "enum": [
+              "approve",
+              "reject"
+            ]
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
+      "CreateNotificationDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "New delivery request"
+          },
+          "message": {
+            "type": "string",
+            "example": "Delivery DR-2024-001 needs review."
+          },
+          "to": {
+            "type": "string",
+            "example": "superuser",
+            "description": "Target role to receive the notification"
+          },
+          "toUserId": {
+            "type": "string",
+            "example": "DR-301",
+            "description": "Optional specific recipient user ID"
+          }
+        },
+        "required": [
+          "title",
+          "message",
+          "to"
+        ]
+      },
+      "UpdatePlatformSettingsDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "DeliverSync"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Kolkata"
+          },
+          "language": {
+            "type": "string",
+            "example": "English"
+          },
+          "logo": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      },
+      "UpdateEconomicsSettingsDto": {
+        "type": "object",
+        "properties": {
+          "commissionRate": {
+            "type": "number",
+            "example": 10
+          },
+          "minimumFleetMarginPercent": {
+            "type": "number",
+            "example": 15
+          }
+        },
+        "required": [
+          "commissionRate",
+          "minimumFleetMarginPercent"
+        ]
+      },
+      "UpdateSecuritySettingsDto": {
+        "type": "object",
+        "properties": {
+          "passwordLength": {
+            "type": "number",
+            "example": 8
+          },
+          "failedAttempts": {
+            "type": "number",
+            "example": 5
+          },
+          "sessionTimeout": {
+            "type": "number",
+            "example": 30
+          }
+        }
+      },
+      "UpdatePermissionsDto": {
+        "type": "object",
+        "properties": {
+          "permissions": {
+            "description": "Array of permission entries: [label, description, enabled]",
+            "example": [
+              [
+                "Dashboard Access",
+                "View platform overview",
+                true
+              ]
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "permissions"
+        ]
+      },
+      "CreateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "plate": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "type": {
+            "type": "string",
+            "example": "Mini Truck",
+            "enum": [
+              "Mini Truck",
+              "Van",
+              "Truck",
+              "Bike",
+              "SUV",
+              "Cargo Van"
+            ]
+          },
+          "capacity": {
+            "type": "string",
+            "example": "2 Tons"
+          },
+          "status": {
+            "type": "string",
+            "example": "Active",
+            "enum": [
+              "Active",
+              "On Trip",
+              "Maintenance"
+            ]
+          },
+          "assignedDriver": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "maintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Last maintenance date in YYYY-MM-DD format"
+          },
+          "lastMaintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Alias for maintenance date"
+          }
+        },
+        "required": [
+          "plate",
+          "type"
+        ]
+      },
+      "UpdateVehicleDto": {
+        "type": "object",
+        "properties": {
+          "plate": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "type": {
+            "type": "string",
+            "example": "Van",
+            "enum": [
+              "Mini Truck",
+              "Van",
+              "Truck",
+              "Bike",
+              "SUV",
+              "Cargo Van"
+            ]
+          },
+          "capacity": {
+            "type": "string",
+            "example": "1 Ton"
+          },
+          "status": {
+            "type": "string",
+            "example": "Maintenance",
+            "enum": [
+              "Active",
+              "On Trip",
+              "Maintenance"
+            ]
+          },
+          "assignedDriver": {
+            "type": "string",
+            "example": "Kiran Teja"
+          },
+          "maintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Last maintenance date in YYYY-MM-DD format"
+          },
+          "lastMaintenance": {
+            "type": "string",
+            "example": "2026-05-03",
+            "description": "Alias for maintenance date"
+          }
+        }
+      },
+      "CreateDriverDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "email": {
+            "type": "string",
+            "example": "driver@deliverysync.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+91 9440011223"
+          },
+          "licenseNumber": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
+          "licenseExpiry": {
+            "type": "string",
+            "example": "2028-12-31",
+            "description": "Driver License expiry date in YYYY-MM-DD format"
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "vehicleType": {
+            "type": "string",
+            "example": "Tempo"
+          },
+          "zone": {
+            "type": "string",
+            "example": "Chennai North"
+          },
+          "license": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Active",
+              "On Duty",
+              "Busy",
+              "Offline",
+              "Inactive",
+              "Suspended",
+              "Rejected",
+              "Document Review"
+            ]
+          },
+          "password": {
+            "type": "string",
+            "example": "Pass@123",
+            "description": "Creates a login account for the driver when provided"
+          },
+          "profileDetails": {
+            "type": "object",
+            "description": "License and bank details collected during driver registration"
+          },
+          "termsAccepted": {
+            "type": "boolean",
+            "example": true
+          },
+          "termsVersion": {
+            "type": "string",
+            "example": "2026-10-12"
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      },
+      "NotifyDriverComplianceDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Your Driver License has expired. Please renew it to restore compliance."
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "UpdateDriverDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Raghav Reddy"
+          },
+          "email": {
+            "type": "string",
+            "example": "driver@deliverysync.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+91 9440011223"
+          },
+          "licenseNumber": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
+          "licenseExpiry": {
+            "type": "string",
+            "example": "2028-12-31",
+            "description": "Driver License expiry date in YYYY-MM-DD format"
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN09AB1234"
+          },
+          "vehicleType": {
+            "type": "string",
+            "example": "Tempo"
+          },
+          "zone": {
+            "type": "string",
+            "example": "Chennai North"
+          },
+          "license": {
+            "type": "string",
+            "example": "TN03201800034521"
+          },
+          "status": {
+            "type": "string",
+            "example": "Available",
+            "enum": [
+              "Available",
+              "Active",
+              "On Duty",
+              "Busy",
+              "Offline",
+              "Inactive",
+              "Suspended",
+              "Rejected",
+              "Document Review"
+            ]
+          }
+        }
+      },
+      "CreateMechanicDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "AutoCare Pro"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UpdateMechanicDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "AutoCare Pro"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PackageDimensionsDto": {
+        "type": "object",
+        "properties": {
+          "length": {
+            "type": "number",
+            "example": 30
+          },
+          "width": {
+            "type": "number",
+            "example": 20
+          },
+          "height": {
+            "type": "number",
+            "example": 15
+          },
+          "unit": {
+            "type": "string",
+            "example": "cm",
+            "enum": [
+              "cm"
+            ]
+          }
+        },
+        "required": [
+          "length",
+          "width",
+          "height",
+          "unit"
+        ]
+      },
+      "CreateDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "customer": {
+            "type": "string",
+            "example": "Acme Logistics"
+          },
+          "contact": {
+            "type": "string",
+            "example": "Sarah Johnson"
+          },
+          "pickup": {
+            "type": "string",
+            "example": "OMR, Chennai"
+          },
+          "dropoff": {
+            "type": "string",
+            "example": "Tambaram, Chennai"
+          },
+          "package": {
+            "type": "string",
+            "example": "Electronics - 2 Laptops, 15kg"
+          },
+          "packageType": {
+            "type": "string",
+            "example": "Electronics",
+            "enum": [
+              "Documents",
+              "Electronics",
+              "Clothing",
+              "Food",
+              "Medical Supplies",
+              "Fragile Items",
+              "Furniture",
+              "Retail Goods",
+              "Industrial Parts",
+              "Other"
+            ]
+          },
+          "packageDimensions": {
+            "$ref": "#/components/schemas/PackageDimensionsDto"
+          },
+          "weight": {
+            "type": "number",
+            "example": 2.5,
+            "description": "Package weight in kilograms"
+          },
+          "type": {
+            "type": "string",
+            "example": "Express",
+            "enum": [
+              "Standard",
+              "Express"
+            ]
+          },
+          "priority": {
+            "type": "string",
+            "example": "High",
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ]
+          },
+          "items": {
+            "type": "number",
+            "example": 2
+          },
+          "instructions": {
+            "type": "string",
+            "example": "Special handling needed"
+          },
+          "preferredDeliveryAt": {
+            "type": "string",
+            "example": "2026-10-14T09:30:00.000Z"
+          }
+        },
+        "required": [
+          "customer",
+          "pickup",
+          "dropoff",
+          "packageType",
+          "packageDimensions",
+          "weight"
+        ]
+      },
+      "BlockDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Suspicious address flagged for review"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "UnblockDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Address verified, approved for delivery"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "CancelDeliveryDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "No longer needed"
+          }
+        }
+      },
+      "CreateDocumentDto": {
+        "type": "object",
+        "properties": {
+          "ownerType": {
+            "type": "string",
+            "example": "vehicle",
+            "enum": [
+              "vehicle",
+              "driver",
+              "delivery",
+              "business-client"
+            ]
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN-09-AB-2345"
+          },
+          "driver": {
+            "type": "string",
+            "example": "Rajesh Kumar"
+          },
+          "delivery": {
+            "type": "string",
+            "example": "DR-2024-001"
+          },
+          "documentType": {
+            "type": "string",
+            "example": "Registration"
+          },
+          "issueDate": {
+            "type": "string",
+            "example": "2025-04-01"
+          },
+          "expiryDate": {
+            "type": "string",
+            "example": "2026-03-31"
+          },
+          "status": {
+            "type": "string",
+            "example": "Submitted",
+            "enum": [
+              "Submitted",
+              "Valid",
+              "Expiring Soon",
+              "Expired"
+            ]
+          }
+        },
+        "required": [
+          "ownerType",
+          "documentType"
+        ]
+      },
+      "UpdateDocumentDto": {
+        "type": "object",
+        "properties": {
+          "ownerType": {
+            "type": "string",
+            "example": "vehicle",
+            "enum": [
+              "vehicle",
+              "driver"
+            ]
+          },
+          "vehicle": {
+            "type": "string",
+            "example": "TN-09-AB-2345"
+          },
+          "driver": {
+            "type": "string",
+            "example": "Rajesh Kumar"
+          },
+          "documentType": {
+            "type": "string",
+            "example": "Insurance"
+          },
+          "issueDate": {
+            "type": "string",
+            "example": "2025-04-01"
+          },
+          "expiryDate": {
+            "type": "string",
+            "example": "2026-03-31"
+          },
+          "status": {
+            "type": "string",
+            "example": "Valid",
+            "enum": [
+              "Submitted",
+              "Valid",
+              "Expiring Soon",
+              "Expired"
+            ]
+          }
+        }
+      },
+      "TripLocationDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "SetRateCardDto": {
+        "type": "object",
+        "properties": {
+          "baseFare": {
+            "type": "number",
+            "example": 50
+          },
+          "perKm": {
+            "type": "number",
+            "example": 8
+          },
+          "perKg": {
+            "type": "number",
+            "example": 5
+          },
+          "customerBaseFare": {
+            "type": "number",
+            "example": 80,
+            "description": "Customer-facing base price"
+          },
+          "customerPerKm": {
+            "type": "number",
+            "example": 13,
+            "description": "Customer-facing price per kilometre"
+          },
+          "customerPerKg": {
+            "type": "number",
+            "example": 8,
+            "description": "Customer-facing price per kilogram"
+          }
+        },
+        "required": [
+          "baseFare",
+          "perKm",
+          "perKg"
+        ]
+      },
+      "CreateMaintenanceDto": {
+        "type": "object",
+        "properties": {
+          "vehicle": {
+            "type": "string",
+            "example": "TN-09-AB-2345"
+          },
+          "issue": {
+            "type": "string",
+            "example": "Engine Oil Change"
+          },
+          "priority": {
+            "type": "string",
+            "example": "High",
+            "enum": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "example": "2026-03-10"
+          },
+          "mechanicId": {
+            "type": "string",
+            "example": "MC-003",
+            "description": "Stable mechanic identifier; preferred for new clients"
+          },
+          "mechanic": {
+            "type": "string",
+            "example": "Ravi Auto Service",
+            "description": "Legacy mechanic name accepted for compatibility"
+          },
+          "cost": {
+            "type": "string",
+            "example": "₹1200"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Check brake fluid"
+          }
+        },
+        "required": [
+          "vehicle",
+          "issue",
+          "priority",
+          "date"
+        ]
+      },
+      "UpdateMaintenanceDto": {
+        "type": "object",
+        "properties": {
+          "vehicle": {
+            "type": "string"
+          },
+          "issue": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Scheduled",
+              "In Progress",
+              "Under Maintenance",
+              "Completed",
+              "Overdue",
+              "Cancelled"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "mechanic": {
+            "type": "string"
+          },
+          "mechanicId": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateTransactionDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateInvoiceDto": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  }
+}

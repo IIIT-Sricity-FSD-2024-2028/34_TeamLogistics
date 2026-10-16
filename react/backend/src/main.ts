@@ -1,0 +1,122 @@
+import { NestFactory } from '@nestjs/core';
+import { ForbiddenException, ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import { json, urlencoded } from 'express';
+import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common';
+import { getUploadRoot } from './common/upload-path';
+import { startLogMaintenance } from './middleware';
+import * as fs from 'fs';
+import * as path from 'path';
+
+async function bootstrap() {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  const configuredOrigins = String(process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim().replace(/\/$/, ''))
+    .filter(Boolean);
+
+  app.enableCors({
+    origin: (origin, callback) => {
+      const normalizedOrigin = String(origin || '').replace(/\/$/, '');
+      if (
+        !origin ||
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
+        configuredOrigins.includes(normalizedOrigin)
+      ) {
+        callback(null, true);
+        return;
+      }
+      callback(new ForbiddenException(`Origin ${origin} is not allowed by CORS`), false);
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Accept,Authorization',
+  });
+
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+      contentSecurityPolicy: false,
+    }),
+  );
+
+  app.use(json({ limit: '2mb' }));
+  app.use(urlencoded({ extended: true, limit: '2mb' }));
+
+  app.use(
+    rateLimit({
+      windowMs: 60 * 1000,
+      max: 1200,
+      skip: (request) => request.path === '/api/changes',
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: {
+        success: false,
+        statusCode: 429,
+        message: 'Too many requests. Please try again later.',
+      },
+    }),
+  );
+
+  app.setGlobalPrefix('api');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  startLogMaintenance();
+
+  const uploadsDir = getUploadRoot();
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.useStaticAssets(uploadsDir, { prefix: '/uploads' });
+
+  const config = new DocumentBuilder()
+    .setTitle('DeliverSync API')
+    .setDescription(
+      'REST API for the DeliverSync delivery management platform. ' +
+      'Authentication is via a signed JWT returned from POST /api/auth/login, sent as ' +
+      '`Authorization: Bearer <token>` on every subsequent request. ' +
+      'Supported roles: superuser, fleet-manager, business-client, driver.',
+    )
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
+
+  const docsDir = path.resolve(__dirname, '..', 'docs');
+  if (!fs.existsSync(docsDir)) {
+    fs.mkdirSync(docsDir, { recursive: true });
+  }
+  fs.writeFileSync(
+    path.join(docsDir, 'swagger.json'),
+    JSON.stringify(document, null, 2),
+    'utf-8',
+  );
+  console.log(`📄 Swagger JSON exported to docs/swagger.json`);
+
+  // Keep the API separate from other common local web apps that use 3000.
+  // PORT can still override this in hosted environments.
+  const port = Number(process.env.PORT || 3001);
+  await app.listen(port);
+  console.log(`🚀 DeliverSync API running on port ${port}`);
+  console.log(`📚 Swagger docs available at /api/docs`);
+}
+bootstrap();
+
+
+
+

@@ -1,0 +1,23 @@
+{
+  "name": "front-end-react",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.mjs",
+    "dev:frontend": "vite",
+    "build": "vite build",
+    "test": "node --test test/*.test.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.3",
+    "@tanstack/react-query": "^5.102.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^8.3.0"
+  }
+}

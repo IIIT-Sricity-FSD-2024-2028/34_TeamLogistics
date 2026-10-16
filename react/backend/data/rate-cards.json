@@ -1,0 +1,24 @@
+[
+  {
+    "id": "PLATFORM",
+    "ownerId": "PLATFORM",
+    "baseFare": 50,
+    "perKm": 8,
+    "perKg": 5,
+    "customerBaseFare": 80,
+    "customerPerKm": 13,
+    "customerPerKg": 8,
+    "updatedAt": "2026-08-31T06:13:55.130Z"
+  },
+  {
+    "id": "FM-101",
+    "ownerId": "FM-101",
+    "baseFare": 60,
+    "perKm": 9.9,
+    "perKg": 5.6,
+    "customerBaseFare": 95,
+    "customerPerKm": 16,
+    "customerPerKg": 9,
+    "updatedAt": "2026-09-21T05:02:41.038Z"
+  }
+]

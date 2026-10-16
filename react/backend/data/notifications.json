@@ -1,0 +1,5131 @@
+[
+  {
+    "id": "N-1792115393371",
+    "title": "Payment approved",
+    "message": "Payment reference 125143517371839 is now Approved.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:49:53.371Z"
+  },
+  {
+    "id": "N-1792115334069",
+    "title": "Payment proof submitted",
+    "message": "Payment reference 125143517371839 for invoice INV-DR-2026-038 is awaiting review.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:48:54.062Z"
+  },
+  {
+    "id": "N-b05551c0-fcdd-4e03-b63e-bc94b4031f2d",
+    "title": "New registration awaiting approval",
+    "message": "ice registered as business-client. Review the application in Registration Approvals.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-12T14:55:52.211Z"
+  },
+  {
+    "id": "N-1791660531479",
+    "title": "Payment proof submitted",
+    "message": "Payment reference uyf for invoice INV-DR-2026-019 is awaiting review.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-10T19:28:51.476Z"
+  },
+  {
+    "id": "N-1788166549632",
+    "title": "Payment successful",
+    "message": "Payment of ₹5,500 received for invoice INV-DR-2026-029.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.630Z"
+  },
+  {
+    "id": "N-1788166528568",
+    "title": "Payment successful",
+    "message": "Payment of ₹5,500 received for invoice INV-DR-2026-028.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.565Z"
+  },
+  {
+    "id": "N-1788166528452",
+    "title": "Payment successful",
+    "message": "Payment of ₹5,500 received for invoice INV-DR-2026-027.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.450Z"
+  },
+  {
+    "id": "N-1788166528357",
+    "title": "Payment successful",
+    "message": "Payment of ₹5,500 received for invoice INV-DR-2026-026.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.354Z"
+  },
+  {
+    "id": "N-1788157039600",
+    "title": "Payment successful",
+    "message": "Payment of ₹1,500 received for invoice INV-DR-2026-024.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.598Z"
+  },
+  {
+    "id": "N-1788157010251",
+    "title": "Payment successful",
+    "message": "Payment of ₹5,500 received for invoice INV-DR-2026-023.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.249Z"
+  },
+  {
+    "id": "N-1787948117577",
+    "title": "Subscription cancelled",
+    "message": "Your Business plan subscription has been cancelled.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-08-28T20:15:17.577Z"
+  },
+  {
+    "id": "N-1787948111536",
+    "title": "Subscription activated successfully",
+    "message": "Your Business plan subscription is now active until 2026-09-27.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-08-28T20:15:11.501Z"
+  },
+  {
+    "id": "N-1787919015565",
+    "title": "Payment successful",
+    "message": "Payment of ₹5,500 received for invoice INV-DR-2026-010.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-28T12:10:15.564Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787918660638",
+    "title": "Subscription cancelled",
+    "message": "Your Enterprise plan subscription has been cancelled.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T12:04:20.638Z"
+  },
+  {
+    "id": "N-1787777072439",
+    "title": "Subscription activated successfully",
+    "message": "Your Enterprise plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:44:32.437Z"
+  },
+  {
+    "id": "N-1787777067995",
+    "title": "Subscription activated successfully",
+    "message": "Your Starter plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:44:27.989Z"
+  },
+  {
+    "id": "N-1787776919445",
+    "title": "Subscription activated successfully",
+    "message": "Your Business plan subscription is now active until 2026-09-25.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T20:41:59.442Z"
+  },
+  {
+    "id": "N-1787776286243",
+    "title": "Payment successful",
+    "message": "Payment of ₹9,800 received for invoice INV-002.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-26T20:31:26.241Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-003",
+    "title": "Driver compliance warning",
+    "message": "One driver document is expiring soon.",
+    "time": "40 mins ago",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-03T06:20:00.000Z"
+  },
+  {
+    "id": "N-004",
+    "title": "Delivery request confirmed",
+    "message": "Your delivery DR-2024-002 has been approved.",
+    "time": "1 hour ago",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-03T06:00:00.000Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-006",
+    "title": "User registration pending",
+    "message": "Cascade Distribution (BC-203) needs approval.",
+    "time": "3 hours ago",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-03T04:00:00.000Z"
+  },
+  {
+    "id": "N-007",
+    "title": "Vehicle maintenance overdue",
+    "message": "Vehicle TN-05-IJ-9012 has overdue maintenance.",
+    "time": "5 hours ago",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-03T02:00:00.000Z"
+  },
+  {
+    "id": "N-008",
+    "title": "Invoice payment received",
+    "message": "Payment of ₹18,500 received from Acme Logistics.",
+    "time": "Yesterday",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-02T14:00:00.000Z"
+  },
+  {
+    "id": "N-009",
+    "title": "Delivery completed",
+    "message": "Delivery DR-2024-005 was delivered successfully.",
+    "time": "Yesterday",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-02T11:00:00.000Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-010",
+    "title": "Driver suspended",
+    "message": "Driver Suresh Babu (DR-304) has been suspended.",
+    "time": "2 days ago",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-01T09:00:00.000Z"
+  },
+  {
+    "id": "N-011",
+    "title": "Delivery blocked",
+    "message": "DR-2024-008 blocked: Oversized package requires clearance.",
+    "time": "4 hours ago",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-03T03:00:00.000Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777885169027",
+    "title": "New delivery request",
+    "message": "Delivery DR-2024-2025 from icecream needs review.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-04T08:59:29.027Z"
+  },
+  {
+    "id": "N-1777902542284",
+    "title": "Delivery Request Blocked",
+    "message": "Your delivery request DR-2024-001 was blocked. Reason: test",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-04T13:49:02.284Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777902754544",
+    "title": "Delivery Request Blocked",
+    "message": "Your delivery request DR-2024-002 was blocked. Reason: type",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-04T13:52:34.544Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777902829953",
+    "title": "Delivery Request Unblocked",
+    "message": "Your delivery request DR-2024-001 was unblocked. Reason: hi",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-04T13:53:49.953Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777921968977",
+    "title": "Delivery Request Blocked",
+    "message": "Your delivery request DR-2024-001 was blocked. Reason: type",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-04T19:12:48.977Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777921996626",
+    "title": "Delivery Request Unblocked",
+    "message": "Your delivery request DR-2024-001 was unblocked. Reason: asd",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-04T19:13:16.626Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777968806338",
+    "title": "Delivery Request Blocked",
+    "message": "Your delivery request DR-2024-001 was blocked. Reason: adadad",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T08:13:26.338Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777968823343",
+    "title": "Delivery Request Unblocked",
+    "message": "Your delivery request DR-2024-001 was unblocked. Reason: sasfaf",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T08:13:43.343Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1777973490542",
+    "title": "New delivery request",
+    "message": "Delivery DR-2024-2025 from Acme Logistics Inc. needs review.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T09:31:30.542Z"
+  },
+  {
+    "id": "N-1777981079641",
+    "title": "New trip queued",
+    "message": "Trip TRP-2024-2025 was automatically created for delivery DR-2024-2025. Driver and vehicle assignment pending.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T11:37:59.640Z"
+  },
+  {
+    "id": "N-1778003675843",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-001 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T17:54:35.843Z"
+  },
+  {
+    "id": "N-1778003675845",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-001 was automatically created for delivery DR-2026-001.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T17:54:35.843Z"
+  },
+  {
+    "id": "N-1778003675846",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-001 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T17:54:35.843Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778003732725",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-002 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T17:55:32.725Z"
+  },
+  {
+    "id": "N-1778003732727",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-002 was automatically created for delivery DR-2026-002.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T17:55:32.725Z"
+  },
+  {
+    "id": "N-1778003732728",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-002 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T17:55:32.725Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778004186891",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-003 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T18:03:06.891Z"
+  },
+  {
+    "id": "N-1778004186893",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-003 was automatically created for delivery DR-2026-003.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T18:03:06.891Z"
+  },
+  {
+    "id": "N-1778004186894",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-003 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T18:03:06.891Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778007375771",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-004 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T18:56:15.771Z"
+  },
+  {
+    "id": "N-1778007375772",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-004 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-05-05T18:56:15.771Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778007375773",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-004 was automatically created for delivery DR-2026-004.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T18:56:15.771Z"
+  },
+  {
+    "id": "N-1778007375774",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-004 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T18:56:15.771Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778007437917",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-005 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T18:57:17.917Z"
+  },
+  {
+    "id": "N-1778007437918",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-005 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-05-05T18:57:17.917Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778007437919",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-005 was automatically created for delivery DR-2026-005.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T18:57:17.917Z"
+  },
+  {
+    "id": "N-1778007437920",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-005 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T18:57:17.917Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778010029516",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-005 has been generated for delivery DR-2026-005.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T19:40:29.516Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778012451749",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-006 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-05-05T20:20:51.749Z"
+  },
+  {
+    "id": "N-1778012451750",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-006 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-05-05T20:20:51.749Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778012451751",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-006 was automatically created for delivery DR-2026-006.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": true,
+    "createdAt": "2026-05-05T20:20:51.749Z"
+  },
+  {
+    "id": "N-1778012451752",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-006 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T20:20:51.749Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1778012634255",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-006 has been generated for delivery DR-2026-006.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-05-05T20:23:54.254Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787767324504",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-007 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:04.504Z"
+  },
+  {
+    "id": "N-1787767324505",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-007 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:04.504Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787767324506",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-007 was automatically created for delivery DR-2026-007.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T18:02:04.504Z"
+  },
+  {
+    "id": "N-1787767324507",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-007 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:04.504Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787767353427",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-007 has been generated for delivery DR-2026-007.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-26T18:02:33.424Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787772877534",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-008 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-26T19:34:37.534Z"
+  },
+  {
+    "id": "N-1787772877535",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-008 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-08-26T19:34:37.534Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787772877536",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-008 was automatically created for delivery DR-2026-008.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-26T19:34:37.534Z"
+  },
+  {
+    "id": "N-1787772877537",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-008 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-26T19:34:37.534Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787784799838",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-003 has been generated for delivery DR-2026-003.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-26T22:53:19.837Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787916993748",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-009 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T11:36:33.748Z"
+  },
+  {
+    "id": "N-1787916993749",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-009 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-08-28T11:36:33.748Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787916993750",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-009 was automatically created for delivery DR-2026-009.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T11:36:33.748Z"
+  },
+  {
+    "id": "N-1787916993751",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-009 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-28T11:36:33.748Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787918789150",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-010 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T12:06:29.150Z"
+  },
+  {
+    "id": "N-1787918789151",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-010 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "read": true,
+    "createdAt": "2026-08-28T12:06:29.150Z",
+    "readByUserIds": [
+      "DR-301"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787918789152",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-010 was automatically created for delivery DR-2026-010.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T12:06:29.150Z"
+  },
+  {
+    "id": "N-1787918789153",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-010 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-28T12:06:29.150Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787918888117",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-010 has been generated for delivery DR-2026-010.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": true,
+    "createdAt": "2026-08-28T12:08:08.116Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": []
+  },
+  {
+    "id": "N-1787919514744",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-011 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T12:18:34.744Z"
+  },
+  {
+    "id": "N-1787919514745",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-011 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-28T12:18:34.744Z"
+  },
+  {
+    "id": "N-1787919514746",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-011 was automatically created for delivery DR-2026-011.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T12:18:34.744Z"
+  },
+  {
+    "id": "N-1787919514747",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-011 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": true,
+    "createdAt": "2026-08-28T12:18:34.744Z"
+  },
+  {
+    "id": "N-1787935569284",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-012 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T16:46:09.283Z"
+  },
+  {
+    "id": "N-1787935569285",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-012 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-28T16:46:09.283Z"
+  },
+  {
+    "id": "N-1787935569286",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-012 was automatically created for delivery DR-2026-012.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T16:46:09.283Z"
+  },
+  {
+    "id": "N-1787935569287",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-012 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-28T16:46:09.283Z"
+  },
+  {
+    "id": "N-1787936951997",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-013 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T17:09:11.997Z"
+  },
+  {
+    "id": "N-1787936951998",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-013 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-28T17:09:11.997Z"
+  },
+  {
+    "id": "N-1787936951999",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-013 was automatically created for delivery DR-2026-013.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T17:09:11.997Z"
+  },
+  {
+    "id": "N-1787936952000",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-013 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-28T17:09:11.997Z"
+  },
+  {
+    "id": "N-1787938438816",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-014 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T17:33:58.816Z"
+  },
+  {
+    "id": "N-1787938438817",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-014 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-28T17:33:58.816Z"
+  },
+  {
+    "id": "N-1787938438818",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-014 was automatically created for delivery DR-2026-014.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T17:33:58.816Z"
+  },
+  {
+    "id": "N-1787938438819",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-014 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-28T17:33:58.816Z"
+  },
+  {
+    "id": "N-1787938650016",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-015 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-28T17:37:30.016Z"
+  },
+  {
+    "id": "N-1787938650017",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-015 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-28T17:37:30.016Z"
+  },
+  {
+    "id": "N-1787938650018",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-015 was automatically created for delivery DR-2026-015.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-28T17:37:30.016Z"
+  },
+  {
+    "id": "N-1787938650019",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-015 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-28T17:37:30.016Z"
+  },
+  {
+    "id": "N-1787946212046",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2024-001 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-305",
+    "read": false,
+    "createdAt": "2026-08-28T19:43:32.046Z"
+  },
+  {
+    "id": "N-1787948006059",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2024-001 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-303",
+    "read": false,
+    "createdAt": "2026-08-28T20:13:26.059Z"
+  },
+  {
+    "id": "N-1788088874748",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-012 has been generated for delivery DR-2026-012.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T11:21:14.746Z"
+  },
+  {
+    "id": "N-1788088891061",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-013 has been generated for delivery DR-2026-013.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T11:21:31.060Z"
+  },
+  {
+    "id": "N-1788089708986",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-011 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T11:35:08.986Z"
+  },
+  {
+    "id": "N-1788089708987",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-011 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T11:35:08.986Z"
+  },
+  {
+    "id": "N-1788111709948",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-011 has been generated for delivery DR-2026-011.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T17:41:49.947Z"
+  },
+  {
+    "id": "N-1788111709952",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-011 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T17:41:49.952Z"
+  },
+  {
+    "id": "N-1788111709953",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-011 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T17:41:49.952Z"
+  },
+  {
+    "id": "N-1788112314686",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-014 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T17:51:54.686Z"
+  },
+  {
+    "id": "N-1788112314687",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T17:51:54.686Z"
+  },
+  {
+    "id": "N-1788112979231",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-015 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T18:02:59.230Z"
+  },
+  {
+    "id": "N-1788112979232",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-015 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:02:59.230Z"
+  },
+  {
+    "id": "N-1788114940542",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-014 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T18:35:40.542Z"
+  },
+  {
+    "id": "N-1788114940543",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:35:40.542Z"
+  },
+  {
+    "id": "N-1788114982021",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-014 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T18:36:22.020Z"
+  },
+  {
+    "id": "N-1788114982022",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:36:22.020Z"
+  },
+  {
+    "id": "N-1788115388918",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-014 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T18:43:08.918Z"
+  },
+  {
+    "id": "N-1788115388919",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:43:08.918Z"
+  },
+  {
+    "id": "N-1788115390805",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-014 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T18:43:10.805Z"
+  },
+  {
+    "id": "N-1788115390806",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:43:10.805Z"
+  },
+  {
+    "id": "N-1788115392644",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-014 has been generated for delivery DR-2026-014.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:43:12.643Z"
+  },
+  {
+    "id": "N-1788115392648",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-014 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T18:43:12.648Z"
+  },
+  {
+    "id": "N-1788115392649",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T18:43:12.648Z"
+  },
+  {
+    "id": "N-1788116609603",
+    "title": "Trip Issue Reported",
+    "message": "Issue reported for trip TRP-2026-014: Vehicle problem. Playwright test issue report with photo",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T19:03:29.597Z"
+  },
+  {
+    "id": "N-1788116609604",
+    "title": "Delivery Issue Reported",
+    "message": "An issue was reported on your delivery via trip TRP-2026-014: Vehicle problem.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:03:29.597Z"
+  },
+  {
+    "id": "N-1788116707204",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-014 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:05:07.203Z"
+  },
+  {
+    "id": "N-1788116707205",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-014 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:05:07.203Z"
+  },
+  {
+    "id": "N-1788117142954",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-015 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:12:22.954Z"
+  },
+  {
+    "id": "N-1788117142955",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-015 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:12:22.954Z"
+  },
+  {
+    "id": "N-1788117144115",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-015 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:12:24.115Z"
+  },
+  {
+    "id": "N-1788117144116",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-015 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:12:24.115Z"
+  },
+  {
+    "id": "N-1788117148643",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-015 has been generated for delivery DR-2026-015.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:12:28.641Z"
+  },
+  {
+    "id": "N-1788117148647",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-015 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:12:28.647Z"
+  },
+  {
+    "id": "N-1788117148648",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-015 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:12:28.647Z"
+  },
+  {
+    "id": "N-1788117261251",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-016 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:21.251Z"
+  },
+  {
+    "id": "N-1788117261252",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-016 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:21.251Z"
+  },
+  {
+    "id": "N-1788117261253",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-016 was automatically created for delivery DR-2026-016.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T19:14:21.251Z"
+  },
+  {
+    "id": "N-1788117261254",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-016 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:21.251Z"
+  },
+  {
+    "id": "N-1788117286598",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-016 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:46.598Z"
+  },
+  {
+    "id": "N-1788117286599",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-016 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:46.598Z"
+  },
+  {
+    "id": "N-1788117296337",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-016 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:56.336Z"
+  },
+  {
+    "id": "N-1788117296338",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-016 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:14:56.336Z"
+  },
+  {
+    "id": "N-1788117300333",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-016 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:15:00.333Z"
+  },
+  {
+    "id": "N-1788117300334",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-016 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:15:00.333Z"
+  },
+  {
+    "id": "N-1788117421186",
+    "title": "Trip Rejected",
+    "message": "Trip TRP-2026-016 has been marked as Rejected.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:17:01.186Z"
+  },
+  {
+    "id": "N-1788117421187",
+    "title": "Delivery Rejected",
+    "message": "Your delivery via trip TRP-2026-016 has been marked as Rejected.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:17:01.186Z"
+  },
+  {
+    "id": "N-1788118337836",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-017 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T19:32:17.836Z"
+  },
+  {
+    "id": "N-1788118337837",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-017 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:32:17.836Z"
+  },
+  {
+    "id": "N-1788118337838",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-017 was automatically created for delivery DR-2026-017.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T19:32:17.836Z"
+  },
+  {
+    "id": "N-1788118337839",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-017 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:32:17.836Z"
+  },
+  {
+    "id": "N-1788118384528",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-017 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:33:04.528Z"
+  },
+  {
+    "id": "N-1788118384529",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-017 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:33:04.528Z"
+  },
+  {
+    "id": "N-1788118426796",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-017 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:33:46.795Z"
+  },
+  {
+    "id": "N-1788118426797",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-017 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:33:46.795Z"
+  },
+  {
+    "id": "N-1788118430677",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-017 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:33:50.677Z"
+  },
+  {
+    "id": "N-1788118430678",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-017 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:33:50.677Z"
+  },
+  {
+    "id": "N-1788118538824",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-017 has been generated for delivery DR-2026-017.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:35:38.822Z"
+  },
+  {
+    "id": "N-1788118538826",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-017 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:35:38.826Z"
+  },
+  {
+    "id": "N-1788118538827",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-017 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T19:35:38.826Z"
+  },
+  {
+    "id": "N-1788119226100",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-018 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T19:47:06.100Z"
+  },
+  {
+    "id": "N-1788119226101",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-018 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:47:06.100Z"
+  },
+  {
+    "id": "N-1788119226102",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-018 was automatically created for delivery DR-2026-018.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T19:47:06.100Z"
+  },
+  {
+    "id": "N-1788119226103",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-018 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:47:06.100Z"
+  },
+  {
+    "id": "N-1788119235508",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2024-004 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:47:15.508Z"
+  },
+  {
+    "id": "N-1788119235509",
+    "title": "Trip Cancelled",
+    "message": "Trip for delivery DR-2024-004 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:47:15.508Z"
+  },
+  {
+    "id": "N-1788119527620",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-018 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:52:07.620Z"
+  },
+  {
+    "id": "N-1788119527621",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-018 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:52:07.620Z"
+  },
+  {
+    "id": "N-1788119769087",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-019 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T19:56:09.087Z"
+  },
+  {
+    "id": "N-1788119769088",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-019 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:56:09.087Z"
+  },
+  {
+    "id": "N-1788119769089",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-019 was automatically created for delivery DR-2026-019.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T19:56:09.087Z"
+  },
+  {
+    "id": "N-1788119769090",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-019 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:56:09.087Z"
+  },
+  {
+    "id": "N-1788119804731",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-019 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T19:56:44.731Z"
+  },
+  {
+    "id": "N-1788119804733",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-019 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T19:56:44.731Z"
+  },
+  {
+    "id": "N-1788120139326",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-020 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T20:02:19.326Z"
+  },
+  {
+    "id": "N-1788120139327",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-020 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:02:19.326Z"
+  },
+  {
+    "id": "N-1788120139328",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-020 was automatically created for delivery DR-2026-020.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T20:02:19.326Z"
+  },
+  {
+    "id": "N-1788120139329",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-020 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T20:02:19.326Z"
+  },
+  {
+    "id": "N-1788121226143",
+    "title": "Trip Issue Reported",
+    "message": "Issue reported for trip TRP-2026-018: Traffic delay. hg",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T20:20:26.136Z"
+  },
+  {
+    "id": "N-1788121226144",
+    "title": "Delivery Issue Reported",
+    "message": "An issue was reported on your delivery via trip TRP-2026-018: Traffic delay.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:20:26.136Z"
+  },
+  {
+    "id": "N-1788121250718",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-019 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:20:50.718Z"
+  },
+  {
+    "id": "N-1788121250719",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-019 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:20:50.718Z"
+  },
+  {
+    "id": "N-1788121251543",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-019 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:20:51.543Z"
+  },
+  {
+    "id": "N-1788121251544",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-019 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:20:51.543Z"
+  },
+  {
+    "id": "N-1788121265782",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-019 has been generated for delivery DR-2026-019.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:21:05.781Z"
+  },
+  {
+    "id": "N-1788121265786",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-019 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:21:05.785Z"
+  },
+  {
+    "id": "N-1788121265787",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-019 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:21:05.785Z"
+  },
+  {
+    "id": "N-1788121304873",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-020 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:21:44.873Z"
+  },
+  {
+    "id": "N-1788121304875",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-020 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T20:21:44.873Z"
+  },
+  {
+    "id": "N-1788121371133",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-020 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:22:51.132Z"
+  },
+  {
+    "id": "N-1788121371134",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-020 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T20:22:51.132Z"
+  },
+  {
+    "id": "N-1788121821420",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-018 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:30:21.419Z"
+  },
+  {
+    "id": "N-1788121821421",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-018 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:30:21.419Z"
+  },
+  {
+    "id": "N-1788121982168",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-018 has been generated for delivery DR-2026-018.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:33:02.166Z"
+  },
+  {
+    "id": "N-1788121982172",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-018 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:33:02.172Z"
+  },
+  {
+    "id": "N-1788121982173",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-018 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:33:02.172Z"
+  },
+  {
+    "id": "N-1788121990209",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-020 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:33:10.209Z"
+  },
+  {
+    "id": "N-1788121990210",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-020 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T20:33:10.209Z"
+  },
+  {
+    "id": "N-1788121999811",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-020 has been generated for delivery DR-2026-020.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T20:33:19.809Z"
+  },
+  {
+    "id": "N-1788121999815",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-020 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:33:19.815Z"
+  },
+  {
+    "id": "N-1788121999816",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-020 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T20:33:19.815Z"
+  },
+  {
+    "id": "N-1788122685756",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-021 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T20:44:45.756Z"
+  },
+  {
+    "id": "N-1788122685757",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-021 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:44:45.756Z"
+  },
+  {
+    "id": "N-1788122685758",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-021 was automatically created for delivery DR-2026-021.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T20:44:45.756Z"
+  },
+  {
+    "id": "N-1788122685759",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-021 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:44:45.756Z"
+  },
+  {
+    "id": "N-1788122873901",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2024-001 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-305",
+    "read": false,
+    "createdAt": "2026-08-30T20:47:53.900Z"
+  },
+  {
+    "id": "N-1788123449383",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-021 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T20:57:29.382Z"
+  },
+  {
+    "id": "N-1788123449384",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-021 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T20:57:29.382Z"
+  },
+  {
+    "id": "N-1788123778584",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-021 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:02:58.583Z"
+  },
+  {
+    "id": "N-1788123778585",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-021 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T21:02:58.583Z"
+  },
+  {
+    "id": "N-1788123779752",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-021 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:02:59.752Z"
+  },
+  {
+    "id": "N-1788123779753",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-021 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T21:02:59.752Z"
+  },
+  {
+    "id": "N-1788123789699",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-021 has been generated for delivery DR-2026-021.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T21:03:09.696Z"
+  },
+  {
+    "id": "N-1788123789706",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-021 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:03:09.706Z"
+  },
+  {
+    "id": "N-1788123789707",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-021 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-08-30T21:03:09.706Z"
+  },
+  {
+    "id": "N-1788123917151",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-022 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-30T21:05:17.150Z"
+  },
+  {
+    "id": "N-1788123917152",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-022 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:05:17.150Z"
+  },
+  {
+    "id": "N-1788123917153",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-022 was automatically created for delivery DR-2026-022.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-30T21:05:17.150Z"
+  },
+  {
+    "id": "N-1788123917154",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-022 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T21:05:17.150Z"
+  },
+  {
+    "id": "N-1788124003395",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-022 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:06:43.395Z"
+  },
+  {
+    "id": "N-1788124003396",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-022 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T21:06:43.395Z"
+  },
+  {
+    "id": "N-1788124004540",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-022 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:06:44.540Z"
+  },
+  {
+    "id": "N-1788124004541",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-022 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T21:06:44.540Z"
+  },
+  {
+    "id": "N-1788124005594",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-022 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-30T21:06:45.594Z"
+  },
+  {
+    "id": "N-1788124005595",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-022 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-30T21:06:45.594Z"
+  },
+  {
+    "id": "N-1788157010197",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-023 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T06:16:50.197Z"
+  },
+  {
+    "id": "N-1788157010198",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-023 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:16:50.197Z"
+  },
+  {
+    "id": "N-1788157010199",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-023 was automatically created for delivery DR-2026-023.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.197Z"
+  },
+  {
+    "id": "N-1788157010200",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-023 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.197Z"
+  },
+  {
+    "id": "N-1788157010217",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-023 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:16:50.217Z"
+  },
+  {
+    "id": "N-1788157010218",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-023 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.217Z"
+  },
+  {
+    "id": "N-1788157010225",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-023 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:16:50.224Z"
+  },
+  {
+    "id": "N-1788157010226",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-023 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.224Z"
+  },
+  {
+    "id": "N-1788157010231",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-023 has been generated for delivery DR-2026-023.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.230Z"
+  },
+  {
+    "id": "N-1788157010233",
+    "title": "Trip payout credited",
+    "message": "You earned ₹100 for completing trip TRP-2026-023.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:16:50.235Z"
+  },
+  {
+    "id": "N-1788157010237",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-023 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:16:50.237Z"
+  },
+  {
+    "id": "N-1788157010238",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-023 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:16:50.237Z"
+  },
+  {
+    "id": "N-1788157039555",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-024 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T06:17:19.555Z"
+  },
+  {
+    "id": "N-1788157039557",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-024 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:17:19.555Z"
+  },
+  {
+    "id": "N-1788157039558",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-024 was automatically created for delivery DR-2026-024.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.555Z"
+  },
+  {
+    "id": "N-1788157039559",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-024 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.555Z"
+  },
+  {
+    "id": "N-1788157039570",
+    "title": "Trip Issue Reported",
+    "message": "Issue reported for trip TRP-2026-024: Damaged goods. 2 of 5 items damaged in transit",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.568Z"
+  },
+  {
+    "id": "N-1788157039571",
+    "title": "Delivery Issue Reported",
+    "message": "An issue was reported on your delivery via trip TRP-2026-024: Damaged goods.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.568Z"
+  },
+  {
+    "id": "N-1788157039578",
+    "title": "Delivery dispute resolved",
+    "message": "Your delivery dispute for trip TRP-2026-024 was resolved: billable amount set to ₹1,500.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.578Z"
+  },
+  {
+    "id": "N-1788157039585",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-024 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:17:19.585Z"
+  },
+  {
+    "id": "N-1788157039586",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-024 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.585Z"
+  },
+  {
+    "id": "N-1788157039591",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-024 has been generated for delivery DR-2026-024.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.590Z"
+  },
+  {
+    "id": "N-1788157039592",
+    "title": "Trip payout credited",
+    "message": "You earned ₹90 for completing trip TRP-2026-024.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:17:19.592Z"
+  },
+  {
+    "id": "N-1788157039594",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-024 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T06:17:19.594Z"
+  },
+  {
+    "id": "N-1788157039595",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-024 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T06:17:19.594Z"
+  },
+  {
+    "id": "N-1788162558706",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-025 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T07:49:18.705Z"
+  },
+  {
+    "id": "N-1788162558707",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-025 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T07:49:18.705Z"
+  },
+  {
+    "id": "N-1788162558708",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-025 was automatically created for delivery DR-2026-025.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T07:49:18.705Z"
+  },
+  {
+    "id": "N-1788162558709",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-025 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T07:49:18.705Z"
+  },
+  {
+    "id": "N-1788162558751",
+    "title": "Trip Issue Reported",
+    "message": "Issue reported for trip TRP-2026-025: Test issue. UI verification issue",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T07:49:18.747Z"
+  },
+  {
+    "id": "N-1788162558752",
+    "title": "Delivery Issue Reported",
+    "message": "An issue was reported on your delivery via trip TRP-2026-025: Test issue.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T07:49:18.747Z"
+  },
+  {
+    "id": "N-1788166528253",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-026 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.252Z"
+  },
+  {
+    "id": "N-1788166528254",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-026 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.252Z"
+  },
+  {
+    "id": "N-1788166528255",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-026 was automatically created for delivery DR-2026-026.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.252Z"
+  },
+  {
+    "id": "N-1788166528256",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-026 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.252Z"
+  },
+  {
+    "id": "N-1788166528292",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-026 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.291Z"
+  },
+  {
+    "id": "N-1788166528293",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-026 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.291Z"
+  },
+  {
+    "id": "N-1788166528312",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-026 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.312Z"
+  },
+  {
+    "id": "N-1788166528313",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-026 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.312Z"
+  },
+  {
+    "id": "N-1788166528328",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-026 has been generated for delivery DR-2026-026.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.326Z"
+  },
+  {
+    "id": "N-1788166528332",
+    "title": "Trip payout credited",
+    "message": "You earned ₹72 for completing trip TRP-2026-026.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.337Z"
+  },
+  {
+    "id": "N-1788166528341",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-026 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.341Z"
+  },
+  {
+    "id": "N-1788166528342",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-026 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.341Z"
+  },
+  {
+    "id": "N-1788166528387",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-027 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.387Z"
+  },
+  {
+    "id": "N-1788166528388",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-027 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.387Z"
+  },
+  {
+    "id": "N-1788166528389",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-027 was automatically created for delivery DR-2026-027.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.387Z"
+  },
+  {
+    "id": "N-1788166528390",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-027 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.387Z"
+  },
+  {
+    "id": "N-1788166528408",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-027 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.408Z"
+  },
+  {
+    "id": "N-1788166528409",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-027 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.408Z"
+  },
+  {
+    "id": "N-1788166528422",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-027 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.422Z"
+  },
+  {
+    "id": "N-1788166528423",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-027 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.422Z"
+  },
+  {
+    "id": "N-1788166528434",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-027 has been generated for delivery DR-2026-027.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.433Z"
+  },
+  {
+    "id": "N-1788166528437",
+    "title": "Trip payout credited",
+    "message": "You earned ₹72 for completing trip TRP-2026-027.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.437Z"
+  },
+  {
+    "id": "N-1788166528441",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-027 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.441Z"
+  },
+  {
+    "id": "N-1788166528442",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-027 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.441Z"
+  },
+  {
+    "id": "N-1788166528506",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-028 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.506Z"
+  },
+  {
+    "id": "N-1788166528507",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-028 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.506Z"
+  },
+  {
+    "id": "N-1788166528508",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-028 was automatically created for delivery DR-2026-028.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.506Z"
+  },
+  {
+    "id": "N-1788166528509",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-028 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.506Z"
+  },
+  {
+    "id": "N-1788166528527",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-028 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.527Z"
+  },
+  {
+    "id": "N-1788166528528",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-028 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.527Z"
+  },
+  {
+    "id": "N-1788166528539",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-028 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.539Z"
+  },
+  {
+    "id": "N-1788166528540",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-028 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.539Z"
+  },
+  {
+    "id": "N-1788166528549",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-028 has been generated for delivery DR-2026-028.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.548Z"
+  },
+  {
+    "id": "N-1788166528552",
+    "title": "Trip payout credited",
+    "message": "You earned ₹72 for completing trip TRP-2026-028.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.552Z"
+  },
+  {
+    "id": "N-1788166528556",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-028 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:28.556Z"
+  },
+  {
+    "id": "N-1788166528557",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-028 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:28.556Z"
+  },
+  {
+    "id": "N-1788166549564",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-029 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:49.564Z"
+  },
+  {
+    "id": "N-1788166549565",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-029 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:49.564Z"
+  },
+  {
+    "id": "N-1788166549566",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-029 was automatically created for delivery DR-2026-029.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.564Z"
+  },
+  {
+    "id": "N-1788166549567",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-029 has been created and assigned to a driver.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.564Z"
+  },
+  {
+    "id": "N-1788166549585",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-029 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:49.585Z"
+  },
+  {
+    "id": "N-1788166549586",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-029 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.585Z"
+  },
+  {
+    "id": "N-1788166549598",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-029 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:49.597Z"
+  },
+  {
+    "id": "N-1788166549599",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-029 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.597Z"
+  },
+  {
+    "id": "N-1788166549611",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-029 has been generated for delivery DR-2026-029.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.610Z"
+  },
+  {
+    "id": "N-1788166549614",
+    "title": "Trip payout credited",
+    "message": "You earned ₹72 for completing trip TRP-2026-029.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:49.614Z"
+  },
+  {
+    "id": "N-1788166549619",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-029 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T08:55:49.619Z"
+  },
+  {
+    "id": "N-1788166549620",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-029 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T08:55:49.619Z"
+  },
+  {
+    "id": "N-1788166929080",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-029 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T09:02:09.079Z"
+  },
+  {
+    "id": "N-1788166929081",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-029 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T09:02:09.079Z"
+  },
+  {
+    "id": "N-1788166929095",
+    "title": "Trip Delivered",
+    "message": "Trip TRP-2026-029 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T09:02:09.095Z"
+  },
+  {
+    "id": "N-1788166929096",
+    "title": "Delivery Delivered",
+    "message": "Your delivery via trip TRP-2026-029 has been marked as Delivered.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-08-31T09:02:09.095Z"
+  },
+  {
+    "id": "N-1788169940234",
+    "title": "Delivery Request Blocked",
+    "message": "Delivery request DR-2024-001 was blocked. Reason: Automated test block reason",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-31T09:52:20.234Z",
+    "readByUserIds": [
+      "BC-201"
+    ],
+    "unreadByUserIds": [],
+    "dismissedForUserIds": [
+      "BC-201"
+    ]
+  },
+  {
+    "id": "N-1788169940235",
+    "title": "Trip Blocked",
+    "message": "Trip for delivery DR-2024-001 was blocked. Reason: Automated test block reason",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-305",
+    "read": false,
+    "createdAt": "2026-08-31T09:52:20.234Z"
+  },
+  {
+    "id": "N-1788169953855",
+    "title": "Delivery Request Unblocked",
+    "message": "Delivery request DR-2024-001 was unblocked. Reason: Reverting automated test",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-08-31T09:52:33.855Z",
+    "dismissedForUserIds": [
+      "BC-201"
+    ]
+  },
+  {
+    "id": "N-1788169953856",
+    "title": "Trip Unblocked",
+    "message": "Trip for delivery DR-2024-001 was unblocked and is queued again. Reason: Reverting automated test",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-08-31T09:52:33.855Z"
+  },
+  {
+    "id": "N-1790451525981",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2024-001 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-302",
+    "read": false,
+    "createdAt": "2026-09-26T19:38:45.981Z"
+  },
+  {
+    "id": "N-1790452203169",
+    "title": "New delivery created",
+    "message": "Delivery DR-2026-030 has been created and directly assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": true,
+    "createdAt": "2026-09-26T19:50:03.169Z"
+  },
+  {
+    "id": "N-1790452203170",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-030 is now available in your driver dashboard.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-09-26T19:50:03.169Z"
+  },
+  {
+    "id": "N-1790452203171",
+    "title": "Trip auto-created",
+    "message": "Trip TRP-2026-030 was automatically created for delivery DR-2026-030.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-09-26T19:50:03.169Z"
+  },
+  {
+    "id": "N-1790452260416",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2026-030 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-09-26T19:51:00.416Z"
+  },
+  {
+    "id": "N-1790452374108",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2026-030 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-302",
+    "read": false,
+    "createdAt": "2026-09-26T19:52:54.108Z"
+  },
+  {
+    "id": "N-1790452484845",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2026-030 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-302",
+    "read": false,
+    "createdAt": "2026-09-26T19:54:44.845Z"
+  },
+  {
+    "id": "N-1791659609085",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-031 was requested and is waiting for manual dispatch.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-10T19:13:29.085Z"
+  },
+  {
+    "id": "N-1791659609087",
+    "title": "Dispatch required",
+    "message": "Delivery DR-2026-031 is awaiting driver assignment in trip TRP-2026-031.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-10-10T19:13:29.085Z"
+  },
+  {
+    "id": "N-1791659609088",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-031 was submitted and is waiting for fleet-manager assignment.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": true,
+    "createdAt": "2026-10-10T19:13:29.085Z"
+  },
+  {
+    "id": "N-ceb752b1-8995-433e-b085-507d657da15c",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-031 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-10T19:23:46.432Z"
+  },
+  {
+    "id": "N-1638390f-14e9-45dd-abf3-2f6337afdb14",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-031 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "read": false,
+    "createdAt": "2026-10-10T19:23:46.432Z"
+  },
+  {
+    "id": "N-0b6b75f5-7bc7-42b6-824f-388deaffe3dd",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-030 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-10T19:25:42.634Z"
+  },
+  {
+    "id": "N-8a61273f-9d65-44f3-ab5d-cae172fc8e7d",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-030 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-10T19:25:42.634Z"
+  },
+  {
+    "id": "N-1791660342635",
+    "title": "Trip Cancelled",
+    "message": "Trip for delivery DR-2026-030 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-302",
+    "read": false,
+    "createdAt": "2026-10-10T19:25:42.634Z"
+  },
+  {
+    "id": "N-1791660612528",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-022 has been generated for delivery DR-2026-022.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-10-10T19:30:12.524Z"
+  },
+  {
+    "id": "N-1791660612535",
+    "title": "Trip payout earned",
+    "message": "You earned ₹71.2 for completing trip TRP-2026-022. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-10T19:30:12.563Z"
+  },
+  {
+    "id": "N-1791660612571",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-022 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-10T19:30:12.571Z"
+  },
+  {
+    "id": "N-1791660612572",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-022 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-202",
+    "read": false,
+    "createdAt": "2026-10-10T19:30:12.571Z"
+  },
+  {
+    "id": "N-e49d5f35-71f5-451e-aedb-c9fadb5e0b86",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-022 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-10T19:30:12.571Z"
+  },
+  {
+    "id": "N-a551cacb-b5e1-49ac-8fbd-d5b4462f6b3e",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-022 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-10T19:30:12.571Z"
+  },
+  {
+    "id": "N-1791720748037",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-032 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-11T12:12:28.036Z"
+  },
+  {
+    "id": "N-1791720748039",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-032 in trip TRP-2026-032 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-11T12:12:28.036Z"
+  },
+  {
+    "id": "N-1791720748040",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-032 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-11T12:12:28.036Z"
+  },
+  {
+    "id": "N-4a1f79c3-c978-4cf1-b57a-02ee64664acc",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-032 in trip TRP-2026-032 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-11T12:12:28.036Z"
+  },
+  {
+    "id": "N-1791720772945",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-032 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-11T12:12:52.945Z"
+  },
+  {
+    "id": "N-1791720772947",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-032 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-11T12:12:52.945Z"
+  },
+  {
+    "id": "N-0f499e63-eff9-4a3c-b979-4f3877e77ef8",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-032 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-11T12:12:52.946Z"
+  },
+  {
+    "id": "N-c594b612-fac3-416a-8195-1be7505d886e",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-032 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-11T12:12:52.946Z"
+  },
+  {
+    "id": "N-1791720798682",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-032 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-11T12:13:18.682Z"
+  },
+  {
+    "id": "N-1791720798683",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-032 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-11T12:13:18.682Z"
+  },
+  {
+    "id": "N-c2fcea52-cd32-45e3-aa65-78ef0180f3db",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-032 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-11T12:13:18.682Z"
+  },
+  {
+    "id": "N-1b1cad95-b38e-43b2-a0ff-da7b31f15315",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-032 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-11T12:13:18.682Z"
+  },
+  {
+    "id": "N-1791720799510",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-032 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-11T12:13:19.510Z"
+  },
+  {
+    "id": "N-1791720799511",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-032 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-11T12:13:19.510Z"
+  },
+  {
+    "id": "N-6ddb8a97-6d09-41e4-b015-c081a9147ab5",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-032 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-11T12:13:19.510Z"
+  },
+  {
+    "id": "N-8574cefc-14c2-435f-ab37-4b5ddb6a1c99",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-032 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-11T12:13:19.510Z"
+  },
+  {
+    "id": "N-1791830441905",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-032 has been generated for delivery DR-2026-032.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-12T18:40:41.890Z"
+  },
+  {
+    "id": "N-1791830441923",
+    "title": "Trip payout earned",
+    "message": "You earned ₹66.16 for completing trip TRP-2026-032. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-12T18:40:41.938Z"
+  },
+  {
+    "id": "N-1791830441954",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-032 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-12T18:40:41.953Z"
+  },
+  {
+    "id": "N-1791830441955",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-032 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-12T18:40:41.953Z"
+  },
+  {
+    "id": "N-26ce2488-22f3-49b8-96b2-25d15ed1183c",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-032 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-12T18:40:41.955Z"
+  },
+  {
+    "id": "N-8ffdb116-a638-4df7-b25e-84d8908bc506",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-032 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-12T18:40:41.955Z"
+  },
+  {
+    "id": "N-1791830920524",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-033 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-12T18:48:40.524Z"
+  },
+  {
+    "id": "N-1791830920527",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-033 in trip TRP-2026-033 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-12T18:48:40.524Z"
+  },
+  {
+    "id": "N-1791830920528",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-033 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-12T18:48:40.524Z"
+  },
+  {
+    "id": "N-ba4aa355-7fc5-4469-a210-b2b08e03cfc6",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-033 in trip TRP-2026-033 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-12T18:48:40.524Z"
+  },
+  {
+    "id": "N-1791831216644",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-034 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-12T18:53:36.643Z"
+  },
+  {
+    "id": "N-1791831216646",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-034 in trip TRP-2026-034 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-12T18:53:36.643Z"
+  },
+  {
+    "id": "N-1791831216647",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-034 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-12T18:53:36.643Z"
+  },
+  {
+    "id": "N-84156a76-800b-4875-8067-f890f6d346f0",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-034 in trip TRP-2026-034 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-12T18:53:36.643Z"
+  },
+  {
+    "id": "N-1791917069237",
+    "title": "Trip reassigned",
+    "message": "Trip TRP-2026-034 has been reassigned to you.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-305",
+    "read": false,
+    "createdAt": "2026-10-13T18:44:29.237Z"
+  },
+  {
+    "id": "N-1791917069246",
+    "title": "Driver assigned",
+    "message": "Rahul Singh was assigned to delivery DR-2026-034.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T18:44:29.245Z"
+  },
+  {
+    "id": "N-f30e18cc-0abb-488f-8c96-f6657939b179",
+    "title": "Driver assigned",
+    "message": "Rahul Singh was assigned to trip TRP-2026-034.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T18:44:29.247Z"
+  },
+  {
+    "id": "N-58b8627b-31dc-4540-af02-47c5211639ed",
+    "title": "Driver assigned",
+    "message": "Rahul Singh was assigned to trip TRP-2026-034.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T18:44:29.247Z"
+  },
+  {
+    "id": "N-b4c31a3a-27e4-4548-82c3-60bff94288a1",
+    "title": "Customer feedback received",
+    "message": "Delivery DR-2026-018 received a 4/5 customer rating.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T18:50:44.302Z"
+  },
+  {
+    "id": "N-cc98eed8-fd79-41ad-a08c-0ee59ce7d8ed",
+    "title": "Customer feedback received",
+    "message": "Delivery DR-2026-018 received a 4/5 customer rating.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T18:50:44.302Z"
+  },
+  {
+    "id": "N-2ed630bd-705b-4794-95d2-ad0edfa2dfa0",
+    "title": "You received feedback",
+    "message": "A customer left feedback for delivery DR-2026-018. Rating: 4/5.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T18:50:44.302Z"
+  },
+  {
+    "id": "N-3b0ac71c-ccfb-409b-a1b7-b6a8ceb8457a",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-034 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:56.294Z"
+  },
+  {
+    "id": "N-950d3e0c-2178-41bc-bff3-f62bae2e8502",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-034 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:56.294Z"
+  },
+  {
+    "id": "N-1791917516294",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2026-034 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:56.294Z"
+  },
+  {
+    "id": "N-1791917516295",
+    "title": "Trip Cancelled",
+    "message": "Trip for delivery DR-2026-034 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-305",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:56.294Z"
+  },
+  {
+    "id": "N-1791917801733",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-033 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T18:56:41.733Z"
+  },
+  {
+    "id": "N-1791917801734",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T18:56:41.733Z"
+  },
+  {
+    "id": "N-06d178f7-57fe-48ac-a09b-6553d73949e4",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-033 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T18:56:41.733Z"
+  },
+  {
+    "id": "N-17f1eac2-8fdf-486b-85ba-e8d25535062b",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-033 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T18:56:41.738Z"
+  },
+  {
+    "id": "N-1791918577766",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-033 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:37.766Z"
+  },
+  {
+    "id": "N-1791918577767",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:37.766Z"
+  },
+  {
+    "id": "N-46b5f402-9d28-4ceb-88e4-bb29e635c64b",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-033 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:37.766Z"
+  },
+  {
+    "id": "N-36a4c6a1-b111-4758-9416-57735d09e1fb",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-033 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:37.766Z"
+  },
+  {
+    "id": "N-1791918593300",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-033 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:53.300Z"
+  },
+  {
+    "id": "N-1791918593301",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:53.300Z"
+  },
+  {
+    "id": "N-58f459f8-707d-4a96-823a-f33c325b5a0b",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-033 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:53.300Z"
+  },
+  {
+    "id": "N-1aff94ac-5819-408e-83e1-c255e4b11710",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-033 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:53.301Z"
+  },
+  {
+    "id": "N-1791918605746",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-033 has been generated for delivery DR-2026-033.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:05.745Z"
+  },
+  {
+    "id": "N-1791918605749",
+    "title": "Trip payout earned",
+    "message": "You earned ₹1,196.8 for completing trip TRP-2026-033. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:05.751Z"
+  },
+  {
+    "id": "N-1791918605753",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-033 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:05.753Z"
+  },
+  {
+    "id": "N-1791918605754",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:05.753Z"
+  },
+  {
+    "id": "N-4d593b42-b8c8-479e-b940-8c08be67aefd",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-033 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:05.753Z"
+  },
+  {
+    "id": "N-31ab6a09-60c3-48b6-9d4c-e1dcf30e81d9",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-033 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:05.753Z"
+  },
+  {
+    "id": "N-1791918743929",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-035 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:23.929Z"
+  },
+  {
+    "id": "N-1791918743931",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-035 in trip TRP-2026-035 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:23.929Z"
+  },
+  {
+    "id": "N-1791918743932",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-035 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:23.929Z"
+  },
+  {
+    "id": "N-ab7254cb-bb36-4b8e-86dd-85a4e78baff6",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-035 in trip TRP-2026-035 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:23.929Z"
+  },
+  {
+    "id": "N-1791918761784",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-035 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:41.784Z"
+  },
+  {
+    "id": "N-1791918761785",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-035 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:41.784Z"
+  },
+  {
+    "id": "N-0972f1aa-c93e-46da-898a-b36e58599ccf",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-035 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:41.784Z"
+  },
+  {
+    "id": "N-be8df845-231b-4317-9570-e3cae7367287",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-035 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:12:41.784Z"
+  },
+  {
+    "id": "N-1791922462117",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-036 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:22.117Z"
+  },
+  {
+    "id": "N-1791922462119",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-036 in trip TRP-2026-036 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:22.117Z"
+  },
+  {
+    "id": "N-1791922462120",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-036 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:22.117Z"
+  },
+  {
+    "id": "N-fe7f11fe-5002-4b12-97c9-96dd7f3a1564",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-036 in trip TRP-2026-036 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:22.117Z"
+  },
+  {
+    "id": "N-1791922498088",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-035 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:58.087Z"
+  },
+  {
+    "id": "N-1791922498089",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-035 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:58.087Z"
+  },
+  {
+    "id": "N-2b864782-8f2f-49d1-a3d1-1d1e5052181e",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-035 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:58.088Z"
+  },
+  {
+    "id": "N-6213eeb7-c500-4a27-89c7-60e0e1372ac5",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-035 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:14:58.088Z"
+  },
+  {
+    "id": "N-1791922500133",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-035 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:00.133Z"
+  },
+  {
+    "id": "N-1791922500134",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-035 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:00.133Z"
+  },
+  {
+    "id": "N-32bc1261-c18c-489c-b9b4-98336db454ff",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-035 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:00.133Z"
+  },
+  {
+    "id": "N-96abb5b2-cda9-4c23-a2c9-e57c1d770cb6",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-035 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:00.133Z"
+  },
+  {
+    "id": "N-1791922512300",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-035 has been generated for delivery DR-2026-035.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:12.227Z"
+  },
+  {
+    "id": "N-1791922512349",
+    "title": "Trip payout earned",
+    "message": "You earned ₹2,641.6 for completing trip TRP-2026-035. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:12.350Z"
+  },
+  {
+    "id": "N-1791922512418",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-035 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:12.418Z"
+  },
+  {
+    "id": "N-1791922512419",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-035 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:12.418Z"
+  },
+  {
+    "id": "N-564452d4-b364-41ab-b69e-64cd6a5db536",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-035 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:12.418Z"
+  },
+  {
+    "id": "N-d4a4ead7-b09c-4dd1-9188-3c61d651ec01",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-035 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:12.418Z"
+  },
+  {
+    "id": "N-1791922541302",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-036 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:41.302Z"
+  },
+  {
+    "id": "N-1791922541303",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-036 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:41.302Z"
+  },
+  {
+    "id": "N-a51c6523-b0ea-4799-b7a3-6650fcb363f3",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-036 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:41.302Z"
+  },
+  {
+    "id": "N-6bd94935-5c10-4f17-a52d-bad9e901f3a9",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-036 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:41.302Z"
+  },
+  {
+    "id": "N-1791922543635",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-036 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:43.635Z"
+  },
+  {
+    "id": "N-1791922543636",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-036 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:43.635Z"
+  },
+  {
+    "id": "N-5b8e93ec-eef3-4ab2-8ead-98a97acc03d6",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-036 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:43.635Z"
+  },
+  {
+    "id": "N-1c89fbf7-ea34-4cba-a78f-89be3b86e68f",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-036 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:43.635Z"
+  },
+  {
+    "id": "N-1791922545310",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-036 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:45.310Z"
+  },
+  {
+    "id": "N-1791922545311",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-036 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:45.310Z"
+  },
+  {
+    "id": "N-520a8e18-ecbc-4ea0-8d9a-f302a7bc05f4",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-036 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:45.310Z"
+  },
+  {
+    "id": "N-aa2bb6c9-49cb-4535-800f-12b07b627e4e",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-036 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:45.310Z"
+  },
+  {
+    "id": "N-1791922556746",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-036 has been generated for delivery DR-2026-036.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:56.742Z"
+  },
+  {
+    "id": "N-1791922556831",
+    "title": "Trip payout earned",
+    "message": "You earned ₹172 for completing trip TRP-2026-036. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:56.831Z"
+  },
+  {
+    "id": "N-1791922556890",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-036 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:56.890Z"
+  },
+  {
+    "id": "N-1791922556891",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-036 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:56.890Z"
+  },
+  {
+    "id": "N-d832d4d4-c3d4-45ab-839e-7d3a0659cbbc",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-036 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:56.890Z"
+  },
+  {
+    "id": "N-00130284-1649-43e2-aa0c-e048c82c7b0a",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-036 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:15:56.890Z"
+  },
+  {
+    "id": "N-1791925827926",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-037 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:27.926Z"
+  },
+  {
+    "id": "N-1791925827928",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-037 in trip TRP-2026-037 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:27.926Z"
+  },
+  {
+    "id": "N-1791925827929",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-037 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:27.926Z"
+  },
+  {
+    "id": "N-1c5f2b4e-6801-4624-a028-704b05827d2a",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-037 in trip TRP-2026-037 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:27.926Z"
+  },
+  {
+    "id": "N-1791925847856",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-037 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:47.856Z"
+  },
+  {
+    "id": "N-1791925847857",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-037 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:47.856Z"
+  },
+  {
+    "id": "N-3813fe9b-687d-4cb1-9ea5-c993eee3d8b9",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-037 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:47.856Z"
+  },
+  {
+    "id": "N-4af99d96-0a9b-454e-9f64-8c77c06b2e27",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-037 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T21:10:47.856Z"
+  },
+  {
+    "id": "N-1791926058028",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-037 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T21:14:18.028Z"
+  },
+  {
+    "id": "N-1791926058029",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-037 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T21:14:18.028Z"
+  },
+  {
+    "id": "N-6e56ae11-e4f4-4efc-b29b-ef3037760f69",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-037 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T21:14:18.028Z"
+  },
+  {
+    "id": "N-62ab8368-3eb0-435b-961e-66a93b4e035b",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-037 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T21:14:18.028Z"
+  },
+  {
+    "id": "N-2773d2d2-70cd-45fe-8d16-455f598d1e69",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-034 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:49.302Z"
+  },
+  {
+    "id": "N-49e44d82-f798-4b90-9627-f71053a99360",
+    "title": "Delivery cancelled",
+    "message": "Delivery DR-2026-034 was cancelled. Cancelled by business client",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:49.302Z"
+  },
+  {
+    "id": "N-1791917509302",
+    "title": "Delivery Cancelled",
+    "message": "Delivery DR-2026-034 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T18:51:49.302Z"
+  },
+  {
+    "id": "N-1791917509303",
+    "title": "Trip Cancelled",
+    "message": "Trip for delivery DR-2026-034 was cancelled. Reason: Cancelled by business client",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-13T18:51:49.302Z"
+  },
+  {
+    "id": "N-1791917865164",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-033 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-13T18:57:45.163Z"
+  },
+  {
+    "id": "N-1791917865165",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T18:57:45.163Z"
+  },
+  {
+    "id": "N-111aaa83-5888-41d4-aa76-fed95af977f7",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-033 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T18:57:45.164Z"
+  },
+  {
+    "id": "N-21471400-238d-4dd8-a267-a5b6f7e4bd07",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-033 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T18:57:45.164Z"
+  },
+  {
+    "id": "N-1791918062574",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-033 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-13T19:01:02.574Z"
+  },
+  {
+    "id": "N-1791918062575",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:01:02.574Z"
+  },
+  {
+    "id": "N-af323369-6aaf-40f0-9384-3b4707b9377e",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-033 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:01:02.575Z"
+  },
+  {
+    "id": "N-9388162d-0221-4241-b9e3-aed8d8c3ca63",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-033 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:01:02.575Z"
+  },
+  {
+    "id": "N-1791918573586",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-033 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-13T19:09:33.586Z"
+  },
+  {
+    "id": "N-1791918573587",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:33.586Z"
+  },
+  {
+    "id": "N-1fb2b3e5-b89c-4317-a4f4-998bfa5d0945",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-033 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:33.586Z"
+  },
+  {
+    "id": "N-034faf7b-a9d7-46e8-8aaa-67ae6acc60de",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-033 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:09:33.586Z"
+  },
+  {
+    "id": "N-1791918616000",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-033 has been generated for delivery DR-2026-033.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:15.995Z"
+  },
+  {
+    "id": "N-1791918616009",
+    "title": "Trip payout earned",
+    "message": "You earned ₹1,196.8 for completing trip TRP-2026-033. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-13T19:10:16.019Z"
+  },
+  {
+    "id": "N-1791918616033",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-033 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": true,
+    "createdAt": "2026-10-13T19:10:16.032Z"
+  },
+  {
+    "id": "N-1791918616034",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-033 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:16.032Z"
+  },
+  {
+    "id": "N-510109e1-5ec4-4d59-82d6-61e2b06eae6f",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-033 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:16.033Z"
+  },
+  {
+    "id": "N-533e6484-5637-4511-af1f-0683d09f22f5",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-033 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T19:10:16.033Z"
+  },
+  {
+    "id": "N-097a01a5-7995-4643-8b13-07f57af6ff0d",
+    "title": "Delivery blocked",
+    "message": "Delivery DR-2024-001 was blocked. 4klerjt",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:18.761Z"
+  },
+  {
+    "id": "N-c9a6b5cc-8806-4546-9142-3b1a6f3f5797",
+    "title": "Delivery blocked",
+    "message": "Delivery DR-2024-001 was blocked. 4klerjt",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:18.761Z"
+  },
+  {
+    "id": "N-1791922638761",
+    "title": "Delivery Request Blocked",
+    "message": "Delivery request DR-2024-001 was blocked. Reason: 4klerjt",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:18.761Z"
+  },
+  {
+    "id": "N-1791922638762",
+    "title": "Trip Blocked",
+    "message": "Trip for delivery DR-2024-001 was blocked. Reason: 4klerjt",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:18.761Z"
+  },
+  {
+    "id": "N-937ddd44-9347-4e87-b552-e7b6f41b3f0f",
+    "title": "Delivery unblocked",
+    "message": "Delivery DR-2024-001 is available for dispatch again. jkh",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:24.321Z"
+  },
+  {
+    "id": "N-afff2d5d-2773-4098-8e07-631694b3a461",
+    "title": "Delivery unblocked",
+    "message": "Delivery DR-2024-001 is available for dispatch again. jkh",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:24.321Z"
+  },
+  {
+    "id": "N-1791922644321",
+    "title": "Delivery Request Unblocked",
+    "message": "Delivery request DR-2024-001 was unblocked. Reason: jkh",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:24.321Z"
+  },
+  {
+    "id": "N-1791922644322",
+    "title": "Trip Unblocked",
+    "message": "Trip for delivery DR-2024-001 was unblocked and requires acceptance again. Reason: jkh",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-13T20:17:24.321Z"
+  },
+  {
+    "id": "N-8edea6c1-e78e-4a42-aed0-f3afb1784fbb",
+    "title": "Feedback submitted",
+    "message": "Your 3/5 feedback for delivery DR-2026-003 was shared with the delivery team.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-14T05:05:47.070Z"
+  },
+  {
+    "id": "N-b57066e4-c63d-4587-a1a7-14619a1862db",
+    "title": "Customer feedback received",
+    "message": "Delivery DR-2026-003 received a 3/5 customer rating.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-14T05:05:47.070Z"
+  },
+  {
+    "id": "N-a42818af-e7f1-4d0b-8d5c-34bb367d3c43",
+    "title": "Customer feedback received",
+    "message": "Delivery DR-2026-003 received a 3/5 customer rating.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-14T05:05:47.070Z"
+  },
+  {
+    "id": "N-55101882-e350-48b7-8043-4761021edfd1",
+    "title": "You received feedback",
+    "message": "A customer left feedback for delivery DR-2026-003. Rating: 3/5.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-302",
+    "read": false,
+    "createdAt": "2026-10-14T05:05:47.070Z"
+  },
+  {
+    "id": "N-1792115163011",
+    "title": "New delivery request",
+    "message": "Delivery DR-2026-038 was automatically assigned to Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:03.011Z"
+  },
+  {
+    "id": "N-1792115163013",
+    "title": "Delivery assigned automatically",
+    "message": "Delivery DR-2026-038 in trip TRP-2026-038 is assigned to Raghav Reddy. You can change the driver.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:03.011Z"
+  },
+  {
+    "id": "N-1792115163014",
+    "title": "Delivery request created",
+    "message": "Your delivery DR-2026-038 was assigned to Raghav Reddy and is awaiting driver acceptance.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:03.011Z"
+  },
+  {
+    "id": "N-3bd67988-4b1d-4a50-a5a7-34ea3f59e575",
+    "title": "New delivery assigned",
+    "message": "Delivery DR-2026-038 in trip TRP-2026-038 was assigned to you. Accept it when you are ready.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:03.011Z"
+  },
+  {
+    "id": "N-1792115218523",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-037 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:58.522Z"
+  },
+  {
+    "id": "N-ee3bf695-5346-43a0-8fe2-0fc737547f38",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-037 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:58.523Z"
+  },
+  {
+    "id": "N-1eb1038d-e234-4d13-b44b-2d6563951278",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-037 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:46:58.523Z"
+  },
+  {
+    "id": "N-1792115226556",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-037 has been generated for delivery DR-2026-037.",
+    "time": "Just now",
+    "to": "business-client",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:06.546Z"
+  },
+  {
+    "id": "N-1792115226583",
+    "title": "Trip payout earned",
+    "message": "You earned ₹200 for completing trip TRP-2026-037. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:06.597Z"
+  },
+  {
+    "id": "N-1792115226617",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-037 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:06.616Z"
+  },
+  {
+    "id": "N-8573b6f6-a7af-4b5c-9e26-71f477c51e7e",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-037 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:06.617Z"
+  },
+  {
+    "id": "N-cd872927-ef4c-4a0d-9654-1c48f7047661",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-037 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:06.617Z"
+  },
+  {
+    "id": "N-1792115230732",
+    "title": "Trip Accepted",
+    "message": "Trip TRP-2026-038 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:10.732Z"
+  },
+  {
+    "id": "N-1792115230733",
+    "title": "Delivery Accepted",
+    "message": "Your delivery via trip TRP-2026-038 has been marked as Accepted.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:10.732Z"
+  },
+  {
+    "id": "N-f4bfa5b4-657a-4495-b90e-7b1d2f8f0f10",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-038 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:10.732Z"
+  },
+  {
+    "id": "N-4951c51f-adcd-4a30-8c39-a6a0948f2990",
+    "title": "Delivery Accepted",
+    "message": "Trip TRP-2026-038 was marked as Accepted by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:10.732Z"
+  },
+  {
+    "id": "N-1792115243144",
+    "title": "Trip Picked Up",
+    "message": "Trip TRP-2026-038 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:23.144Z"
+  },
+  {
+    "id": "N-1792115243145",
+    "title": "Delivery Picked Up",
+    "message": "Your delivery via trip TRP-2026-038 has been marked as Picked Up.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:23.144Z"
+  },
+  {
+    "id": "N-14f4eae5-76b7-4894-b7d5-fbf477c0cafe",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-038 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:23.144Z"
+  },
+  {
+    "id": "N-16191f6f-69eb-4879-981f-4dc6e8c2a42a",
+    "title": "Delivery Picked Up",
+    "message": "Trip TRP-2026-038 was marked as Picked Up by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:23.144Z"
+  },
+  {
+    "id": "N-1792115245653",
+    "title": "Trip In Transit",
+    "message": "Trip TRP-2026-038 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:25.653Z"
+  },
+  {
+    "id": "N-1792115245654",
+    "title": "Delivery In Transit",
+    "message": "Your delivery via trip TRP-2026-038 has been marked as In Transit.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:25.653Z"
+  },
+  {
+    "id": "N-376232f0-ba62-4d07-a7ca-d49386aed863",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-038 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:25.653Z"
+  },
+  {
+    "id": "N-7fb1f588-4b07-45bf-b4af-800d53c5722f",
+    "title": "Delivery In Transit",
+    "message": "Trip TRP-2026-038 was marked as In Transit by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:25.653Z"
+  },
+  {
+    "id": "N-1792115255169",
+    "title": "Invoice generated",
+    "message": "Invoice INV-DR-2026-038 has been generated for delivery DR-2026-038.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:35.162Z"
+  },
+  {
+    "id": "N-1792115255183",
+    "title": "Trip payout earned",
+    "message": "You earned ₹65.6 for completing trip TRP-2026-038. It will be approved after customer payment is verified.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:35.183Z"
+  },
+  {
+    "id": "N-1792115255196",
+    "title": "Trip Completed",
+    "message": "Trip TRP-2026-038 has been marked as Completed.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:35.196Z"
+  },
+  {
+    "id": "N-1792115255197",
+    "title": "Delivery Completed",
+    "message": "Your delivery via trip TRP-2026-038 has been marked as Completed.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:35.196Z"
+  },
+  {
+    "id": "N-370b6d12-cc0a-45ec-bb41-2f7435ae339f",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-038 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:35.196Z"
+  },
+  {
+    "id": "N-73c4d4cf-9581-42a7-8b51-5a0ba3b5c23a",
+    "title": "Delivery Completed",
+    "message": "Trip TRP-2026-038 was marked as Completed by Raghav Reddy.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:47:35.196Z"
+  },
+  {
+    "id": "N-ab4802f9-206d-428e-805e-344e88219a4a",
+    "title": "Feedback submitted",
+    "message": "Your 5/5 feedback for delivery DR-2026-038 was shared with the delivery team.",
+    "time": "Just now",
+    "to": "business-client",
+    "toUserId": "BC-201",
+    "read": false,
+    "createdAt": "2026-10-16T01:48:09.893Z"
+  },
+  {
+    "id": "N-b1f2d991-a00d-4949-8aa9-0d9986e31035",
+    "title": "Customer feedback received",
+    "message": "Delivery DR-2026-038 received a 5/5 customer rating.",
+    "time": "Just now",
+    "to": "fleet-manager",
+    "toUserId": "FM-101",
+    "read": false,
+    "createdAt": "2026-10-16T01:48:09.893Z"
+  },
+  {
+    "id": "N-588ab880-3ec4-41a7-9e5d-a37d0e3fc104",
+    "title": "Customer feedback received",
+    "message": "Delivery DR-2026-038 received a 5/5 customer rating.",
+    "time": "Just now",
+    "to": "superuser",
+    "read": false,
+    "createdAt": "2026-10-16T01:48:09.893Z"
+  },
+  {
+    "id": "N-c6b0caca-a14d-4e30-862d-8ad8bfbb36c9",
+    "title": "You received feedback",
+    "message": "A customer left feedback for delivery DR-2026-038. Rating: 5/5.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:48:09.893Z"
+  },
+  {
+    "id": "N-1792115393340",
+    "title": "Payout approved",
+    "message": "Your ₹65.6 payout for trip TRP-2026-038 is approved for payment.",
+    "time": "Just now",
+    "to": "driver",
+    "toUserId": "DR-301",
+    "read": false,
+    "createdAt": "2026-10-16T01:49:53.332Z"
+  }
+]
