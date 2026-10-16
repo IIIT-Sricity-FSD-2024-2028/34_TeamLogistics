@@ -73,22 +73,9 @@ npm install
 
 ## Running the Project
 
-### Recommended: Start Everything Together
+### Start the Backend
 
-From the frontend directory, one command starts the backend, waits for port 3001
-to be ready, and then starts Vite:
-
-```bash
-cd front-end-react
-npm run dev
-```
-
-If the backend is already running, the command reuses it instead of starting a
-duplicate process. Stop both managed services together with `Ctrl+C`.
-
-### Manual: Start in Separate Terminals
-
-Start the backend in the first terminal:
+Start only the backend in the first terminal:
 
 ```bash
 cd backend
@@ -101,11 +88,13 @@ The backend runs at:
 http://localhost:3001
 ```
 
+### Start the Frontend
+
 Open another terminal and start only the frontend:
 
 ```bash
 cd front-end-react
-npm run dev:frontend
+npm run dev
 ```
 
 Open the URL displayed by Vite, normally:

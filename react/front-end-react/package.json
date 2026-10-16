@@ -4,8 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "node dev.mjs",
-    "dev:frontend": "vite",
+    "dev": "vite",
     "build": "vite build",
     "test": "node --test test/*.test.js",
     "preview": "vite preview"
