@@ -4,7 +4,7 @@
 .bc-active-page .bc-search-dark{height:42px;max-width:360px;border-radius:10px;padding:0 14px}
 .bc-active-page .bc-search-dark input{font-size:13px}
 .bc-active-page .delivery-list{gap:12px}
-.bc-active-page .delivery-item{grid-template-columns:150px minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr) 100px 240px;gap:16px;padding:20px;border-radius:14px;min-height:116px}
+.bc-active-page .delivery-item{grid-template-columns:140px minmax(0,1fr) minmax(0,1fr) minmax(0,.8fr) 90px 110px 230px;gap:16px;padding:20px;border-radius:14px;min-height:116px}
 .bc-active-page .delivery-item>div{min-width:0;overflow-wrap:anywhere}
 .bc-active-page .delivery-id{font-size:18px;line-height:1.35;font-weight:700;margin-bottom:10px}
 .bc-active-page .pill{font-size:10px;line-height:1.3;padding:5px 9px}

@@ -6,6 +6,7 @@ import { statusClass, Icon } from '../../components/Icon';
 import Modal from '../../components/Modal';
 import { useLiveSync } from '../../hooks/useLiveSync';
 import { matchesFilter, matchesSearchFields, uniqueFilterOptions } from '../../utils/search';
+import { formatDeliveryPrice } from '../../utils/deliveryPricing';
 
 function RequestDetailModal({ requestId, onClose }) {
   const [r, setR] = useState(null);
@@ -25,6 +26,8 @@ function RequestDetailModal({ requestId, onClose }) {
           type: raw.type || 'Standard',
           requestTime: raw.requestTime || '--',
           status: raw.status || 'Pending',
+          pricing: raw.pricing,
+          amount: raw.amount,
         });
       } catch {
         setFailed(true);
@@ -52,6 +55,7 @@ function RequestDetailModal({ requestId, onClose }) {
               <div className="detail-block full"><div className="detail-label">Package Details</div><div className="detail-main">{Icon.package}{r.package}</div></div>
               <div className="detail-block"><div className="detail-label">Request Time</div><div className="detail-main">{Icon.calendar}{r.requestTime}</div></div>
               <div className="detail-block"><div className="detail-label">Current Status</div><div className="detail-main">{Icon.map}<span>{r.status}</span></div></div>
+              <div className="detail-block"><div className="detail-label">Delivery Price</div><div className="detail-main">{formatDeliveryPrice(r)}</div></div>
             </>
           )}
         </div>
@@ -184,19 +188,20 @@ export default function SuDeliveryRequests() {
             <th>Pickup</th>
             <th>Drop Address</th>
             <th>Type</th>
+            <th>Price</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {loading && (
-            <tr><td colSpan={7} style={{ textAlign: 'center', color: '#b9b9b9', padding: 18 }}>Loading deliveries...</td></tr>
+            <tr><td colSpan={8} style={{ textAlign: 'center', color: '#b9b9b9', padding: 18 }}>Loading deliveries...</td></tr>
           )}
           {!loading && failed && (
-            <tr><td colSpan={7} style={{ textAlign: 'center', color: '#ff6b6b', padding: 18 }}>Failed to load deliveries.</td></tr>
+            <tr><td colSpan={8} style={{ textAlign: 'center', color: '#ff6b6b', padding: 18 }}>Failed to load deliveries.</td></tr>
           )}
           {!loading && !failed && filtered.length === 0 && (
-            <tr><td colSpan={7} style={{ textAlign: 'center', color: '#b9b9b9', padding: 18 }}>{search.trim() || typeFilter || statusFilter ? 'No delivery requests match the selected search and filters.' : 'No delivery requests found.'}</td></tr>
+            <tr><td colSpan={8} style={{ textAlign: 'center', color: '#b9b9b9', padding: 18 }}>{search.trim() || typeFilter || statusFilter ? 'No delivery requests match the selected search and filters.' : 'No delivery requests found.'}</td></tr>
           )}
           {!loading &&
             !failed &&
@@ -209,6 +214,7 @@ export default function SuDeliveryRequests() {
                   <td>{r.pickup || '-'}</td>
                   <td>{r.dropoff || '-'}</td>
                   <td>{r.type || '-'}</td>
+                  <td>{formatDeliveryPrice(r)}</td>
                   <td><span className={`status-pill ${statusClass(r.status)}`}>{r.status || '-'}</span></td>
                   <td>
                     <div className="action-menu-wrap" onClick={(e) => e.stopPropagation()}>

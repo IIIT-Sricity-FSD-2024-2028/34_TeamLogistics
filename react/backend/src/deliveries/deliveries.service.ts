@@ -4,12 +4,38 @@ import {
   DeliveryRequest,
   Trip,
 } from '../data-store/data-store.service';
-import { CreateDeliveryDto, PACKAGE_TYPES } from './dto/delivery.dto';
+import { CreateDeliveryDto, DeliveryQuoteDto, PACKAGE_TYPES } from './dto/delivery.dto';
 import { randomUUID } from 'crypto';
+import { PayoutsService } from '../payouts/payouts.service';
+import { calculateDeliveryPricing, DeliveryPricing } from '../common/delivery-pricing';
 
 @Injectable()
 export class DeliveriesService {
-  constructor(private readonly store: DataStoreService) {}
+  constructor(
+    private readonly store: DataStoreService,
+    private readonly payoutsService: PayoutsService,
+  ) {}
+
+  private findDefaultDriver() {
+    const defaultDriverName = process.env.DEFAULT_DELIVERY_DRIVER || 'Raghav Reddy';
+    const driver = this.store.drivers.find((item) =>
+      item.name.trim().toLowerCase() === defaultDriverName.trim().toLowerCase() &&
+      !/suspended|rejected|inactive|blocked|document review/i.test(item.status || ''),
+    );
+    const account = driver && this.store.users.find((user) =>
+      user.role === 'driver' && (user.id === driver.id ||
+        user.name.trim().toLowerCase() === driver.name.trim().toLowerCase()) &&
+      !/suspended|rejected|inactive|blocked|pending approval/i.test(user.status || ''),
+    );
+    return account ? driver : undefined;
+  }
+
+  quote(dto: DeliveryQuoteDto): DeliveryPricing {
+    const driver = this.findDefaultDriver();
+    const fleetManagerId = this.payoutsService.findFleetManagerIdForDriverName(driver?.name || '');
+    const rateCard = this.payoutsService.getEffectiveCustomerRateCard(fleetManagerId);
+    return calculateDeliveryPricing(dto, rateCard);
+  }
 
   private normalizeClientName(value: unknown): string {
     return String(value || '')
@@ -486,6 +512,9 @@ export class DeliveriesService {
       (tripData as any).packageDimensions = (delivery as any).packageDimensions;
     }
 
+    (tripData as any).pricing = (delivery as any).pricing;
+    (tripData as any).amount = (delivery as any).amount;
+
     (tripData as any).weight =
       (delivery as any).weight ||
       (delivery as any).estimatedWeight ||
@@ -552,20 +581,19 @@ export class DeliveriesService {
       ...(requestingUser?.phone ? { contact: requestingUser.phone } : {}),
     });
     const createdAt = new Date().toISOString();
-    const defaultDriverName = process.env.DEFAULT_DELIVERY_DRIVER || 'Raghav Reddy';
-    const defaultDriver = this.store.drivers.find((driver) =>
-      driver.name.trim().toLowerCase() === defaultDriverName.trim().toLowerCase() &&
-      !/suspended|rejected|inactive|blocked|document review/i.test(driver.status || ''),
-    );
-    const defaultDriverAccount = defaultDriver && this.store.users.find((user) =>
-      user.role === 'driver' && (user.id === defaultDriver.id ||
-        user.name.trim().toLowerCase() === defaultDriver.name.trim().toLowerCase()) &&
-      !/suspended|rejected|inactive|blocked|pending approval/i.test(user.status || ''),
-    );
     // Assigned means queued for this driver, not accepted or picked up.
     // A busy driver can see the next job, but cannot accept it until the
     // current active delivery is finished. Fleet managers can reassign it.
-    const assignedDriver = defaultDriverAccount ? defaultDriver : undefined;
+    const assignedDriver = this.findDefaultDriver();
+    const assignedDriverAccount = assignedDriver && this.store.users.find((user) =>
+      user.role === 'driver' && (user.id === assignedDriver.id ||
+        user.name.trim().toLowerCase() === assignedDriver.name.trim().toLowerCase()),
+    );
+    const pricing = this.quote({
+      packageDimensions: normalized.packageDimensions,
+      weight: Number(normalized.weight),
+      type: normalized.type,
+    });
 
     const delivery: DeliveryRequest = {
       id,
@@ -590,6 +618,8 @@ export class DeliveriesService {
 
       driver: assignedDriver?.name || '',
       preferredDeliveryAt: normalized.preferredDeliveryAt || undefined,
+      amount: pricing.total,
+      pricing,
     } as DeliveryRequest;
 
     (delivery as any).client = normalized.customer;
@@ -685,7 +715,7 @@ export class DeliveriesService {
       this.store.notifications.push({
         id: `N-${randomUUID()}`, title: 'New delivery assigned',
         message: `Delivery ${id} in trip ${trip.id} was assigned to you. Accept it when you are ready.`,
-        time: 'Just now', to: 'driver', toUserId: defaultDriverAccount?.id,
+        time: 'Just now', to: 'driver', toUserId: assignedDriverAccount?.id,
         read: false, createdAt: now,
       });
     }

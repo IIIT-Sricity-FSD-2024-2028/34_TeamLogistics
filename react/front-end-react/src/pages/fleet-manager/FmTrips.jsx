@@ -6,6 +6,7 @@ import { useToast } from '../../hooks/useToast';
 import { canonicalTripStatus, matchesFilter, matchesSearchFields, pillClass, uniqueFilterOptions } from './fmUtils';
 import ActionMenu from './ActionMenu';
 import { useLiveSync } from '../../hooks/useLiveSync';
+import { formatDeliveryPrice } from '../../utils/deliveryPricing';
 
 export default function FmTrips() {
   usePageHeader('Trip Management', 'Monitor and manage all fleet trips');
@@ -123,6 +124,7 @@ export default function FmTrips() {
               <th>Route</th>
               <th>Start Time</th>
               <th>Distance</th>
+              <th>Price</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -130,19 +132,19 @@ export default function FmTrips() {
           <tbody>
             {error ? (
               <tr>
-                <td colSpan={8} style={{ textAlign: 'center', color: '#ff8d8d', padding: 18 }}>
+                <td colSpan={9} style={{ textAlign: 'center', color: '#ff8d8d', padding: 18 }}>
                   Failed to load trips.
                 </td>
               </tr>
             ) : rows === null ? (
               <tr>
-                <td colSpan={8} style={{ textAlign: 'center', color: '#888', padding: 18 }}>
+                <td colSpan={9} style={{ textAlign: 'center', color: '#888', padding: 18 }}>
                   Loading trips...
                 </td>
               </tr>
             ) : filteredRows.length === 0 ? (
               <tr>
-                <td colSpan={8} style={{ textAlign: 'center', color: '#888', padding: 18 }}>
+                <td colSpan={9} style={{ textAlign: 'center', color: '#888', padding: 18 }}>
                   {search.trim() || driverFilter || vehicleFilter || statusFilter ? 'No trips match the selected search and filters.' : 'No trips found.'}
                 </td>
               </tr>
@@ -157,6 +159,7 @@ export default function FmTrips() {
                   </td>
                   <td>{t.startTime || '--'}</td>
                   <td className="em">{t.distance || '--'}</td>
+                  <td className="em">{formatDeliveryPrice(t)}</td>
                   <td>
                     <span className={`pill ${pillClass(t.status)}`}>{t.status || '--'}</span>
                   </td>

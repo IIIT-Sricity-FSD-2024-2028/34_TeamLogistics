@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Deliveries, Documents, Users } from '../../api/namespaces';
 import { getSession } from '../../api/client';
@@ -32,6 +32,49 @@ export default function BcCreateDelivery() {
   const [errors, setErrors] = useState({});
   const [toast, setToast] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [quote, setQuote] = useState(null);
+  const [quoteStatus, setQuoteStatus] = useState('idle');
+
+  useEffect(() => {
+    const length = Number(pkgLength);
+    const width = Number(pkgWidth);
+    const height = Number(pkgHeight);
+    const weight = Number(pkgWeight);
+    const valid = [length, width, height, weight].every((value) => Number.isFinite(value) && value > 0);
+
+    if (!valid) {
+      setQuote(null);
+      setQuoteStatus('idle');
+      return undefined;
+    }
+
+    let cancelled = false;
+    setQuoteStatus('loading');
+    const timer = setTimeout(async () => {
+      try {
+        const result = await Deliveries.quote({
+          packageDimensions: { length, width, height, unit: 'cm' },
+          weight,
+          type: deliveryType === 'express' ? 'Express' : 'Standard',
+        });
+        if (!cancelled) {
+          setQuote(result);
+          setQuoteStatus('ready');
+        }
+      } catch (error) {
+        console.error('Failed to calculate delivery quote:', error);
+        if (!cancelled) {
+          setQuote(null);
+          setQuoteStatus('error');
+        }
+      }
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [deliveryType, pkgLength, pkgWidth, pkgHeight, pkgWeight]);
 
   function showToast(message) {
     setToast(message);
@@ -169,7 +212,7 @@ export default function BcCreateDelivery() {
               Standard
             </div>
             <div>Next-day delivery</div>
-            <div className="option-price">₹40</div>
+            <div className="option-price">Calculated from package</div>
           </div>
 
           <div className={`option-card${deliveryType === 'express' ? ' selected' : ''}`} onClick={() => setDeliveryType('express')}>
@@ -180,7 +223,7 @@ export default function BcCreateDelivery() {
               Express
             </div>
             <div>Same-day delivery</div>
-            <div className="option-price">₹80</div>
+            <div className="option-price">1.5× standard rate</div>
           </div>
         </div>
 
@@ -306,6 +349,25 @@ export default function BcCreateDelivery() {
         </div>
         {errors.pkgWeight && <div className="inline-error" style={{ color: '#ff6b6b', fontSize: 13, marginTop: 6 }}>{errors.pkgWeight}</div>}
 
+        <div className="delivery-quote" aria-live="polite">
+          <div>
+            <span>Estimated delivery price</span>
+            <small>Uses the greater of actual and volumetric weight</small>
+          </div>
+          <strong>
+            {quoteStatus === 'loading' && 'Calculating…'}
+            {quoteStatus === 'error' && 'Available after submission'}
+            {quoteStatus === 'idle' && 'Enter dimensions and weight'}
+            {quoteStatus === 'ready' && `₹${Number(quote.total).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          </strong>
+          {quoteStatus === 'ready' && (
+            <p>
+              Chargeable weight: {quote.chargeableWeightKg} kg
+              {quote.volumetricWeightKg > quote.actualWeightKg ? ' (volumetric)' : ' (actual)'}
+            </p>
+          )}
+        </div>
+
         <style>{`
           .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
           .dim-label { display: block; font-size: 0.82rem; color: rgba(255,255,255,.55); margin-bottom: 6px; }
@@ -316,6 +378,12 @@ export default function BcCreateDelivery() {
             font-size: 0.82rem; color: rgba(255,255,255,.4); pointer-events: none;
           }
           .date-time-input { color-scheme: dark; }
+          .delivery-quote { margin: 18px 0 4px; padding: 16px 18px; border: 1px solid rgba(255,212,0,.35); border-radius: 14px; background: rgba(255,212,0,.07); display: grid; grid-template-columns: 1fr auto; gap: 6px 18px; align-items: center; }
+          .delivery-quote span, .delivery-quote small { display: block; }
+          .delivery-quote span { color: #fff; font-weight: 800; }
+          .delivery-quote small, .delivery-quote p { color: rgba(255,255,255,.58); font-size: 12px; }
+          .delivery-quote strong { color: #ffd400; font-size: 22px; text-align: right; }
+          .delivery-quote p { grid-column: 1 / -1; margin: 0; }
           .date-time-input::-webkit-calendar-picker-indicator {
             filter: brightness(0) invert(1);
             opacity: 1;

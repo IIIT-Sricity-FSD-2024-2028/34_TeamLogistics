@@ -5,6 +5,7 @@ import { useSession } from '../../auth/SessionContext';
 import { usePageHeader } from '../../hooks/usePageHeader';
 import { useLiveSync } from '../../hooks/useLiveSync';
 import { isPendingTrip, isInProgressTrip, isReportedIssue } from './tripStatus';
+import { formatDeliveryPrice } from '../../utils/deliveryPricing';
 
 function normalize(v) {
   return String(v || '').trim().toLowerCase();
@@ -196,6 +197,10 @@ export default function DriverTaskDetails() {
             <div>
               <span>Distance</span>
               <strong>{distance}</strong>
+            </div>
+            <div>
+              <span>Delivery Price</span>
+              <strong>{formatDeliveryPrice(delivery || trip)}</strong>
             </div>
           </div>
 

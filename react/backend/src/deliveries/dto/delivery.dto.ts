@@ -121,6 +121,25 @@ export class CreateDeliveryDto {
   preferredDeliveryAt?: string;
 }
 
+export class DeliveryQuoteDto {
+  @ApiProperty({ type: PackageDimensionsDto })
+  @ValidateNested()
+  @Type(() => PackageDimensionsDto)
+  packageDimensions!: PackageDimensionsDto;
+
+  @ApiProperty({ example: 2.5, description: 'Package weight in kilograms' })
+  @IsNumber()
+  @IsPositive()
+  @Max(1000)
+  weight!: number;
+
+  @ApiPropertyOptional({ example: 'Standard', enum: ['Standard', 'Express'] })
+  @IsOptional()
+  @IsString()
+  @IsIn(['Standard', 'Express'])
+  type?: string;
+}
+
 export class BlockDeliveryDto {
   @ApiProperty({ example: 'Suspicious address flagged for review' })
   @IsString()

@@ -101,6 +101,20 @@ export interface DeliveryRequest {
   items: number;
   driver: string;
   preferredDeliveryAt?: string;
+  amount?: number;
+  pricing?: {
+    currency: 'INR';
+    formulaVersion: 'dimensions-weight-v1';
+    baseFare: number;
+    perKg: number;
+    actualWeightKg: number;
+    volumetricWeightKg: number;
+    chargeableWeightKg: number;
+    weightCharge: number;
+    serviceMultiplier: number;
+    total: number;
+    rateCardOwnerId: string;
+  };
   blockReason?: string;
   unblockReason?: string;
   cancelReason?: string;
@@ -119,6 +133,8 @@ export interface Trip {
   distance: string;
   status: string;
   request?: string;
+  amount?: number;
+  pricing?: DeliveryRequest['pricing'];
   driverNotes?: { text: string; time: string }[];
   statusBeforeIssue?: string;
   disputeResolution?: {

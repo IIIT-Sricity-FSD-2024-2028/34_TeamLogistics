@@ -136,4 +136,43 @@ describe('TransactionsService role scoping', () => {
       'Only submitted invoice payments can be approved or rejected',
     );
   });
+
+  it('uses the delivery creation price unchanged when generating its invoice', () => {
+    const pricing = {
+      currency: 'INR',
+      formulaVersion: 'dimensions-weight-v1',
+      baseFare: 80,
+      perKg: 8,
+      actualWeightKg: 5,
+      volumetricWeightKg: 40,
+      chargeableWeightKg: 40,
+      weightCharge: 320,
+      serviceMultiplier: 1,
+      total: 400,
+      rateCardOwnerId: 'PLATFORM',
+    };
+    const invoiceStore: any = {
+      users: [],
+      drivers: [],
+      trips: [{ id: 'TRP-1', request: 'DEL-1', status: 'Completed', amount: 400, pricing }],
+      deliveryRequests: [{
+        id: 'DEL-1', customer: 'Client One', status: 'Delivered', amount: 400, pricing,
+        pickup: 'Chennai', dropoff: 'Bengaluru', requestTime: new Date().toISOString(),
+      }],
+      invoices: [],
+      notifications: [],
+      persistInvoices: jest.fn(),
+      persistNotifications: jest.fn(),
+    };
+    const payouts: any = {
+      findFleetManagerIdForDriverName: jest.fn(() => undefined),
+      getEffectiveCustomerRateCard: jest.fn(() => ({ ownerId: 'PLATFORM', baseFare: 80, perKm: 13, perKg: 8 })),
+    };
+    const invoiceService = new TransactionsService(invoiceStore, {} as any, payouts);
+
+    const invoice: any = invoiceService.generateInvoiceForDelivery('DEL-1');
+
+    expect(invoice.totalAmount).toBe(400);
+    expect(invoice.pricing).toEqual(pricing);
+  });
 });

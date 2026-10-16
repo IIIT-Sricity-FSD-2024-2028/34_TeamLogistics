@@ -20,6 +20,7 @@ import {
 import { DeliveriesService } from './deliveries.service';
 import {
   CreateDeliveryDto,
+  DeliveryQuoteDto,
   BlockDeliveryDto,
   UnblockDeliveryDto,
   CancelDeliveryDto,
@@ -31,6 +32,16 @@ import { RolesGuard, Roles, Role } from '../common';
 @UseGuards(RolesGuard)
 export class DeliveriesController {
   constructor(private readonly deliveriesService: DeliveriesService) {}
+
+  @Post('quote')
+  @Roles(Role.BUSINESS_CLIENT, Role.SUPERUSER)
+  @ApiOperation({
+    summary: 'Quote a delivery from its weight and dimensions',
+    description: 'Uses the same persisted pricing calculation as delivery creation.',
+  })
+  quote(@Body() dto: DeliveryQuoteDto) {
+    return this.deliveriesService.quote(dto);
+  }
 
   @Get()
   @Roles(Role.SUPERUSER, Role.FLEET_MANAGER, Role.BUSINESS_CLIENT, Role.DRIVER)

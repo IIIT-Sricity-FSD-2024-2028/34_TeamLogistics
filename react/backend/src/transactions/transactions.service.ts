@@ -357,15 +357,17 @@ export class TransactionsService {
       delivery.distanceKm ||
       '';
 
-    const distanceNumber = Number(String(distanceRaw).replace(/[^\d.]/g, ''));
-    const weightNumber = Number(String(delivery.weight || delivery.estimatedWeight || '').replace(/[^\d.]/g, ''));
     const fleetManagerId = this.payoutsService.findFleetManagerIdForDriverName(trip?.driver || delivery.driver || '');
     const rateCard = this.payoutsService.getEffectiveCustomerRateCard(fleetManagerId);
-    const baseCost = Number((
+    const storedPricing = delivery.pricing || trip?.pricing;
+    const storedTotal = Number(storedPricing?.total ?? delivery.amount ?? trip?.amount);
+    const distanceNumber = Number(String(distanceRaw).replace(/[^\d.]/g, ''));
+    const weightNumber = Number(String(delivery.weight || delivery.estimatedWeight || '').replace(/[^\d.]/g, ''));
+    const legacyTotal =
       Number(rateCard?.baseFare || 0) +
       (Number.isFinite(distanceNumber) ? distanceNumber : 0) * Number(rateCard?.perKm || 0) +
-      (Number.isFinite(weightNumber) ? weightNumber : 0) * Number(rateCard?.perKg || 0)
-    ).toFixed(2));
+      (Number.isFinite(weightNumber) ? weightNumber : 0) * Number(rateCard?.perKg || 0);
+    const baseCost = Number((Number.isFinite(storedTotal) ? storedTotal : legacyTotal).toFixed(2));
     const taxAmount = 0;
     const totalAmount = baseCost + taxAmount;
 
@@ -425,12 +427,13 @@ export class TransactionsService {
       total: totalAmount,
       totalAmount,
       rateCardSnapshot: {
-        type: 'customer-pricing',
-        ownerId: rateCard.ownerId,
-        baseFare: rateCard.baseFare,
-        perKm: rateCard.perKm,
-        perKg: rateCard.perKg,
+        type: storedPricing?.formulaVersion || 'customer-pricing',
+        ownerId: storedPricing?.rateCardOwnerId || rateCard.ownerId,
+        baseFare: storedPricing?.baseFare ?? rateCard.baseFare,
+        perKm: 0,
+        perKg: storedPricing?.perKg ?? rateCard.perKg,
       },
+      pricing: storedPricing,
 
       status: 'Unpaid',
       paymentStatus: 'Pending',

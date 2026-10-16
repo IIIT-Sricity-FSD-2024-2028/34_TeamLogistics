@@ -5,6 +5,7 @@ import { getArray, normalize, getPickup, getDropoff, getDriver } from './bcUtils
 import { useLiveSync } from '../../hooks/useLiveSync';
 import { matchesFilter, matchesSearchFields, uniqueFilterOptions } from '../../utils/search';
 import './BcActiveDeliveries.css';
+import { formatDeliveryPrice } from '../../utils/deliveryPricing';
 
 const activeStatuses = [
   'requested',
@@ -192,6 +193,11 @@ export default function BcActiveDeliveries() {
                 <div>
                   <div className="delivery-meta-label">ETA</div>
                   <div className="bc-active-eta">{eta}</div>
+                </div>
+
+                <div>
+                  <div className="delivery-meta-label">Price</div>
+                  <div className="delivery-meta-value">{formatDeliveryPrice(delivery)}</div>
                 </div>
 
                 <div className="bc-active-actions">

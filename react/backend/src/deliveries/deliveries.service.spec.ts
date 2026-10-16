@@ -20,7 +20,7 @@ describe('DeliveriesService business-client access', () => {
       notifications: [],
     };
 
-    return new DeliveriesService(store);
+    return new DeliveriesService(store, {} as any);
   }
 
   it('uses the same legacy company-name match for the list and detail endpoints', () => {
@@ -74,5 +74,46 @@ describe('DeliveriesService business-client access', () => {
 
     expect(() => service.submitFeedback(delivery.id, feedback as any, requester))
       .toThrow(expectedMessage);
+  });
+});
+
+describe('DeliveriesService package pricing sync', () => {
+  it('stores the same dimensions-and-weight price on the delivery and linked trip', () => {
+    const store: any = {
+      users: [{ id: 'BC-1', role: 'business-client', name: 'Acme', phone: '9876543210' }],
+      deliveryRequests: [],
+      trips: [],
+      drivers: [],
+      vehicles: [],
+      notifications: [],
+      persistDeliveries: jest.fn(),
+      persistTrips: jest.fn(),
+      persistNotifications: jest.fn(),
+    };
+    const payouts: any = {
+      findFleetManagerIdForDriverName: jest.fn(() => undefined),
+      getEffectiveCustomerRateCard: jest.fn(() => ({ ownerId: 'PLATFORM', baseFare: 80, perKg: 8 })),
+    };
+    const service = new DeliveriesService(store, payouts);
+
+    const delivery: any = service.create({
+      customer: 'Untrusted name',
+      pickup: 'Chennai',
+      dropoff: 'Bengaluru',
+      packageType: 'Electronics',
+      packageDimensions: { length: 100, width: 50, height: 40, unit: 'cm' },
+      weight: 5,
+      type: 'Standard',
+    }, { userId: 'BC-1', role: 'business-client' });
+
+    expect(delivery.pricing).toEqual(expect.objectContaining({
+      actualWeightKg: 5,
+      volumetricWeightKg: 40,
+      chargeableWeightKg: 40,
+      total: 400,
+    }));
+    expect(delivery.amount).toBe(400);
+    expect(store.trips[0].pricing).toEqual(delivery.pricing);
+    expect(store.trips[0].amount).toBe(delivery.amount);
   });
 });

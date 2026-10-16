@@ -49,6 +49,7 @@ export const Deliveries = {
   getAll: (search, status) => apiRequest('GET', `/deliveries${qs({ search, status })}`),
   getOne: (id) => apiRequest('GET', `/deliveries/${encodeURIComponent(id)}`),
   create: (data) => apiRequest('POST', '/deliveries', data),
+  quote: (data) => apiRequest('POST', '/deliveries/quote', data),
   block: (id, reason) => apiRequest('PATCH', `/deliveries/${encodeURIComponent(id)}/block`, { reason }),
   unblock: (id, reason) => apiRequest('PATCH', `/deliveries/${encodeURIComponent(id)}/unblock`, { reason }),
   cancel: (id, reason) => apiRequest('PATCH', `/deliveries/${encodeURIComponent(id)}/cancel`, { reason }),

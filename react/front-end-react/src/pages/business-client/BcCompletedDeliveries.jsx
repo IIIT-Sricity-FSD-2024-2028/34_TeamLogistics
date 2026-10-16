@@ -4,6 +4,7 @@ import { Deliveries, Trips, Transactions } from '../../api/namespaces';
 import { getArray, normalize, formatDate, resolveClientName, belongsToClient } from './bcUtils';
 import { useLiveSync } from '../../hooks/useLiveSync';
 import { matchesSearchFields } from '../../utils/search';
+import { formatDeliveryPrice } from '../../utils/deliveryPricing';
 
 function isCompleted(item) {
   const status = normalize(item.status);
@@ -150,6 +151,7 @@ export default function BcCompletedDeliveries() {
               <th>Driver</th>
               <th>Route</th>
               <th>Status</th>
+              <th>Price</th>
               <th>Invoice</th>
               <th>Feedback</th>
             </tr>
@@ -158,7 +160,7 @@ export default function BcCompletedDeliveries() {
           <tbody>
             {status === 'loading' && (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', color: '#8f8f8f', padding: 24 }}>
+                <td colSpan={8} style={{ textAlign: 'center', color: '#8f8f8f', padding: 24 }}>
                   Loading completed deliveries...
                 </td>
               </tr>
@@ -166,7 +168,7 @@ export default function BcCompletedDeliveries() {
 
             {status === 'error' && (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', color: '#ff8d8d', padding: 24 }}>
+                <td colSpan={8} style={{ textAlign: 'center', color: '#ff8d8d', padding: 24 }}>
                   Could not load completed deliveries.
                 </td>
               </tr>
@@ -174,7 +176,7 @@ export default function BcCompletedDeliveries() {
 
             {status === 'ok' && pageDeliveries.length === 0 && (
               <tr>
-                <td colSpan={7} style={{ textAlign: 'center', color: '#8f8f8f', padding: 24 }}>
+                <td colSpan={8} style={{ textAlign: 'center', color: '#8f8f8f', padding: 24 }}>
                   {search.trim() ? 'No deliveries match your search.' : 'No completed deliveries found.'}
                 </td>
               </tr>
@@ -205,6 +207,7 @@ export default function BcCompletedDeliveries() {
                     <td>
                       <span className="pill yellow">{statusText}</span>
                     </td>
+                    <td>{formatDeliveryPrice(delivery)}</td>
                     <td>
                       <Link className="btn sm outline-yellow" to={invoiceLink}>
                         <svg viewBox="0 0 24 24">
