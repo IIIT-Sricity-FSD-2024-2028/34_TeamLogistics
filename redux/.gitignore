@@ -1,0 +1,17 @@
+node_modules/
+dist/
+coverage/
+
+backend/logs/
+backend/uploads/
+
+.env
+.env.*
+!.env.example
+
+*.tsbuildinfo
+/backend/runtime-data/
+/backend/data/
+*.writer-lock
+front-end-react/test-results/
+front-end-react/playwright-report/
