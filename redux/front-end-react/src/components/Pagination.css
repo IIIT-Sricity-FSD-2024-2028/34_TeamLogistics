@@ -1,0 +1,7 @@
+.ds-pagination{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;padding:14px 2px 2px;color:#a7a7a7;font-size:13px}
+.ds-pagination__actions{display:flex;align-items:center;gap:10px}
+.ds-pagination__actions button{min-height:36px;padding:7px 14px;border:1px solid rgba(255,212,0,.48);border-radius:9px;background:#ffd400;color:#111;font:inherit;font-weight:800;cursor:pointer;transition:opacity .15s ease,transform .15s ease}
+.ds-pagination__actions button:not(:disabled):hover{transform:translateY(-1px)}
+.ds-pagination__actions button:disabled{opacity:.38;cursor:not-allowed;transform:none}
+.ds-pagination__actions span{min-width:92px;text-align:center;color:#d5d5d5;font-weight:700}
+@media(max-width:620px){.ds-pagination{align-items:stretch;flex-direction:column;text-align:center}.ds-pagination__actions{justify-content:space-between}.ds-pagination__actions button{flex:1}}
